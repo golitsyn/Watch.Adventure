@@ -1,6 +1,6 @@
 var c_version = 2;
 var EPS = 1e-16;
-var CINF = 999999999999999;
+var CINF = 0;
 var colors = {
   range: "#93A6A2",
   armor: "#5C5D5E",
