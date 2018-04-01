@@ -6324,7 +6324,7 @@ var G = {
       }]
     }
   },
-  "version": 277,
+  "version": 279,
   "animations": {
     "explode_up": {
       "frames": 12,
