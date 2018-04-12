@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Adventure Land</title>
+		<link rel="apple-touch-icon-precomposed" href="/images/favicon3.png" /> <!-- 152 -->
+		<link rel="icon" href="/images/favicon3.png" /> <!-- 32 -->
+		<!--[if IE]><link rel="shortcut icon" href="/images/favicon3.png"><![endif]--> <!-- .ico -->
+		<meta name="msapplication-TileImage" content="/images/favicon3.png"> <!-- 144 -->
+		<meta name="google-site-verification" content="828I6vVcDPWUBQyONrSKy8Y5cMaibNSMxZSfiKzOQrk" />
+		<meta property="og:url" content="http://adventure.land/index.htm?1523559602"/>
+		<meta property="og:image" content="http://adventure.land/images/first_logo.png"/>
+		<meta property="og:title" content="Adventure Land"/>
+		<meta property="og:description" content="A Casual Browser Based MMORPG Where You Can Even Code Your Character! Very Early Access."/>
+		<meta name="description" content="A Casual Browser Based MMORPG Where You Can Even Code Your Character! Very Early Access."/>
+		<meta name="keywords" content="browser,mmorpg,pixel,2d,retro,code"/>
+		<script src="/js/pixi/4.6.2/pixi.min.js"></script>
+		 <script src="/js/pixi-display/v4/pixi-display.js"></script> 
+		<script src="/js/socket.io/2.0.4/socket.io.min.js"></script>
+		<script src="/js/jquery/jquery-3.2.0.min.js"></script>
+		
+			<script src="/js/howler/2.0.7/howler.min.js"></script>
+			<script src="/js/howler/2.0.7/howler.spatial.min.js"></script>
+			<script src="/js/libraries/jquery.payment.min.js"></script>
+			<script src="/js/libraries/jquery-ui.draggable.min.js"></script>
+		
+		<script src="/js/libraries/bowser/bowser.16.08.16.js"></script>
+		<script src="/js/libraries/combined.js?v=2"></script>
+		
+		
+		
+			<script src="/js/codemirror/5.15.2/codemirror.js"></script>
+			<link href="/js/codemirror/5.15.2/codemirror.css" rel="stylesheet" type="text/css"/>
+			<link href="/js/codemirror/pixel.css" rel="stylesheet" type="text/css"/>
+			<script src="/js/codemirror/5.15.2/javascript.js"></script>
+			<script src="/js/codemirror/5.15.2/xml.js"></script>
+		
+		<script src="/js/common_functions.js?v=280"></script>
+		<script src="/js/functions.js?v=280"></script>
+		<script src="/js/game.js?v=280"></script>
+		<script src="/js/html.js?v=280"></script>
+		<script src="/js/payments.js?v=280"></script>
+		<script src="/js/keyboard.js?v=280"></script>
+		<script src="/data.js?v=280"></script>
+		 <link href="/css/index.css?v=280" rel="stylesheet" type="text/css"/> 
+		<link href="/css/common.css?v=280" rel="stylesheet" type="text/css"/>
+		<script>
+	var inside="login";
+	var user_id="",user_auth="",the_character=null;
+	var base_url="http://adventure.land";
+	var server_addr="54.169.213.59",server_port="8090";
+	var server_names={"US":"Americas","EU":"Europas","ASIA":"Eastlands"};
+	var sound_music='',sound_sfx='',xmas_tunes=false,music_level=0.5;
+	var perfect_pixels='1';
+	var cached_map='1',scale='2';
+	var d_lines='1';
+	var sd_lines='1';
+	var is_sdk='';
+	var is_electron='';
+	var graphics_engine='auto';
+	var no_graphics='';
+	var no_html='';
+	var explicit_code='';
+	var force_webgl=(graphics_engine=="webgl"),force_canvas=(graphics_engine=="canvas");
+	var is_mobile=false;
+	var is_bold=false;
+	var c_enabled='1',stripe_enabled='';
+	var auto_reload="auto",reload_times='0',character_to_load='',code_to_load=null,mstand_to_load=null;
+	// It's pretty complicated but there are 2 persistence, auto login routines, the above one is the first, the below one is the second, second one uses the URL data
+	var url_ip='',url_port='',url_character='';
+	var persist_code="True";
+	var update_notes=['Last Update [February 23th]', 'Bugfixes'];
+	var X={};
+	function payment_logic(){};
+
+	if(url_character)
+	{
+		if(url_ip)
+		{
+			server_addr=url_ip;
+			server_port=url_port;
+			character_to_load=url_character;
+			setTimeout(function(){
+				if(!character)
+				{
+					add_log("If the character doesn't connect","gray");
+					add_log("Reloading the page to retry in 10 seconds","gray");
+					setTimeout(function(){ if(!character) location.reload(); },10000);
+				}
+			},10000);
+		}
+		else
+		{
+			setTimeout(function(){
+				add_log("Server not found","gray");
+				add_log("Reloading the page to retry in 25 seconds","gray");
+				setTimeout(function(){ if(!character) location.reload(); },25000);
+			},5000);
+		}
+	}
+
+	if(!is_sdk)
+	{
+		for(var f in log_flags) log_flags[f]=0;
+	}
+
+	if(navigator.userAgent.match(/Android/i)
+		|| navigator.userAgent.match(/webOS/i)
+		|| navigator.userAgent.match(/iPhone/i)
+		|| navigator.userAgent.match(/iPad/i)
+		|| navigator.userAgent.match(/iPod/i)
+		|| navigator.userAgent.match(/BlackBerry/i)
+		|| navigator.userAgent.match(/Windows Phone/i))
+	{
+		is_mobile=true;
+		/*
+		document.addEventListener('gesturestart', function (e) {
+		    e.preventDefault();
+		});
+
+		*/
+		if(document.documentElement) // these are to prevent the iOS pinch_zoom + dblclick zoom ... Android used to suck, I guess now it's iOS's turn with this new user-scalable=no block ... [16/10/16]
+		{
+				document.documentElement.addEventListener('touchstart', function (event) {
+			  if (event.touches.length > 1) {
+			    event.preventDefault();
+			  }
+			}, false);
+
+
+				var lastTouchEnd = 0;
+			document.documentElement.addEventListener('touchend', function (event) {
+			  var now = (new Date()).getTime();
+			  if (now - lastTouchEnd <= 300) {
+			    event.preventDefault();
+			  }
+			  lastTouchEnd = now;
+			}, false);
+		}
+
+		$(".mobile").show();
+
+
+    	$("head").append('<meta name="viewport" content="width=1280, user-scalable=no" />'); // initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no
+} /* temporary dirty fix, works wonders! (I guess I like it dirty) [16/10/16] */
+
+(function($) {
+  var IS_IOS = /iphone|ipad/i.test(navigator.userAgent);
+  $.fn.nodoubletapzoom = function() {
+    if (IS_IOS)
+      $(this).bind('touchstart', function preventZoom(e) {
+        var t2 = e.timeStamp
+          , t1 = $(this).data('lastTouch') || t2
+          , dt = t2 - t1
+          , fingers = e.originalEvent.touches.length;
+        $(this).data('lastTouch', t2);
+        if (!dt || dt > 500 || fingers > 1) return; // not double-tap
+
+        e.preventDefault(); // double tap - prevent the zoom
+        // also synthesize click events we just swallowed up
+        $(this).trigger('click').trigger('click');
+      });
+  };
+})(jQuery);
+
+X.servers=[{"players": 3, "region": "EU", "name": "I"}];
+X.characters=[];
+
+</script>
+
+
+
+
+
+
+
+<style>
+.cbold{
+	font-weight: normal;
+	/* conditional bold, can't decide whether to make things bold or not, better not, since it's a synthetic bold [16/08/16] */
+}
+</style>
+
+
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+		ga('create', 'UA-81826565-1', 'auto');
+		ga('send', 'pageview');
+	</script>
+
+
+
+	<style>
+		canvas{
+			image-rendering: optimizeSpeed;
+			image-rendering: -moz-crisp-edges;
+			image-rendering: -webkit-optimize-contrast;
+			image-rendering: optimize-contrast;
+			image-rendering: pixelated;
+			-ms-interpolation-mode: nearest-neighbor;
+		}
+	</style>
+
+		<script src="/js/ios-drag-drop.js"></script> <!-- https://github.com/timruffles/ios-html5-drag-drop-shim -->
+		
+	</head>
+	<body>
+		
+			<div id="content"><div id="pagewrapper">
+	<div id="pagewrapped" class="loginorselection">
+		
+			<div class="whiteheader mb4">&gt; Email</div>
+			<input class="selectioninput" id="email" type="text"></input>
+			<div class="whiteheader mt5 mb4">&gt; Password</div>
+			<input class="selectioninput" id="password" type="password"></input>
+			<div class="textbutton mt5" onclick="if(bc(this)) return; api_call_l('signup_or_login',{email:$('#email').val(),password:$('#password').val()},{disable:$(this)})">&gt; Signup or Login</div>
+			<div class="textbutton mt5 passwordui hidden" onclick="if(bc(this)) return; api_call_l('password_reminder',{email:$('#email').val()},{disable:$(this)})">&gt; Forgot My Password</div>
+		
+	</div>
+</div>
+<div class="gamebutton menu" style="position: fixed; top: 0px; right: 80px; z-index: 201; text-align: center; border-color: green">43 Online!</div>
+<div id="progressui" class="gamebutton menu" style="position: fixed; top: 0px; right: 0px; z-index: 201; width: 40px; text-align: center">0%</div>
+<div id="topleftcorner" style="z-index: 201">
+	<!-- <a class="gamebutton" href="/logs" target="_blank">Development Diary</a> -->
+<div class="gamebutton" onclick="show_modal($('#gameguide').html())" style="border-color: #CD6297">Game Guide</div>
+<a class="gamebutton eexternal" href="https://discord.gg/44yUVeU" target="_blank" style="border-color: #3386CF">Discord!</a>
+<a class="gamebutton eexternal" href="https://github.com/kaansoral/adventureland" target="_blank">Github</a>
+<a class="gamebutton eexternal" href="https://www.reddit.com/r/adventureland" target="_blank">Reddit</a>
+<!-- <a class="gamebutton" href="https://www.facebook.com/adventurelandmmo" target="_blank">Facebook</a>
+<a class="gamebutton" href="https://twitter.com/CodeMMORPG" target="_blank">Twitter</a> -->
+
+</div>
+<div id="features" style="font-size: 24px; max-width: 320px">
+	<div style='border-bottom: 2px dashed gray; color: #E7E7E7; display: inline-block; margin-bottom: 6px'>About Adventure Land</div>
+	<div class="infop">
+		Adventure Land is an experimental Indie <span class='mw'>MMORPG</span>. Anyone can <span class='mw'>CODE</span> their characters, let the CODE do the grinding, while you do something productive!
+	</div>
+	<div class="infop" style="margin-top: 12px">
+		Gameplay has many aspects to it, you can <span class='mw'>UPGRADE</span> weapons, <span class='mw'>COMBINE</span> accessories, <span class='mw'>EXCHANGE</span> rewards, <span class='mw'>CRAFT</span> items, farm <span class='mw'>GOLD</span>.
+	</div>
+	<div class="infop" style="margin-top: 12px">
+		There are <span class='mw'>PVP</span> maps with increased LUCK, GOLD, XP.
+	</div>
+	<div class="infop" style="margin-top: 12px">
+		The <span class='mw'>ECONOMY</span> is completely <span class='mw'>P2P</span>. You can keep your <span class='mw'>MERCHANT</span> open 24/7 to <span class='mw'>SELL</span> stuff.
+	</div>
+	<div class="infop" style="margin-top: 12px">
+		Ps. If you can't afford to buy the game, you can signup for free
+	</div>
+	
+</div>
+<script>
+	setTimeout(function(){ $("#features").html($("#features").html()) },0); /* otherwise the list entities overflow [28/07/16] */
+	setTimeout(function(){ $("#features").html($("#features").html()) },200);
+	setTimeout(function(){ $("#features").html($("#features").html()) },1000);
+	setTimeout(function(){ $("#features").html($("#features").html()) },2000);
+	setTimeout(function(){ $("#features").html($("#features").html()) },3000);
+</script></div>
+			<div id="gameguide" style="display:none">
+	<div class="gamebutton gamebutton-small" style="position: absolute; top: 5px; right: 5px">Updated April 27th</div>
+	<div style="font-size: 24px; color: #F4F4F4">
+		<div class="gamebutton gamebutton-large">Key Mappings</div> <div class="mb5"></div>
+		<div class="gamebutton gamebutton-small mr5 mt5">Mouse Left Click</div>
+		<div class="gamebutton gamebutton-small mr5 mt5" style="border-color: #4AB48E">Move</div>
+		<div class="gamebutton gamebutton-small mr5 mt5" style="border-color: #11A3B9">Target</div> <div class="mb2"></div>
+		<div class="gamebutton gamebutton-small mr5 mt5">Mouse Right Click</div>
+		<div class="gamebutton gamebutton-small mr5 mt5" style="border-color: #B61B00">Attack</div>
+		<div class="gamebutton gamebutton-small mr5 mt5" style="border-color: #D6723D">Interact</div>
+		<div class="gamebutton gamebutton-small mr5 mt5" style="border-color: #0B86CB">Equip</div>
+		<div class="gamebutton gamebutton-small mr5 mt5" style="border-color: #6C2B65">Enter</div> <div class="mb2"></div>
+		<div class="gamebutton gamebutton-small mr5 mt5">Keyboard 1</div>
+		<div class="gamebutton gamebutton-small mr5 mt5">Heal</div>
+		<div class="gamebutton gamebutton-small mr5 mt5">Use HP Potion</div> <div class="mb2"></div>
+		<div class="gamebutton gamebutton-small mr5 mt5">Keyboard 2</div>
+		<div class="gamebutton gamebutton-small mr5 mt5">Mana</div>
+		<div class="gamebutton gamebutton-small mr5 mt5">Use MP Potion</div> <div class="mb2"></div>
+		<div class="gamebutton gamebutton-small mr5 mt5">Keyboard I</div>
+		<div class="gamebutton gamebutton-small mr5 mt5">Inventory</div> <div class="mb2"></div>
+		<div class="gamebutton gamebutton-small mr5 mt5">Keyboard C</div>
+		<div class="gamebutton gamebutton-small mr5 mt5">Target Your Character</div> <div class="mb2"></div>
+		<div class="gamebutton gamebutton-small mr5 mt5">Keyboard F</div>
+		<div class="gamebutton gamebutton-small mr5 mt5">Activate Nearest NPC/Door</div> <div class="mb2"></div>
+		<div class="gamebutton gamebutton-small mr5 mt5">Keyboard R</div>
+		<div class="gamebutton gamebutton-small mr5 mt5">Use Main Skill [Demo]</div> <div class="mb2"></div>
+		<div class="gamebutton gamebutton-small mr5 mt5">Keyboard N</div>
+		<div class="gamebutton gamebutton-small mr5 mt5">Show Names [Toggle]</div> <div class="mb2"></div>
+		<div class="gamebutton gamebutton-small mr5 mt5">Keyboard \</div>
+		<div class="gamebutton gamebutton-small mr5 mt5">Toggle CODE</div> <div class="mb2"></div>
+		<div class="gamebutton gamebutton-small mr5 mt5">Keyboard ESC</div>
+		<div class="gamebutton gamebutton-small mr5 mt5">Close</div>
+		<div class="gamebutton gamebutton-small mr5 mt5">Dismiss</div> <div class="mb2"></div>
+		<div class="gamebutton gamebutton-large mt15">Items | Inventory</div> <div class="mb5"></div>
+		<div class="gray"><span style="color: #F4F4F4">&gt;</span> Right click to equip and un-equip items. You can drag items within your inventory. When a merchant npc is active, right click the item to see the item value / sell.</div>
+		<div class="gamebutton gamebutton-large mt15">Bank</div> <div class="mb5"></div>
+		<div class="gray"><span style="color: #F4F4F4">&gt;</span> The Bank is for storing items and gold. The Bank is shared across all your characters!</div>
+		<div class="gamebutton gamebutton-large mt15">Targeting | Top Left Corner</div> <div class="mb5"></div>
+		<div class="gray"><span style="color: #F4F4F4">&gt;</span> Left click to target monsters and players. Press the character name between HP and MP bars to target yourself. You can see the properties/items of the targeted entity. You can only target one entity at a time.</div>
+		<div class="gamebutton gamebutton-large mt15">Upgrades</div> <div class="mb5"></div>
+		<div class="gray mb5"><span style="color: #F4F4F4">&gt;</span> Find the NPC that offers upgrades and compounds in New Town, nearby, there is an NPC that sells scrolls. Weapons, Armors start at +0 and go all the way up to +10. +10 is almost impossible. Upgrade items by using upgrade scrolls, there are 3 grades of items, Normal, High and Rare, at first, you will only need the "Upgrade Scroll" that costs 1,000 gold.</div>
+		<div class="gamebutton gamebutton-large mt15">Compounds</div> <div class="mb5"></div>
+		<div class="gray mb5"><span style="color: #F4F4F4">&gt;</span> For accessories, reaching a higher level is more challenging, for an +1 accessory, you need 3x +0 accessories of the same kind, and so on.</div>
+		<div class="gray mb"><span style="color: #F4F4F4">&gt;</span> You can use "Primordial Shard"s increase the chances of success of both upgrades and compounds, the essence of the shard is absorbed inside the item.</div>
+		<div class="gamebutton gamebutton-large mt15">Communities | Links</div> <div class="mb5"></div>
+		<div class="gray mb5"><span style="color: #F4F4F4">&gt;</span> <a href="https://discord.gg/44yUVeU" target="_blank" style="color: #469ECF; text-decoration: none">Discord:</a> Discord is our most active community, ideal for questions of all kinds and to provide feedback, suggest new ideas. The coding channels are also quite useful.</div>
+		<div class="gray mb5"><span style="color: #F4F4F4">&gt;</span> <a href="https://github.com/kaansoral/adventureland/blob/master/runner_functions.js" target="_blank" style="color: #469ECF; text-decoration: none">Github:</a> Our Official Github houses the "runner_functions.js" - which includes all the base CODE functions</div>
+		<div class="gray mb5"><span style="color: #F4F4F4">&gt;</span> <a href="https://www.reddit.com/r/adventureland" target="_blank" style="color: #469ECF; text-decoration: none">Reddit:</a> You can use Reddit to share things, Discord is more practical for asking quick questions</div>
+		<div class="gray mb5"><span style="color: #F4F4F4">&gt;</span> <a href="https://docs.google.com/document/d/18xG9NaO1mm7cSx7wMIQEtrkGzFHo6WrEE_TZcbeAFnA/edit" target="_blank" style="color: #469ECF; text-decoration: none">Unofficial Starter Guide</a></div>
+		<div class="gray mb5"><span style="color: #F4F4F4">&gt;</span> <a href="https://fansana.github.io/adventureland/global.html" target="_blank" style="color: #469ECF; text-decoration: none">NexusNull's Unofficial But Awesome Documentation</a></div>
+		<div class="gamebutton gamebutton-large mt15">CODE</div> <div class="mb5"></div>
+		<div class="gray mb5"><span style="color: #F4F4F4">&gt;</span> You don't have to be a coder to use the CODE, you don't have to use the CODE to play Adventure Land, but CODE is the highlight of our game, so use it, try to learn a bit of coding too, it can be very fun and it's very useful</div>
+		<div class="gamebutton gamebutton-large mt15">Attributes</div> <div class="mb5"></div>
+		<div class="gray mb"><span style="color: #F4F4F4">Strength:</span> Increases HP, Armor. <!--Increases the attack of warriors.--></div>
+		<div class="gray mb"><span style="color: #F4F4F4">Intelligence:</span> Increases MP, Resistance.  <!--Increases the attack of mages.--></div>
+		<div class="gray mb"><span style="color: #F4F4F4">Dexterity:</span> Increases the attack speed, run speed.</div>
+		<div class="gray mb"><span style="color: #F4F4F4">Vitality:</span> Increases HP proportional to level.</div>
+		<div class="gray mb"><span style="color: #F4F4F4">Armor:</span> 100 Armor reduces incoming physical damage by 10%.</div>
+		<div class="gray mb"><span style="color: #F4F4F4">Resistance:</span> 100 Resistance reduces incoming magical damage by 10%.</div>
+		<div class="gray mb"><span style="color: #F4F4F4">Damage:</span> Proportionally increases the attack.</div>
+		<div class="gray mb"><span style="color: #F4F4F4">Range:</span> Increases the attack range.</div>
+		<div class="gray mb"><span style="color: #F4F4F4">Speed:</span> Increases the run speed.</div>
+		<div class="gray mb"><span style="color: #F4F4F4">Stat:</span> Becomes a main attribute with a scroll.</div>
+		<div class="gray mb"><span style="color: #F4F4F4">Evasion:</span> Evade physical attacks.</div>
+		<div class="gray mb"><span style="color: #F4F4F4">Reflection:</span> Reflect magical attacks back.</div>
+		<div class="gray mb"><span style="color: #F4F4F4">A.Piercing:</span> Pierce through armor.</div>
+		<div class="gray mb"><span style="color: #F4F4F4">R.Piercing:</span> Pierce through resistance.</div>
+		<div class="gray mb"><span style="color: #F4F4F4">Damage Return:</span> Returns melee damage.</div>
+		<div class="gamebutton gamebutton-large mt15">Abilities</div> <div class="mb5"></div>
+		<div class="gray"><span style="color: #F4F4F4">&gt;</span> Abilities are currently in development. You can use existing abilities via their hotkeys or through CODE.</div>
+		<div class="gray mb"><span style="color: #F4F4F4">Mage's Mana Burst:</span> Converts approximately half of the mana to damage.</div>
+		<div class="gray mb"><span style="color: #F4F4F4">Warrior's Charge:</span> Increases speed for approximately 3 seconds.</div>
+		<div class="gray mb"><span style="color: #F4F4F4">Warrior's Taunt:</span> Taunts the enemy with a higher range [Q]</div>
+		<div class="gray mb"><span style="color: #F4F4F4">Rogue's Invis:</span> Goes invisible and deals 1.25X sneak damage</div>
+		<div class="gray mb"><span style="color: #F4F4F4">Rogue's Poisonous Touch:</span> Poison reduces healing and attack speed</div>
+		<div class="gray mb"><span style="color: #F4F4F4">Ranger's Supershot:</span> Has an extreme range, deals 1.5X damage</div>
+		<div class="gray mb"><span style="color: #F4F4F4">Priest's Curse:</span> Slows down the enemy, amplifies damage taken, reduces attack</div>
+		<div class="gamebutton gamebutton-large mt15">Limits</div> <div class="mb5"></div>
+		<div class="gray"><span style="color: #F4F4F4">&gt;</span> You can connect to the game with 1 Character on PVE, 1 Character on PVP and 1 Merchant. 2 Siblings, or Friends living in the same household can connect to the game using 2 PVE Characters. If 2 PVE Characters are used, the additional 1 PVP Character can not be used.</div>
+		<div class="gray"><span style="color: #F4F4F4">&gt;</span> With XP/Gold/Luck Boosters, 2 additional characters can be connected to the game from one account. Available configurations are currently: 3PVE/1PVP - 2PVE/2PVP - 1PVE/3PVP</div>
+		<div class="gamebutton gamebutton-large mt15">Servers</div> <div class="mb5"></div>
+		<div class="gray"><span style="color: #F4F4F4">&gt;</span> You can connect to any server you want. Your character is uniform across all servers. If you suddenly get disconnected, It's likely because the server is updating. You can usually re-connect in 2-3 minutes.</div>
+		<div class="gamebutton gamebutton-large mt15">Chat Commands</div> <div class="mb5"></div>
+		<div class="gray"><span style="color: #F4F4F4">&gt;</span> /list</div>
+		<div class="gamebutton gamebutton-large mt15">Rules</div> <div class="mb5"></div>
+		<div class="gray"><span style="color: #F4F4F4">&gt;</span> No swearing, bullying, or offensive nicknames.</div>
+		<div class="gray"><span style="color: #F4F4F4">&gt;</span> Each person is allowed to have a single account.</div>
+		<div class="gray"><span style="color: #F4F4F4">&gt;</span> Abuse of the "Limits" is strictly forbidden.</div>
+		<div class="gray"><span style="color: #F4F4F4">&gt;</span> It's forbidden to use CODE for violating the game.</div>
+		<div class="gray"><span style="color: #F4F4F4">&gt;</span> It's forbidden to automate the game with anything other than the CODE.</div>
+		<div class="gray"><span style="color: #F4F4F4">&gt;</span> You can inspect the game, learn from the game, but please keep in mind that game content is copyrighted. Please respect the sanctity of the game.</div>
+		<div class="gray"><span style="color: #F4F4F4">&gt;</span> It's strictly forbidden to buy or sell items, accounts with real money.</div>
+		<div class="gray"><span style="color: #F4F4F4">&gt;</span> Violation of the above rules might lead to deletion, minimum punishment is jail.</div>
+		<div class="gray"><span style="color: #F4F4F4">&gt;</span> If anyone is breaking the rules, just email a screenshot of the violation to <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="9cf4f9f0f0f3dcfdf8eafdf2e8e9eef9b2f0fdf2f8">[email&#160;protected]</a></div>
+		<div class="gamebutton gamebutton-large mt15">Notes / Tips</div> <div class="mb5"></div>
+		<div class="gray"><span style="color: #F4F4F4">&gt;</span> Adventure Land is best played on Chrome.</div>
+		<div class="gray"><span style="color: #F4F4F4">&gt;</span> Chat isn't global, so stay close during a conversation.</div>
+		<div class="gray"><span style="color: #F4F4F4">&gt;</span> There are rewards for good suggestions or unknown bugs.</div>
+		<div class="gray"><span style="color: #F4F4F4">&gt;</span> Be careful in PVP, It's not for everyone.</div>
+		<div class="gray"><span style="color: #F4F4F4">&gt;</span> Please, please be kind to each other.</div>
+		<div class="gamebutton gamebutton-large mt15">About the Game</div> <div class="mb5"></div>
+		<div class="gray"><span style="color: #F4F4F4">&gt;</span> The game is in active development, there are improvements almost every single day. Over time there will be new maps, new dynamics, new challenges, new items, new players. Hopefully it will all be very exciting. Feel free to email me at: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="1e767b7272715e7f7a687b706a6b6c7b30727f707a">[email&#160;protected]</a></div>
+	</div>
+</div>
+			<div id="hardcoreguide" style="display:none">
+	<div class="gamebutton gamebutton-small" style="position: absolute; top: 5px; right: 5px">Updated May 28th</div>
+	<div style="font-size: 24px; color: #F4F4F4">
+		<div class="gamebutton gamebutton-large"><span style="color: #C01626">HARDCORE</spam> Mode</div> <div class="mb5"></div>
+		<div class="gray"><span style="color: #F4F4F4">&gt;</span> No Premium Shop</div>
+		<div class="gray"><span style="color: #F4F4F4">&gt;</span> Pure Skills + Collaboration</div>
+		<div class="gray"><span style="color: #F4F4F4">&gt;</span> Chaotic, Unbalanced, Untested</div>
+		<div class="gray"><span style="color: #F4F4F4">&gt;</span> Start From Level 1</div>
+		<div class="gray"><span style="color: #F4F4F4">&gt;</span> Only 1 Character Per IP/Player</div>
+		<div class="gray"><span style="color: #F4F4F4">&gt;</span> Server Reset = Progress Lost</div>
+		<div class="gray"><span style="color: #F4F4F4">&gt;</span> Extreme Gold, Luck, XP</div>
+		<div class="gray"><span style="color: #F4F4F4">&gt;</span> Warped Drop Rates</div>
+		<div class="gray"><span style="color: #F4F4F4">&gt;</span> Buy, Sell, Upgrade, Exchange Anywhere!</div>
+		<div class="gray"><span style="color: #F4F4F4">&gt;</span> PVE Death: Lose 1 level</div>
+		<div class="gray"><span style="color: #F4F4F4">&gt;</span> PVP Death: Lose 3 levels to the opponent</div>
+		<div class="gray"><span style="color: #F4F4F4">&gt;</span> PVP Death: Drop a slot item with ~10% chance</div>
+		<div class="gray"><span style="color: #F4F4F4">&gt;</span> PVP Death: Drop an inventory item with ~20% chance</div>
+		<div class="gray"><span style="color: #F4F4F4">&gt;</span> PVP Death: Lose an inventory item with ~5% chance</div>
+		<div class="gray"><span style="color: #F4F4F4">&gt;</span> PVP Death: Lose 80% of your gold</div>
+		<div class="gray"><span style="color: #F4F4F4">&gt;</span> Priest Heal's: Nerfed to 60%</div>
+		<div class="gray"><span style="color: #F4F4F4">&gt;</span> Trade: Receive 480K Gold Every 64 Seconds in the Beach Office</div>
+		<div class="gamebutton gamebutton-large mt15">Take Screenshots</div> <div class="mb5"></div>
+		<div class="gray"><span style="color: #F4F4F4">&gt;</span> Hardcore Mode is experimental, there is no long term progress saving yet, no leaderboards, so if you want to save your progress, show off your achievements, do take screenshots!</div>
+		<div class="gamebutton gamebutton-large mt15">Provide Feedback</div> <div class="mb5"></div>
+		<div class="gray"><span style="color: #F4F4F4">&gt;</span> Please send an email to <span style="color: #F4F4F4"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="19717c75757659787d6f7c776d6c6b7c377578777d">[email&#160;protected]</a></span> about your experience in this new mode. I would like to hear about how you view Adventure Land, and whether this new Hardcore mode improves the game for you. When completed, the Hardcore mode will likely be a weekend-only thing. It will start on Friday, end on Sunday. I think there might be a lot of players who find loopholes etc. I've certainly improved some routines to prevent some scenarios. For example, depending on the feedback, I might add an NPC that tells where a certain player is for 10,000,000 gold etc., or, add 1-2 hours of peace time every 3-4 hours.</div>
+	</div>
+</div>
+			<div id="boosterguide" style="display:none">
+	<div class="gamebutton gamebutton-small" style="position: absolute; top: 5px; right: 5px">Updated December 16th</div>
+	<div style="font-size: 24px; color: #F4F4F4">
+		<div class="gamebutton gamebutton-large" style="border-color: #E56369">Boosters</div> <div class="mb5"></div>
+		<div class="gamebutton gamebutton-small mr5 mt5 mb5">Activation and Usage</div>
+		<div class="gray"><span style="color: #F4F4F4">&gt;</span> After pressing the "ACTIVATE" button. The booster item lasts 30 days. The booster item works from a character's inventory, it is not equipped or consumed. The effect can be observed from the "STATS" interface. The item can be transfered between characters or sold through merchanting.</div>
+		<div class="gamebutton gamebutton-small mr5 mt10 mb5">Increased Limits</div>
+		<div class="gray"><span style="color: #F4F4F4">&gt;</span> While the free character limit is 1, characters with an active booster item are able to exceed this limit. Even with booster items, the upper limit for multi-characters is 3. So minimally, with 2 stones, you can play the game with a 3-character party.</div>
+		<div class="gamebutton gamebutton-small mr5 mt10 mb5">Optimal Strategy</div>
+		<div class="gray"><span style="color: #F4F4F4">&gt;</span> Don't loot chests, keep the Booster in XP mode.</div>
+		<div class="gray"><span style="color: #F4F4F4">&gt;</span> While battling a boss, shift the Booster to Luck mode.</div>
+		<div class="gray"><span style="color: #F4F4F4">&gt;</span> When there are enough chests around, shift the Booster to Gold mode and loot.</div>
+		<div class="gray"><span style="color: #F4F4F4">&gt;</span> This way, you can benefit from all 3 bonuses with 1 stone.</div>
+		<div class="mr5 mt10 mb5" style="border-color: #32A3B0; font-size: 0px">
+			<span class='bitems'></span>
+			<span class='bitem1'></span>
+			<span class='bitem2'></span>
+			<span class='bitem3'></span>
+			<span class='bitem4'></span>
+			<span class='bitem5'></span>
+			<span class='bitemo'></span>
+		</div>
+		<div class="gray"><span style="color: #F4F4F4">&gt;</span> You can combine boosters as you combine accessories. The combination succeeds 100%, however, if you use a "Primordial Essence" for the combination, It triggers a proc-chance routine.</div>
+		<div class="gray"><span style="color: #F4F4F4">&gt;</span> You start with a 20% chance, as you succeed, your booster becomes a higher level booster, and the routine internally repeats with half the chance. So you can even receive an +5 booster, instead of an +1!</div>
+		<div class="gamebutton gamebutton-small mr5 mt10 mb5" style="border-color: #32A3B0">CODE</div>
+		<div class="gray mb5"><span style="color: #F4F4F4">&gt;</span> You can use the activate and shift functions in CODE.</div>
+		<div class="gray mb5"><span class='label'>shift(0,'xpbooster')</span></div>
+		<div class="gray mb5"><span class='label'>shift(0,'luckbooster')</span></div>
+		<div class="gray mb5"><span class='label'>shift(0,'goldbooster')</span></div>
+		<div class="gray mb5"><span style="color: #F4F4F4">&gt;</span> Above calls be used to shift a booster in 0th inventory slot.</div>
+		<div class="gray mb5"><span style="color: #F4F4F4">&gt;</span> Implementing the optimal strategy is left as an exercise to the reader.</div>
+	</div>
+	<div class="oncreate" onclick="booster_modal_logic();"></div>
+</div>
+
+			<!-- <div id="snow" style="background: url(https://media.giphy.com/media/xT0xeOeZspRlIheb84/giphy.gif) repeat center center fixed; position: fixed; left:0px; top:0px; bottom: 0px; right: 0px; z-index: 2; pointer-events: none"></div> -->
+			
+			
+			
+			<div id="bottomleftcorner2" style="width: 320px; display:none" onclick="last_say='normal';">
+				
+				<div style="background: black; padding: 3px 4px 3px 4px; width: 312px; border: 5px solid gray; font-size: 24px; line-height: 22px; margin-bottom: -6px; text-align: center"
+					class="clickable" onclick="$('.coords').toggle()">
+					<div class="coords hidden">0,0</div>
+					<span class='servername'>Europas I</span> | <span class="mapname">Town</span>
+				</div>
+				<div id="chatlog" class="noscroll cbold"></div>
+			</div>
+			<div id="bottomrightcorner" class="disableclicks">
+				<div style="text-align: right; font-size: 0px">
+					<div id="iframelist" style="display: none; margin-bottom: -5px; vertical-align: bottom" class="enableclicks"></div><div id="partylist" style="display: none; margin-left: -5px; margin-bottom: -5px; vertical-align: bottom"></div><div id="skillbar" style="margin-left: -5px; margin-bottom: -5px; display: none; vertical-align: bottom"></div>
+				</div>
+				<div style="background: black; padding: 2px; width: 316px; border: 5px solid gray; margin-bottom: -5px; display:none; position: relative"
+					class="clickable inline-block bshadow xpsui enableclicks" onclick="toggle_stats()">
+					<div style="background: #166D11; width: 87%; height: 30px" id="xpslider"></div> <!-- red #B12727 green #368C2B -->
+					<div style="position: absolute; width: 316px; top: 2px; left: 0px; height: 30px; color: white; vertical-align: middle; line-height: 30px; text-align: center; font-size: 30px" id="xpui">
+						LV54 87%
+					</div>
+				</div>
+				<div id="gamelog" class="noscroll cbold enableclicks"></div>
+			</div>
+			<div id="bottomleftcorner"></div>
+			<div id="topleftcorner">
+				<div id="topleftcornerui" style='display: inline-block; vertical-align: top'></div>
+				<div id="topleftcornerdialog" style='display: inline-block; margin-left: 5px; vertical-align: top'></div>
+			</div>
+			<div id="codeui" class="codeui">
+				<textarea id="code"></textarea>
+				<div class="gamebutton engagebutton" onclick="btc(event); start_runner()">ENGAGE</div>
+				<div class="gamebutton dengagebutton hidden" onclick="btc(event); stop_runner()">DISENGAGE</div>
+			</div>
+			<div id="toprightcorner" class="hidden disableclicks">
+				<span class="codebuttons">
+				</span>
+				
+				<div class="gamebutton promode hidden" onclick="btc(event); toggle_code()">CODE</div>
+				<div class="gamebutton" onclick="btc(event); render_friends()">COM</div>
+				<div class="gamebutton newcomermode " onclick="toggle_character()">CHAR</div>
+				<div class="gamebutton newcomermode " onclick="render_inventory(inventory)">INV</div>
+				<div class="gamebutton newcomermode " onclick="btc(event); toggle_stats()">STATS</div>
+				<div class="gamebutton" onclick="btc(event); render_skills()">SKILLS</div>
+				<div class="gamebutton newcomermode " onclick="btc(event); show_game_guide();">GUIDE</div>
+				<div class="gamebutton promode hidden" onclick="btc(event); ping()">PING</div>
+				<div class="gamebutton newcomermode " onclick="btc(event); toggle_code()">CODE</div>
+				<div class="gamebutton townb" onclick="btc(event); socket.emit('town'); hide_transports();">TOWN</div>
+				<div class="gamebutton" onclick="btc(event); show_settings()">CONF</div>
+				<div class="codeui hidden" style="text-align: right; margin-top: 5px">
+					
+					<div class="gamebutton" onclick="btc(event); api_call_l('list_codes',{purpose:'save'},{disable:$(this)})" style="border-color: #E13758">SAVE</div>
+					<div class="gamebutton" onclick="btc(event); api_call_l('list_codes',{purpose:'load'},{disable:$(this)})" style="border-color: #32A3B0">LOAD</div>
+				</div>
+			</div>
+			<div class="transports hidden" align='right'>
+				<div class="gamebutton" onclick='socket.emit("transport",{to:"main"}); hide_transports();'>TOWN A</div>
+				<div class="gamebutton" onclick='socket.emit("transport",{to:"main"}); hide_transports();'>TOWN B</div>
+				<div class="gamebutton" onclick='socket.emit("transport",{to:"main"}); hide_transports();'>TOWN C</div>
+				<div class="mt5"></div>
+				<div class="gamebutton" onclick='socket.emit("transport",{to:"test"}); hide_transports();'>TEST</div>
+				<div class="gamebutton" onclick='socket.emit("transport",{to:"arena"}); hide_transports();'>PVP ARENA</div>
+			</div>
+			<div id="topmid" class="hidden" style="position: fixed; top: 0px; z-index: 5" class="hidden">
+			</div>
+			<div id="bottommid" style="position: fixed; bottom: 0px; font-size: 0px; text-align: center; z-index: 5" class="hidden disableclicks">
+
+				<div id="ripbutton" class="hidden" onclick="btc(event); socket.emit('respawn');"
+					style="text-align: center; margin-bottom: 5px">
+						<div class="gamebutton" onclick="btc(event); socket.emit('respawn');">RESPAWN</div>
+						<div></div>
+						<div class="gamebutton hidden saferespawn" style="border-color: #399427; margin-top: 5px" onclick="btc(event); socket.emit('respawn',{safe:1});">SAFE RESPAWN</div>
+				</div>
+				<div id="pausedui" class="hidden" onclick="btc(event); socket.emit('respawn');"
+					style="text-align: center; margin-bottom: 5px">
+						<div class="gamebutton" onclick="btc(event); pause()">GRAPHICS PAUSED</div>
+				</div>
+				<div class="codebbuttons" style="position: absolute; pointer-events: none; left: 0px; right: 0px; bottom: 92px; text-align: center"></div>
+				<div id="rightcornerui" class="inline-block" style="margin-bottom: -5px"></div>
+				
+				<div style="margin-bottom: -4px" class="enableclicks">
+					<div style="background: black; padding: 2px; border: 4px solid gray" class="inline-block bshadow2 clickable" onclick="btc(event); attack_click();">
+						<div style="vertical-align: middle; font-size: 30px; height: 30px; line-height: 30px; width: 125px; background: #6A6A6A" class="tint atint inline-block"> <!-- perfect gray #8F8F8F -->
+							<span class="attackui ontint">ATT 100</span>
+						</div>
+					</div>
+					<div style="background: black; padding: 2px; border: 4px solid gray; margin-left: -4px;" class="clickable bshadow2 inline-block" onclick="btc(event); toggle_character()">
+						<div style="padding: 0px 20px 0px 20px; height: 30px; line-height: 30px; vertical-align: middle; font-size: 30px" class="tint pvptint inline-block">
+							<span class="charactername ontint">NAME</span>
+						</div>
+					</div>
+					<div style="background: black; padding: 2px; border: 4px solid gray; margin-left: -4px;" class="clickable bshadow2 inline-block" onclick="btc(event); render_inventory(inventory)">
+						<div style="vertical-align: middle; height: 30px; font-size: 30px; line-height: 30px; width: 125px; background: #6A6A6A" class="tint ptint inline-block">
+							<!-- nice teal #4B979C nice purple #664FA0 | #4A959B -->
+							<!-- chrome palette | nice earth tone #9c7f4b | darker earth tone #8a7246 | better teal #47867d -->
+							<span class="invui ontint">INV 12/42</span>
+						</div>
+					</div>
+					
+				</div>
+				<!-- .vtopx fixes the bottom spacing issue on iOS/iPad -->
+				<div style="background: black; padding: 2px; width: 240px; border: 4px solid gray; position: relative" class="clickable inline-block bshadow vtopx enableclicks" onclick="btc(event); use('hp')">
+					<div style="background: #A62323; width: 75%; height: 30px" id="hpslider"></div> <!-- red #B12727 green #368C2B -->
+					<div style="position: absolute; width: 240px; top: 2px; left: 0px; height: 30px; vertical-align: middle; line-height: 30px; text-align: center; font-size: 30px" id="hptext">
+						1231/5212
+					</div>
+				</div>
+				<div id="mpbar" style="background: black; padding: 2px; width: 240px; border: 4px solid gray; margin-left: -4px; position: relative" class="clickable inline-block bshadow vtopx enableclicks" onclick="use('mp')">
+					<div style="background: #295184; width: 75%; height: 30px" id="mpslider"></div> <!-- blue #225DB1 cool blue #3E6D91 teal #4997AA very cool blue #295184 -->
+					<div style="position: absolute; width: 240px; top: 2px; left: 0px; height: 30px; vertical-align: middle; line-height: 30px; text-align: center; font-size: 30px" id="mptext">
+						1231/5212
+					</div>
+				</div>
+				
+			</div>
+			<div id="settingshtml" style="display:none">
+				<div class="blockbutton promode hidden"
+	onclick="btc(event); Cookies.set('pro_mode','',{ expires:12*365}); $('.promode').hide(); $('.newcomermode').show(); $('.gamebutton.newcomermode').css('display','inline-block'); $('.proinfo').show()">
+	Pro Mode: <span style='color: green'>ON</span></div>
+<div class="blockbutton newcomermode "
+	onclick="btc(event); Cookies.set('pro_mode','1',{ expires:12*365}); $('.newcomermode').hide(); $('.promode').show(); $('.gamebutton.promode').css('display','inline-block'); $('.proinfo').show()">
+	Pro Mode: <span style='color: #F54423'>OFF</span></div>
+
+<div class="mt4 blockbutton fastoff hidden"
+	onclick="btc(event); $('.fastoff').hide(); $('.faston').show(); $('.restartneeded').show(); Cookies.set('no_fast_mode','',{ expires:12*365});">Cached/Fast Maps: <span style='color: #F54423'>OFF</span></div>
+<div class="mt4 blockbutton faston "
+	onclick="btc(event); $('.faston').hide(); $('.fastoff').show(); $('.restartneeded').show(); Cookies.set('no_fast_mode','1',{ expires:12*365});">Cached/Fast Maps: <span style='color: green'>ON</span></div>
+
+<div class="mt4 blockbutton autoon "
+	onclick="btc(event); Cookies.set('manual_reload','1',{ expires:12*365}); $('.autoon').hide(); $('.autooff').show(); auto_reload='off';">Auto Reload on DC: <span style='color: green'>ON</span></div>
+<div class="mt4 blockbutton autooff hidden"
+	onclick="btc(event); Cookies.set('manual_reload','',{ expires:12*365}); $('.autooff').hide(); $('.autoon').show(); auto_reload='auto';">Auto Reload on DC: <span style='color: #F54423'>OFF</span></div>
+
+
+
+<div class="mt4 blockbutton pixelson "
+	onclick="btc(event); Cookies.set('perfect_pixels_off','1',{ expires:12*365}); $('.pixelson').hide(); $('.pixelsoff').show(); $('.restartneeded').show()">Perfect Pixels: <span style='color: green'>ON</span></div>
+<div class="mt4 blockbutton pixelsoff hidden"
+	onclick="btc(event); Cookies.set('perfect_pixels_off','',{ expires:12*365}); $('.pixelsoff').hide(); $('.pixelson').show(); $('.restartneeded').show()">Perfect Pixels: <span style='color: #F67D4C'>OFF</span></div>
+
+<div class="mt4 blockbutton musicoff "
+	onclick="btc(event); sound_music='1'; init_music(); reflect_music(); $('.musicoff').hide(); $('.musicon').show()">Music: <span style='color: gray'>OFF</span></div>
+<div class="mt4 blockbutton musicon hidden"
+	onclick="btc(event); sound_music=''; reflect_music(); $('.musicon').hide(); $('.musicoff').show()">Music: <span style='color: gray'>ON</span> [Work in Progress]</div>
+
+<div class="mt4 blockbutton sfxoff "
+	onclick="btc(event); sound_sfx='1'; init_fx(); $('.sfxoff').hide(); $('.sfxon').show()">SFX: <span style='color: gray'>OFF</span></div>
+<div class="mt4 blockbutton sfxon hidden"
+	onclick="btc(event); sound_sfx=''; $('.sfxon').hide(); $('.sfxoff').show()">SFX: <span style='color: gray'>ON</span> [Work in Progress]</div>
+
+
+<div class="mt4 blockbutton" style="text-align: left">
+	Note: Feel free to email <span style="color: #36B2F8"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="6b030e0707042b0a0f1d0e051f1e190e45070a050f">[email&#160;protected]</a></span> for anything, the game is in development, I love to receive emails and feedback
+</div>
+
+<div class="mt4 blockbutton restartneeded hidden" style="text-align: left">
+	You need to refresh the game for changes to be effective.
+</div>
+
+<div class="mt4 blockbutton proinfo hidden" style="text-align: left">
+	Pro Mode hides the CHAR/INV/STATS buttons. You can press your character name to open CHAR, press the inventory button to open INV and press the xp-bar to open STATS.
+</div>
+			</div>
+			<div id="paymentshtml" style="display:none">
+				<div style='width: 600px; display: inline-block' class="">		
+	<div style="/*margin-top: 5px; */text-align: left">
+		<div class="inline-block vtop">
+			<div class="gamebutton block mb5" onclick="$('.pui').hide(); $('.mainpui').show(); set_pamount(10)">$10 for<br />800 <span style='/*color: #6ECF28*/'>SHELLS</span></div>
+			<div class="gamebutton block mb5" onclick="$('.pui').hide(); $('.mainpui').show(); set_pamount(25)">$25 for<br />2,000 <span style='/*color: #6ECF28*/'>SHELLS</span></div>
+			<div class="gamebutton block mb5" onclick="$('.pui').hide(); $('.mainpui').show(); set_pamount(100)">$100 for<br />8,000 <span style='/*color: #6ECF28*/'>SHELLS</span></div>
+			<div class="gamebutton block mb5" onclick="$('.pui').hide(); $('.aboutpui').show()" style="color: #5DAC40/*#43C7D1*/">About<br />SHELLS</div>
+			
+			
+		</div>
+		<div class="inline-block vtop" style="width: 392px">
+			<div style="padding: 20px; background: black; font-size: 32px; border: 4px solid gray; width: 388px" class="pui mainpui">
+				
+				<div>Owner: <input type="text" class="ccinput stripe-name" placeholder="Name Surname" style="width: 280px"/></div>
+				<div>Number: <input type="text" class="ccinput stripe-number" placeholder="4444 4444 4444 4444" onchange="$(this).payment('formatCardNumber');" style="width: 270px"/></div>
+				<div>
+					<div class="inline-block vtop">
+						Expiry: <input type="text" class="ccinput stripe-month" placeholder="08" style="width: 30px"/> / <input type="text" class="ccinput ccsmall stripe-year" placeholder="18" style="width: 30px"/>
+					</div>
+					<div class="inline-block vtop" style="margin-left: 10px">
+						CVC: <input type="text" class="ccinput ccsmall2 stripe-cvc" placeholder="123" style="width: 40px"/>
+					</div>
+				</div>
+				<div class="ccpostcode hidden">
+					Postcode: <input type="text" class="ccinput" placeholder="Optional" style="width: 200px"/>
+				</div>
+				
+					<div style="border: 4px solid gray; text-align: center; padding: 6px 0px 6px 0px; margin-top: 12px" class="pbutton">
+						Please Login First!
+					</div>
+				
+			</div>
+			<div class="pui mainpui" style="border: 4px solid gray; padding: 12px; background: black; font-size: 24px; color: gray; text-align: left; margin-top: 5px; width: 404px">
+				Adventure Land uses <a href="https://stripe.com/about" target="_blank" style="color: #CFCFCF; text-decoration: none" onclick="stpr(event)">Stripe</a> to handle payments, the leader in payments processing. Your credit card information never touches Adventure Land's servers.
+				<div id="plog"></div>
+			</div>
+			<div class="hidden pui aboutpui" style="border: 4px solid gray; padding: 12px; background: black; font-size: 24px; color: white; text-align: left; width: 400px">
+				<div class="mb5">
+					SHELLS are Adventure Land's rare, purchasable currency. Unlike many other games, you can find SHELLS in-game too. They drop from gems and monsters. They are rare.
+				</div>
+				<div class="mb5">
+					This creates equal opportunities for both paying and non-paying players. The game is designed and balanced to be enjoyable either way.
+				</div>
+				<div style="color: #BDD8B0;">
+					You can support Adventure Land's development by buying SHELLS and hopefully enjoy the game more, faster, to your hearts desire!
+				</div>
+			</div>
+			<div style="padding: 20px; background: black; font-size: 32px; border: 4px solid gray; width: 388px; text-align: center"
+				class="pui alternativepui clickable hidden" onclick="show_ppayments()">
+				Alternative Payments
+			</div>
+			<div style="padding: 20px; background: black; font-size: 32px; border: 4px solid gray; width: 388px; margin-top: 5px; text-align: center"
+				class="pui alternativepui clickable hidden" onclick="show_poffers()">
+				Offers
+			</div>
+			<div class="pui alternativepui hidden"
+				style="border: 4px solid gray; padding: 12px; background: black; font-size: 24px; color: gray; text-align: left; margin-top: 5px; width: 404px">
+				Adventure Land uses <a href="https://www.paymentwall.com/en/about-us" target="_blank" style="color: #CFCFCF; text-decoration: none">Paymentwall</a> for alternative payments and offers. There are various localised payment methods, and offers to receive free SHELLS.
+			</div>
+		</div>
+	</div>
+</div>
+			</div>
+			
+		
+		<script data-cfasync="false" src="/cdn-cgi/scripts/d07b1474/cloudflare-static/email-decode.min.js"></script><script>
+			$(function(){ //document.addEventListener("DOMContentLoaded", // now replaced $(document).on("ready") too [10/04/17]
+				keyboard_logic();
+				init_sounds();
+				if(!bowser.chrome && perfect_pixels) retina_mode=true;
+				the_game();
+				drag_logic();
+				window.onresize=on_resize;
+				on_resize();
+				code_logic();
+				setTimeout(payment_logic,1200);
+				// $("body").nodoubletapzoom();
+				window.onbeforeunload=function(e){
+					if(character && game_loaded) code_persistence_logic();
+					if(character && next_transport>new Date())
+					{
+						add_log("Since you engaged another player in the last 3.6 seconds, If you leave now, You will be automatically defeated.","#E58859")
+						var response="Are you sure?";
+						e.returnValue=response;
+						return response;
+					}
+				};
+				$(document).on('click','a.eexternal',function(event) {
+					if(!is_electron) return;
+					event.preventDefault();
+					require('electron').shell.openExternal(this.href);
+				});
+				if(no_graphics && !no_html)
+				{
+					$("body").css("background-color","#4D4E50");
+					// block_right_clicks=false;
+				}
+				set_status("50%");
+				setTimeout(function(){ $("#gamelog").scrollTop(0);},1);
+			});
+			window.addEventListener("contextmenu", function(e) {
+				if(!block_right_clicks) return;
+				var custom=false,current=e.target||{};
+				if((current.className||"").substr(0,6)=="rclick") custom=true;
+				while(current.parentNode && !custom)
+				{
+					current=current.parentNode;
+					if((current.className||"").substr(0,6)=="rclick") custom=true;
+				}
+				if(inside!="login" && inside!="selection")
+				{
+					if(custom) on_rclick(current);
+					e.preventDefault();
+					return false;
+				}
+	   		 });
+		</script>
+<textarea id='dcode' style='display:none'>
+// Hey there!
+// This is CODE, lets you control your character with code.
+// If you don't know how to code, don't worry, It's easy.
+// Just set attack_mode to true and ENGAGE!
+
+var attack_mode=false
+
+setInterval(function(){
+
+	use_hp_or_mp();
+	loot();
+
+	if(!attack_mode || character.rip || is_moving(character)) return;
+
+	var target=get_targeted_monster();
+	if(!target)
+	{
+		target=get_nearest_monster({min_xp:100,max_att:120});
+		if(target) change_target(target);
+		else
+		{
+			set_message("No Monsters");
+			return;
+		}
+	}
+	
+	if(!in_attack_range(target))
+	{
+		move(
+			character.real_x+(target.real_x-character.real_x)/2,
+			character.real_y+(target.real_y-character.real_y)/2
+			);
+		// Walk half the distance
+	}
+	else if(can_attack(target))
+	{
+		set_message("Attacking");
+		attack(target);
+	}
+
+},1000/4); // Loops every 1/4 seconds.
+
+// NOTE: If the tab isn't focused, browsers slow down the game
+// Learn Javascript: https://www.codecademy.com/learn/learn-javascript
+// Write your own CODE: https://github.com/kaansoral/adventureland
+
+</textarea>
+	</body>
+</html>
