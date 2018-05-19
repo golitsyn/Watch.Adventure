@@ -78,6 +78,7 @@ var G = {
     "gem1": ["pack_20", 10, 25],
     "gem0": ["pack_20", 13, 25],
     "shade_uweapon": ["", 14, 98],
+    "t2intamulet": ["pack_20", 12, 19],
     "leather": ["pack_20", 6, 25],
     "supermittens": ["pack_20", 2, 33],
     "shrine2": ["dungeon", 720, 128, 32, 48],
@@ -213,7 +214,7 @@ var G = {
     "t2bow": ["pack_20", 3, 9],
     "hhelmet": ["pack_20", 4, 0],
     "blade20": ["pack_20", 1, 11],
-    "t2intamulet": ["pack_20", 12, 19],
+    "xshield": ["pack_20", 6, 12],
     "hpamulet": ["pack_20", 4, 19],
     "xpbooster": ["pack_20", 2, 27],
     "shoes1": ["pack_20", 3, 5],
@@ -1985,18 +1986,25 @@ var G = {
       },
       "type": "earring"
     },
-    "shield": {
-      "grades": [4, 8],
+    "xshield": {
+      "int": 4,
+      "explanation": "A metallurgical failure but a magical marvel",
+      "resistance": 24,
+      "g": 1200000,
+      "grades": [0, 0],
+      "skin": "xshield",
+      "crit": 1,
+      "xp": 8,
+      "speed": 5,
+      "dex": 6,
       "upgrade": {
-        "armor": 12.5,
-        "resistance": 7.5
+        "resistance": 6,
+        "str": 1
       },
-      "name": "Shield",
-      "g": 24000,
-      "skin": "shield",
-      "armor": 60,
-      "type": "shield",
-      "resistance": 20
+      "name": "Shield X",
+      "evasion": 4,
+      "str": 8,
+      "type": "shield"
     },
     "bow": {
       "damage": "physical",
@@ -2412,6 +2420,19 @@ var G = {
       "edge": 4,
       "type": "chest",
       "scroll": true
+    },
+    "shield": {
+      "grades": [4, 8],
+      "upgrade": {
+        "armor": 12.5,
+        "resistance": 7.5
+      },
+      "name": "Shield",
+      "g": 24000,
+      "skin": "shield",
+      "armor": 60,
+      "type": "shield",
+      "resistance": 20
     },
     "maceofthedead": {
       "a": true,
@@ -6324,7 +6345,7 @@ var G = {
       }]
     }
   },
-  "version": 280,
+  "version": 281,
   "animations": {
     "explode_up": {
       "frames": 12,
