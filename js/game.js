@@ -3561,7 +3561,7 @@ function effects_logic(a) {
     }
   }
   if (a.s.hardshell && !a.fx.hardshell) {
-    a.hardshell_effect = true;
+    a.fx.hardshell = true;
     start_animation(a, "hardshell")
   } else {
     if (!a.s.hardshell && a.fx.hardshell) {
