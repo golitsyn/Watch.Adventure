@@ -48,7 +48,6 @@ var last_drag_start = new Date();
 var last_npc_right_click = new Date();
 var block_right_clicks = true;
 var mouse_only = true;
-var show_names = 0;
 var the_code = "";
 var rxd = null;
 var server_region = "EU",
@@ -60,6 +59,8 @@ var real_id = "",
   map = null,
   game_loaded = false,
   friends = [];
+var ch_disp_x = 0,
+  ch_disp_y = 0;
 var tints = [];
 var entities = {},
   future_entities = {
@@ -69,12 +70,14 @@ var entities = {},
   pull_all = false,
   pull_all_next = false,
   prepull_target_id = null;
-var text_layer, monster_layer, player_layer, chest_layer, map_layer;
+var text_layer, monster_layer, player_layer, chest_layer, map_layer, separate_layer;
 var rip = false;
 var heartbeat = new Date(),
   slow_heartbeats = 0;
 var ctarget = null;
-var textures = {};
+var textures = {},
+  C = {},
+  FC = {};
 var total_map_tiles = 0;
 var tiles = null,
   dtile = null;
@@ -91,7 +94,8 @@ var water_tiles = [],
 var drawings = [],
   code_buttons = {};
 var chests = {},
-  party_list = [];
+  party_list = [],
+  party = {};
 var tile_sprites = {},
   sprite_last = {};
 var first_coords = false,
@@ -116,6 +120,7 @@ var topleft_npc = false,
 var topright_npc = false;
 var transports = false;
 var purpose = "buying";
+var next_minteraction = null;
 var abtesting = null,
   abtesting_ui = false;
 var code_run = false,
@@ -124,8 +129,18 @@ var code_run = false,
 var reload_state = false,
   reload_timer = null,
   first_entities = false;
+var blink_pressed = false,
+  last_blink_pressed = new Date();
 var force_draw_on = false;
+var use_layers = false;
 var draws = 0;
+var keymap = {},
+  skillbar = [];
+var options = {
+  move_with_arrows: true,
+  code_fx: false,
+  show_names: false,
+};
 var S = {
   font: "Pixel",
   normal: 18,
@@ -233,6 +248,9 @@ setInterval(function() {
   }
   heartbeat = new Date()
 }, 100);
+setInterval(function() {
+  arrow_movement_logic()
+}, 200);
 
 function code_button() {
   add_log("Executed");
@@ -341,9 +359,20 @@ function position_map() {
   }
   if (character) {
     if (manual_centering) {
-      character.x = c_round(width / 2), character.y = c_round(height / 2)
+      character.x = c_round(width / 2 + ch_disp_x), character.y = c_round(height / 2 + ch_disp_y)
     } else {
       character.x = c_round(character.real_x), character.y = c_round(character.real_y)
+    }
+  }
+}
+function ui_logic() {
+  if (character && character.ctype == "mage") {
+    if (b_pressed && map.cursor != "crosshair") {
+      map.cursor = "crosshair"
+    } else {
+      if (!b_pressed && map.cursor == "crosshair") {
+        map.cursor = "default"
+      }
     }
   }
 }
@@ -387,7 +416,9 @@ function reset_topleft() {
       name: "HP",
       color: colors.hp,
       value: c.hp + "/" + c.max_hp,
-      cursed: c.cursed
+      cursed: c.s.cursed,
+      stunned: !c.attack && c.s.stunned,
+      poisoned: !c.attack && c.s.poisoned
     }, {
       name: "XP",
       color: "green",
@@ -398,8 +429,8 @@ function reset_topleft() {
         name: "ATT",
         color: "#316EE6",
         value: c.attack,
-        stunned: c.stunned,
-        poisoned: c.poisoned
+        stunned: c.s.stunned,
+        poisoned: c.s.poisoned
       })
     }
     if (e.evasion) {
@@ -481,7 +512,14 @@ function reset_topleft() {
         color: "#CF539B"
       }, ]
     }
-    render_info(f)
+    if (c.heal) {
+      f.push({
+        line: "SELF HEALING",
+        color: "#9E6367"
+      })
+    }
+    render_info(f);
+    render_conditions(c)
   } else {
     if (ctarget && ctarget.npc) {
       var f = [{
@@ -518,12 +556,12 @@ function reset_topleft() {
           name: (b.ctype == "priest" && "HEAL" || "ATT"),
           color: "green",
           value: round(b.attack),
-          cursed: b.cursed
+          cursed: b.s.cursed
         }, {
           name: "ATTSPD",
           color: "gray",
           value: round(b.frequency * 100),
-          poisoned: b.poisoned
+          poisoned: b.s.poisoned
         }, {
           name: "RANGE",
           color: "gray",
@@ -608,14 +646,14 @@ function reset_topleft() {
             onclick: "socket.emit('jail',{id:'" + ctarget.id + "'})",
             color: "#9525A3"
           });
-          if (!b.mute) {
+          if (!b.s.mute) {
             d.push({
               name: "MUTE",
               onclick: "socket.emit('mute',{id:'" + ctarget.id + "',state:1})",
               color: "#A72379"
             })
           } else {
-            if (b.mute) {
+            if (b.s.mute) {
               d.push({
                 name: "UNMUTE",
                 onclick: "socket.emit('mute',{id:'" + ctarget.id + "',state:0})",
@@ -765,6 +803,14 @@ function process_entities() {
             start_animation(h, "spark0")
           }
         }
+      } else {
+        if (g.type == "heal") {
+          var e = get_entity(g.m);
+          d_text("+" + g.heal, e, {
+            color: colors.heal
+          });
+          start_animation(e, "heal")
+        }
       }
     })
   }
@@ -805,11 +851,14 @@ function on_disappear(a) {
     if (a.invis) {
       assassin_smoke(entities[a.id].real_x, entities[a.id].real_y)
     }
-    if (a.effect) {
+    if (a.effect === 1) {
       start_animation(entities[a.id], "transport")
     }
     entities["DEAD" + a.id] = entities[a.id];
     entities[a.id].dead = true;
+    if (a.teleport) {
+      entities[a.id].tpd = true
+    }
     call_code_function("on_disappear", entities[a.id], a);
     delete entities[a.id]
   } else {
@@ -825,38 +874,45 @@ var asp_skip = {};["x", "y", "vx", "vy", "moving", "abs", "going_x", "going_y", 
   asp_skip[a] = true
 });
 
-function adopt_soft_properties(a, b) {
+function adopt_soft_properties(a, c) {
   if (a.me) {
-    if (a.moving && a.speed && b.speed && a.speed != b.speed) {
-      a.speed = b.speed;
+    if (a.moving && a.speed && c.speed && a.speed != c.speed) {
+      a.speed = c.speed;
       calculate_vxy(a)
     }
-    if (b.abs) {
+    if (c.abs) {
       a.moving = false
     }
     a.bank = null
   }
-  if (a.type == "character" && a.skin && a.skin != b.skin) {
-    a.skin = b.skin;
+  if (a.type == "monster" && G.monsters[a.mtype]) {
+    var b = G.monsters[a.mtype];[["speed", "speed"], ["hp", "hp"], ["max_hp", "hp"], ["mp", "mp"], ["max_mp", "mp"], ["attack", "attack"], ["xp", "xp"], ["frequency", "frequency"], ["heal", "heal"]].forEach(function(e) {
+      if (b[e[1]] !== undefined && (c[e[0]] === undefined || a[e[0]] === undefined)) {
+        a[e[0]] = b[e[1]]
+      }
+    })
+  }
+  if (a.type == "character" && a.skin && a.skin != c.skin) {
+    a.skin = c.skin;
     new_sprite(a, "full", "renew")
   }
-  for (prop in b) {
+  for (prop in c) {
     if (asp_skip[prop]) {
       continue
     }
-    a[prop] = b[prop]
+    a[prop] = c[prop]
   }
   if (a.slots) {
     a.g10 = a.g9 = a.g8 = undefined;
-    for (var c in a.slots) {
-      if ((c == "chest" || c == "mainhand") && a.slots[c]) {
-        if (a.slots[c].level >= 10) {
+    for (var d in a.slots) {
+      if ((d == "chest" || d == "mainhand") && a.slots[d]) {
+        if (a.slots[d].level >= 10) {
           a.g10 = true
         }
-        if (a.slots[c].level == 9) {
+        if (a.slots[d].level == 9) {
           a.g9 = true
         }
-        if (a.slots[c].level == 8) {
+        if (a.slots[d].level == 8) {
           a.g8 = true
         }
       }
@@ -867,23 +923,11 @@ function adopt_soft_properties(a, b) {
     if (a.g9) {
       a.g8 = undefined
     }
-  }["stunned", "cursed", "poisoned", "poisonous", "frozen"].forEach(function(d) {
-    if (a[d]) {
-      a[d] = false
-    }
-  });
-  if (is_player(a)) {["charging", "invis", "invincible", "mute"].forEach(function(d) {
-      if (a[d]) {
-        a[d] = false
-      }
-    })
-  }
-  for (prop in b.s || {}) {
-    a[prop] = b.s[prop]
   }
   if (a.me) {
     a.bank = a.user
   }
+  a.last_ms = new Date()
 }
 function reposition_ui() {
   if (character && !no_html) {
@@ -946,6 +990,9 @@ function update_overlays() {
     }
     $(".abtime").html("0" + a + ":" + c)
   }
+  if (character && character.moving && options.code_fx && stage.cfilter_ascii) {
+    remove_code_fx()
+  }
 }
 function on_load_progress(a, b) {
   $("#progressui").html(round(a.progress) + "%")
@@ -1001,14 +1048,20 @@ function the_game(c) {
     document.body.appendChild(renderer.view)
   }
   $("canvas").css("position", "fixed").css("top", "0px").css("left", "0px").css("z-index", 1);
-  stage = new PIXI.Container();
-  inner_stage = new PIXI.Container();
+  if (PIXI.display.Stage) {
+    stage = new PIXI.display.Stage()
+  } else {
+    stage = new PIXI.Container()
+  }
   if (bw_mode) {
     var b = new PIXI.filters.ColorMatrixFilter();
-    stage.filters = [b];
-    b.desaturate()
+    b.desaturate();
+    stage.cfilter_bw = b;
+    regather_filters(stage)
+  } else {
+    delete stage.cfilter_bw;
+    regather_filters(stage)
   }
-  stage.addChild(inner_stage);
   if (PIXI.DisplayList && !no_graphics) {
     if (window.inner_stage) {
       inner_stage.displayList = new PIXI.DisplayList()
@@ -1018,6 +1071,7 @@ function the_game(c) {
     map_layer = new PIXI.DisplayGroup(0, true);
     text_layer = new PIXI.DisplayGroup(3, true);
     chest_layer = new PIXI.DisplayGroup(2, true);
+    separate_layer = new PIXI.DisplayGroup(0, true);
     monster_layer = new PIXI.DisplayGroup(1, function(e) {
       var d = 0;
       if (e.stand) {
@@ -1031,6 +1085,55 @@ function the_game(c) {
     });
     player_layer = monster_layer;
     chest_layer = monster_layer
+  } else {
+    if (PIXI.display) {
+      use_layers = true;
+      stage.group.enableSort = true;
+      map_layer = new PIXI.display.Group(0, true);
+      text_layer = new PIXI.display.Group(5, true);
+      monster_layer = new PIXI.display.Group(3, function(e) {
+        var d = 0;
+        if (e.stand) {
+          d = -3
+        }
+        if ("real_y" in e) {
+          e.zOrder = -e.real_y + d + (e.y_disp || 0)
+        } else {
+          e.zOrder = -e.position.y + d + (e.y_disp || 0)
+        }
+      });
+      animation_layer = new PIXI.display.Group(1, true);
+      entity_layer = new PIXI.display.Group(2, function(e) {
+        var d = 0;
+        if (e.parent.stand) {
+          d = -3
+        }
+        if ("real_y" in e.parent) {
+          e.zOrder = -e.parent.real_y + d + (e.parent.y_disp || 0)
+        } else {
+          e.zOrder = -e.parent.position.y + d + (e.parent.y_disp || 0)
+        }
+      });
+      hp_layer = new PIXI.display.Group(4, function(e) {
+        var d = 0;
+        if (e.parent.stand) {
+          d = -3
+        }
+        if ("real_y" in e.parent) {
+          e.zOrder = -e.parent.real_y + d + (e.parent.y_disp || 0)
+        } else {
+          e.zOrder = -e.parent.position.y + d + (e.parent.y_disp || 0)
+        }
+      });
+      player_layer = monster_layer;
+      chest_layer = monster_layer;
+      stage.addChild(new PIXI.display.Layer(map_layer));
+      stage.addChild(new PIXI.display.Layer(text_layer));
+      stage.addChild(new PIXI.display.Layer(entity_layer));
+      stage.addChild(new PIXI.display.Layer(hp_layer));
+      stage.addChild(new PIXI.display.Layer(monster_layer));
+      stage.addChild(new PIXI.display.Layer(animation_layer))
+    }
   }
   frame_ms = 16;
   C = PIXI.utils.BaseTextureCache;
@@ -1082,6 +1185,9 @@ function init_socket() {
   }
   if (window.socket) {
     window.socket.destroy()
+  }
+  if (is_sdk) {
+    server_addr = "0.0.0.0"
   }
   window.socket = io(server_addr + ":" + server_port);
   var original_onevent = socket.onevent;
@@ -1168,9 +1274,18 @@ function init_socket() {
     character.direction = data.direction || 0;
     character.map = current_map;
     character["in"] = data["in"];
-    if (data.effect) {
-      character.tp = true
+    if (data.effect === "blink") {
+      delete character.fading_out;
+      character.alpha = 0.5;
+      restore_dimensions(character)
     }
+    if (data.effect === "magiport") {
+      delete character.fading_out;
+      stop_filter(character, "bloom");
+      character.alpha = 0.5;
+      restore_dimensions(character)
+    }
+    character.tp = data.effect;
     var cm_timer = new Date();
     if (create) {
       create_map()
@@ -1205,7 +1320,7 @@ function init_socket() {
       show_modal($(gameplay == "hardcore" && "#hardcoreguide" || "#gameguide").html())
     }
     if (character.ctype == "merchant") {
-      show_names = 1
+      options.show_names = true
     }
     clear_game_logs();
     add_log("Connected!");
@@ -1259,10 +1374,6 @@ function init_socket() {
     rip_logic();
     new_map_logic("start", data);
     new_game_logic();
-    load_skills();
-    if (is_sdk || 1) {
-      render_skillbar()
-    }
     ipass = data.ipass;
     setInterval(function() {
       if (game_loaded) {
@@ -1309,6 +1420,15 @@ function init_socket() {
         }
       }
     }
+    var settings = get_settings(real_id);
+    if (settings.skillbar) {
+      skillbar = settings.skillbar
+    }
+    if (settings.keymap) {
+      keymap = settings.keymap
+    }
+    map_keys_and_skills();
+    render_skillbar();
     if (!character.rip) {
       $("#name").css("color", "#1AC506")
     }
@@ -1441,7 +1561,10 @@ function init_socket() {
     draw_trigger(function() {
       var response = data.response || data;
       if (response == "elixir") {
-        ui_log("Consumed the elixir", "gray")
+        ui_log("Consumed the elixir", "gray");
+        d_text("YUM", character, {
+          color: "elixir"
+        })
       } else {
         if (response == "nothing") {
           ui_log("Nothing happens", "gray")
@@ -1452,172 +1575,229 @@ function init_socket() {
             if (response == "no_mp") {
               d_text("NO MP", character)
             } else {
-              if (response == "no_mp") {
-                d_text("LOW LEVEL", character)
+              if (response == "skill_too_far") {
+                d_text("TOO FAR", character)
               } else {
-                if (response == "exchange_full") {
-                  d_text("NO SPACE", character);
-                  ui_log("Inventory is full", "gray");
-                  reopen()
+                if (response == "target_alive") {
+                  d_text("LOOKS LIVE?", character)
                 } else {
-                  if (response == "exchange_notenough") {
-                    d_text("NOT ENOUGH", character);
-                    ui_log("Need more", "gray");
-                    reopen()
-                  } else {
-                    if (in_arr(response, ["mistletoe_success", "leather_success", "candycane_success", "ornament_success", "seashell_success", "gemfragment_success"])) {
-                      render_interaction(response)
+                  if (response == "no_target") {
+                    if (!ctarget) {
+                      d_text("NO TARGET", character)
                     } else {
-                      if (response == "cant_escape") {
-                        d_text("CAN'T ESCAPE", character);
-                        transporting = false
+                      d_text("INVALID TARGET", character)
+                    }
+                  } else {
+                    if (response == "non_friendly_target") {
+                      d_text("NON FRIENDLY", character)
+                    } else {
+                      if (response == "no_level") {
+                        d_text("LOW LEVEL", character)
                       } else {
-                        if (response == "cant_enter") {
-                          ui_log("Can't enter", "gray");
-                          transporting = false
+                        if (response == "skill_cant_use") {
+                          d_text("CAN'T USE", character)
                         } else {
-                          if (response == "bank_opi") {
-                            ui_log("Bank connection in progress", "gray");
-                            transporting = false
+                          if (response == "skill_cant_wtype") {
+                            ui_log("Wrong weapon", "gray");
+                            d_text("NOPE", character)
                           } else {
-                            if (response == "bank_opx") {
-                              if (data.name) {
-                                ui_log(data.name + " is in the bank", "gray")
-                              } else {
-                                ui_log("Bank is busy right now", "gray")
-                              }
-                              transporting = false
+                            if (response == "exchange_full") {
+                              d_text("NO SPACE", character);
+                              ui_log("Inventory is full", "gray");
+                              reopen()
                             } else {
-                              if (response == "transport_failed") {
-                                transporting = false
+                              if (response == "exchange_notenough") {
+                                d_text("NOT ENOUGH", character);
+                                ui_log("Need more", "gray");
+                                reopen()
                               } else {
-                                if (response == "loot_failed") {
-                                  ui_log("Can't loot", "gray")
+                                if (in_arr(response, ["mistletoe_success", "leather_success", "candycane_success", "ornament_success", "seashell_success", "gemfragment_success"])) {
+                                  render_interaction(response)
                                 } else {
-                                  if (response == "transport_cant_reach") {
-                                    ui_log("Can't reach", "gray");
+                                  if (response == "cant_escape") {
+                                    d_text("CAN'T ESCAPE", character);
                                     transporting = false
                                   } else {
-                                    if (response == "destroyed") {
-                                      ui_log("Destroyed " + G.items[data.name].name, "gray")
+                                    if (response == "cant_enter") {
+                                      ui_log("Can't enter", "gray");
+                                      transporting = false
                                     } else {
-                                      if (response == "buy_get_closer" || response == "sell_get_closer" || response == "trade_get_closer" || response == "ecu_get_closer") {
-                                        if (response == "buy_get_closer") {
-                                          call_code_function("trigger_event", "buy_fail", {
-                                            rxd: rxd,
-                                            reason: "distance"
-                                          })
-                                        }
-                                        ui_log("Get closer", "gray")
+                                      if (response == "bank_opi") {
+                                        ui_log("Bank connection in progress", "gray");
+                                        transporting = false
                                       } else {
-                                        if (response == "condition") {
-                                          var def = G.conditions[data.name],
-                                            from = data.from;
-                                          if (def.bad) {
-                                            ui_log("Afflicted by " + def.name, "gray")
+                                        if (response == "bank_opx") {
+                                          if (data.name) {
+                                            ui_log(data.name + " is in the bank", "gray")
                                           } else {
-                                            if (from) {
-                                              ui_log(from + " buffed you with " + def.name, "gray")
-                                            } else {
-                                              ui_log("Buffed with " + def.name, "gray")
-                                            }
+                                            ui_log("Bank is busy right now", "gray")
                                           }
+                                          transporting = false
                                         } else {
-                                          if (response == "ex_condition") {
-                                            var def = G.conditions[data.name];
-                                            ui_log(def.name + " faded away ...", "gray")
+                                          if (response == "transport_failed") {
+                                            transporting = false
                                           } else {
-                                            if (response == "buy_cant_npc") {
-                                              ui_log("Can't buy this from an NPC", "gray"), call_code_function("trigger_event", "buy_fail", {
-                                                rxd: rxd,
-                                                reason: "not_buyable"
-                                              })
+                                            if (response == "loot_failed") {
+                                              close_chests();
+                                              ui_log("Can't loot", "gray")
                                             } else {
-                                              if (response == "buy_cost") {
-                                                d_text("INSUFFICIENT", character), ui_log("Not enough gold", "gray"), call_code_function("trigger_event", "buy_fail", {
-                                                  rxd: rxd,
-                                                  reason: "gold"
-                                                })
+                                              if (response == "loot_no_space") {
+                                                close_chests();
+                                                d_text("NO SPACE", character)
                                               } else {
-                                                if (response == "cant_reach") {
-                                                  ui_log("Can't reach", "gray")
+                                                if (response == "transport_cant_reach") {
+                                                  ui_log("Can't reach", "gray");
+                                                  transporting = false
                                                 } else {
-                                                  if (response == "no_item") {
-                                                    ui_log("No item provided", "gray")
+                                                  if (response == "destroyed") {
+                                                    ui_log("Destroyed " + G.items[data.name].name, "gray")
                                                   } else {
-                                                    if (response == "op_unavailable") {
-                                                      add_chat("", "Operation unavailable", "gray")
+                                                    if (response == "buy_get_closer" || response == "sell_get_closer" || response == "trade_get_closer" || response == "ecu_get_closer") {
+                                                      if (response == "buy_get_closer") {
+                                                        call_code_function("trigger_event", "buy_fail", {
+                                                          rxd: rxd,
+                                                          reason: "distance"
+                                                        })
+                                                      }
+                                                      ui_log("Get closer", "gray")
                                                     } else {
-                                                      if (response == "send_no_space") {
-                                                        add_chat("", "No space on receiver", "gray")
-                                                      } else {
-                                                        if (response == "send_no_item") {
-                                                          add_chat("", "Nothing to send", "gray")
+                                                      if (response == "condition") {
+                                                        var def = G.conditions[data.name],
+                                                          from = data.from;
+                                                        if (def.bad) {
+                                                          ui_log("Afflicted by " + def.name, "gray")
                                                         } else {
-                                                          if (response == "signed_up") {
-                                                            ui_log("Signed Up!", "#39BB54")
+                                                          if (from) {
+                                                            ui_log(from + " buffed you with " + def.name, "gray")
                                                           } else {
-                                                            if (response == "item_received" || response == "item_sent") {
-                                                              var additional = "";
-                                                              if (data.q > 1) {
-                                                                additional = "(x" + data.q + ")"
-                                                              }
-                                                              if (response == "item_received") {
-                                                                add_chat("", "Received " + G.items[data.item].name + additional + " from " + data.name, "#6AB3FF")
-                                                              } else {
-                                                                add_chat("", "Sent " + G.items[data.item].name + additional + " to " + data.name, "#6AB3FF")
-                                                              }
+                                                            ui_log("Buffed with " + def.name, "gray")
+                                                          }
+                                                        }
+                                                      } else {
+                                                        if (response == "ex_condition") {
+                                                          var def = G.conditions[data.name];
+                                                          ui_log(def.name + " faded away ...", "gray")
+                                                        } else {
+                                                          if (response == "buy_cant_npc") {
+                                                            ui_log("Can't buy this from an NPC", "gray"), call_code_function("trigger_event", "buy_fail", {
+                                                              rxd: rxd,
+                                                              reason: "not_buyable"
+                                                            })
+                                                          } else {
+                                                            if (response == "buy_cost") {
+                                                              d_text("INSUFFICIENT", character), ui_log("Not enough gold", "gray"), call_code_function("trigger_event", "buy_fail", {
+                                                                rxd: rxd,
+                                                                reason: "gold"
+                                                              })
                                                             } else {
-                                                              if (response == "gold_not_enough") {
-                                                                add_chat("", "Not enough gold", colors.gold)
+                                                              if (response == "cant_reach") {
+                                                                ui_log("Can't reach", "gray")
                                                               } else {
-                                                                if (response == "gold_sent") {
-                                                                  add_chat("", "Sent " + to_pretty_num(data.gold) + " gold to " + data.name, colors.gold)
+                                                                if (response == "no_item") {
+                                                                  ui_log("No item provided", "gray")
                                                                 } else {
-                                                                  if (response == "gold_received") {
-                                                                    add_chat("", "Received " + to_pretty_num(data.gold) + " gold from " + data.name, colors.gold)
+                                                                  if (response == "op_unavailable") {
+                                                                    add_chat("", "Operation unavailable", "gray")
                                                                   } else {
-                                                                    if (response == "friend_already") {
-                                                                      add_chat("", "You are already friends", "gray")
+                                                                    if (response == "send_no_space") {
+                                                                      add_chat("", "No space on receiver", "gray")
                                                                     } else {
-                                                                      if (response == "friend_rleft") {
-                                                                        add_chat("", "Player left the server", "gray")
+                                                                      if (response == "send_no_item") {
+                                                                        add_chat("", "Nothing to send", "gray")
                                                                       } else {
-                                                                        if (response == "friend_rsent") {
-                                                                          add_chat("", "Friend request sent", "#409BDD")
+                                                                        if (response == "signed_up") {
+                                                                          ui_log("Signed Up!", "#39BB54")
                                                                         } else {
-                                                                          if (response == "friend_expired") {
-                                                                            add_chat("", "Request expired", "#409BDD")
-                                                                          } else {
-                                                                            if (response == "friend_failed") {
-                                                                              add_chat("", "Friendship failed, reason: " + data.reason, "#409BDD")
+                                                                          if (response == "item_received" || response == "item_sent") {
+                                                                            var additional = "";
+                                                                            if (data.q > 1) {
+                                                                              additional = "(x" + data.q + ")"
+                                                                            }
+                                                                            if (response == "item_received") {
+                                                                              add_chat("", "Received " + G.items[data.item].name + additional + " from " + data.name, "#6AB3FF")
                                                                             } else {
-                                                                              if (response == "craft") {
-                                                                                var def = G.craft[data.name];
-                                                                                ui_log("Spent " + to_pretty_num(def.cost) + " gold", "gray");
-                                                                                ui_log("Received " + G.items[data.name].name, "white")
+                                                                              add_chat("", "Sent " + G.items[data.item].name + additional + " to " + data.name, "#6AB3FF")
+                                                                            }
+                                                                          } else {
+                                                                            if (response == "gold_not_enough") {
+                                                                              add_chat("", "Not enough gold", colors.gold)
+                                                                            } else {
+                                                                              if (response == "gold_sent") {
+                                                                                add_chat("", "Sent " + to_pretty_num(data.gold) + " gold to " + data.name, colors.gold)
                                                                               } else {
-                                                                                if (response == "dismantle") {
-                                                                                  var def = G.craft[data.name];
-                                                                                  ui_log("Spent " + to_pretty_num(def.cost) + " gold", "gray");
-                                                                                  ui_log("Dismantled " + G.items[data.name].name, "#CF5C65")
+                                                                                if (response == "gold_received") {
+                                                                                  add_chat("", "Received " + to_pretty_num(data.gold) + " gold from " + data.name, colors.gold)
                                                                                 } else {
-                                                                                  if (response == "dismantle_cant") {
-                                                                                    ui_log("Can't dismantle", "gray")
+                                                                                  if (response == "friend_already") {
+                                                                                    add_chat("", "You are already friends", "gray")
                                                                                   } else {
-                                                                                    if (response == "inv_size") {
-                                                                                      ui_log("Need more empty space", "gray")
+                                                                                    if (response == "friend_rleft") {
+                                                                                      add_chat("", "Player left the server", "gray")
                                                                                     } else {
-                                                                                      if (response == "craft_cant") {
-                                                                                        ui_log("Can't craft", "gray")
+                                                                                      if (response == "friend_rsent") {
+                                                                                        add_chat("", "Friend request sent", "#409BDD")
                                                                                       } else {
-                                                                                        if (response == "craft_cant_quantity") {
-                                                                                          ui_log("Not enough materials", "gray")
+                                                                                        if (response == "friend_expired") {
+                                                                                          add_chat("", "Request expired", "#409BDD")
                                                                                         } else {
-                                                                                          if (response == "craft_atleast2") {
-                                                                                            ui_log("You need to provide at least 2 items", "gray")
+                                                                                          if (response == "friend_failed") {
+                                                                                            add_chat("", "Friendship failed, reason: " + data.reason, "#409BDD")
                                                                                           } else {
-                                                                                            console.log("Missed game_response: " + response)
+                                                                                            if (response == "craft") {
+                                                                                              var def = G.craft[data.name];
+                                                                                              ui_log("Spent " + to_pretty_num(def.cost) + " gold", "gray");
+                                                                                              ui_log("Received " + G.items[data.name].name, "white")
+                                                                                            } else {
+                                                                                              if (response == "dismantle") {
+                                                                                                var def = G.craft[data.name];
+                                                                                                ui_log("Spent " + to_pretty_num(def.cost) + " gold", "gray");
+                                                                                                ui_log("Dismantled " + G.items[data.name].name, "#CF5C65")
+                                                                                              } else {
+                                                                                                if (response == "dismantle_cant") {
+                                                                                                  ui_log("Can't dismantle", "gray")
+                                                                                                } else {
+                                                                                                  if (response == "inv_size") {
+                                                                                                    ui_log("Need more empty space", "gray")
+                                                                                                  } else {
+                                                                                                    if (response == "craft_cant") {
+                                                                                                      ui_log("Can't craft", "gray")
+                                                                                                    } else {
+                                                                                                      if (response == "craft_cant_quantity") {
+                                                                                                        ui_log("Not enough materials", "gray")
+                                                                                                      } else {
+                                                                                                        if (response == "craft_atleast2") {
+                                                                                                          ui_log("You need to provide at least 2 items", "gray")
+                                                                                                        } else {
+                                                                                                          if (response == "target_lock") {
+                                                                                                            ui_log("Target Acquired: " + G.monsters[data.monster].name, "#F00B22")
+                                                                                                          } else {
+                                                                                                            if (response == "cooldown") {
+                                                                                                              d_text("NOT READY", character)
+                                                                                                            } else {
+                                                                                                              if (response == "blink_failed") {
+                                                                                                                no_no_no();
+                                                                                                                d_text("NO", character);
+                                                                                                                last_blink_pressed = inception
+                                                                                                              } else {
+                                                                                                                if (response == "magiport_failed") {
+                                                                                                                  ui_log("Magiport failed", "gray"), no_no_no(2)
+                                                                                                                } else {
+                                                                                                                  if (response == "revive_failed") {
+                                                                                                                    ui_log("Revival failed", "gray"), no_no_no(1)
+                                                                                                                  } else {
+                                                                                                                    console.log("Missed game_response: " + response)
+                                                                                                                  }
+                                                                                                                }
+                                                                                                              }
+                                                                                                            }
+                                                                                                          }
+                                                                                                        }
+                                                                                                      }
+                                                                                                    }
+                                                                                                  }
+                                                                                                }
+                                                                                              }
+                                                                                            }
                                                                                           }
                                                                                         }
                                                                                       }
@@ -1781,6 +1961,184 @@ function init_socket() {
                 num: data.num,
                 fnum: data.fnum
               })
+            } else {
+              if (data.type == "energize") {
+                var sender = get_player(data.from),
+                  receiver = get_player(data.to);
+                if (sender && receiver) {
+                  d_line(sender, receiver, {
+                    color: "mana"
+                  })
+                }
+                if (receiver) {
+                  start_animation(receiver, "block")
+                }
+              } else {
+                if (data.type == "mluck") {
+                  var sender = get_player(data.from),
+                    receiver = get_player(data.to);
+                  if (sender && receiver) {
+                    d_line(sender, receiver, {
+                      color: "mluck"
+                    })
+                  }
+                  if (receiver) {
+                    start_animation(receiver, "mluck")
+                  }
+                } else {
+                  if (data.type == "rspeed") {
+                    var sender = get_player(data.from),
+                      receiver = get_player(data.to);
+                    if (sender && receiver) {
+                      d_line(sender, receiver, {
+                        color: "#D4C392"
+                      })
+                    }
+                    if (receiver) {
+                      start_animation(receiver, "rspeed")
+                    }
+                  } else {
+                    if (data.type == "4fingers") {
+                      var sender = get_player(data.from),
+                        receiver = get_player(data.to);
+                      if (sender && receiver) {
+                        d_line(sender, receiver, {
+                          color: "#6F62AE"
+                        })
+                      }
+                      if (sender) {
+                        mojo(sender)
+                      }
+                    } else {
+                      if (data.type == "mcourage") {
+                        var sender = get_player(data.name);
+                        if (sender) {
+                          d_text("OMG!", sender, {
+                            size: "huge",
+                            color: "#B9A08C"
+                          })
+                        }
+                      } else {
+                        if (data.type == "agitate") {
+                          var attacker = get_entity(data.name);
+                          data.ids.forEach(function(id) {
+                            var entity = entities[id];
+                            if (!entity) {
+                              return
+                            }
+                            start_emblem(entity, "rr1", {
+                              frames: 20
+                            })
+                          });
+                          if (attacker) {
+                            start_emblem(attacker, "rr1", {
+                              frames: 10
+                            })
+                          }
+                        } else {
+                          if (data.type == "stomp") {
+                            var attacker = get_entity(data.name);
+                            data.ids.forEach(function(id) {
+                              var entity = entities[id];
+                              if (!entity) {
+                                return
+                              }
+                              start_emblem(entity, "br1", {
+                                frames: 30
+                              });
+                              if (1 || attacker != character) {
+                                v_shake_i(entity)
+                              }
+                            });
+                            if (attacker) {
+                              start_emblem(attacker, "br1", {
+                                frames: 5
+                              })
+                            }
+                            if (attacker == character) {
+                              v_dive()
+                            } else {
+                              if (attacker) {
+                                v_dive_i(attacker)
+                              }
+                            }
+                          } else {
+                            if (data.type == "cleave") {
+                              var points = [],
+                                attacker = get_entity(data.name);
+                              data.ids.forEach(function(id) {
+                                var entity = entities[id] || entities["DEAD" + id];
+                                if (!entity) {
+                                  return
+                                }
+                                points.push({
+                                  x: get_x(entity),
+                                  y: get_y(entity)
+                                });
+                                if (attacker) {
+                                  disappearing_clone(attacker, {
+                                    x: (get_x(entity) + get_x(attacker) * 2) / 3,
+                                    y: (get_y(entity) + get_y(attacker) * 2) / 3,
+                                    random: true
+                                  })
+                                }
+                              });
+                              if (attacker) {
+                                points.push({
+                                  x: get_x(attacker),
+                                  y: get_y(attacker)
+                                }), flurry(attacker)
+                              }
+                              cpoints = convexhull.makeHull(points);
+                              for (var i = 0; i < cpoints.length; i++) {
+                                var j = (i + 1) % cpoints.length;
+                                d_line(cpoints[i], cpoints[j], {
+                                  color: "warrior"
+                                })
+                              }
+                            } else {
+                              if (data.type == "shadowstrike") {
+                                var points = [],
+                                  attacker = get_entity(data.name);
+                                data.ids.forEach(function(id) {
+                                  var entity = entities[id] || entities["DEAD" + id];
+                                  if (!entity) {
+                                    return
+                                  }
+                                  if (!attacker) {
+                                    return
+                                  }
+                                  disappearing_clone(attacker, {
+                                    x: (get_x(entity) + get_x(attacker) * 2) / 3,
+                                    y: (get_y(entity) + get_y(attacker) * 2) / 3,
+                                    random: true,
+                                    rcolor: true
+                                  });
+                                  disappearing_clone(attacker, {
+                                    x: get_x(entity),
+                                    y: get_y(entity),
+                                    random: true,
+                                    rcolor: true
+                                  })
+                                })
+                              } else {
+                                if (data.type == "track") {
+                                  var attacker = get_entity(data.name);
+                                  if (attacker) {
+                                    start_emblem(attacker, "o1", {
+                                      frames: 5
+                                    })
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
             }
           }
         }
@@ -1807,10 +2165,10 @@ function init_socket() {
             start_animation(npc, "failure")
           }
         }
-        if (npc.role == "funtoken" && data.type == "funtokens") {
+        if (npc.role == "funtokens" && data.type == "funtokens") {
           start_animation(npc, "exchange")
         }
-        if (npc.role == "pvptoken" && data.type == "pvptokens") {
+        if (npc.role == "pvptokens" && data.type == "pvptokens") {
           start_animation(npc, "exchange")
         }
       })
@@ -1841,8 +2199,8 @@ function init_socket() {
     draw_trigger(function() {
       if (chests[data.id]) {
         sfx("coins", chests[data.id].x, chests[data.id].y);
-        destroy_sprite(chests[data.id]);
-        delete chests[data.id]
+        chests[data.id].to_delete = true;
+        chests[data.id].alpha = 0.8
       }
       try {
         var chars = get_active_characters();
@@ -1950,15 +2308,24 @@ function init_socket() {
         direction_logic(owner, entity, "attack")
       }
       if (entity && data.anim) {
+        var anim = data.anim;
         if (data.reflect) {
-          data.anim = "explode_c"
+          anim = data.anim = "explode_c"
         } else {
-          if (owner && owner.slots && owner.slots.pants && owner.slots.pants.name == "starkillers") {
-            data.anim = "starkiller"
+          if (owner && owner.skin == "konami") {
+            anim = data.anim = "explode_b"
+          } else {
+            if (owner && owner.slots && owner.slots.pants && owner.slots.pants.name == "starkillers") {
+              anim = data.anim = "starkiller"
+            } else {
+              if (data.anim == "poisonarrow") {
+                anim = "arrow_hit"
+              }
+            }
           }
         }
-        start_animation(entity, data.anim);
-        if (in_arr(data.anim, ["explode_a", "explode_c", "starkiller"])) {
+        start_animation(entity, anim);
+        if (in_arr(anim, ["explode_a", "explode_c", "explode_b", "starkiller"])) {
           sfx("explosion", entity.real_x, entity.real_y)
         } else {
           sfx("monster_hit", entity.real_x, entity.real_y)
@@ -1971,35 +2338,48 @@ function init_socket() {
             color: "reflect"
           })
         } else {
-          if (data.anim == "taunt") {
+          if (owner && owner.skin == "konami") {
             d_line(owner, entity, {
-              color: "taunt"
+              color: random_one(["#63388F", "#D1B416", "#CF3327", "#2D82D2"])
             })
           } else {
-            if (data.anim == "burst") {
+            if (data.anim == "taunt") {
               d_line(owner, entity, {
-                color: "burst"
-              }), color = "burst"
+                color: "taunt"
+              })
             } else {
-              if (data.anim == "supershot") {
+              if (data.anim == "poisonarrow") {
                 d_line(owner, entity, {
-                  color: "supershot"
-                })
+                  color: colors.poison,
+                  size: 2
+                }), color = colors.poison
               } else {
-                if (data.anim == "curse") {
+                if (data.anim == "burst") {
                   d_line(owner, entity, {
-                    color: "curse"
-                  }), start_animation(entity, "curse")
+                    color: "burst"
+                  }), color = "burst"
                 } else {
-                  if (owner.me) {
-                    if (sd_lines) {
-                      d_line(owner, entity, {
-                        color: "my_hit"
-                      })
-                    }
+                  if (data.anim == "supershot") {
+                    d_line(owner, entity, {
+                      color: "supershot"
+                    })
                   } else {
-                    if (owner) {
-                      d_line(owner, entity)
+                    if (data.anim == "curse") {
+                      d_line(owner, entity, {
+                        color: "curse"
+                      }), start_animation(entity, "curse")
+                    } else {
+                      if (owner.me && !data.no_lines) {
+                        if (sd_lines) {
+                          d_line(owner, entity, {
+                            color: "my_hit"
+                          })
+                        }
+                      } else {
+                        if (owner && !data.no_lines) {
+                          d_line(owner, entity)
+                        }
+                      }
                     }
                   }
                 }
@@ -2021,7 +2401,7 @@ function init_socket() {
         }
         data.heal = abs(data.heal);
         d_text("+" + data.heal, entity, {
-          color: "#EE4D93"
+          color: colors.heal
         })
       }
     })
@@ -2051,6 +2431,7 @@ function init_socket() {
   });
   var erec = 0;
   socket.on("entities", function(data) {
+    window.last_entities_received = data;
     if (data.type == "all") {
       if (!first_entities) {
         first_entities = true;
@@ -2166,11 +2547,12 @@ function init_socket() {
         add_log(data.message, "#703987")
       }
     }
-    render_party(data.list || []);
     if (party_list.length == 0 && (data.list || []).length && !in_arr("party", cwindows)) {
       open_chat_window("party")
     }
-    party_list = data.list || []
+    party_list = data.list || [];
+    party = data.party || {};
+    render_party()
   });
   socket.on("blocker", function(data) {
     if (data.type == "pvp") {
@@ -2206,6 +2588,26 @@ function init_socket() {
     } else {
       show_modal(html)
     }
+  });
+  socket.on("track", function(list) {
+    if (!list.length) {
+      return add_log("No echoes", "gray")
+    }
+    if (list.length == 1) {
+      add_log("One echo", "gray");
+      add_log(parseInt(list[0].dist) + " clicks away", "gray");
+      return
+    }
+    var c = "";
+    add_log(list.length + " echoes", "gray");
+    list.forEach(function(e) {
+      if (!c) {
+        c = parseInt(e.dist)
+      } else {
+        c = c + "," + parseInt(e.dist)
+      }
+    });
+    add_log(c + " clicks", "gray")
   })
 }
 function npc_right_click(c) {
@@ -2274,19 +2676,19 @@ function npc_right_click(c) {
   if (this.role == "guard") {
     render_interaction("guard")
   }
-  if (this.role == "seashells") {
+  if (this.quest == "seashell") {
     render_interaction("seashells")
   }
-  if (this.role == "mistletoe") {
+  if (this.quest == "mistletoe") {
     render_interaction("mistletoe")
   }
-  if (this.role == "ornaments") {
+  if (this.quest == "ornament") {
     render_interaction("ornaments")
   }
-  if (this.role == "leathers") {
+  if (this.quest == "leather") {
     render_interaction("leathers")
   }
-  if (this.role == "lostearring") {
+  if (this.quest == "lostearring") {
     render_interaction("lostearring")
   }
   if (this.role == "santa") {
@@ -2295,7 +2697,7 @@ function npc_right_click(c) {
   if (this.role == "tavern") {
     render_interaction("tavern")
   }
-  if (this.role == "gemfragments") {
+  if (this.quest == "gemfragment") {
     render_interaction("gemfragments")
   }
   if (this.role == "standmerchant") {
@@ -2315,10 +2717,10 @@ function npc_right_click(c) {
       type: "xmas_tree"
     })
   }
-  if (this.role == "pvptoken") {
+  if (this.role == "pvptokens") {
     render_token_exchange("pvptoken")
   }
-  if (this.role == "funtoken") {
+  if (this.role == "funtokens") {
     render_token_exchange("funtoken")
   }
   if (a.interaction) {
@@ -2361,10 +2763,8 @@ function player_attack(a) {
       d_text("TOO FAR", character)
     })
   } else {
-    socket.emit("click", {
-      type: "player_attack",
-      id: this.id,
-      button: "right"
+    socket.emit("attack", {
+      id: this.id
     })
   }
   if (a) {
@@ -2383,10 +2783,8 @@ function player_heal(a) {
       d_text("TOO FAR", character)
     })
   } else {
-    socket.emit("click", {
-      type: "player_heal",
-      id: this.id,
-      button: "right"
+    socket.emit("heal", {
+      id: this.id
     })
   }
   if (a) {
@@ -2410,7 +2808,7 @@ function player_right_click(b) {
     }
   } else {
     if (character.slots.mainhand && character.slots.mainhand.name == "cupid") {
-      player_attack.call(this)
+      player_heal.call(this)
     } else {
       if (character.ctype == "priest") {
         if (!pvp || character.party && this.party == character.party) {
@@ -2452,15 +2850,13 @@ function monster_click(a) {
 function monster_attack(a) {
   ctarget = this;
   direction_logic(character, ctarget);
-  if (!character || distance(this, character) > character.range) {
+  if (!character || distance(this, character) > character.range + 10) {
     draw_trigger(function() {
       d_text("TOO FAR", character)
     })
   } else {
-    socket.emit("click", {
-      type: "monster",
-      id: this.id,
-      button: "right"
+    socket.emit("attack", {
+      id: this.id
     })
   }
   if (a) {
@@ -2468,17 +2864,35 @@ function monster_attack(a) {
   }
 }
 function map_click(e) {
-  var a = e.data.global.x,
-    f = e.data.global.y;
-  var d = a - width / 2,
-    c = f - height / 2;
-  if (manual_centering && character) {
-    d = a - character.x, c = f - character.y
-  }
-  d /= scale;
-  c /= scale;
-  if (call_code_function("on_map_click", character.real_x + d, character.real_y + c)) {
-    return
+  var d = 0,
+    c = 0;
+  if (e && e.data && e.data.global) {
+    var a = e.data.global.x,
+      g = e.data.global.y;
+    d = a - width / 2;
+    c = g - height / 2;
+    if (manual_centering && character) {
+      d = a - character.x, c = g - character.y
+    }
+    d /= scale;
+    c /= scale;
+    if (call_code_function("on_map_click", character.real_x + d, character.real_y + c)) {
+      return
+    }
+    if ((blink_pressed || mssince(last_blink_pressed) < 360) && character.ctype == "mage") {
+      socket.emit("skill", {
+        name: "blink",
+        x: character.real_x + d,
+        y: character.real_y + c,
+        direction: character.moving && character.direction
+      });
+      return
+    }
+  } else {
+    if (e.x) {
+      d = e.x - character.real_x;
+      c = e.y - character.real_y
+    }
   }
   if (character && can_walk(character)) {
     var b = calculate_move(M, character.real_x, character.real_y, character.real_x + d, character.real_y + c);
@@ -2488,15 +2902,25 @@ function map_click(e) {
     character.going_y = b.y;
     character.moving = true;
     calculate_vxy(character);
-    socket.emit("move", {
+    var f = {
       x: character.real_x,
       y: character.real_y,
       going_x: character.going_x,
       going_y: character.going_y,
       m: character.m
-    })
+    };
+    if (next_minteraction) {
+      f.key = next_minteraction, next_minteraction = null
+    }
+    socket.emit("move", f)
   }
   topleft_npc = false
+}
+function move(a, b) {
+  map_click({
+    x: a,
+    y: b
+  })
 }
 function map_click_release() {}
 function draw_entities() {
@@ -2519,10 +2943,14 @@ function draw_entities() {
       a.cid++;
       a.died = new Date();
       a.interactive = false;
-      if (a.drawn) {
-        draw_timeout(fade_away(1, a), 30, 1)
+      if (a.drawn && a.tpd) {
+        draw_timeout(fade_away_teleport(1, a), 30, 1)
       } else {
-        destroy_sprite(entities[entity], "just")
+        if (a.drawn) {
+          draw_timeout(fade_away(1, a), 30, 1)
+        } else {
+          destroy_sprite(entities[entity], "just")
+        }
       }
       delete entities[entity];
       continue
@@ -2532,12 +2960,13 @@ function draw_entities() {
         map.addChild(a)
       }
     }
-    a.x = round(a.real_x);
-    a.y = round(a.real_y);
     if (!round_entities_xy) {
-      a.x = a.real_x
+      a.x = a.real_x;
+      a.y = a.real_y
+    } else {
+      a.x = round(a.real_x);
+      a.y = round(a.real_y)
     }
-    a.y = a.real_y;
     update_sprite(a)
   }
   if (pull_all && socket) {
@@ -2553,173 +2982,230 @@ function draw_entities() {
     }
   }
 }
-function update_sprite(k) {
-  if (!k || !k.stype) {
+function update_sprite(m) {
+  if (!m || !m.stype) {
     return
   }
-  for (name in (k.animations || {})) {
-    update_sprite(k.animations[name])
+  for (b in (m.animations || {})) {
+    update_sprite(m.animations[b])
   }
-  if (k.stype == "static") {
+  for (b in (m.emblems || {})) {
+    update_sprite(m.emblems[b])
+  }
+  if (m.stype == "static") {
     return
   }
-  if (k.type == "character" || k.type == "monster") {
-    hp_bar_logic(k);
+  if (m.type == "character" || m.type == "monster") {
+    hp_bar_logic(m);
     if (border_mode) {
-      border_logic(k)
+      border_logic(m)
     }
   }
-  if (k.type == "character" || k.type == "npc") {
-    name_logic(k)
+  if (m.type == "character" || m.type == "npc") {
+    name_logic(m)
   }
-  if (k.type == "character") {
-    player_rclick_logic(k);
-    player_effects_logic(k)
+  if (m.type == "character") {
+    player_rclick_logic(m);
+    player_effects_logic(m)
   }
-  if (k.type == "character" || k.type == "monster") {
-    effects_logic(k)
+  if (m.type == "character" || m.type == "monster") {
+    effects_logic(m)
   }
-  if (k.stype == "full") {
+  if (m.stype == "full") {
     var a = false,
-      f = 1,
-      e = 0;
-    if (k.type == "monster" && G.monsters[k.mtype].aa) {
+      h = 1,
+      g = 0;
+    if (m.type == "monster" && G.monsters[m.mtype].aa) {
       a = true
     }
-    if (k.npc && !k.moving && k.allow === true) {
-      k.direction = 1
+    if (m.npc && !m.moving && m.allow === true) {
+      m.direction = 1
     }
-    if (k.npc && !k.moving && k.allow === false) {
-      k.direction = 0
+    if (m.npc && !m.moving && m.allow === false) {
+      m.direction = 0
     }
-    if (k.orientation && !k.moving) {
-      k.direction = k.orientation
+    if (m.orientation && !m.moving) {
+      m.direction = m.orientation
     }
-    if ((k.moving || a) && k.walking === null) {
-      if (k.last_stop && msince(k.last_stop) < 320) {
-        k.walking = k.last_walking
+    if ((m.moving || a) && m.walking === null) {
+      if (m.last_stop && msince(m.last_stop) < 320) {
+        m.walking = m.last_walking
       } else {
-        reset_ms_check(k, "walk", 350), k.walking = 1
+        reset_ms_check(m, "walk", 350), m.walking = 1
       }
     } else {
-      if (!(k.moving || a) && k.walking) {
-        k.last_stop = new Date();
-        k.last_walking = k.walking || k.last_walking || 1;
-        k.walking = null
+      if (!(m.moving || a) && m.walking) {
+        m.last_stop = new Date();
+        m.last_walking = m.walking || m.last_walking || 1;
+        m.walking = null
       }
     }
-    var d = [0, 1, 2, 1],
-      c = 350;
-    if (k.mtype == "wabbit") {
-      d = [0, 1, 2], c = 220
+    var f = [0, 1, 2, 1],
+      e = 350;
+    if (m.mtype == "wabbit") {
+      f = [0, 1, 2], e = 220
     }
-    if (k.walking && ms_check(k, "walk", c - (k.speed / 2 || 0))) {
-      k.walking++
+    if (m.walking && ms_check(m, "walk", e - (m.speed / 2 || 0))) {
+      m.walking++
     }
-    if (k.direction !== undefined) {
-      e = k.direction
+    if (m.direction !== undefined) {
+      g = m.direction
     }
-    if (!a && k.stunned) {
-      f = 1
+    if (!a && m.s && m.s.stunned) {
+      h = 1
     } else {
-      if (k.walking) {
-        f = d[k.walking % d.length]
+      if (m.walking) {
+        h = f[m.walking % f.length]
       } else {
-        if (k.last_stop && mssince(k.last_stop) < 180) {
-          f = d[k.last_walking % d.length]
+        if (m.last_stop && mssince(m.last_stop) < 180) {
+          h = f[m.last_walking % f.length]
         }
       }
     }
-    if (k.stand && !k.standed) {
-      var b = new PIXI.Sprite(textures.stand0_texture);
-      b.y = 3;
-      b.anchor.set(0.5, 1);
-      k.addChild(b);
-      k.standed = b;
-      k.speed = 10
+    if (m.stand && !m.standed) {
+      var d = new PIXI.Sprite(textures.stand0_texture);
+      d.y = 3;
+      d.anchor.set(0.5, 1);
+      m.addChild(d);
+      m.standed = d;
+      m.speed = 10
     } else {
-      if (k.standed && !k.stand) {
-        k.standed.destroy();
-        k.standed = false
+      if (m.standed && !m.stand) {
+        m.standed.destroy();
+        m.standed = false
       }
     }
-    if (k.rip && !k.rtexture) {
-      k.cskin = null;
-      k.rtexture = true;
-      k.texture = textures.stone
+    if (m.rip && !m.rtexture) {
+      m.cskin = null;
+      m.rtexture = true;
+      m.texture = textures.stone;
+      restore_dimensions(m)
     } else {
-      if (!k.rip) {
-        k.rtexture = false;
-        set_texture(k, f, e)
+      if (!m.rip && m.rtexture) {
+        delete m.rtexture;
+        set_texture(m, h, g);
+        restore_dimensions(m)
       }
     }
-    if (k.charging && ms_check(k, "clone", 80)) {
-      disappearing_clone(k)
+    if (!m.rip) {
+      set_texture(m, h, g)
+    }
+    if (m.s && m.s.charging && ms_check(m, "clone", 80)) {
+      disappearing_clone(m)
     }
   }
-  if (k.stype == "animation") {
-    var g = (k.aspeed == "fast" && 0.8) || (k.aspeed == "slow" && 3) || 2;
-    if (ms_check(k, "anim", g * 16.5)) {
-      k.frame += 1
+  if (m.stype == "animation") {
+    var k = m.aspeed;
+    if (m.speeding) {
+      m.aspeed -= 0.003
     }
-    if (k.frame >= k.frames && k.continuous) {
-      k.frame = 0
+    if (ms_check(m, "anim" + m.skin, k * 16.5)) {
+      m.frame += 1
+    }
+    if (m.frame >= m.frames && m.continuous) {
+      m.frame = 0
     } else {
-      if (k.frame >= k.frames) {
-        var h = k.parent;
-        if (h) {
-          destroy_sprite(k, "children");
-          delete h.animations[k.skin]
+      if (m.frame >= m.frames) {
+        var l = m.parent;
+        if (l) {
+          destroy_sprite(m, "children");
+          delete l.animations[m.skin]
         }
         return
       }
     }
-    set_texture(k, k.frame)
+    set_texture(m, m.frame)
   }
-  if (k.stype == "emote") {
-    var g = (k.aspeed == "slow" && 17) || (k.aspeed == "slower" && 40) || 10;
-    if (k.atype == "flow") {
-      if (ms_check(k, "anim", g * 16.5)) {
-        k.frame += 1
+  if (m.stype == "emblem") {
+    if (!m.frames) {
+      var l = m.parent;
+      if (l) {
+        destroy_sprite(m, "children");
+        delete l.emblems[m.skin]
       }
-      set_texture(k, [0, 1, 2, 1][k.frame % 4])
+      return
+    }
+    if (ms_check(m, "emblem" + m.skin, 60)) {
+      m.frames -= 1
+    }
+    m.alpha = m.frame_list[m.frames % m.frame_list.length]
+  }
+  if (m.stype == "emote") {
+    var k = (m.aspeed == "slow" && 17) || (m.aspeed == "slower" && 40) || 10;
+    if (m.atype == "flow") {
+      if (ms_check(m, "anim", k * 16.5)) {
+        m.frame += 1
+      }
+      set_texture(m, [0, 1, 2, 1][m.frame % 4])
     } else {
-      if (ms_check(k, "anim", g * 16.5) && k.atype != "once") {
-        k.frame = (k.frame + 1) % 3
+      if (ms_check(m, "anim", k * 16.5) && m.atype != "once") {
+        m.frame = (m.frame + 1) % 3
       }
-      set_texture(k, k.frame)
+      set_texture(m, m.frame)
     }
   }
-  if (k.mtype == "dice") {
-    if (k.shuffling) {
-      var f = k.updates % 4;
-      k.digits[f].texture = textures.dicesub[parseInt(Math.random() * 10)];
-      if (!(k.updates % 40)) {
-        k.cskin = "" + (parseInt(k.cskin) + 1) % 2;
-        k.texture = textures.dice[k.cskin]
+  if (m.mtype == "dice") {
+    if (m.shuffling) {
+      var h = m.updates % 4;
+      m.digits[h].texture = textures.dicesub[parseInt(Math.random() * 10)];
+      if (!(m.updates % 40)) {
+        m.cskin = "" + (parseInt(m.cskin) + 1) % 2;
+        m.texture = textures.dice[m.cskin]
       }
     }
   }
-  update_filters(k);
-  k.updates += 1
+  if (m.type == "chest" && m.openning) {
+    if (mssince(m.openning) > 30 && m.frame != 3) {
+      m.openning = new Date();
+      set_texture(m, ++m.frame);
+      if (m.to_delete) {
+        m.alpha -= 0.1
+      }
+    } else {
+      if (mssince(m.openning) > 30 && m.to_delete && m.alpha >= 0.5) {
+        m.alpha -= 0.1
+      } else {
+        if (m.alpha < 0.5) {
+          destroy_sprite(chests[m.id]);
+          delete chests[m.id]
+        }
+      }
+    }
+  }
+  if (m.last_ms && m.s) {
+    var c = mssince(m.last_ms);
+    for (var b in m.s) {
+      if (m.s[b].ms) {
+        m.s[b].ms -= c;
+        if (m.s[b].ms <= 0) {
+          delete m.s[b]
+        }
+      }
+    }
+    m.last_ms = new Date()
+  }
+  update_filters(m);
+  m.updates += 1
 }
 function add_monster(d) {
   var c = G.monsters[d.type],
     b = new_sprite(c.skin || d.type, "full");
+  b.type = "monster";
+  b.mtype = d.type;
   adopt_soft_properties(b, d);
-  b.displayGroup = monster_layer;
+  b.parentGroup = b.displayGroup = monster_layer;
   b.walking = null;
   b.animations = {};
+  b.fx = {};
+  b.emblems = {};
   b.move_num = d.move_num;
   b.c = {};
   b.x = b.real_x = round(d.x);
   b.y = b.real_y = round(d.y);
   b.vx = d.vx || 0;
   b.vy = d.vy || 0;
+  b.last_ms = new Date();
   b.anchor.set(0.5, 1);
-  b.speed = d.speed;
-  b.type = "monster";
-  b.mtype = d.type;
   if (c.hit) {
     b.hit = c.hit
   }
@@ -2757,7 +3243,7 @@ function update_filters(a) {
       b.step = abs(b.step)
     }
     b.b += b.step;
-    if (a.stand || a.charging) {
+    if (a.stand || a.s.charging) {
       b.b = 1.05
     }
     b.brightness(b.b)
@@ -2774,7 +3260,7 @@ function update_filters(a) {
       b.step = abs(b.step)
     }
     b.b += b.step;
-    if (a.stand || a.charging) {
+    if (a.stand || a.s.charging) {
       b.b = 1.075
     }
     b.brightness(b.b)
@@ -2791,7 +3277,7 @@ function update_filters(a) {
       b.step = abs(b.step)
     }
     b.b += b.step;
-    if (a.stand || a.charging) {
+    if (a.stand || a.s.charging) {
       b.b = 1.2
     }
     b.brightness(b.b)
@@ -2801,7 +3287,7 @@ function update_filters(a) {
     if (a.alpha >= 1 || mssince(a.appearing) > 900) {
       a.appearing = a.tp = false;
       a.alpha = 1;
-      if (a.invis) {
+      if (a.s && a.s.invis) {
         a.alpha = 0.5
       }
       stop_animation(a, "transport")
@@ -2817,7 +3303,63 @@ function start_filter(b, a) {
   if (no_graphics) {
     return
   }
-  var c = new PIXI.filters.ColorMatrixFilter();
+  var c = null;
+  if (a == "darkgray") {
+    c = new PIXI.filters.OutlineFilter(3, 6185310)
+  } else {
+    if (a == "fingered") {
+      c = new PIXI.filters.OutlineFilter(3, 9654194)
+    } else {
+      if (a == "bloom") {
+        c = new PIXI.filters.BloomFilter(1, 1, 1)
+      } else {
+        if (a == "cv") {
+          c = new PIXI.filters.ConvolutionFilter([0.3, 0.02, 0.1, 0.1, 0.1, 0.02, 0.02, 0.2, 0.02], 30, 40)
+        } else {
+          if (a == "cv2") {
+            c = new PIXI.filters.ConvolutionFilter([0.1, 0.1, 0.1, 0.1, 0, 0.1, 0.1, 0.1, 0.1], 30, 40)
+          } else {
+            if (a == "rblur") {
+              c = new PIXI.filters.RadialBlurFilter(random_one([-0.75, -0.5, 0.5, 0.75]), [5, 10], 11, -1)
+            } else {
+              if (a == "rcolor") {
+                c = new PIXI.filters.ColorMatrixFilter();
+                c.desaturate()
+              } else {
+                c = new PIXI.filters.ColorMatrixFilter();
+                c.step = 0.01;
+                c.b = 1
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  if (a == "curse") {
+    if (b.s && b.s.frozen) {
+      c.hue(24)
+    } else {
+      if (b.s && b.s.poisoned) {
+        c.hue(-24)
+      } else {
+        c.hue(20)
+      }
+    }
+  } else {
+    if (a == "xcolor") {
+      c.desaturate(2);
+      c.sepia(0.01)
+    } else {
+      if (a == "darken") {
+        c.night()
+      } else {
+        if (a == "bw") {
+          c.desaturate()
+        }
+      }
+    }
+  }
   if (!b.filter_list) {
     b.filter_list = [c]
   } else {
@@ -2825,23 +3367,13 @@ function start_filter(b, a) {
   }
   b.filters = b.filter_list;
   b["filter_" + a] = c;
-  b[a] = true;
-  c.step = 0.01;
-  c.b = 1;
-  if (a == "curse") {
-    if (b.frozen) {
-      c.hue(24)
-    } else {
-      if (b.poisoned) {
-        c.hue(-24)
-      } else {
-        c.hue(20)
-      }
-    }
-  }
+  b[a] = true
 }
 function stop_filter(b, a) {
   if (no_graphics) {
+    return
+  }
+  if (!b["filter_" + a]) {
     return
   }
   b.filter_list.splice(b.filter_list.indexOf(b["filter_" + a]), 1);
@@ -2854,7 +3386,7 @@ function stop_filter(b, a) {
   delete b[a]
 }
 function player_effects_logic(a) {
-  if (no_graphics) {
+  if (no_graphics || !a.s) {
     return
   }
   if (a.g10 && !a.filter_glow10) {
@@ -2880,33 +3412,79 @@ function player_effects_logic(a) {
       }
     }
   }
-  if (a.invis && (!a.invis_effect || a.alpha != 0.5)) {
-    a.invis_effect = true;
+  if (a.s.invis && (!a.fx.invis || a.alpha != 0.5)) {
+    a.fx.invis = true;
     a.alpha = 0.5
   } else {
-    if (!a.invis && a.invis_effect) {
-      a.invis_effect = false;
+    if (!a.s.invis && a.fx.invis) {
+      delete a.fx.invis;
       a.alpha = 1
     }
   }
-  if (a.stunned && !a.stunned_effect) {
-    a.stunned_effect = true;
-    start_animation(a, "stunned", "stun")
+  if (a.s.phasedout && !a.fx.phs) {
+    a.fx.phs = true;
+    a.alpha = 0.8;
+    start_filter(a, "xcolor");
+    if (a.me && 0) {
+      stage.cfilter_rblur = new PIXI.filters.RadialBlurFilter(random_one([-0.5, -0.25, 0.25, 0.5]), [width / 2, height / 2], 3, -1);
+      regather_filters(stage)
+    }
   } else {
-    if (!a.stunned && a.stunned_effect) {
-      a.stunned_effect = false;
-      stop_animation(a, "stunned")
+    if (!a.s.phasedout && a.fx.phs) {
+      a.alpha += 0.02;
+      if (a.alpha >= 1) {
+        delete a.fx.phs;
+        stop_filter(a, "xcolor")
+      }
+      if (a.me && 0) {
+        delete stage.cfilter_rblur;
+        regather_filters(stage)
+      }
     }
   }
-  if (a.invincible && !a.invincible_effect) {
-    a.invincible_effect = true;
-    start_animation(a, "invincible");
-    a.alpha = 0.9
+  if (a.s.darkblessing && !a.fx.db) {
+    a.fx.db = true;
+    start_emblem(a, "dp1", {
+      frames: 1200,
+      no_dip: false
+    })
   } else {
-    if (!a.invincible && a.invincible_effect) {
-      a.invincible_effect = false;
-      stop_animation(a, "invincible");
-      a.alpha = 1
+    if (!a.s.darkblessing && a.fx.db) {
+      delete a.fx.db;
+      stop_emblem(a, "dp1")
+    }
+  }
+  if (a.s.warcry && !a.fx.wcry) {
+    a.fx.wcry = true;
+    start_emblem(a, "r1", {
+      frames: 1200,
+      no_dip: false
+    })
+  } else {
+    if (!a.s.warcry && a.fx.wcry) {
+      delete a.fx.wcry;
+      stop_emblem(a, "r1")
+    }
+  }
+  if (a.s.blink && !a.fading_out) {
+    a.fading_out = new Date();
+    a.alpha = 1;
+    draw_timeout(fade_out_blink(0, a), 0)
+  }
+  if (a.s.magiport && !a.fading_out) {
+    a.fading_out = new Date();
+    a.alpha = 1;
+    draw_timeout(fade_out_magiport(0, a), 0);
+    start_filter(a, "bloom")
+  }
+  if (a.c.revival && !a.fx.revival) {
+    a.fx.revival = true;
+    start_animation(a, "revival")
+  } else {
+    if (!a.c.revival && a.fx.revival) {
+      delete a.fx.revival;
+      stop_animation(a, "revival");
+      start_animation(a, "heal")
     }
   }
   if (a.c.town && !a.disappearing) {
@@ -2915,7 +3493,7 @@ function player_effects_logic(a) {
     start_animation(a, "transport")
   } else {
     if (!a.c.town && a.disappearing) {
-      a.disappearing = false;
+      delete a.disappearing;
       a.alpha = 1;
       stop_animation(a, "transport")
     }
@@ -2925,7 +3503,7 @@ function player_effects_logic(a) {
     a.alpha = 0.5;
     start_animation(a, "transport")
   }
-  if (a.me && a.targets >= 3 && (!a.last_targets || a.last_targets < a.targets)) {
+  if (a.me && a.targets >= 3 && (!a.last_targets || a.last_targets < a.targets) && character.ctype != "warrior") {
     if (a.targets > 5) {
       add_log("You are petrified", "#B03736")
     } else {
@@ -2943,16 +3521,52 @@ function player_effects_logic(a) {
   }
 }
 function effects_logic(a) {
-  if (no_graphics) {
+  if (no_graphics || !a.s) {
     return
   }
-  if ((a.cursed || a.poisoned || a.frozen) && !a.cursed_effect) {
-    a.cursed_effect = true;
+  if ((a.s.cursed || a.s.poisoned || a.s.frozen) && !a.fx.cursed) {
+    a.fx.cursed = true;
     start_filter(a, "curse")
   } else {
-    if (!(a.cursed || a.poisoned || a.frozen) && a.cursed_effect) {
-      a.cursed_effect = false;
+    if (!(a.s.cursed || a.s.poisoned || a.s.frozen) && a.fx.cursed) {
+      delete a.fx.cursed;
       stop_filter(a, "curse")
+    }
+  }
+  if (a.s.fingered && !a.filter_fingered) {
+    start_filter(a, "fingered")
+  } else {
+    if (!a.s.fingered && a.filter_fingered) {
+      stop_filter(a, "fingered")
+    }
+  }
+  if (a.s.stunned && !a.fx.stunned && !a.s.fingered) {
+    a.fx.stunned = true;
+    start_animation(a, "stunned", "stun")
+  } else {
+    if (!a.s.stunned && a.fx.stunned && !a.s.fingered) {
+      delete a.fx.stunned;
+      stop_animation(a, "stunned")
+    }
+  }
+  if (a.s.invincible && !a.fx.invincible) {
+    a.fx.invincible = true;
+    start_animation(a, "invincible");
+    a.alpha = 0.9
+  } else {
+    if (!a.s.invincible && a.fx.invincible) {
+      delete a.fx.invincible;
+      stop_animation(a, "invincible");
+      a.alpha = 1
+    }
+  }
+  if (a.s.hardshell && !a.fx.hardshell) {
+    a.hardshell_effect = true;
+    start_animation(a, "hardshell")
+  } else {
+    if (!a.s.hardshell && a.fx.hardshell) {
+      delete a.fx.hardshell;
+      stop_animation(a, "hardshell")
     }
   }
 }
@@ -2968,15 +3582,19 @@ function add_character(e, d) {
   if (a != 1) {
     c.scale = new PIXI.Point(a, a)
   }
+  c.cscale = a;
   adopt_soft_properties(c, e);
   c.name = c.id;
-  c.displayGroup = player_layer;
+  c.parentGroup = c.displayGroup = player_layer;
   c.walking = null;
   c.animations = {};
+  c.fx = {};
+  c.emblems = {};
   c.x = round(e.x);
   c.real_x = parseFloat(e.x);
   c.y = round(e.y);
   c.real_y = parseFloat(e.y);
+  c.last_ms = new Date();
   c.anchor.set(0.5, 1);
   c.type = "character";
   c.me = d;
@@ -3002,8 +3620,8 @@ function add_character(e, d) {
   return c
 }
 function add_chest(c) {
-  var a = new_sprite(c.chest, "chest");
-  a.displayGroup = chest_layer;
+  var a = new_sprite(c.chest, "v_animation");
+  a.parentGroup = a.displayGroup = chest_layer;
   a.x = round(c.x);
   a.y = round(c.y);
   a.items = c.items;
@@ -3012,10 +3630,9 @@ function add_chest(c) {
   a.interactive = true;
   a.buttonMode = true;
   a.cursor = "help";
+  a.id = c.id;
   var b = function() {
-      socket.emit("open_chest", {
-        id: c.id
-      })
+      open_chest(c.id)
     };
   a.on("mousedown", b).on("touchstart", b).on("rightdown", b);
   chests[c.id] = a;
@@ -3042,7 +3659,7 @@ function add_npc(d, a, c, g) {
     }
   }
   e.npc_id = g;
-  e.displayGroup = player_layer;
+  e.parentGroup = e.displayGroup = player_layer;
   e.interactive = true;
   e.buttonMode = true;
   e.real_x = e.x = round(a[0]);
@@ -3057,6 +3674,8 @@ function add_npc(d, a, c, g) {
   e.type = "npc";
   e.npc = true;
   e.animations = {};
+  e.fx = {};
+  e.emblems = {};
   adopt_soft_properties(e, d);
   if (d.stand) {
     var f = new PIXI.Sprite(textures[d.stand]);
@@ -3081,7 +3700,7 @@ function add_npc(d, a, c, g) {
 }
 function add_machine(d) {
   var c = new_sprite(d, "machine");
-  c.displayGroup = player_layer;
+  c.parentGroup = c.displayGroup = player_layer;
   c.interactive = true;
   c.buttonMode = true;
   c.x = round(d.x);
@@ -3121,7 +3740,7 @@ function add_machine(d) {
 }
 function add_door(b) {
   var c = new PIXI.Sprite();
-  c.displayGroup = player_layer;
+  c.parentGroup = c.displayGroup = player_layer;
   c.interactive = true;
   c.buttonMode = true;
   c.x = round(b[0]);
@@ -3151,7 +3770,7 @@ function add_door(b) {
 }
 function add_quirk(c) {
   var a = new PIXI.Sprite();
-  a.displayGroup = player_layer;
+  a.parentGroup = a.displayGroup = player_layer;
   a.interactive = true;
   a.buttonMode = true;
   if (c[4] != "upgrade" && c[4] != "compound") {
@@ -3277,7 +3896,11 @@ function create_map() {
   if (G.maps[current_map].filter == "halloween" && !no_graphics) {
     var k = new PIXI.filters.ColorMatrixFilter();
     k.saturate(-0.1);
-    stage.filters = [k]
+    stage.cfilter_halloween = k;
+    regather_filters(stage)
+  } else {
+    delete stage.cfilter_halloween;
+    regather_filters(stage)
   }
   if (cached_map) {
     for (var B = 0; B <= M.tiles.length; B++) {
@@ -3490,7 +4113,7 @@ function create_map() {
       o.y = n;
       o.real_x = q;
       o.real_y = F;
-      o.displayGroup = player_layer;
+      o.parentGroup = o.displayGroup = player_layer;
       map.addChild(o);
       map_entities.push(o)
     }
@@ -3633,7 +4256,7 @@ function retile_the_map() {
         f.x = z * M["default"][3];
         f.y = v * M["default"][4];
         if (mdraw_mode != "redraw") {
-          f.displayGroup = map_layer
+          f.parentGroup = f.displayGroup = map_layer
         }
         f.zOrder = 0;
         f.tid = u;
@@ -3675,7 +4298,7 @@ function retile_the_map() {
       f.x = E[1];
       f.y = E[2];
       if (mdraw_mode != "redraw") {
-        f.displayGroup = map_layer
+        f.parentGroup = f.displayGroup = map_layer
       }
       f.zOrder = -(q + 1);
       f.tid = "p" + q;
@@ -3753,46 +4376,54 @@ function calculate_fps() {
   fps_counter.position.set(width - 340, height)
 }
 function load_game(a) {
-  loader.load(function(l, c) {
+  loader.load(function(m, d) {
     if (mode_nearest) {
       for (file in PIXI.utils.BaseTextureCache) {
         PIXI.utils.BaseTextureCache[file].scaleMode = PIXI.SCALE_MODES.NEAREST
       }
     }
+    IID = null;
     for (name in G.sprites) {
-      var f = G.sprites[name];
-      if (f.skip) {
+      var g = G.sprites[name];
+      if (g.skip) {
         continue
       }
-      var d = 4,
-        h = "full";
-      if (f.type == "animation") {
-        d = 1, h = "animation"
+      var e = 4,
+        b = 3,
+        k = "full";
+      if (g.type == "animation") {
+        e = 1, k = "animation"
       }
-      var k = f.matrix;
+      if (g.type == "v_animation") {
+        b = 1, k = "v_animation"
+      }
+      if (g.type == "emblem") {
+        e = 1, b = 1, k = "emblem"
+      }
+      var l = g.matrix;
       if (no_graphics) {
-        C[f.file] = {
+        C[g.file] = {
           width: 20,
           height: 20
         }
       }
-      var b = C[f.file].width / (f.columns * 3);
-      var m = C[f.file].height / (f.rows * d);
-      for (var g = 0; g < k.length; g++) {
-        for (var e = 0; e < k[g].length; e++) {
-          if (!k[g][e]) {
+      var c = C[g.file].width / (g.columns * b);
+      var n = C[g.file].height / (g.rows * e);
+      for (var h = 0; h < l.length; h++) {
+        for (var f = 0; f < l[h].length; f++) {
+          if (!l[h][f]) {
             continue
           }
-          FC[k[g][e]] = f.file;
-          FM[k[g][e]] = [g, e];
-          D[k[g][e]] = [e * 3 * b, g * d * m, b, m];
-          T[k[g][e]] = h
+          FC[l[h][f]] = g.file;
+          FM[l[h][f]] = [h, f];
+          D[l[h][f]] = [f * b * c, h * e * n, c, n];
+          T[l[h][f]] = k
         }
       }
     }
-    G.positions.textures.forEach(function(n) {
-      var j = G.positions[n];
-      textures[n] = new PIXI.Texture(PIXI.utils.BaseTextureCache[G.tilesets[j[0]]], new PIXI.Rectangle(j[1], j[2], j[3], j[4]))
+    G.positions.textures.forEach(function(o) {
+      var j = G.positions[o];
+      textures[o] = new PIXI.Texture(PIXI.utils.BaseTextureCache[G.tilesets[j[0]]], new PIXI.Rectangle(j[1], j[2], j[3], j[4]))
     });
     create_map();
     for (name in G.animations) {
@@ -3806,7 +4437,7 @@ function load_game(a) {
       });
       fps_counter.position.set(10, 10);
       fps_counter.anchor.set(1, 1);
-      fps_counter.displayGroup = chest_layer;
+      fps_counter.parentGroup = fps_counter.displayGroup = chest_layer;
       fps_counter.zOrder = -999999999;
       if (window.inner_stage) {
         inner_stage.addChild(fps_counter)
@@ -3860,7 +4491,7 @@ function pause() {
     $("#pausedui").show()
   }
 }
-function draw(b, c) {
+function draw(f, a) {
   if (manual_stop) {
     return
   }
@@ -3874,25 +4505,25 @@ function draw(b, c) {
   stop_timer("draw", "timeouts");
   calculate_fps();
   if (!(character && mouse_only) && 0) {
-    var h = map.speed;
+    var d = map.speed;
     if (character) {
-      h = character.speed
+      d = character.speed
     }
-    h *= frame_ms / 1000;
+    d *= frame_ms / 1000;
     if ((left_pressed || right_pressed) && (down_pressed || up_pressed)) {
-      h /= 1.41
+      d /= 1.41
     }
     if (left_pressed < right_pressed) {
-      map.real_x += h
+      map.real_x += d
     }
     if (left_pressed > right_pressed) {
-      map.real_x -= h
+      map.real_x -= d
     }
     if (up_pressed < down_pressed) {
-      map.real_y += h
+      map.real_y += d
     }
     if (up_pressed > down_pressed) {
-      map.real_y -= h
+      map.real_y -= d
     }
   }
   process_entities();
@@ -3904,19 +4535,19 @@ function draw(b, c) {
   if (gtest && character) {
     map.real_x -= 0.1, map.real_y -= 0.001
   }
-  var g = frame_ms;
-  if (g > (is_sdk && 40 || 10000)) {
-    console.log("cframe_ms is " + g)
+  var k = frame_ms;
+  if (k > (is_sdk && 40 || 10000)) {
+    console.log("cframe_ms is " + k)
   }
-  while (g > 0) {
-    var d = false;
+  while (k > 0) {
+    var j = false;
     if (character && character.moving) {
-      d = true;
+      j = true;
       if (character.vx) {
-        character.real_x += character.vx * min(g, 50) / 1000
+        character.real_x += character.vx * min(k, 50) / 1000
       }
       if (character.vy) {
-        character.real_y += character.vy * min(g, 50) / 1000
+        character.real_y += character.vy * min(k, 50) / 1000
       }
       set_direction(character);
       stop_logic(character)
@@ -3924,15 +4555,15 @@ function draw(b, c) {
     for (i in entities) {
       entity = entities[i];
       if (entity && !entity.dead && entity.moving) {
-        d = true;
-        entity.real_x += entity.vx * min(g, 50) / 1000;
-        entity.real_y += entity.vy * min(g, 50) / 1000;
+        j = true;
+        entity.real_x += entity.vx * min(k, 50) / 1000;
+        entity.real_y += entity.vy * min(k, 50) / 1000;
         set_direction(entity);
         stop_logic(entity)
       }
     }
-    g -= 50;
-    if (!d) {
+    k -= 50;
+    if (!j) {
       break
     }
   }
@@ -3940,6 +4571,7 @@ function draw(b, c) {
   draw_entities();
   stop_timer("draw", "draw_entities");
   position_map();
+  ui_logic();
   call_code_function("on_draw");
   retile_the_map();
   stop_timer("draw", "retile");
@@ -3949,6 +4581,11 @@ function draw(b, c) {
   map_npcs.forEach(function(e) {
     update_sprite(e)
   });
+  for (var c in chests) {
+    if (chests[c].openning) {
+      update_sprite(chests[c])
+    }
+  }
   stop_timer("draw", "sprites");
   update_overlays();
   if (exchange_animations) {
@@ -3958,7 +4595,7 @@ function draw(b, c) {
   tint_logic();
   draw_timeouts_logic();
   stop_timer("draw", "before_render");
-  if (force_draw_on || !c && !is_hidden() && !paused) {
+  if (force_draw_on || !a && !is_hidden() && !paused) {
     renderer.render(stage);
     force_draw_on = false
   }
@@ -3966,17 +4603,17 @@ function draw(b, c) {
     $("#status").html(current_status), last_status = current_status
   }
   stop_timer("draw", "after_render");
-  if (!c && !no_html) {
+  if (!a && !no_html) {
     requestAnimationFrame(draw);
     try {
-      var f = get_active_characters();
-      for (var a in f) {
-        if (f[a] != "self") {
-          character_window_eval(a, "draw()")
+      var h = get_active_characters();
+      for (var b in h) {
+        if (h[b] != "self") {
+          character_window_eval(b, "draw()")
         }
       }
-    } catch (j) {
-      console.log(j)
+    } catch (g) {
+      console.log(g)
     }
   }
 };
