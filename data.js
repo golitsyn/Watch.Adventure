@@ -913,8 +913,8 @@ var G = {
       "cooldown": 0,
       "name": "Magiport",
       "skin": "skill_teleport",
-      "explanation": "Pull someone nearby using the magical paths that surround our world.",
-      "complementary": "Unless the target doesn't have a T2+ helmet, high intelligence, or a low level, it can't resist being magiported.",
+      "explanation": "Pull someone to your location using the magical paths that surround our world.",
+      "complementary": "Unless the target doesn't have a T2+ helmet, high intelligence, or a low level, it can't resist being magiported. (Reverted [03/07/18])",
       "type": "skill",
       "class": ["mage"],
       "mp": 900
@@ -6829,7 +6829,7 @@ var G = {
       }]
     }
   },
-  "version": 289,
+  "version": 290,
   "games": {
     "tarot": {
       "cards": ["chariot", "death", "devil", "emperor", "empress", "fool", "fortune", "hangman", "hermit", "hierophant", "judgment", "justice", "lovers", "magician", "moon", "priestess", "star", "strength", "sun", "temperance", "theworld", "tower", "2cups", "2pentacles", "2swords", "2wands", "3cups", "3pentacles", "3swords", "3wands", "4cups", "4pentacles", "4swords", "4wands", "5cups", "5pentacles", "5swords", "5wands", "6cups", "6pentacles", "6swords", "6wands", "7cups", "7pentacles", "7swords", "7wands", "8cups", "8pentacles", "8swords", "8wands", "9cups", "9pentacles", "9swords", "9wands", "10cups", "10pentacles", "10swords", "10wands", "acecups", "acepentacles", "aceswords", "acewands", "kingcups", "kingpentacles", "kingswords", "kingwands", "knightcups", "knightpentacles", "knightswords", "knightwands", "pagecups", "pagepentacles", "pageswords", "pagewands", "queencups", "queenpentacles", "queenswords", "queenwands"],
