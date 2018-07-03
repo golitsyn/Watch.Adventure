@@ -1498,17 +1498,17 @@ function init_socket() {
   });
   socket.on("online", function(data) {
     draw_trigger(function() {
-      add_chat("", data.name + " is on " + data.server, "white")
+      add_chat("", data.name + " is on " + data.server, "white", "online|" + data.name)
     })
   });
   socket.on("light", function(data) {
-    if (data.affected) {
-      if (is_pvp) {
-        pvp_timeout(3600)
-      }
-      skill_timeout("invis", 12000)
-    }
     draw_trigger(function() {
+      if (data.affected) {
+        if (is_pvp) {
+          pvp_timeout(3600)
+        }
+        skill_timeout("invis", 12000)
+      }
       if (data.affected) {
         start_animation(player, "light")
       }
@@ -2486,16 +2486,18 @@ function init_socket() {
     on_disappear(data)
   });
   socket.on("poke", function(data) {
-    var entity = get_entity(data.name);
-    if (entity) {
-      if (entity == character) {
-        add_log(data.who + " poked you", "gray")
+    draw_trigger(function() {
+      var entity = get_entity(data.name);
+      if (entity) {
+        if (entity == character) {
+          add_log(data.who + " poked you", "gray")
+        }
+        if (data.level >= 2) {
+          add_chat("", data.who + " poked " + data.name, "gray")
+        }
+        bump_up(entity, data.level * data.level)
       }
-      if (data.level >= 2) {
-        add_chat("", data.who + " poked " + data.name, "gray")
-      }
-      bump_up(entity, data.level * data.level)
-    }
+    })
   });
   socket.on("info", function(info) {
     render_info(info)
@@ -2542,19 +2544,21 @@ function init_socket() {
     })
   });
   socket.on("party_update", function(data) {
-    if (data.message) {
-      if (data.leave) {
-        add_log(data.message, "#875045")
-      } else {
-        add_log(data.message, "#703987")
+    draw_trigger(function() {
+      if (data.message) {
+        if (data.leave) {
+          add_log(data.message, "#875045")
+        } else {
+          add_log(data.message, "#703987")
+        }
       }
-    }
-    if (party_list.length == 0 && (data.list || []).length && !in_arr("party", cwindows)) {
-      open_chat_window("party")
-    }
-    party_list = data.list || [];
-    party = data.party || {};
-    render_party()
+      if (party_list.length == 0 && (data.list || []).length && !in_arr("party", cwindows)) {
+        open_chat_window("party")
+      }
+      party_list = data.list || [];
+      party = data.party || {};
+      render_party()
+    })
   });
   socket.on("blocker", function(data) {
     if (data.type == "pvp") {
