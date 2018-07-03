@@ -9,18 +9,6 @@ var u_item = null,
   cr_items = e_array(9),
   cr_last = 0,
   ds_item = null;
-var skillmap = {
-  "1": {
-    name: "use_hp"
-  },
-  "2": {
-    name: "use_mp"
-  },
-  R: {
-    name: "burst"
-  }
-},
-  skillbar = [];
 var settings_shown = 0;
 
 function show_settings() {
@@ -138,7 +126,7 @@ function bold_prop_line(c, b, a) {
   }
   return prop_line(c, b, a)
 }
-function render_party(b) {
+function render_party_old(b) {
   var a = "<div style='background-color: black; border: 5px solid gray; padding: 6px; font-size: 24px; display: inline-block' class='enableclicks'>";
   if (b) {
     a += "<div class='slimbutton block'>PARTY</div>";
@@ -154,6 +142,26 @@ function render_party(b) {
     $("#partylist").hide()
   } else {
     $("#partylist").css("display", "inline-block")
+  }
+}
+function render_party() {
+  var b = "";
+  for (var a in party) {
+    var c = party[a];
+    b += " <div class='gamebutton' style='padding: 6px 8px 6px 8px; font-size: 24px; line-height: 18px' onclick='party_click(\"" + a + "\")'>";
+    b += character_image(c.skin);
+    if (c.rip) {
+      b += "<div style='color:gray'>RIP</div>"
+    } else {
+      b += "<div>" + a.substr(0, 3).toUpperCase() + "</div>"
+    }
+    b += "</div>"
+  }
+  $("#newparty").html(b);
+  if (!party_list.length) {
+    $("#newparty").hide()
+  } else {
+    $("#newparty").show()
   }
 }
 function render_character_sheet() {
@@ -185,6 +193,9 @@ function render_character_sheet() {
   if (character.evasion) {
     a += "<div><span style='color:gray'>Evasion:</span> " + character.evasion + "%</div>"
   }
+  if (character.miss) {
+    a += "<div><span style='color:gray'>Miss:</span> " + character.miss + "%</div>"
+  }
   if (character.crit) {
     a += "<div><span style='color:gray'>Crit:</span> " + character.crit + "%</div>"
   }
@@ -207,13 +218,13 @@ function render_character_sheet() {
   $("#rightcornerui").html(a);
   topright_npc = "character"
 }
-function render_abilities() {}
 function render_conditions(b) {
   var a = "<div style='margin-top: 5px; margin-bottom: -5px; margin-left: -2px'>",
     c = 0;
-  for (var e in b.s) {
-    var d = G.conditions[e];
-    if (!d || !d.ui) {
+  for (var f in b.s) {
+    var e = G.conditions[f],
+      d = b.s[f];
+    if (!e || (!e.ui && (!d.s || d.s < 20))) {
       continue
     }
     if (c > 0 && !(c % 2)) {
@@ -221,9 +232,9 @@ function render_conditions(b) {
     }
     c += 1;
     a += item_container({
-      skin: d.skin,
-      onclick: "condition_click('" + e + "')"
-    })
+      skin: e.skin,
+      onclick: "condition_click('" + f + "')"
+    }, d)
   }
   a += "</div>";
   if (c) {
@@ -661,27 +672,29 @@ function render_recipe(b, a) {
 function render_recipes() {
   topleft_npc = "recipes";
   rendered_target = topleft_npc;
-  var b = "<div style='background-color: black; border: 5px solid gray; padding: 20px; font-size: 24px; display: inline-block; vertical-align: top; text-align: center'>";
-  b += "<div class='clickable' onclick='render_craftsman()'>CRAFT</div>";
-  for (var a in G.craft) {
-    b += item_container({
-      skin: G.items[a].skin,
-      onclick: "render_recipe('craft','" + a + "')"
+  var a = "<div style='background-color: black; border: 5px solid gray; padding: 20px; font-size: 24px; display: inline-block; vertical-align: top; text-align: center'>";
+  a += "<div class='clickable' onclick='render_craftsman()'>CRAFT</div>";
+  object_sort(G.craft).forEach(function(c) {
+    var b = c[0];
+    a += item_container({
+      skin: G.items[b].skin,
+      onclick: "render_recipe('craft','" + b + "')"
     }, {
-      name: a
+      name: b
     })
-  }
-  b += "<div class='clickable' onclick='render_dismantler()'>DISMANTLE</div>";
-  for (var a in G.dismantle) {
-    b += item_container({
-      skin: G.items[a].skin,
-      onclick: "render_recipe('dismantle','" + a + "')"
+  });
+  a += "<div class='clickable' onclick='render_dismantler()'>DISMANTLE</div>";
+  object_sort(G.dismantle).forEach(function(c) {
+    var b = c[0];
+    a += item_container({
+      skin: G.items[b].skin,
+      onclick: "render_recipe('dismantle','" + b + "')"
     }, {
-      name: a
+      name: b
     })
-  }
-  b += "</div><div id='recipe-item' style='display: inline-block; vertical-align: top; margin-left: 5px'></div>";
-  $("#topleftcornerui").html(b)
+  });
+  a += "</div><div id='recipe-item' style='display: inline-block; vertical-align: top; margin-left: 5px'></div>";
+  $("#topleftcornerui").html(a)
 }
 function render_exchange_shrine(d) {
   var a = "shade_exchange",
@@ -1023,6 +1036,19 @@ function render_skill(a, e, c) {
       if (b.level) {
         d += bold_prop_line("Level Requirement", b.level, "gray")
       }
+      if (b.type == "passive") {
+        d += "<div><span style='color: #696C68;'>Passive</span></div>"
+      }(b.levels || []).forEach(function(h) {
+        var i = h[0],
+          g = h[1];
+        d += bold_prop_line("Output", g + (i > 0 && (" (Lv. " + i + ")")), "gray")
+      });
+      if (b.consume) {
+        d += "<div style='margin: 4px 0px 0px -2px;'>" + item_container({
+          skin: G.items[b.consume].skin,
+          def: G.items[b.consume]
+        }); + "</div>"
+      }
     }
   }
   d += "</div>";
@@ -1053,6 +1079,13 @@ function render_item(p, b) {
   if (!s) {
     h += "ITEM"
   } else {
+    if (s.type == "tarot" && s.minor) {
+      h += "<img style='display: inline-block; margin: -8px 2px -6px -8px;' src='/images/cards/tarot/minor_arcana/tarot__" + s.minor + ".png' />"
+    } else {
+      if (s.type == "tarot") {
+        h += "<img style='display: inline-block; margin: -8px 2px -6px -8px;' src='/images/cards/tarot/major_arcana/tarot__" + s.major + ".png' />"
+      }
+    }
     o = "#E4E4E4";
     if (s.grade == "mid") {
       o = "blue"
@@ -1069,8 +1102,14 @@ function render_item(p, b) {
         def: s
       }) + "</div>"
     }
-    h += "<div style='color: " + o + "; display: inline-block; border-bottom: 2px dashed gray; margin-bottom: 3px' class='cbold'>" + g + "</div>";
-    (s.gives || []).forEach(function(i) {
+    if (s.card) {
+      h += "<div style='display:inline-block; vertical-align: top'>";
+      h += "<div style='color: " + o + "; display: inline-block; border-bottom: 2px dashed gray; margin-bottom: 3px' class='cbold'>" + g + "</div><div></div>";
+      h += "<div style='color: " + o + "; display: inline-block; border-bottom: 2px dashed gray; margin-bottom: 3px; color: #AB7951' class='cbold'>" + s.card + "</div>";
+      h += "</div>"
+    } else {
+      h += "<div style='color: " + o + "; display: inline-block; border-bottom: 2px dashed gray; margin-bottom: 3px' class='cbold'>" + g + "</div>"
+    }(s.gives || []).forEach(function(i) {
       if (i[0] == "hp") {
         h += bold_prop_line("HP", "+" + i[1], colors.hp)
       }
@@ -1092,6 +1131,9 @@ function render_item(p, b) {
     }
     if (d.evasion) {
       h += bold_prop_line("Evasion", d.evasion + "%", "#7AC0F5")
+    }
+    if (d.miss) {
+      h += bold_prop_line("Miss", d.miss + "%", "#F36C6E")
     }
     if (d.reflection) {
       h += bold_prop_line("Reflection", d.reflection + "%", "#B484E5")
@@ -1152,6 +1194,9 @@ function render_item(p, b) {
     }
     if (d.frequency) {
       h += bold_prop_line("A.Speed", d.frequency, "#3BE681")
+    }
+    if (d.output) {
+      h += bold_prop_line("Damage Output", "+" + d.output + "%", "#D93319")
     }
     if (d.charisma) {
       h += bold_prop_line("Charisma", d.charisma, "#4DB174")
@@ -1372,6 +1417,9 @@ function render_item(p, b) {
       });
       h += bold_prop_line("Cost", to_pretty_num(G.dismantle[t].cost), "gold")
     }
+    if (b.from) {
+      h += bold_prop_line("From", b.from, "#BED4DE")
+    }
   }
   h += "</div>";
   if (p == "html") {
@@ -1382,14 +1430,19 @@ function render_item(p, b) {
 }
 function render_condition(a, b) {
   var d = G.conditions[b],
-    c = 0;
-  if (character.s[b]) {
-    c = parseInt(character.s[b] / 6000) / 10
+    c = 0,
+    e = undefined;
+  if (ctarget && ctarget.s[b] && ctarget.s[b].ms) {
+    c = parseInt(ctarget.s[b].ms / 6000) / 10
+  }
+  if (ctarget && ctarget.s[b] && ctarget.s[b].f) {
+    e = ctarget.s[b].f
   }
   render_item(a, {
     skin: d.skin,
     item: d,
-    minutes: c
+    minutes: c,
+    from: e
   })
 }
 function render_item_selector(a, c) {
@@ -1421,13 +1474,6 @@ function render_item_selector(a, c) {
   }
   e += "</div>";
   $(a).html(e)
-}
-function on_skill(b) {
-  var a = skillmap[b];
-  if (!a) {
-    return
-  }
-  use_skill(a.name, ctarget)
 }
 function allow_drop(a) {
   a.preventDefault()
@@ -1631,109 +1677,134 @@ function on_rclick(g) {
 }
 function on_drop(m) {
   m.preventDefault();
-  var r = m.dataTransfer.getData("text"),
+  var s = m.dataTransfer.getData("text"),
     j = false,
     l = false;
-  var c = $(document.getElementById(r)),
-    q = $(m.target);
-  while (q && q.parent() && q.attr("ondrop") == undefined) {
-    q = q.parent()
+  var c = $(document.getElementById(s)),
+    r = $(m.target);
+  while (r && r.parent() && r.attr("ondrop") == undefined) {
+    r = r.parent()
   }
-  var b = q.data("cnum"),
-    d = q.data("slot"),
-    a = q.data("strnum"),
-    o = q.data("trigrc"),
-    h = q.data("skillid");
-  var s = c.data("inum"),
-    p = c.data("sname"),
-    i = c.data("snum");
-  if (s !== undefined && h !== undefined) {
-    s = parseInt(s);
-    if ((s || s === 0) && character.items[s] && G.items[character.items[s].name].gives) {
-      skillmap[h] = {
+  var b = r.data("cnum"),
+    f = r.data("slot"),
+    a = r.data("strnum"),
+    o = r.data("trigrc"),
+    p = r.data("skid");
+  var t = c.data("inum"),
+    q = c.data("sname"),
+    i = c.data("snum"),
+    d = c.data("skname");
+  console.log(b + " " + t + " " + f + " " + q + " skid: " + p + " skname: " + d);
+  if (t !== undefined && p !== undefined) {
+    t = parseInt(t);
+    if ((t || t === 0) && character.items[t]) {
+      keymap[p] = {
         type: "item",
-        name: character.items[s].name
+        name: character.items[t].name
       };
-      render_skillbar()
+      set_setting(real_id, "keymap", keymap);
+      render_skills();
+      render_skills()
     }
   } else {
-    if (o != undefined && s != undefined) {
-      on_rclick(c.get(0))
-    } else {
-      if (i != undefined && a != undefined) {
-        socket.emit("bank", {
-          operation: "move",
-          a: i,
-          b: a,
-          pack: last_rendered_items
-        });
-        j = true
+    if (d !== undefined && p !== undefined) {
+      if (d == "eval") {
+        keymap[p] = {
+          name: "eval",
+          code: "add_log('Empty eval','gray')"
+        }
       } else {
-        if (a != undefined && s != undefined) {
+        if (d == "snippet") {
+          keymap[p] = {
+            name: "snippet",
+            code: "game_log('Empty snippet','gray')"
+          }
+        } else {
+          keymap[p] = d
+        }
+      }
+      set_setting(real_id, "keymap", keymap);
+      render_skills();
+      render_skills()
+    } else {
+      if (o != undefined && t != undefined) {
+        on_rclick(c.get(0))
+      } else {
+        if (i != undefined && a != undefined) {
           socket.emit("bank", {
-            operation: "swap",
-            inv: s,
-            str: a,
+            operation: "move",
+            a: i,
+            b: a,
             pack: last_rendered_items
           });
-          l = true
+          j = true
         } else {
-          if (b != undefined && i != undefined) {
+          if (a != undefined && t != undefined) {
             socket.emit("bank", {
               operation: "swap",
-              inv: b,
-              str: i,
+              inv: t,
+              str: a,
               pack: last_rendered_items
             });
             l = true
           } else {
-            if (b !== undefined && b == s) {
-              if (is_mobile && mssince(last_drag_start) < 300) {
-                inventory_click(parseInt(s))
-              }
+            if (b != undefined && i != undefined) {
+              socket.emit("bank", {
+                operation: "swap",
+                inv: b,
+                str: i,
+                pack: last_rendered_items
+              });
+              l = true
             } else {
-              if (b != undefined && s != undefined) {
-                socket.emit("imove", {
-                  a: b,
-                  b: s
-                });
-                j = true
+              if (b !== undefined && b == t) {
+                if (is_mobile && mssince(last_drag_start) < 300) {
+                  inventory_click(parseInt(t))
+                }
               } else {
-                if (p !== undefined && p == d) {
-                  if (is_mobile && mssince(last_drag_start) < 300) {
-                    slot_click(d)
-                  }
+                if (b != undefined && t != undefined) {
+                  socket.emit("imove", {
+                    a: b,
+                    b: t
+                  });
+                  j = true
                 } else {
-                  if (b != undefined && p != undefined) {
-                    socket.emit("unequip", {
-                      slot: p,
-                      position: b
-                    })
+                  if (q !== undefined && q == f) {
+                    if (is_mobile && mssince(last_drag_start) < 300) {
+                      slot_click(f)
+                    }
                   } else {
-                    if (d != undefined && s != undefined) {
-                      if (in_arr(d, trade_slots)) {
-                        if (character.slots[d]) {
-                          return
+                    if (b != undefined && q != undefined) {
+                      socket.emit("unequip", {
+                        slot: q,
+                        position: b
+                      })
+                    } else {
+                      if (f != undefined && t != undefined) {
+                        if (in_arr(f, trade_slots)) {
+                          if (character.slots[f]) {
+                            return
+                          }
+                          try {
+                            var k = character.items[parseInt(t)];
+                            render_item("#topleftcornerdialog", {
+                              trade: 1,
+                              item: G.items[k.name],
+                              actual: k,
+                              num: parseInt(t),
+                              slot: f
+                            });
+                            $(".editable").focus();
+                            dialogs_target = ctarget
+                          } catch (n) {
+                            console.log("TRADE-ERROR: " + n)
+                          }
+                        } else {
+                          socket.emit("equip", {
+                            num: t,
+                            slot: f
+                          }), l = true
                         }
-                        try {
-                          var k = character.items[parseInt(s)];
-                          render_item("#topleftcornerdialog", {
-                            trade: 1,
-                            item: G.items[k.name],
-                            actual: k,
-                            num: parseInt(s),
-                            slot: d
-                          });
-                          $(".editable").focus();
-                          dialogs_target = ctarget
-                        } catch (n) {
-                          console.log("TRADE-ERROR: " + n)
-                        }
-                      } else {
-                        socket.emit("equip", {
-                          num: s,
-                          slot: d
-                        }), l = true
                       }
                     }
                   }
@@ -1746,14 +1817,14 @@ function on_drop(m) {
     }
   }
   if (j) {
-    var g = c.all_html(),
-      f = q.html();
-    q.html("");
-    c.parent().html(f);
-    q.html(g)
+    var h = c.all_html(),
+      g = r.html();
+    r.html("");
+    c.parent().html(g);
+    r.html(h)
   }
   if (l) {
-    q.html(c.all_html())
+    r.html(c.all_html())
   }
 }
 function item_container(z, q) {
@@ -1808,6 +1879,9 @@ function item_container(z, q) {
   if (z.slot != undefined) {
     b = "data-slot='" + z.slot + "' "
   }
+  if (z.skid != undefined) {
+    b = "data-skid='" + z.skid + "' "
+  }
   if (z.cid) {
     f += " id='" + z.cid + "' "
   }
@@ -1846,11 +1920,14 @@ function item_container(z, q) {
     if (z.sname != undefined) {
       r = "class='rclick" + A + "' data-sname='" + z.sname + "'"
     }
+    if (z.skname != undefined) {
+      r = "class='rclick" + A + "' data-skname='" + z.skname + "'"
+    }
     if (z.on_rclick) {
       r = "class='rclick" + A + "' data-onrclick=\"" + z.on_rclick + '"'
     }
     j += "<div " + r + " style='background: black; position: absolute; bottom: -2px; left: -2px; border: 2px solid " + s + ";";
-    j += "padding:" + (w) + "px; overflow: hidden' id='" + z.id + "' " + l + ">";
+    j += "padding:" + (w) + "px; overflow: hidden' " + ("id='" + (z.id || ("rid" + randomStr(12))) + "'") + " " + l + ">";
     j += "<div style='overflow: hidden; height: " + (p) + "px; width: " + (p) + "px;'>";
     j += "<img style='width: " + (v.columns * v.size * B) + "px; height: " + (v.rows * v.size * B) + "px; margin-top: -" + (h * p) + "px; margin-left: -" + (i * p) + "px;' src='" + v.file + "' draggable='false' />";
     j += "</div>";
@@ -1884,9 +1961,19 @@ function item_container(z, q) {
         }
         j += "<div class='iuui " + u + "level" + min(d, m.compound && 5 || 12) + "' style='border-color: " + s + "'>" + (a == 10 && "X" || a == 11 && "Y" || a == 12 && "Z" || a == 5 && u == "c" && "V" || a) + "</div>"
       }
+      if (q.s) {
+        j += "<div class='iqui'>" + q.s + "</div>"
+      }
     }
     if (z.slot && in_arr(z.slot, trade_slots)) {
       j += "<div class='truui' style='border-color: " + s + ";'>$</div>"
+    }
+    if (q && q.v) {
+      j += "<div class='trruui ivu' style='border-color: " + s + "; line-height: 7px'><br />^</div>"
+    } else {
+      if (q && q.m) {
+        j += "<div class='trruui imu' style='border-color: " + s + ";'>M</div>"
+      }
     }
     if (z.skid) {
       j += "<div class='skidloader" + z.skid + "' style='position: absolute; bottom: 0px; right: 0px; width: 4px; height: 0px; background-color: yellow'></div>";
@@ -1897,209 +1984,215 @@ function item_container(z, q) {
   j += "</div>";
   return j
 }
-function load_skills() {
-  if (0) {} else {
-    if (character.ctype == "warrior" || character.ctype == "rogue") {
-      skillbar = ["1", "2", "3", "Q", "R"]
-    } else {
-      if (character.ctype == "merchant") {
-        skillbar = ["1", "2", "3", "4", "5"]
-      } else {
-        skillbar = ["1", "2", "3", "4", "R"]
-      }
-    }
-    if (character.ctype == "warrior") {
-      skillmap = {
-        "1": {
-          name: "use_hp"
-        },
-        "2": {
-          name: "use_mp"
-        },
-        Q: {
-          name: "taunt"
-        },
-        R: {
-          name: "charge"
-        }
-      }
-    } else {
-      if (character.ctype == "mage") {
-        skillmap = {
-          "1": {
-            name: "use_hp"
-          },
-          "2": {
-            name: "use_mp"
-          },
-          Q: {
-            name: "light"
-          },
-          R: {
-            name: "burst"
-          },
-          "6": {
-            name: "cburst"
-          }
-        }
-      } else {
-        if (character.ctype == "priest") {
-          skillmap = {
-            "1": {
-              name: "use_hp"
-            },
-            "2": {
-              name: "use_mp"
-            },
-            R: {
-              name: "curse"
-            }
-          }
-        } else {
-          if (character.ctype == "ranger") {
-            skillmap = {
-              "1": {
-                name: "use_hp"
-              },
-              "2": {
-                name: "use_mp"
-              },
-              "3": {
-                name: "3shot"
-              },
-              "5": {
-                name: "5shot"
-              },
-              R: {
-                name: "supershot"
-              }
-            }
-          } else {
-            if (character.ctype == "rogue") {
-              skillmap = {
-                "1": {
-                  name: "use_hp"
-                },
-                "2": {
-                  name: "use_mp"
-                },
-                "3": {
-                  name: "quickpunch"
-                },
-                "5": {
-                  name: "quickstab"
-                },
-                R: {
-                  name: "invis"
-                },
-                Q: {
-                  name: "pcoat"
-                }
-              }
-            } else {
-              if (character.ctype == "merchant") {
-                skillmap = {
-                  "1": {
-                    name: "use_hp"
-                  },
-                  "2": {
-                    name: "use_mp"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-    skillmap.X = {
-      name: "use_town"
-    }
-  }
-}
-function render_skillbar(b) {
-  if (b) {
+function render_skillbar(c) {
+  if (c) {
     $("#skillbar").html("").hide();
     return
   }
-  var a = "<div style='background-color: black; border: 5px solid gray; padding: 2px; display: inline-block' class='enableclicks'>";
-  skillbar.forEach(function(d) {
-    var c = skillmap[d];
-    if (c) {
-      a += item_container({
-        skid: d,
-        skin: G.skills[c.name].skin,
-        draggable: false
-      }, c)
+  var b = "<div style='background-color: black; border: 5px solid gray; padding: 2px; display: inline-block' class='enableclicks'>",
+    a = 0;
+  skillbar.forEach(function(f) {
+    var e = keymap[f],
+      d = e;
+    if (e) {
+      if (e && e.skin) {
+        d = e.skin
+      } else {
+        if (e.type == "item" && G.items[e.name]) {
+          d = G.items[e.name].skin
+        } else {
+          if (G.skills[e.name || e]) {
+            d = G.skills[e.name || e].skin
+          }
+        }
+      }
+      b += item_container({
+        skid: f,
+        skin: d || "",
+        draggable: false,
+        droppable: true,
+        onclick: "on_skill('" + f + "')"
+      }, e)
     } else {
-      a += item_container({
-        skid: d,
-        draggable: false
+      b += item_container({
+        skid: f,
+        draggable: false,
+        droppable: true
       })
     }
-    a += "<div></div>"
+    if (!(skillbar.length >= 8 && !(skillbar.length % 2) && !(a % 2))) {
+      b += "<div></div>"
+    }
+    a++
   });
-  a += "</div>";
-  $("#skillbar").html(a).css("display", "inline-block")
+  b += "</div>";
+  $("#skillbar").html(b).css("display", "inline-block")
 }
 function skill_click(a) {
-  if (skillsui && skillmap[a]) {
-    render_skill("#skills-item", skillmap[a].name, skillmap[a])
+  if (skillsui && keymap[a]) {
+    render_skill("#skills-item", keymap[a].name || keymap[a], keymap[a])
+  }
+  if (G.skills[a]) {
+    render_skill("#skills-item", a)
   }
 }
+var skills_page = "I";
+
 function render_skills() {
-  var e = 0,
-    a = "text-align: right";
+  var l = 0,
+    d = "text-align: right";
   if (skillsui) {
     $("#theskills").remove();
     skillsui = false;
     render_skillbar();
     return
   }
-  var d = "<div id='skills-item' style='display: inline-block; vertical-align: top; margin-right: 5px'></div>";
-  d += "<div style='background-color: black; border: 5px solid gray; padding: 2px; font-size: 24px; display: inline-block'>";
-  d += "<div class='textbutton' style='margin-left: 5px'>SLOTS</div>";
-  d += "<div>";["1", "2", "3", "4", "5", "6", "7"].forEach(function(f) {
-    d += item_container({
-      skid: f,
-      skin: skillmap[f] && (G.skills[skillmap[f].name] && G.skills[skillmap[f].name].skin || skillmap[f].name),
-      onclick: "skill_click('" + f + "')"
-    }, skillmap[f])
-  });
-  d += "</div>";
-  d += "<div>";["Q", "W", "E", "R", "TAB", "X", "8"].forEach(function(f) {
-    d += item_container({
-      skid: f,
-      skin: skillmap[f] && (G.skills[skillmap[f].name] && G.skills[skillmap[f].name].skin || skillmap[f].name),
-      onclick: "skill_click('" + f + "')"
-    }, skillmap[f])
-  });
-  d += "</div>";
-  d += "<div class='textbutton' style='margin-left: 5px'>ABILITIES <span style='float:right; color: #99D9B9; margin-right: 5px'>WORK IN PROGRESS!</span></div>";
-  for (var c = 0; c < 2; c++) {
-    d += "<div>";
-    for (var b = 0; b < 7; b++) {
-      d += item_container({})
+  var h = "<div id='skills-item' style='display: inline-block; vertical-align: top; margin-right: 5px'></div>";
+  h += "<div style='background-color: black; border: 5px solid gray; padding: 2px; font-size: 24px; display: inline-block'>";
+  h += "<div class='textbutton' style='margin-left: 5px'><span  onclick='btc(event); show_snippet()'>MAPPING</span> <span style='color: " + (skills_page == "I" && "#76BDE5" || "#7C7C7C") + ";' class='clickable' onclick='btc(event); skills_page=\"I\"; render_skills(); render_skills();'>1</span> <span style='color: " + (skills_page == "II" && "#E38241" || "#7C7C7C") + ";' class='clickable' onclick='btc(event); skills_page=\"II\"; render_skills(); render_skills();'>2</span> <span style='color: " + (skills_page == "U" && "#8FCE72" || "#7C7C7C") + ";' class='clickable' onclick='btc(event); skills_page=\"U\"; render_skills(); render_skills();'>U</span> <span style='float:right; color: #7C7C7C; margin-right: 5px' class='clickable' onclick='btc(event); show_json(keymap)'><span style='color:#DECE31'>&gt;</span> DATA <span style='color:#DECE31'>&lt;</span></span></div>";
+  var c = ["1", "2", "3", "4", "5", "6", "7"],
+    b = ["Q", "W", "E", "R", "X", "T", "B"];
+  if (skills_page == "II") {
+    c = ["8", "9", "0", "G", "H", "J", "K"], b = ["SHIFT", "Z", "V", "M", "P", "D", "BACK"]
+  }
+  if (skills_page == "U") {
+    c = ["ESC", "A", "C", "F", "I", "TAB", "ENTER"], b = ["UP", "LEFT", "DOWN", "RIGHT", ",", "S", "U"]
+  }
+  h += "<div>";
+  c.forEach(function(j) {
+    var i = keymap[j],
+      a = i;
+    if (i && i.skin) {
+      a = i.skin
+    } else {
+      if (i && i.type == "item" && G.items[i.name]) {
+        a = G.items[i.name].skin
+      } else {
+        if (i && G.skills[i.name || i]) {
+          a = G.skills[i.name || i].skin
+        }
+      }
     }
-    d += "</div>"
+    h += item_container({
+      skid: j,
+      skin: a || "",
+      onclick: "on_skill('" + j + "')"
+    }, i)
+  });
+  h += "</div>";
+  h += "<div>";
+  b.forEach(function(j) {
+    var i = keymap[j],
+      a = i;
+    if (i && i.skin) {
+      a = i.skin
+    } else {
+      if (i && i.type == "item" && G.items[i.name]) {
+        a = G.items[i.name].skin
+      } else {
+        if (i && G.skills[i.name || i]) {
+          a = G.skills[i.name || i].skin
+        }
+      }
+    }
+    h += item_container({
+      skid: j,
+      skin: a || "",
+      onclick: "on_skill('" + j + "')"
+    }, i)
+  });
+  h += "</div>";
+  h += "<div class='textbutton' style='margin-left: 5px'><span class='clickable' onclick='btc(event); show_json(G.skills)'>SKILLS</span> <span style='float:right; color: #7C7C7C; margin-right: 5px' class='clickable' onclick='btc(event); show_modal($(\"#keymapguide\").html())'><span style='color:#60B8C7'>&gt;</span> CONFIG <span style='color:#60B8C7'>&lt;</span></span></div>";
+  var n = [],
+    m = 0,
+    k = [],
+    g = 0;
+  object_sort(G.skills).forEach(function(j) {
+    var i = j[0],
+      a = j[1];
+    if (a.type == "skill" && (!a["class"] || in_arr(character.ctype, a["class"]) || character.role == "gm")) {
+      n.push({
+        name: i
+      })
+    }
+    if (a.type == "passive" && (!a["class"] || in_arr(character.ctype, a["class"]) || character.role == "gm")) {
+      n.push({
+        name: i
+      })
+    }
+    if (a.type == "ability" && (!a["class"] || in_arr(character.ctype, a["class"]) || character.role == "gm")) {
+      k.push({
+        name: i
+      })
+    }
+    if (a.type == "utility" && a.ui !== false && (!a["class"] || in_arr(character.ctype, a["class"]))) {
+      k.push({
+        name: i
+      })
+    }
+  });
+  for (var f = 0; f < 10; f++) {
+    h += "<div>";
+    for (var e = 0; e < 7; e++) {
+      if (m < n.length) {
+        h += item_container({
+          skin: G.skills[n[m].name].skin,
+          onclick: "skill_click('" + n[m].name + "')",
+          skname: n[m].name
+        }, n[m])
+      } else {
+        h += item_container({})
+      }
+      m++
+    }
+    h += "</div>";
+    if (m >= n.length) {
+      break
+    }
   }
-  d += "<div class='textbutton' style='margin-left: 5px'>SKILLS</div>";
-  d += "<div>";
-  for (var b = 0; b < 7; b++) {
-    d += item_container({})
+  h += "<div class='textbutton' style='margin-left: 5px' onclick='btc(event); show_json(G.skills)'>ABILITIES</div>";
+  for (var f = 0; f < 10; f++) {
+    h += "<div>";
+    for (var e = 0; e < 7; e++) {
+      if (g < k.length) {
+        h += item_container({
+          skin: G.skills[k[g].name].skin,
+          onclick: "skill_click('" + k[g].name + "')",
+          skname: k[g].name
+        }, k[g])
+      } else {
+        h += item_container({})
+      }
+      g++
+    }
+    h += "</div>";
+    if (g >= k.length) {
+      break
+    }
   }
-  d += "</div>";
-  d += "</div>";
+  h += "</div>";
   skillsui = true;
   render_skillbar(1);
   $("body").append("<div id='theskills' style='position: fixed; z-index: 310; bottom: 0px; right: 0px'></div>");
-  $("#theskills").html(d)
+  $("#theskills").html(h)
 }
 function render_teleporter() {
   var a = "<div style='max-width: 420px; text-align: center'>";
   for (var b in G.maps) {
     if (!G.maps[b].ignore && !G.maps[b].instance) {
       a += "<div class='gamebutton' style='margin-left: 5px; margin-bottom: 5px' onclick='socket.emit(\"transport\",{to:\"" + b + "\"})'>" + G.maps[b].name + "</div>"
+    }
+  }
+  a += "</div>";
+  show_modal(a, {
+    wrap: false
+  })
+}
+function render_travel() {
+  var a = "<div style='max-width: 420px; text-align: center'>";
+  for (var b in G.maps) {
+    if (!G.maps[b].ignore && !G.maps[b].instance && !G.maps[b].irregular) {
+      a += "<div class='gamebutton' style='margin-left: 5px; margin-bottom: 5px' onclick='code_travel(\"" + b + "\"); hide_modal()'>" + G.maps[b].name + "</div>"
     }
   }
   a += "</div>";
@@ -2429,7 +2522,7 @@ function render_interaction(h, f) {
   }
   $("#topleftcornerui").html(g)
 }
-function load_nearby() {
+function load_nearby(g) {
   friends_inside = "nearby";
   var c = "",
     a = false;
@@ -2473,6 +2566,9 @@ function load_nearby() {
     }
     c += "</table>"
   } else {
+    if (g) {
+      return load_server_list()
+    }
     c = "<div style='margin-top: 8px'>There is no one nearby.</div>"
   }
   $(".friendslist").html(c);
@@ -2523,35 +2619,43 @@ function load_server_list(b) {
         a += "<th style='width: 120px'>Kills</th>"
       }
       a += "</tr>";
-      b.forEach(function(d) {
-        var e = "AFK",
-          c = d.party;
-        if (!d.afk) {
-          e = "<span style='color: #34bf15'>ACTIVE</span>"
+      b.forEach(function(e) {
+        var f = "AFK",
+          c = e.party,
+          d = e.name;
+        if (!e.afk) {
+          f = "<span style='color: #34bf15'>ACTIVE</span>"
         } else {
-          if (d.afk == "code") {
-            e = "<span style='color: gray'>CODE</span>"
+          if (e.afk == "code") {
+            f = "<span style='color: gray'>CODE</span>"
           } else {
-            if (d.afk == "bot") {
-              e = "<span style='color: gray'>BOT</span>"
+            if (e.afk == "bot") {
+              f = "<span style='color: gray'>BOT</span>"
             }
           }
         }
-        if (!d.party && d.name != character.name) {
-          c = "<span style='color: #34BCAF' class='clickable' onclick='parent.socket.emit(\"party\",{event:\"invite\",name:\"" + d.name + "\"})'>Invite</span>"
+        if (!e.party && e.name != character.name && e.name != "Hidden") {
+          c = "<span style='color: #34BCAF' class='clickable' onclick='parent.socket.emit(\"party\",{event:\"invite\",name:\"" + e.name + "\"})'>Invite</span>"
         } else {
-          if (!d.party) {
-            c = "<span style='color: #999999'>You</span>"
+          if (e.name == "Hidden") {
+            c = "<span style='color: #999999'>None</span>"
           } else {
-            c = "<span style='color: #9F68C0'>" + d.party + "</span>"
+            if (!e.party) {
+              c = "<span style='color: #999999'>You</span>"
+            } else {
+              c = "<span style='color: #9F68C0'>" + e.party + "</span>"
+            }
           }
         }
-        if (d.name != character.name) {
-          c += " <span style='color: #A255BA' class='clickable' onclick='hide_modal(); cpm_window(\"" + d.name + "\");'>PM</span>"
+        if (e.name != character.name && e.name != "Hidden") {
+          c += " <span style='color: #A255BA' class='clickable' onclick='hide_modal(); cpm_window(\"" + e.name + "\");'>PM</span>"
         }
-        a += "<tr><td>" + d.name + "</td><td>" + d.level + "</td><td>" + d.type.toUpperCase() + "</td><td>" + d.age + "</td><td>" + e + "</td><td>" + c + "</td>";
+        if (d == "Hidden") {
+          d = "<span style='color:gray'>Hidden</span>"
+        }
+        a += "<tr><td>" + d + "</td><td>" + e.level + "</td><td>" + e.type.toUpperCase() + "</td><td>" + e.age + "</td><td>" + f + "</td><td>" + c + "</td>";
         if (is_pvp) {
-          a += "<td>" + to_pretty_num(d.kills) + "</td>"
+          a += "<td>" + to_pretty_num(e.kills) + "</td>"
         }
         a += "</tr>"
       });
@@ -2616,7 +2720,7 @@ function render_friends() {
   a += "<div style='font-size: 16px; margin-top: 5px; color: gray; text-align: center'>NOTE: The Communicator is an evolving protoype with missing features</div>";
   a += "</div>";
   show_modal(a, {});
-  load_nearby()
+  load_nearby(1)
 }
 var IID = null;
 
@@ -2636,11 +2740,8 @@ function precompute_image_positions() {
       c = 1, g = "animation"
     }
     var h = e.matrix;
-    var b = e.width || 312,
-      k = e.height || 288;
-    if (e.columns != 4 || e.rows != 2) {
-      continue
-    }
+    var b = e.width || C[e.file] && C[e.file].width || 312,
+      k = e.height || C[e.file] && C[e.file].height || 288;
     for (var f = 0; f < h.length; f++) {
       for (var d = 0; d < h[f].length; d++) {
         if (!h[f][d]) {
@@ -2662,6 +2763,7 @@ function character_image(a) {
     if (!IID[a]) {
       a = "tf_template"
     }
+    return "<div style='display: inline-block; width: 39px; height: 50px; overflow: hidden'><img style='margin-left: " + (-IID[a][2] - IID[a][4] - Math.ceil((IID[a][4] - 39) / 2)) + "px; margin-top: " + (-IID[a][3] - IID[a][5] + 50) + "px; width: " + IID[a][0] + "px; height: " + IID[a][1] + "px;' src='" + IID[a][6] + "'/></div>";
     return "<div style='display: inline-block; width: " + IID[a][4] + "px; height: " + IID[a][5] + "px; overflow: hidden'><img style='margin-left: " + (-IID[a][2] - IID[a][4]) + "px; margin-top: " + (-IID[a][3]) + "px; width: " + IID[a][0] + "px; height: " + IID[a][1] + "px;' src='" + IID[a][6] + "'/></div>"
   } catch (b) {
     console.log(b)
