@@ -1276,11 +1276,13 @@ function init_socket() {
     character["in"] = data["in"];
     if (data.effect === "blink") {
       delete character.fading_out;
+      delete character.s.blink;
       character.alpha = 0.5;
       restore_dimensions(character)
     }
     if (data.effect === "magiport") {
       delete character.fading_out;
+      delete character.s.magiport;
       stop_filter(character, "bloom");
       character.alpha = 0.5;
       restore_dimensions(character)
