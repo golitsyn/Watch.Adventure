@@ -1,8 +1,34 @@
-//#NOTE: If you want to see a new function/feature, just request it at: https://github.com/kaansoral/adventureland/issues
-var character = parent.character;
-var G = parent.G; // Game data
-var safeties = true;
+// #NOTE: If you want to see a new function/feature, just request it at: https://github.com/kaansoral/adventureland/issues
+// Or at #feedback in Discord: https://discord.gg/4SXJGU
+var character = {
+  // This object proxies the real parent.character
+  // Normal entities have normal coordinates, their {x,y}'s are equal to their {real_x,real_y}'s
+  // The character object is special, it's always in the middle of the screen, so it has static {x,y}'s
+  // Added this wrapper so instead of using .real_x and .real_y on all entities, .x and .y's can be used uniformly
+  "note": "This is a proxy object, the real character is in parent.character",
+  "properties": ["x", "y"],
+}
 
+Object.defineProperty(character, 'x', {
+  get: function() {
+    return parent.character.real_x;
+  },
+  set: function() {
+    game_log("You can't set coordinates manually, use the move(x,y) function!");
+  }
+});
+Object.defineProperty(character, 'y', {
+  get: function() {
+    return parent.character.real_y;
+  },
+  set: function() {
+    game_log("You can't set coordinates manually, use the move(x,y) function!");
+  }
+});
+for (var p in parent.character) proxy(p); // Not all properties are sadly available right away, new properties are captured imperfectly
+// var character=parent.character; // Old [25/06/2018]
+var G = parent.G; // Game Data - Use show_json(Object.keys(G)); and inspect individual data with show_json(G.skills) and alike
+var safeties = true; // Prevents common delay based issues that cause many requests to be sent to the server in a burst that triggers the server to disconnect the character
 server = {
   mode: parent.gameplay,
   // "normal", "hardcore", "test"
@@ -96,6 +122,7 @@ function use(name, target) // a multi-purpose use function, works for skills too
 }
 
 function use_skill(name, target) {
+  // for blink: use_skill("blink",[x,y])
   if (!target) target = get_target();
   parent.use_skill(name, target);
 }
@@ -337,22 +364,7 @@ function pm(name, message) // please use MORE responsibly, thank you! :)
 
 function move(x, y) {
   if (!can_walk(character)) return;
-  var map = parent.map,
-    move = parent.calculate_move(parent.M, character.real_x, character.real_y, parseFloat(x) || 0, parseFloat(y) || 0);
-  character.from_x = character.real_x;
-  character.from_y = character.real_y;
-  character.going_x = move.x;
-  character.going_y = move.y;
-  character.moving = true;
-  parent.calculate_vxy(character);
-  // parent.console.log("engaged move "+character.angle);
-  parent.socket.emit("move", {
-    x: character.real_x,
-    y: character.real_y,
-    going_x: character.going_x,
-    going_y: character.going_y,
-    m: character.m
-  });
+  parent.move(x, y);
 }
 
 function show_json(e) // renders the object as json inside the game
@@ -382,6 +394,7 @@ function get_nearest_monster(args) {
 
   if (!args) args = {};
   if (args && args.target && args.target.name) args.target = args.target.name;
+  if (args && args.type == "monster") game_log("You used monster.type, which is always 'monster', use monster.mtype instead");
 
   for (id in parent.entities) {
     var current = parent.entities[id];
@@ -442,12 +455,9 @@ function loot(commander) {
     var chest = parent.chests[id];
     if (safeties && (chest.items > character.esize || chest.last_loot && mssince(chest.last_loot) < 1600)) continue;
     chest.last_loot = last_loot;
-    if (commander) parent.parent.socket.emit("open_chest", {
-      id: id
-    });
-    else parent.socket.emit("open_chest", {
-      id: id
-    });
+    if (commander) parent.parent.open_chest(id);
+    else parent.open_chest(id);
+    // parent.socket.emit("open_chest",{id:id}); old version [02/07/18]
     looted++;
     if (looted == 2) break;
   }
@@ -766,6 +776,56 @@ function preview_item(def, args) {
   parent.prop_cache = {};
 }
 
+function set_skillbar() // example: set_skillbar("1","2","3","4","R") or set_skillbar(["1","2","3","4","R"])
+{
+  var arr = ["1"];
+  if (is_array(arguments[0])) arr = arguments[0];
+  else {
+    arr = [];
+    for (var i = 0; i < arguments.length; i++) arr.push(arguments[i]);
+  }
+  parent.set_setting(parent.real_id, "skillbar", arr);
+  parent.skillbar = arr;
+  parent.render_skills();
+  parent.render_skills();
+}
+
+function set_keymap(keymap) // example: {"1":{"name":"use_mp"},"2":{"name":"use_hp"}}
+{
+  parent.set_setting(parent.real_id, "keymap", keymap);
+  parent.keymap = keymap;
+  parent.render_skills();
+  parent.render_skills();
+}
+
+function map_key(key, skill, code) // example: map_key("1","use_hp") or map_key("2","snippet","say('OMG')") or map_key("1","esc") or map_key("ESC","up")
+{
+  var settings = parent.get_settings(parent.real_id);
+  var keymap = settings.keymap || parent.keymap;
+  if (is_string(skill)) keymap[key] = {
+    "name": skill
+  };
+  else keymap[key] = skill;
+  if (code) keymap[key].code = code;
+  if (keymap[key].keycode) parent.K[keymap[key].keycode] = key;
+  set_keymap(keymap);
+}
+
+function unmap_key(key) {
+  var settings = parent.get_settings(parent.real_id);
+  var keymap = settings.keymap || parent.keymap;
+  delete keymap[key];
+  set_keymap(keymap);
+}
+
+function reset_mappings() {
+  parent.keymap = {};
+  parent.skillbar = [];
+  parent.map_keys_and_skills();
+  set_keymap(parent.keymap);
+  set_skillbar(parent.skillbar);
+}
+
 function load_code(name, onerror) // onerror can be a function that will be executed if load_code fails
 {
   if (!onerror) onerror = function() {
@@ -864,10 +924,20 @@ function smart_move(destination, on_done) // despite the name, smart_move isn't 
   console.log(smart.map + " " + smart.x + " " + smart.y);
 }
 
-function stop() {
-  if (smart.moving) smart.on_done(false);
-  smart.moving = false;
-  move(character.real_x, character.real_y);
+function stop(action) {
+  if (!action || action == "move") {
+    if (smart.moving) smart.on_done(false);
+    smart.moving = false;
+    move(character.real_x, character.real_y);
+  } else if (action == "invis") {
+    parent.socket.emit("stop", {
+      action: "invis"
+    });
+  } else if (action == "teleport") {
+    parent.socket.emit("stop", {
+      action: "teleport"
+    });
+  }
 }
 
 var queue = [],
@@ -1074,6 +1144,27 @@ function smart_move_logic() {
 setInterval(function() {
   smart_move_logic();
 }, 80);
+
+function proxy(name) {
+  if (in_arr(name, character.properties)) return;
+  character.properties.push(name);
+  Object.defineProperty(character, name, {
+    get: function() {
+      return parent.character[name];
+    },
+    set: function(value) {
+      delete this[name];
+      parent.character[name] = value;
+    }
+  });
+}
+
+["bank", "user", "code", "angle", "direction", "target", "from_x", "from_y", "going_x", "going_y", "moving", "vx", "vy", "move_num"].forEach(function(p) {
+  proxy(p)
+});
+setInterval(function() {
+  for (var p in parent.character) proxy(p);
+}, 50); // bottom of the barrel
 
 function doneify(fn, s_event, f_event) {
   return function(a, b, c, d, e, f) {
