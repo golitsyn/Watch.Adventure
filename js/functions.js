@@ -678,7 +678,7 @@ function use_skill(b, h, k) {
                             id: h
                           })
                         } else {
-                          if (b == "shadowstrike") {
+                          if (b == "shadowstrike" || b == "phaseout") {
                             var d = item_position("shadowstone");
                             if (d === undefined) {
                               add_log("You don't have any shadow stones", "gray");
