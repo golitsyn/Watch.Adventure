@@ -3772,7 +3772,7 @@ function d_line(start, end, args) {
                               if (args.color == "warrior") {
                                 args.color = 14710051, args.size = 3
                               } else {
-                                if (args.color.startsWith("#")) {
+                                if (args.color && args.color.startsWith && args.color.startsWith("#")) {
                                   args.color = eval(args.color.replace("#", "0x"))
                                 }
                               }
