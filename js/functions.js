@@ -352,41 +352,65 @@ function add_greenlight_log() {
   $("#gamelog").append("<div class='gameentry' style='color: white'>Adventure Land is on Steam Greenlight! Would really appreciate your help: <a href='http://steamcommunity.com/sharedfiles/filedetails/?id=821265543' target='_blank' class='cancela' style='color: " + colors.xmas + "'>Browser</a> <a href='steam://url/CommunityFilePage/821265543' target='_blank' class='cancela' style='color: " + colors.xmasgreen + "'>Open: Steam</a></div>");
   $("#gamelog").scrollTop($("#gamelog")[0].scrollHeight)
 }
-function add_chat(b, k, d) {
+function add_chat(c, n, f, b) {
   if (no_html) {
     return
   }
-  var c = "#chatlog",
-    g = "";
+  var d = "#chatlog",
+    j = "",
+    m = 1,
+    h = false;
   if (!window.character) {
-    c = "#gamelog"
+    d = "#gamelog"
   }
-  if (game_chats.length > 360) {
-    var j = "<div class='chatentry' style='color: gray'>- Truncated -</div>",
-      a = [];
-    for (var h = 0; h < game_chats.length; h++) {
-      var f = game_chats[h];
-      if (h < 180 && !f[0]) {
-        continue
-      }
-      a.push(f)
+  for (var k = 0; k < game_chats.length; k++) {
+    if (b && game_chats[k][3] == b || game_chats[k][0] == c && game_chats[k][1] == n && game_chats[k][3] == b) {
+      m = game_chats[k][4] + 1;
+      game_chats.splice(k, 1);
+      h = true;
+      break
     }
-    game_chats = a.slice(-270);
-    game_chats.forEach(function(m) {
-      var l = "";
-      if (m[0]) {
-        l = "<span style='color:white'>" + m[0] + ":</span> "
+  }
+  if (game_chats.length > 360 || h) {
+    var l = "";
+    if (game_chats.length > 360) {
+      l = "<div class='chatentry' style='color: gray'>- Truncated -</div>";
+      var a = [];
+      for (var k = 0; k < game_chats.length; k++) {
+        var g = game_chats[k];
+        if (k < 180 && !g[0]) {
+          continue
+        }
+        a.push(g)
       }
-      j += "<div class='chatentry' style='color: " + (m[2] || "gray") + "'>" + l + html_escape(m[1]) + "</div>"
+      game_chats = a.slice(-270)
+    }
+    game_chats.forEach(function(q) {
+      var p = "",
+        o = q[4];
+      if (q[0]) {
+        p = "<span style='color:white'>" + q[0] + ":</span> "
+      }
+      if (o > 1) {
+        o = " <span style='color:#999A4F'>[" + o + "]</span>"
+      } else {
+        o = ""
+      }
+      l += "<div class='chatentry' style='color: " + (q[2] || "gray") + "'>" + p + html_escape(q[1]) + o + "</div>"
     });
-    $(c).html(j)
+    $(d).html(l)
   }
-  game_chats.push([b, k, d]);
-  if (b) {
-    g = "<span style='color:white'>" + b + ":</span> "
+  game_chats.push([c, n, f, b, m]);
+  if (c) {
+    j = "<span style='color:white'>" + c + ":</span> "
   }
-  $(c).append("<div class='chatentry' style='color: " + (d || "gray") + "'>" + g + html_escape(k) + "</div>");
-  $(c).scrollTop($(c)[0].scrollHeight)
+  if (m > 1) {
+    m = " <span style='color:#999A4F'>[" + m + "]</span>"
+  } else {
+    m = ""
+  }
+  $(d).append("<div class='chatentry' style='color: " + (f || "gray") + "'>" + j + html_escape(n) + m + "</div>");
+  $(d).scrollTop($(d)[0].scrollHeight)
 }
 function cpm_window(a) {
   if (no_html) {
