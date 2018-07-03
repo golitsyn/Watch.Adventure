@@ -17,6 +17,7 @@ var colors = {
   male: "#43A1C6",
   female: "#C06C9B",
   server_success: "#85C76B",
+  poison: "#41834A",
   ability: "#ff9100",
   xmas: "#C82F17",
   xmasgreen: "#33BF6D",
@@ -29,6 +30,7 @@ var colors = {
   white_negative: "#FFDBDC",
   serious_red: "#BC0004",
   serious_green: "#428727",
+  heal: "#EE4D93",
 };
 var trade_slots = [],
   check_slots = ["elixir"];
@@ -65,6 +67,7 @@ function process_game_data() {
         }
       }
     }
+    G.monsters[a].max_hp = G.monsters[a].hp
   }
   for (var b in G.maps) {
     var d = G.maps[b];
@@ -73,6 +76,7 @@ function process_game_data() {
     }
     d.items = {};
     d.merchants = [];
+    d.ref = d.ref || {};
     (d.npcs || []).forEach(function(f) {
       if (!f.position) {
         return
@@ -96,26 +100,12 @@ function process_game_data() {
           can_buy[h] = true
         })
       }
-      if (g.role == "transport") {
-        d.transporter = e
-      }
+      d.ref[f.id] = e;
       if (g.role == "newupgrade") {
         d.upgrade = d.compound = e
       }
       if (g.role == "exchange") {
         d.exchange = e
-      }
-      if (g.role == "craftsman") {
-        d.craftsman = e
-      }
-      if (g.role == "xmas_tree") {
-        d.xmas_tree = e
-      }
-      if (g.role == "pvptoken") {
-        d.pvptokens = e
-      }
-      if (g.role == "funtoken") {
-        d.funtokens = e
       }
       if (g.quest) {
         G["quest_" + g.quest] = e
@@ -166,6 +156,22 @@ function hardcore_logic() {
   G.monsters.phoenix.respawn = 1;
   G.monsters.mvampire.respawn = 1
 }
+function object_sort(e, d) {
+  function b(h, g) {
+    if (h[0] < g[0]) {
+      return -1
+    }
+    return 1
+  }
+  var c = [];
+  for (var f in e) {
+    c.push([f, e[f]])
+  }
+  if (!d) {
+    c.sort(b)
+  }
+  return c
+}
 function within_xy_range(c, b) {
   if (c["in"] != b["in"]) {
     return false
@@ -173,13 +179,10 @@ function within_xy_range(c, b) {
   if (!c.vision) {
     return false
   }
-  var a = b.x,
-    f = b.y,
-    e = c.x,
-    d = c.y;
-  if ("real_x" in c) {
-    e = c.real_x, d = c.real_y
-  }
+  var a = get_x(b),
+    f = get_y(b),
+    e = get_x(c),
+    d = get_y(c);
   if (e - c.vision[0] < a && a < e + c.vision[0] && d - c.vision[1] < f && f < d + c.vision[1]) {
     return true
   }
@@ -199,16 +202,10 @@ function distance(l, j) {
     if ("awidth" in j) {
       d = j.awidth, h = j.aheight
     }
-    var m = l.x,
-      k = l.y,
-      c = j.x,
-      o = j.y;
-    if ("real_x" in l) {
-      m = l.real_x, k = l.real_y
-    }
-    if ("real_y" in j) {
-      c = j.real_x, o = j.real_y
-    }[{
+    var m = get_x(l),
+      k = get_y(l),
+      c = get_x(j),
+      o = get_y(j);[{
       x: m - n / 2,
       y: k - e / 2
     }, {
@@ -348,7 +345,7 @@ function damage_multiplier(a) {
   return min(1.32, max(0.05, 1 - (max(0, min(100, a)) * 0.001 + max(0, min(100, a - 100)) * 0.001 + max(0, min(100, a - 200)) * 0.00095 + max(0, min(100, a - 300)) * 0.0009 + max(0, min(100, a - 400)) * 0.00082 + max(0, min(100, a - 500)) * 0.0007 + max(0, min(100, a - 600)) * 0.0006 + max(0, min(100, a - 700)) * 0.0005 + max(0, a - 800) * 0.0004) + max(0, min(50, 0 - a)) * 0.001 + max(0, min(50, -50 - a)) * 0.00075 + max(0, min(50, -100 - a)) * 0.0005 + max(0, -150 - a) * 0.00025))
 }
 function calculate_item_properties(e, d) {
-  var a = e.name + "|" + d.level + "|" + d.stat_type + "|" + d.p;
+  var a = e.name + (e.card || "") + "|" + d.level + "|" + d.stat_type + "|" + d.p;
   if (prop_cache[a]) {
     return prop_cache[a]
   }
@@ -374,6 +371,7 @@ function calculate_item_properties(e, d) {
     speed: 0,
     level: 0,
     evasion: 0,
+    miss: 0,
     reflection: 0,
     lifesteal: 0,
     attr0: 0,
@@ -384,6 +382,7 @@ function calculate_item_properties(e, d) {
     dreturn: 0,
     frequency: 0,
     mp_cost: 0,
+    output: 0,
   };
   if (e.upgrade || e.compound) {
     var c = e.upgrade || e.compound;
@@ -516,31 +515,35 @@ function e_array(a) {
   }
   return c
 }
-function gx(a) {
+function set_xy(b, a, c) {
+  if ("real_x" in b) {
+    b.real_x = a, b.real_y = c
+  } else {
+    b.x = a, b.y = c
+  }
+}
+function get_xy(a) {
+  return [get_x(a), get_y(a)]
+}
+function get_x(a) {
   if ("real_x" in a) {
     return a.real_x
   }
   return a.x
 }
-function gy(a) {
+function get_y(a) {
   if ("real_y" in a) {
     return a.real_y
   }
   return a.y
 }
 function simple_distance(e, d) {
-  var c = e.x,
-    h = e.y,
-    g = d.x,
-    f = d.y;
+  var c = get_x(e),
+    h = get_y(e),
+    g = get_x(d),
+    f = get_y(d);
   if (e.map && d.map && e.map != d.map) {
     return 9999999
-  }
-  if ("real_x" in e) {
-    c = e.real_x, h = e.real_y
-  }
-  if ("real_y" in d) {
-    g = d.real_x, f = d.real_y
   }
   return Math.sqrt((c - g) * (c - g) + (h - f) * (h - f))
 }
@@ -566,7 +569,7 @@ function recalculate_vxy(a) {
   }
 }
 function is_in_front(b, a) {
-  var c = Math.atan2(gy(a) - gy(b), gx(a) - gx(b)) * 180 / Math.PI;
+  var c = Math.atan2(get_y(a) - get_y(b), get_x(a) - get_x(b)) * 180 / Math.PI;
   if (b.angle !== undefined && Math.abs(b.angle - c) <= 45) {
     return true
   }
@@ -743,13 +746,10 @@ function calculate_move(e, g, f, d, c) {
   return b
 }
 function recalculate_move(a) {
-  var c = a.x,
-    e = a.y,
+  var c = get_x(a),
+    e = get_y(a),
     b = a.going_x,
     d = a.going_y;
-  if ("real_x" in a) {
-    c = a.real_x, e = a.real_y
-  }
   move = calculate_move(G.maps[a.map].data || {}, c, e, b, d);
   a.going_x = move.x;
   a.going_y = move.y
@@ -880,17 +880,10 @@ function stop_logic(b) {
   if (!b.moving) {
     return
   }
-  var a = b.x,
-    c = b.y;
-  if ("real_x" in b) {
-    a = b.real_x, c = b.real_y
-  }
+  var a = get_x(b),
+    c = get_y(b);
   if (((b.from_x <= b.going_x && a >= b.going_x - 0.1) || (b.from_x >= b.going_x && a <= b.going_x + 0.1)) && ((b.from_y <= b.going_y && c >= b.going_y - 0.1) || (b.from_y >= b.going_y && c <= b.going_y + 0.1))) {
-    if ("real_x" in b) {
-      b.real_x = b.going_x, b.real_y = b.going_y
-    } else {
-      b.x = b.going_x, b.y = b.going_y
-    }
+    set_xy(b, b.going_x, b.going_y);
     if (b.loop) {
       b.going_x = b.positions[(b.last + 1) % b.positions.length][0];
       b.going_y = b.positions[(++b.last) % b.positions.length][1];
