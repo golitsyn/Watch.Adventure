@@ -133,7 +133,8 @@ var blink_pressed = false,
   last_blink_pressed = new Date();
 var force_draw_on = false;
 var use_layers = false;
-var draws = 0;
+var draws = 0,
+  in_draw = false;
 var keymap = {},
   skillbar = [];
 var options = {
@@ -640,7 +641,7 @@ function reset_topleft() {
             pm_onclick: !ctarget.me && "cpm_window('" + (ctarget.controller || ctarget.name) + "')"
           })
         }
-        if (character.role == "gm" && !b.me) {
+        if (0 && character.role == "gm" && !b.me) {
           d.push({
             name: "SEND TO JAIL",
             onclick: "socket.emit('jail',{id:'" + ctarget.id + "'})",
@@ -1382,12 +1383,6 @@ function init_socket() {
         $.getJSON("http://" + server_addr + ":" + (parseInt(server_port) + 40) + "/character?checkin=1&ipass=" + ipass + "&id=" + character.id + "&callback=?")
       }
     }, 30000);
-    if (character.ctype == "mage") {
-      skill_timeout("burst", 10000)
-    }
-    if (character.ctype == "ranger") {
-      skill_timeout("supershot", 10000)
-    }
     if (code_to_load) {
       handle_information([{
         type: "code",
@@ -1431,6 +1426,12 @@ function init_socket() {
     }
     map_keys_and_skills();
     render_skillbar();
+    if (character.ctype == "mage") {
+      skill_timeout("burst", 10000)
+    }
+    if (character.ctype == "ranger") {
+      skill_timeout("supershot", 10000)
+    }
     if (!character.rip) {
       $("#name").css("color", "#1AC506")
     }
@@ -1486,6 +1487,18 @@ function init_socket() {
           sfx(data.sound)
         }
         ui_log(data.message, data.color)
+      }
+    })
+  });
+  socket.on("game_chat", function(data) {
+    draw_trigger(function() {
+      if (is_string(data)) {
+        add_chat("", data, "gray")
+      } else {
+        if (data.sound) {
+          sfx(data.sound)
+        }
+        add_chat("", data.message, data.color)
       }
     })
   });
@@ -1845,6 +1858,24 @@ function init_socket() {
       }
     })
   });
+  socket.on("gm", function(data) {
+    if (data.ids && data.action == "jump_list") {
+      var buttons = [];
+      hide_modal();
+      data.ids.forEach(function(id) {
+        buttons.push({
+          button: id,
+          onclick: function() {
+            socket.emit("gm", {
+              action: "jump",
+              id: id
+            })
+          }
+        })
+      });
+      get_input(buttons)
+    }
+  });
   socket.on("tavern", function(data) {});
   socket.on("game_chat_log", function(data) {
     draw_trigger(function() {
@@ -2200,9 +2231,14 @@ function init_socket() {
   socket.on("chest_opened", function(data) {
     draw_trigger(function() {
       if (chests[data.id]) {
-        sfx("coins", chests[data.id].x, chests[data.id].y);
-        chests[data.id].to_delete = true;
-        chests[data.id].alpha = 0.8
+        var chest = chests[data.id];
+        sfx("coins", chest.x, chest.y);
+        if (!chest.openning) {
+          chest.openning = new Date();
+          set_texture(chest, ++chest.frame)
+        }
+        chest.to_delete = true;
+        chest.alpha = 0.8
       }
       try {
         var chars = get_active_characters();
@@ -4502,6 +4538,7 @@ function draw(f, a) {
     return
   }
   draws++;
+  in_draw = true;
   if (window.last_draw) {
     frame_ms = mssince(last_draw)
   }
@@ -4622,4 +4659,5 @@ function draw(f, a) {
       console.log(g)
     }
   }
+  in_draw = false
 };
