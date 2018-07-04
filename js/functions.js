@@ -599,7 +599,7 @@ function use_skill(b, h, k) {
               })
             } else {
               var g = get_nearby_hostiles({
-                range: character.range - 60,
+                range: character.range - 2,
                 limit: 12
               }),
                 f = [],
@@ -622,7 +622,7 @@ function use_skill(b, h, k) {
                 })
               } else {
                 var g = get_nearby_hostiles({
-                  range: character.range - 40,
+                  range: character.range - 2,
                   limit: 3
                 }),
                   a = [];
@@ -643,7 +643,7 @@ function use_skill(b, h, k) {
                   })
                 } else {
                   var g = get_nearby_hostiles({
-                    range: character.range - 40,
+                    range: character.range - 2,
                     limit: 5
                   }),
                     a = [];
@@ -829,53 +829,59 @@ function on_skill(d, g) {
                     if (c == "travel") {
                       render_travel()
                     } else {
-                      if (c == "interact") {
-                        npc_focus()
+                      if (c == "gm") {
+                        socket.emit("gm", {
+                          action: "jump_list"
+                        })
                       } else {
-                        if (c == "toggle_inventory") {
-                          render_inventory()
+                        if (c == "interact") {
+                          npc_focus()
                         } else {
-                          if (c == "toggle_character") {
-                            toggle_character()
+                          if (c == "toggle_inventory") {
+                            render_inventory()
                           } else {
-                            if (c == "toggle_stats") {
-                              toggle_stats()
+                            if (c == "toggle_character") {
+                              toggle_character()
                             } else {
-                              if (c == "open_snippet") {
-                                show_snippet()
+                              if (c == "toggle_stats") {
+                                toggle_stats()
                               } else {
-                                if (c == "toggle_run_code") {
-                                  toggle_runner()
+                                if (c == "open_snippet") {
+                                  show_snippet()
                                 } else {
-                                  if (c == "toggle_code") {
-                                    toggle_code();
-                                    if (code) {
-                                      setTimeout(function() {
-                                        try {
-                                          codemirror_render.focus()
-                                        } catch (h) {}
-                                      }, 1)
-                                    }
+                                  if (c == "toggle_run_code") {
+                                    toggle_runner()
                                   } else {
-                                    if (c == "snippet") {
-                                      code_eval(a.code)
+                                    if (c == "toggle_code") {
+                                      toggle_code();
+                                      if (code) {
+                                        setTimeout(function() {
+                                          try {
+                                            codemirror_render.focus()
+                                          } catch (h) {}
+                                        }, 1)
+                                      }
                                     } else {
-                                      if (c == "eval") {
-                                        smart_eval(a.code)
+                                      if (c == "snippet") {
+                                        code_eval(a.code)
                                       } else {
-                                        if (c == "magiport") {
-                                          get_input({
-                                            button: "Engage",
-                                            onclick: function() {
-                                              use_skill("magiport", $(".mglocx").val());
-                                              hide_modal()
-                                            },
-                                            input: "mglocx",
-                                            placeholder: "Name",
-                                            title: "Magiport"
-                                          })
+                                        if (c == "eval") {
+                                          smart_eval(a.code)
                                         } else {
-                                          use_skill(c, ctarget)
+                                          if (c == "magiport") {
+                                            get_input({
+                                              button: "Engage",
+                                              onclick: function() {
+                                                use_skill("magiport", $(".mglocx").val());
+                                                hide_modal()
+                                              },
+                                              input: "mglocx",
+                                              placeholder: "Name",
+                                              title: "Magiport"
+                                            })
+                                          } else {
+                                            use_skill(c, ctarget)
+                                          }
                                         }
                                       }
                                     }
@@ -2956,7 +2962,16 @@ function draw_timeout(c, b, a) {
   draw_timeouts.push([c, future_ms(b), a])
 }
 function draw_trigger(a) {
-  draw_timeouts.push([a, new Date(), 2])
+  if (in_draw) {
+    try {
+      a()
+    } catch (b) {
+      console.log("draw_trigger_error: " + b);
+      console.log("code: " + a)
+    }
+  } else {
+    draw_timeouts.push([a, new Date(), 2])
+  }
 }
 function tint_logic() {
   var c = new Date(),
@@ -2976,6 +2991,7 @@ function tint_logic() {
         $(d.selector).css("height", "0px").css("background-color", "rgb(" + a + "," + j + "," + p + ")")
       } else {
         if (!d.added) {
+          $(".skidloader" + d.skid).parent().find("img").css("opacity", 0.5);
           d.added = true;
           $(d.selector).css("height", "1px")
         }
@@ -3082,6 +3098,14 @@ function tint_logic() {
     delete_indices(tints, s)
   }
 }
+function restart_skill_tints() {
+  tints.forEach(function(a) {
+    if (a.skid) {
+      $(".skidloader" + a.skid).parent().find("img").css("opacity", 0.5);
+      $(a.selector).css("height", "1px")
+    }
+  })
+}
 function get_tint(a) {
   for (var b = 0; b < tints.length; b++) {
     if (tints[b].selector == a) {
@@ -3175,7 +3199,9 @@ function attack_timeout(a) {
       type: "brute",
       key: "a",
       cur: tint_c.a
-    })
+    });
+    skill_timeout("attack", -mssince(next_attack));
+    skill_timeout("heal", -mssince(next_attack))
   })
 }
 function pot_timeout(a) {
@@ -3263,28 +3289,31 @@ function pvp_timeout(c, h) {
 }
 var next_skill = {};
 
-function skill_timeout(b, a) {
-  var c = "";
-  if (!a) {
-    a = G.skills[b].cooldown
+function skill_timeout(c, b) {
+  var a = [];
+  if (!b) {
+    b = G.skills[c].cooldown
   }
-  if (a == "1X") {
-    a = 1000 * 100 / character.speed
+  if (b == "1X") {
+    b = 1000 * 100 / character.speed
   }
-  next_skill[b] = future_ms(a);
+  next_skill[c] = future_ms(b);
   for (N in keymap) {
-    if (keymap[N] && (keymap[N] == b || keymap[N].name == b)) {
-      c = N
+    if (keymap[N] && (keymap[N] == c || keymap[N].name == c)) {
+      a.push(N)
     }
   }
   draw_trigger(function() {
-    if (c) {
-      $(".skidloader" + c).parent().find("img").css("opacity", 0.5);
-      add_tint(".skidloader" + c, {
-        ms: -mssince(next_skill[b]),
-        type: "skill"
-      })
+    if (G.skills[c] && G.skills[c].share == "attack") {
+      attack_timeout(-mssince(next_skill[c]))
     }
+    a.forEach(function(d) {
+      add_tint(".skidloader" + d, {
+        ms: -mssince(next_skill[c]),
+        type: "skill",
+        skid: d
+      })
+    })
   })
 }
 function disappearing_circle(a, g, d, b) {
