@@ -2026,7 +2026,8 @@ function render_skillbar(c) {
     a++
   });
   b += "</div>";
-  $("#skillbar").html(b).css("display", "inline-block")
+  $("#skillbar").html(b).css("display", "inline-block");
+  restart_skill_tints()
 }
 function skill_click(a) {
   if (skillsui && keymap[a]) {
@@ -2131,6 +2132,11 @@ function render_skills() {
       })
     }
   });
+  if (character.role == "gm") {
+    k.push({
+      name: "gm"
+    })
+  }
   for (var f = 0; f < 10; f++) {
     h += "<div>";
     for (var e = 0; e < 7; e++) {
@@ -2174,7 +2180,8 @@ function render_skills() {
   skillsui = true;
   render_skillbar(1);
   $("body").append("<div id='theskills' style='position: fixed; z-index: 310; bottom: 0px; right: 0px'></div>");
-  $("#theskills").html(h)
+  $("#theskills").html(h);
+  restart_skill_tints()
 }
 function render_teleporter() {
   var a = "<div style='max-width: 420px; text-align: center'>";
