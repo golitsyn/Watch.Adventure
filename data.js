@@ -25,6 +25,7 @@ var G = {
     "run_snippet0": ["skills", 3, 10],
     "run_snippet5": ["skills", 13, 10],
     "run_snippet4": ["skills", 11, 10],
+    "gm": ["skills", 4, 6],
     "sshield": ["pack_20", 1, 12],
     "ring220": ["pack_20", 1, 10],
     "emptyjar": ["pack_20", 13, 34],
@@ -437,6 +438,12 @@ var G = {
       "mp": 1,
       "type": "skill"
     },
+    "gm": {
+      "explanation": "Jump, Jail, Mute, Use Any Skill",
+      "type": "gm",
+      "name": "GM Abilities",
+      "skin": "gm"
+    },
     "darkblessing": {
       "explanation": "Increases damage by 25% for the duration.",
       "cooldown": 60000,
@@ -536,6 +543,7 @@ var G = {
       "cooldown": "1X",
       "name": "3-Shot",
       "skin": "skill_3shot",
+      "share": "attack",
       "explanation": "Hits 3 targets at once! Deals 0.7X damage to each target.",
       "level": 60,
       "type": "skill",
@@ -613,16 +621,17 @@ var G = {
       "mp": 320
     },
     "cburst": {
+      "explanation": "A skill for experienced mages. Allows you to control your most powerful ability.",
+      "share": "burst",
       "cooldown": 6000,
+      "skin": "skill_cburst",
+      "class": ["mage"],
       "ratio": 0.5,
       "name": "Controlled Mana Burst",
-      "skin": "skill_cburst",
-      "list": true,
-      "explanation": "A skill for experienced mages. Allows you to control your most powerful ability.",
       "level": 75,
-      "type": "skill",
-      "class": ["mage"],
-      "mp": 0
+      "list": true,
+      "mp": 0,
+      "type": "skill"
     },
     "hardshell": {
       "cooldown": 16000,
@@ -751,6 +760,7 @@ var G = {
       "cooldown": "1X",
       "name": "5-Shot",
       "skin": "skill_5shot",
+      "share": "attack",
       "explanation": "Hits 5 targets at once! Deals 0.5X damage to each target.",
       "level": 75,
       "type": "skill",
@@ -6829,7 +6839,7 @@ var G = {
       }]
     }
   },
-  "version": 292,
+  "version": 293,
   "games": {
     "tarot": {
       "cards": ["chariot", "death", "devil", "emperor", "empress", "fool", "fortune", "hangman", "hermit", "hierophant", "judgment", "justice", "lovers", "magician", "moon", "priestess", "star", "strength", "sun", "temperance", "theworld", "tower", "2cups", "2pentacles", "2swords", "2wands", "3cups", "3pentacles", "3swords", "3wands", "4cups", "4pentacles", "4swords", "4wands", "5cups", "5pentacles", "5swords", "5wands", "6cups", "6pentacles", "6swords", "6wands", "7cups", "7pentacles", "7swords", "7wands", "8cups", "8pentacles", "8swords", "8wands", "9cups", "9pentacles", "9swords", "9wands", "10cups", "10pentacles", "10swords", "10wands", "acecups", "acepentacles", "aceswords", "acewands", "kingcups", "kingpentacles", "kingswords", "kingwands", "knightcups", "knightpentacles", "knightswords", "knightwands", "pagecups", "pagepentacles", "pageswords", "pagewands", "queencups", "queenpentacles", "queenswords", "queenwands"],
