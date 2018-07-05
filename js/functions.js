@@ -1485,7 +1485,10 @@ function stop_runner(a) {
   socket.emit("code", {
     run: 0
   });
-  code_persistence_logic()
+  code_persistence_logic();
+  if (sounds.empty) {
+    sounds.empty.stop()
+  }
 }
 function set_setting(b, d, g) {
   var f = window.localStorage.getItem("settings_cache"),
@@ -4421,6 +4424,17 @@ function init_fx() {
   sounds.chat = new Howl({
     src: ["/sounds/fx/UI_Beep_Double_Quick_Smooth_stereo.wav"],
     volume: 0.4,
+  })
+}
+function performance_trick() {
+  if (sounds.empty) {
+    return sounds.empty.play()
+  }
+  sounds.empty = new Howl({
+    src: ["/sounds/loops/empty_loop_for_js_performance.ogg", "/sounds/loops/empty_loop_for_js_performance.wav"],
+    volume: 0.5,
+    autoplay: true,
+    loop: true,
   })
 }
 function init_music() {
