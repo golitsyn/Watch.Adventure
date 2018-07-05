@@ -1067,14 +1067,14 @@ function in_arr(b, d) {
   if (is_array(b)) {
     for (var a = 0; a < b.length; a++) {
       for (var c in d) {
-        if (b[a] == d[c]) {
+        if (b[a] === d[c]) {
           return true
         }
       }
     }
   }
   for (var c in d) {
-    if (b == d[c]) {
+    if (b === d[c]) {
       return true
     }
   }
