@@ -1166,6 +1166,10 @@ setInterval(function() {
   for (var p in parent.character) proxy(p);
 }, 50); // bottom of the barrel
 
+function performance_trick() {
+  parent.performance_trick(); // Just plays an empty sound file, so browsers don't throttle JS, only way to prevent it, interesting cheat [05/07/18]
+}
+
 function doneify(fn, s_event, f_event) {
   return function(a, b, c, d, e, f) {
     var rxd = randomStr(30);
