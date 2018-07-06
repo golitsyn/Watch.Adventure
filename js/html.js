@@ -289,39 +289,39 @@ function render_info(h, f) {
   $("#topleftcornerui").html(e)
 }
 function render_slots(f) {
-  function c(m, g, l) {
-    if (!l) {
-      l = 0.4
+  function c(n, g, m) {
+    if (!m) {
+      m = 0.4
     }
-    if (f.slots[m]) {
-      var j = f.slots[m];
-      var k = "item" + randomStr(10),
-        h = G.items[j.name],
-        i = j.skin || h.skin;
-      if (j.expires) {
-        i = h.skin_a
+    if (f.slots[n]) {
+      var k = f.slots[n];
+      var l = "item" + randomStr(10),
+        h = G.items[k.name],
+        j = k.skin || h.skin;
+      if (k.expires) {
+        j = h.skin_a
       }
-      if ((j.name == "tristone" || j.name == "darktristone") && (f.skin.startsWith("mm_") || f.skin.startsWith("mf_") || f.skin.startsWith("tm_") || f.skin.startsWith("tf_"))) {
-        i = h.skin_a
+      if ((k.name == "tristone" || k.name == "darktristone") && (f.skin.startsWith("mm_") || f.skin.startsWith("mf_") || f.skin.startsWith("tm_") || f.skin.startsWith("tf_"))) {
+        j = h.skin_a
       }
       e += item_container({
-        skin: i,
-        onclick: "slot_click('" + m + "')",
+        skin: j,
+        onclick: "slot_click('" + n + "')",
         def: h,
-        id: k,
+        id: l,
         draggable: f.me,
-        sname: f.me && m,
+        sname: f.me && n,
         shade: g,
-        s_op: l,
-        slot: m
-      }, j)
+        s_op: m,
+        slot: n
+      }, k)
     } else {
       e += item_container({
         size: 40,
         draggable: f.me,
         shade: g,
-        s_op: l,
-        slot: m
+        s_op: m,
+        slot: n
       })
     }
   }
@@ -477,9 +477,9 @@ function render_items_npc(l) {
   for (var d = 0; d < g.length; d++) {
     var b = g[d];
 
-    function f(i) {
+    function f(j) {
       return function() {
-        render_item("#storage-item", i)
+        render_item("#storage-item", j)
       }
     }
     $("#str" + b.id).on("click", f(b)).addClass("clickable")
@@ -672,6 +672,7 @@ function render_recipe(b, a) {
 function render_recipes() {
   topleft_npc = "recipes";
   rendered_target = topleft_npc;
+  i = 0;
   var a = "<div style='background-color: black; border: 5px solid gray; padding: 20px; font-size: 24px; display: inline-block; vertical-align: top; text-align: center'>";
   a += "<div class='clickable' onclick='render_craftsman()'>CRAFT</div>";
   object_sort(G.craft).forEach(function(c) {
@@ -681,9 +682,14 @@ function render_recipes() {
       onclick: "render_recipe('craft','" + b + "')"
     }, {
       name: b
-    })
+    });
+    i += 1;
+    if (!(i % 6)) {
+      a += "<div></div>"
+    }
   });
   a += "<div class='clickable' onclick='render_dismantler()'>DISMANTLE</div>";
+  i = 0;
   object_sort(G.dismantle).forEach(function(c) {
     var b = c[0];
     a += item_container({
@@ -691,7 +697,11 @@ function render_recipes() {
       onclick: "render_recipe('dismantle','" + b + "')"
     }, {
       name: b
-    })
+    });
+    i += 1;
+    if (!(i % 6)) {
+      a += "<div></div>"
+    }
   });
   a += "</div><div id='recipe-item' style='display: inline-block; vertical-align: top; margin-left: 5px'></div>";
   $("#topleftcornerui").html(a)
@@ -904,9 +914,9 @@ function render_merchant(l, b) {
   for (var e = 0; e < h.length; e++) {
     var c = h[e];
 
-    function g(i) {
+    function g(j) {
       return function() {
-        render_item("#merchant-item", i)
+        render_item("#merchant-item", j)
       }
     }
     $("#" + c.id).on("click", g(c)).addClass("clickable")
@@ -958,9 +968,9 @@ function render_token_exchange(c) {
   for (var f = 0; f < k.length; f++) {
     var d = k[f];
 
-    function h(i) {
+    function h(j) {
       return function() {
-        render_item("#merchant-item", i)
+        render_item("#merchant-item", j)
       }
     }
     $("#" + d.id).on("click", h(d)).addClass("clickable")
@@ -1024,14 +1034,17 @@ function render_skill(a, e, c) {
     d += "<div style='color: #4EB7DE; display: inline-block; border-bottom: 2px dashed gray; margin-bottom: 3px' class='cbold'>" + b.name + "</div>";
     if (b.explanation) {
       d += "<div style='color: #C3C3C3'>" + b.explanation + "</div>";
+      if (b.mp) {
+        d += bold_prop_line("MP", b.mp, colors.mp)
+      }
       if (b.duration) {
         d += bold_prop_line("Duration", (b.duration / 1000) + " seconds", "gray")
       }
       if (b.cooldown && (b.cooldown / 1000)) {
         d += bold_prop_line("Cooldown", (b.cooldown / 1000) + " seconds", "gray")
       }
-      if (b.mp) {
-        d += bold_prop_line("MP", b.mp, colors.mp)
+      if (b.range) {
+        d += bold_prop_line("Range", b.range, "gray")
       }
       if (b.level) {
         d += bold_prop_line("Level Requirement", b.level, "gray")
@@ -1039,9 +1052,9 @@ function render_skill(a, e, c) {
       if (b.type == "passive") {
         d += "<div><span style='color: #696C68;'>Passive</span></div>"
       }(b.levels || []).forEach(function(h) {
-        var i = h[0],
+        var j = h[0],
           g = h[1];
-        d += bold_prop_line("Output", g + (i > 0 && (" (Lv. " + i + ")")), "gray")
+        d += bold_prop_line("Output", g + (j > 0 && (" (Lv. " + j + ")")), "gray")
       });
       if (b.consume) {
         d += "<div style='margin: 4px 0px 0px -2px;'>" + item_container({
@@ -1109,12 +1122,12 @@ function render_item(p, b) {
       h += "</div>"
     } else {
       h += "<div style='color: " + o + "; display: inline-block; border-bottom: 2px dashed gray; margin-bottom: 3px' class='cbold'>" + g + "</div>"
-    }(s.gives || []).forEach(function(i) {
-      if (i[0] == "hp") {
-        h += bold_prop_line("HP", "+" + i[1], colors.hp)
+    }(s.gives || []).forEach(function(q) {
+      if (q[0] == "hp") {
+        h += bold_prop_line("HP", "+" + q[1], colors.hp)
       }
-      if (i[0] == "mp") {
-        h += bold_prop_line("MP", "+" + i[1], colors.mp)
+      if (q[0] == "mp") {
+        h += bold_prop_line("MP", "+" + q[1], colors.mp)
       }
     });
     if (d.gold) {
@@ -1375,17 +1388,17 @@ function render_item(p, b) {
       h += "<div style='margin-top: 5px'></div>";
       h += "<div style='color: " + o + "; display: inline-block; border-bottom: 2px dashed gray; margin-bottom: 3px' class='cbold'>Recipe</div>";
       h += "<div></div>";
-      G.craft[t].items.forEach(function(i) {
-        var u = undefined;
-        if (i[0] != 1) {
-          u = i[0]
+      G.craft[t].items.forEach(function(u) {
+        var v = undefined;
+        if (u[0] != 1) {
+          v = u[0]
         }
         h += item_container({
-          skin: G.items[i[1]].skin
+          skin: G.items[u[1]].skin
         }, {
-          name: i[1],
-          q: u,
-          level: i[2]
+          name: u[1],
+          q: v,
+          level: u[2]
         });
         r += 1;
         if (!(r % 4)) {
@@ -1399,16 +1412,16 @@ function render_item(p, b) {
       h += "<div style='margin-top: 5px'></div>";
       h += "<div style='color: " + o + "; display: inline-block; border-bottom: 2px dashed gray; margin-bottom: 3px' class='cbold'>Dismantles-to</div>";
       h += "<div></div>";
-      G.dismantle[t].items.forEach(function(i) {
-        var u = undefined;
-        if (i[0] != 1) {
-          u = i[0]
+      G.dismantle[t].items.forEach(function(u) {
+        var v = undefined;
+        if (u[0] != 1) {
+          v = u[0]
         }
         h += item_container({
-          skin: G.items[i[1]].skin
+          skin: G.items[u[1]].skin
         }, {
-          name: i[1],
-          q: u
+          name: u[1],
+          q: v
         });
         r += 1;
         if (!(r % 4)) {
@@ -1457,8 +1470,8 @@ function render_item_selector(a, c) {
       b.push(G.items[h])
     }
   }
-  b.sort(function(j, i) {
-    return i.g - j.g
+  b.sort(function(k, j) {
+    return j.g - k.g
   });
   for (var d = 0; d < b.length; d++) {
     var f = b[d];
@@ -1514,14 +1527,14 @@ function on_rclick(g) {
             })
           } else {
             if (topleft_npc == "merchant") {
-              var i = character.items[parseInt(a)];
-              if (!i) {
+              var j = character.items[parseInt(a)];
+              if (!j) {
                 return
               }
               render_item("#merchant-item", {
-                item: G.items[i.name],
-                name: i.name,
-                actual: i,
+                item: G.items[j.name],
+                name: j.name,
+                actual: j,
                 sell: 1,
                 num: parseInt(a)
               })
@@ -1675,135 +1688,135 @@ function on_rclick(g) {
     }
   }
 }
-function on_drop(m) {
-  m.preventDefault();
-  var s = m.dataTransfer.getData("text"),
-    j = false,
-    l = false;
-  var c = $(document.getElementById(s)),
-    r = $(m.target);
-  while (r && r.parent() && r.attr("ondrop") == undefined) {
-    r = r.parent()
+function on_drop(n) {
+  n.preventDefault();
+  var t = n.dataTransfer.getData("text"),
+    k = false,
+    m = false;
+  var c = $(document.getElementById(t)),
+    s = $(n.target);
+  while (s && s.parent() && s.attr("ondrop") == undefined) {
+    s = s.parent()
   }
-  var b = r.data("cnum"),
-    f = r.data("slot"),
-    a = r.data("strnum"),
-    o = r.data("trigrc"),
-    p = r.data("skid");
-  var t = c.data("inum"),
-    q = c.data("sname"),
-    i = c.data("snum"),
+  var b = s.data("cnum"),
+    f = s.data("slot"),
+    a = s.data("strnum"),
+    p = s.data("trigrc"),
+    q = s.data("skid");
+  var u = c.data("inum"),
+    r = c.data("sname"),
+    j = c.data("snum"),
     d = c.data("skname");
-  console.log(b + " " + t + " " + f + " " + q + " skid: " + p + " skname: " + d);
-  if (t !== undefined && p !== undefined) {
-    t = parseInt(t);
-    if ((t || t === 0) && character.items[t]) {
-      keymap[p] = {
+  console.log(b + " " + u + " " + f + " " + r + " skid: " + q + " skname: " + d);
+  if (u !== undefined && q !== undefined) {
+    u = parseInt(u);
+    if ((u || u === 0) && character.items[u]) {
+      keymap[q] = {
         type: "item",
-        name: character.items[t].name
+        name: character.items[u].name
       };
       set_setting(real_id, "keymap", keymap);
       render_skills();
       render_skills()
     }
   } else {
-    if (d !== undefined && p !== undefined) {
+    if (d !== undefined && q !== undefined) {
       if (d == "eval") {
-        keymap[p] = {
+        keymap[q] = {
           name: "eval",
           code: "add_log('Empty eval','gray')"
         }
       } else {
         if (d == "snippet") {
-          keymap[p] = {
+          keymap[q] = {
             name: "snippet",
             code: "game_log('Empty snippet','gray')"
           }
         } else {
-          keymap[p] = d
+          keymap[q] = d
         }
       }
       set_setting(real_id, "keymap", keymap);
       render_skills();
       render_skills()
     } else {
-      if (o != undefined && t != undefined) {
+      if (p != undefined && u != undefined) {
         on_rclick(c.get(0))
       } else {
-        if (i != undefined && a != undefined) {
+        if (j != undefined && a != undefined) {
           socket.emit("bank", {
             operation: "move",
-            a: i,
+            a: j,
             b: a,
             pack: last_rendered_items
           });
-          j = true
+          k = true
         } else {
-          if (a != undefined && t != undefined) {
+          if (a != undefined && u != undefined) {
             socket.emit("bank", {
               operation: "swap",
-              inv: t,
+              inv: u,
               str: a,
               pack: last_rendered_items
             });
-            l = true
+            m = true
           } else {
-            if (b != undefined && i != undefined) {
+            if (b != undefined && j != undefined) {
               socket.emit("bank", {
                 operation: "swap",
                 inv: b,
-                str: i,
+                str: j,
                 pack: last_rendered_items
               });
-              l = true
+              m = true
             } else {
-              if (b !== undefined && b == t) {
+              if (b !== undefined && b == u) {
                 if (is_mobile && mssince(last_drag_start) < 300) {
-                  inventory_click(parseInt(t))
+                  inventory_click(parseInt(u))
                 }
               } else {
-                if (b != undefined && t != undefined) {
+                if (b != undefined && u != undefined) {
                   socket.emit("imove", {
                     a: b,
-                    b: t
+                    b: u
                   });
-                  j = true
+                  k = true
                 } else {
-                  if (q !== undefined && q == f) {
+                  if (r !== undefined && r == f) {
                     if (is_mobile && mssince(last_drag_start) < 300) {
                       slot_click(f)
                     }
                   } else {
-                    if (b != undefined && q != undefined) {
+                    if (b != undefined && r != undefined) {
                       socket.emit("unequip", {
-                        slot: q,
+                        slot: r,
                         position: b
                       })
                     } else {
-                      if (f != undefined && t != undefined) {
+                      if (f != undefined && u != undefined) {
                         if (in_arr(f, trade_slots)) {
                           if (character.slots[f]) {
                             return
                           }
                           try {
-                            var k = character.items[parseInt(t)];
+                            var l = character.items[parseInt(u)];
                             render_item("#topleftcornerdialog", {
                               trade: 1,
-                              item: G.items[k.name],
-                              actual: k,
-                              num: parseInt(t),
+                              item: G.items[l.name],
+                              actual: l,
+                              num: parseInt(u),
                               slot: f
                             });
                             $(".editable").focus();
                             dialogs_target = ctarget
-                          } catch (n) {
-                            console.log("TRADE-ERROR: " + n)
+                          } catch (o) {
+                            console.log("TRADE-ERROR: " + o)
                           }
                         } else {
                           socket.emit("equip", {
-                            num: t,
+                            num: u,
                             slot: f
-                          }), l = true
+                          }), m = true
                         }
                       }
                     }
@@ -1816,173 +1829,173 @@ function on_drop(m) {
       }
     }
   }
-  if (j) {
+  if (k) {
     var h = c.all_html(),
-      g = r.html();
-    r.html("");
+      g = s.html();
+    s.html("");
     c.parent().html(g);
-    r.html(h)
+    s.html(h)
   }
-  if (l) {
-    r.html(c.all_html())
+  if (m) {
+    s.html(c.all_html())
   }
 }
-function item_container(z, q) {
-  var j = "",
+function item_container(A, r) {
+  var k = "",
     g = "",
-    w = 3,
-    l = "",
+    z = 3,
+    m = "",
     f = "",
-    r = "",
+    s = "",
     b = "",
-    s = z.bcolor || "gray",
-    k = "#C5C5C5",
-    A = "",
-    p = z.size || 40,
-    m = null,
+    t = A.bcolor || "gray",
+    l = "#C5C5C5",
+    B = "",
+    q = A.size || 40,
+    n = null,
     e = false;
-  if (q && q.name) {
-    m = G.items[q.name]
+  if (r && r.name) {
+    n = G.items[r.name]
   }
-  if (q && m) {
-    if ((m.upgrade && q.level > 8 || m.compound && q.level > 4)) {
-      s = k
+  if (r && n) {
+    if ((n.upgrade && r.level > 8 || n.compound && r.level > 4)) {
+      t = l
     }
-    if (calculate_item_grade(q) == 2 || calculate_item_value(q) > 5000000) {
-      s = k;
+    if (calculate_item_grade(r) == 2 || calculate_item_value(r) > 5000000) {
+      t = l;
       e = true
     }
   }
-  if (m && q && m.type == "booster" && q.level) {
-    s = k
+  if (n && r && n.type == "booster" && r.level) {
+    t = l
   }
-  if (z.draggable || !("draggable" in z)) {
-    l += " draggable='true' ondragstart='on_drag_start(event)'";
+  if (A.draggable || !("draggable" in A)) {
+    m += " draggable='true' ondragstart='on_drag_start(event)'";
     f += "ondrop='on_drop(event)' ondragover='allow_drop(event)'"
   }
-  if (z.droppable) {
-    z.trigrc = true;
+  if (A.droppable) {
+    A.trigrc = true;
     f += "ondrop='on_drop(event)' ondragover='allow_drop(event)'"
   }
-  if (z.onclick) {
-    f += ' onclick="' + z.onclick + '" class="clickable" '
+  if (A.onclick) {
+    f += ' onclick="' + A.onclick + '" class="clickable" '
   }
-  if (z.cnum != undefined) {
-    b = "data-cnum='" + z.cnum + "' "
+  if (A.cnum != undefined) {
+    b = "data-cnum='" + A.cnum + "' "
   }
-  if (z.trigrc != undefined) {
+  if (A.trigrc != undefined) {
     b = "data-trigrc='1'"
   }
-  if (z.strnum != undefined) {
-    b = "data-strnum='" + z.strnum + "' "
+  if (A.strnum != undefined) {
+    b = "data-strnum='" + A.strnum + "' "
   }
-  if (z.slot != undefined) {
-    b = "data-slot='" + z.slot + "' "
+  if (A.slot != undefined) {
+    b = "data-slot='" + A.slot + "' "
   }
-  if (z.skid != undefined) {
-    b = "data-skid='" + z.skid + "' "
+  if (A.skid != undefined) {
+    b = "data-skid='" + A.skid + "' "
   }
-  if (z.cid) {
-    f += " id='" + z.cid + "' "
+  if (A.cid) {
+    f += " id='" + A.cid + "' "
   }
-  j += "<div " + b + "style='position: relative; display:inline-block; margin: 2px; border: 2px solid " + s + "; height: " + (p + 2 * w) + "px; width: " + (p + 2 * w) + "px; background: black; vertical-align: top' " + f + ">";
-  if (z.skid && !z.skin) {
-    j += "<div class='truui' style='border-color: gray; color: white'>" + z.skid + "</div>"
+  k += "<div " + b + "style='position: relative; display:inline-block; margin: 2px; border: 2px solid " + t + "; height: " + (q + 2 * z) + "px; width: " + (q + 2 * z) + "px; background: black; vertical-align: top' " + f + ">";
+  if (A.skid && !A.skin) {
+    k += "<div class='truui' style='border-color: gray; color: white'>" + A.skid + "</div>"
   }
-  if (z.shade) {
-    var t = G.itemsets[G.positions[z.shade][0] || "pack_1a"],
-      c = p / t.size;
-    var o = G.positions[z.shade][1],
-      n = G.positions[z.shade][2];
-    j += "<div style='position: absolute; top: -2px; left: -2px; padding:" + (w + 2) + "px'>";
-    j += "<div style='overflow: hidden; height: " + (p) + "px; width: " + (p) + "px;'>";
-    j += "<img style='width: " + (t.columns * t.size * c) + "px; height: " + (t.rows * t.size * c) + "px; margin-top: -" + (n * p) + "px; margin-left: -" + (o * p) + "px; opacity: " + (z.s_op || 0.2) + ";' src='" + t.file + "' draggable='false' />";
-    j += "</div>";
-    j += "</div>"
+  if (A.shade) {
+    var u = G.itemsets[G.positions[A.shade][0] || "pack_1a"],
+      c = q / u.size;
+    var p = G.positions[A.shade][1],
+      o = G.positions[A.shade][2];
+    k += "<div style='position: absolute; top: -2px; left: -2px; padding:" + (z + 2) + "px'>";
+    k += "<div style='overflow: hidden; height: " + (q) + "px; width: " + (q) + "px;'>";
+    k += "<img style='width: " + (u.columns * u.size * c) + "px; height: " + (u.rows * u.size * c) + "px; margin-top: -" + (o * q) + "px; margin-left: -" + (p * q) + "px; opacity: " + (A.s_op || 0.2) + ";' src='" + u.file + "' draggable='false' />";
+    k += "</div>";
+    k += "</div>"
   }
-  if (z.skin) {
-    if (!G.positions[z.skin]) {
-      z.skin = "placeholder"
+  if (A.skin) {
+    if (!G.positions[A.skin]) {
+      A.skin = "placeholder"
     }
-    var v = G.itemsets[G.positions[z.skin][0] || "pack_1a"],
-      i = G.positions[z.skin][1],
-      h = G.positions[z.skin][2];
-    var B = p / v.size;
-    if (q && q.level && q.level > 7) {
-      A += " glow" + min(z.level, 10)
+    var w = G.itemsets[G.positions[A.skin][0] || "pack_1a"],
+      j = G.positions[A.skin][1],
+      h = G.positions[A.skin][2];
+    var D = q / w.size;
+    if (r && r.level && r.level > 7) {
+      B += " glow" + min(A.level, 10)
     }
-    if (z.num != undefined) {
-      r = "class='rclick" + A + "' data-inum='" + z.num + "'"
+    if (A.num != undefined) {
+      s = "class='rclick" + B + "' data-inum='" + A.num + "'"
     }
-    if (z.snum != undefined) {
-      r = "class='rclick" + A + "' data-snum='" + z.snum + "'"
+    if (A.snum != undefined) {
+      s = "class='rclick" + B + "' data-snum='" + A.snum + "'"
     }
-    if (z.sname != undefined) {
-      r = "class='rclick" + A + "' data-sname='" + z.sname + "'"
+    if (A.sname != undefined) {
+      s = "class='rclick" + B + "' data-sname='" + A.sname + "'"
     }
-    if (z.skname != undefined) {
-      r = "class='rclick" + A + "' data-skname='" + z.skname + "'"
+    if (A.skname != undefined) {
+      s = "class='rclick" + B + "' data-skname='" + A.skname + "'"
     }
-    if (z.on_rclick) {
-      r = "class='rclick" + A + "' data-onrclick=\"" + z.on_rclick + '"'
+    if (A.on_rclick) {
+      s = "class='rclick" + B + "' data-onrclick=\"" + A.on_rclick + '"'
     }
-    j += "<div " + r + " style='background: black; position: absolute; bottom: -2px; left: -2px; border: 2px solid " + s + ";";
-    j += "padding:" + (w) + "px; overflow: hidden' " + ("id='" + (z.id || ("rid" + randomStr(12))) + "'") + " " + l + ">";
-    j += "<div style='overflow: hidden; height: " + (p) + "px; width: " + (p) + "px;'>";
-    j += "<img style='width: " + (v.columns * v.size * B) + "px; height: " + (v.rows * v.size * B) + "px; margin-top: -" + (h * p) + "px; margin-left: -" + (i * p) + "px;' src='" + v.file + "' draggable='false' />";
-    j += "</div>";
-    if (q) {
-      var u = "u";
-      if (m && m.compound) {
-        u = "c"
+    k += "<div " + s + " style='background: black; position: absolute; bottom: -2px; left: -2px; border: 2px solid " + t + ";";
+    k += "padding:" + (z) + "px; overflow: hidden' " + ("id='" + (A.id || ("rid" + randomStr(12))) + "'") + " " + m + ">";
+    k += "<div style='overflow: hidden; height: " + (q) + "px; width: " + (q) + "px;'>";
+    k += "<img style='width: " + (w.columns * w.size * D) + "px; height: " + (w.rows * w.size * D) + "px; margin-top: -" + (h * q) + "px; margin-left: -" + (j * q) + "px;' src='" + w.file + "' draggable='false' />";
+    k += "</div>";
+    if (r) {
+      var v = "u";
+      if (n && n.compound) {
+        v = "c"
       }
-      if (q.q && q.q != 1) {
-        if (m && m.gives && m.gives[0] && m.gives[0][0] == "hp") {
-          j += "<div class='iqui iqhp'>" + q.q + "</div>"
+      if (r.q && r.q != 1) {
+        if (n && n.gives && n.gives[0] && n.gives[0][0] == "hp") {
+          k += "<div class='iqui iqhp'>" + r.q + "</div>"
         } else {
-          if (m && m.gives && m.gives[0] && m.gives[0][0] == "mp") {
-            j += "<div class='iqui iqmp'>" + q.q + "</div>"
+          if (n && n.gives && n.gives[0] && n.gives[0][0] == "mp") {
+            k += "<div class='iqui iqmp'>" + r.q + "</div>"
           } else {
-            j += "<div class='iqui'>" + q.q + "</div>"
+            k += "<div class='iqui'>" + r.q + "</div>"
           }
         }
       }
-      if (q.level) {
-        var a = q.level,
+      if (r.level) {
+        var a = r.level,
           d = a;
-        if (m.type == "booster") {
-          d = a = (q.level == 1 && "A" || q.level == 2 && "B" || q.level == 3 && "C" || q.level == 4 && "D" || q.level == 5 && "E" || q.level > 5 && "W")
+        if (n.type == "booster") {
+          d = a = (r.level == 1 && "A" || r.level == 2 && "B" || r.level == 3 && "C" || r.level == 4 && "D" || r.level == 5 && "E" || r.level > 5 && "W")
         }
-        if (e && m.compound && d == 3) {
+        if (e && n.compound && d == 3) {
           d = 4
         }
-        if (e && m.upgrade && d == 7) {
+        if (e && n.upgrade && d == 7) {
           d = 8
         }
-        j += "<div class='iuui " + u + "level" + min(d, m.compound && 5 || 12) + "' style='border-color: " + s + "'>" + (a == 10 && "X" || a == 11 && "Y" || a == 12 && "Z" || a == 5 && u == "c" && "V" || a) + "</div>"
+        k += "<div class='iuui " + v + "level" + min(d, n.compound && 5 || 12) + "' style='border-color: " + t + "'>" + (a == 10 && "X" || a == 11 && "Y" || a == 12 && "Z" || a == 5 && v == "c" && "V" || a) + "</div>"
       }
-      if (q.s) {
-        j += "<div class='iqui'>" + q.s + "</div>"
+      if (r.s) {
+        k += "<div class='iqui'>" + r.s + "</div>"
       }
     }
-    if (z.slot && in_arr(z.slot, trade_slots)) {
-      j += "<div class='truui' style='border-color: " + s + ";'>$</div>"
+    if (A.slot && in_arr(A.slot, trade_slots)) {
+      k += "<div class='truui' style='border-color: " + t + ";'>$</div>"
     }
-    if (q && q.v) {
-      j += "<div class='trruui ivu' style='border-color: " + s + "; line-height: 7px'><br />^</div>"
+    if (r && r.v) {
+      k += "<div class='trruui ivu' style='border-color: " + t + "; line-height: 7px'><br />^</div>"
     } else {
-      if (q && q.m) {
-        j += "<div class='trruui imu' style='border-color: " + s + ";'>M</div>"
+      if (r && r.m) {
+        k += "<div class='trruui imu' style='border-color: " + t + ";'>M</div>"
       }
     }
-    if (z.skid) {
-      j += "<div class='skidloader" + z.skid + "' style='position: absolute; bottom: 0px; right: 0px; width: 4px; height: 0px; background-color: yellow'></div>";
-      j += "<div class='truui' style='border-color: gray; color: white'>" + z.skid + "</div>"
+    if (A.skid) {
+      k += "<div class='skidloader" + A.skid + "' style='position: absolute; bottom: 0px; right: 0px; width: 4px; height: 0px; background-color: yellow'></div>";
+      k += "<div class='truui' style='border-color: gray; color: white'>" + A.skid + "</div>"
     }
-    j += "</div>"
+    k += "</div>"
   }
-  j += "</div>";
-  return j
+  k += "</div>";
+  return k
 }
 function render_skillbar(c) {
   if (c) {
@@ -2060,47 +2073,47 @@ function render_skills() {
     c = ["ESC", "A", "C", "F", "I", "TAB", "ENTER"], b = ["UP", "LEFT", "DOWN", "RIGHT", ",", "S", "U"]
   }
   h += "<div>";
-  c.forEach(function(j) {
-    var i = keymap[j],
-      a = i;
-    if (i && i.skin) {
-      a = i.skin
+  c.forEach(function(o) {
+    var j = keymap[o],
+      a = j;
+    if (j && j.skin) {
+      a = j.skin
     } else {
-      if (i && i.type == "item" && G.items[i.name]) {
-        a = G.items[i.name].skin
+      if (j && j.type == "item" && G.items[j.name]) {
+        a = G.items[j.name].skin
       } else {
-        if (i && G.skills[i.name || i]) {
-          a = G.skills[i.name || i].skin
+        if (j && G.skills[j.name || j]) {
+          a = G.skills[j.name || j].skin
         }
       }
     }
     h += item_container({
-      skid: j,
+      skid: o,
       skin: a || "",
-      onclick: "on_skill('" + j + "')"
-    }, i)
+      onclick: "on_skill('" + o + "')"
+    }, j)
   });
   h += "</div>";
   h += "<div>";
-  b.forEach(function(j) {
-    var i = keymap[j],
-      a = i;
-    if (i && i.skin) {
-      a = i.skin
+  b.forEach(function(o) {
+    var j = keymap[o],
+      a = j;
+    if (j && j.skin) {
+      a = j.skin
     } else {
-      if (i && i.type == "item" && G.items[i.name]) {
-        a = G.items[i.name].skin
+      if (j && j.type == "item" && G.items[j.name]) {
+        a = G.items[j.name].skin
       } else {
-        if (i && G.skills[i.name || i]) {
-          a = G.skills[i.name || i].skin
+        if (j && G.skills[j.name || j]) {
+          a = G.skills[j.name || j].skin
         }
       }
     }
     h += item_container({
-      skid: j,
+      skid: o,
       skin: a || "",
-      onclick: "on_skill('" + j + "')"
-    }, i)
+      onclick: "on_skill('" + o + "')"
+    }, j)
   });
   h += "</div>";
   h += "<div class='textbutton' style='margin-left: 5px'><span class='clickable' onclick='btc(event); show_json(G.skills)'>SKILLS</span> <span style='float:right; color: #7C7C7C; margin-right: 5px' class='clickable' onclick='btc(event); show_modal($(\"#keymapguide\").html())'><span style='color:#60B8C7'>&gt;</span> CONFIG <span style='color:#60B8C7'>&lt;</span></span></div>";
@@ -2108,27 +2121,27 @@ function render_skills() {
     m = 0,
     k = [],
     g = 0;
-  object_sort(G.skills).forEach(function(j) {
-    var i = j[0],
-      a = j[1];
+  object_sort(G.skills).forEach(function(o) {
+    var j = o[0],
+      a = o[1];
     if (a.type == "skill" && (!a["class"] || in_arr(character.ctype, a["class"]) || character.role == "gm")) {
       n.push({
-        name: i
+        name: j
       })
     }
     if (a.type == "passive" && (!a["class"] || in_arr(character.ctype, a["class"]) || character.role == "gm")) {
       n.push({
-        name: i
+        name: j
       })
     }
     if (a.type == "ability" && (!a["class"] || in_arr(character.ctype, a["class"]) || character.role == "gm")) {
       k.push({
-        name: i
+        name: j
       })
     }
     if (a.type == "utility" && a.ui !== false && (!a["class"] || in_arr(character.ctype, a["class"]))) {
       k.push({
-        name: i
+        name: j
       })
     }
   });
@@ -2214,117 +2227,117 @@ function render_interaction(h, f) {
     rendered_interaction = h
   }
   var b = 0,
-    i = 0,
+    j = 0,
     d = "/images/tiles/characters/npc1.png",
     c = "normal";
   var g = "<div style='background-color: #E5E5E5; color: #010805; border: 5px solid gray; padding: 6px 12px 6px 12px; font-size: 30px; display: inline-block; max-width: 420px'>";
   if (h.auto) {
     d = FC[h.skin];
     b = FM[h.skin][1];
-    i = FM[h.skin][0]
+    j = FM[h.skin][0]
   } else {
     if (in_arr(h, ["wizard", "hardcoretp"])) {
       b = 2;
-      i = 0;
+      j = 0;
       d = "/images/tiles/characters/chara8.png"
     } else {
       if (in_arr(h, ["santa", "candycane_success"])) {
         b = 0;
-        i = 0;
+        j = 0;
         d = "/images/tiles/characters/animationc.png";
         c = "animation"
       } else {
         if (in_arr(h, ["leathers", "leather_success"])) {
           b = 1;
-          i = 0;
+          j = 0;
           d = "/images/tiles/characters/npc5.png"
         } else {
           if (in_arr(h, ["lostearring", "lostearring_success"])) {
             b = 3;
-            i = 0;
+            j = 0;
             d = "/images/tiles/characters/chara8.png"
           } else {
             if (in_arr(h, ["mistletoe", "mistletoe_success"])) {
               b = 0;
-              i = 0;
+              j = 0;
               d = "/images/tiles/characters/chara8.png"
             } else {
               if (in_arr(h, ["crafting"])) {
                 b = 0;
-                i = 0;
+                j = 0;
                 d = "/images/tiles/characters/npc5.png"
               } else {
                 if (in_arr(h, ["ornaments", "ornament_success"])) {
                   b = 1;
-                  i = 0;
+                  j = 0;
                   d = "/images/tiles/characters/chara8.png"
                 } else {
                   if (in_arr(h, ["jailer", "guard", "blocker", "test"])) {
                     b = 3;
-                    i = 0;
+                    j = 0;
                     d = "/images/tiles/characters/chara5.png"
                   } else {
                     if (in_arr(h, ["seashells", "seashell_success"])) {
                       b = 0;
-                      i = 1;
+                      j = 1;
                       d = "/images/tiles/characters/npc1.png"
                     } else {
                       if (in_arr(h, ["lottery"])) {
                         b = 3;
-                        i = 0;
+                        j = 0;
                         d = "/images/tiles/characters/npc6.png"
                       } else {
                         if (in_arr(h, ["newupgrade"])) {
                           b = 3;
-                          i = 1;
+                          j = 1;
                           d = "/images/tiles/characters/chara8.png"
                         } else {
                           if (h == "tavern") {
                             b = 0;
-                            i = 1;
+                            j = 1;
                             d = "/images/tiles/characters/custom1.png"
                           } else {
                             if (h == "standmerchant") {
                               b = 3;
-                              i = 0;
+                              j = 0;
                               d = "/images/tiles/characters/npc5.png"
                             } else {
                               if (h == "subscribe") {
                                 b = 3;
-                                i = 1;
+                                j = 1;
                                 d = "/images/tiles/characters/chara7.png"
                               } else {
                                 if (in_arr(h, ["gemfragments", "gemfragment_success"])) {
                                   b = 2;
-                                  i = 1;
+                                  j = 1;
                                   d = "/images/tiles/characters/npc1.png"
                                 } else {
                                   if (in_arr(h, ["buyshells", "noshells", "yesshells"])) {
                                     b = 0;
-                                    i = 1;
+                                    j = 1;
                                     d = "/images/tiles/characters/dwarf2.png"
                                   } else {
                                     if (in_arr(h, ["unlock_items2", "unlock_items3", "unlock_items4", "unlock_items5", "unlock_items6", "unlock_items7"])) {
                                       b = 3;
-                                      i = 1;
+                                      j = 1;
                                       d = "/images/tiles/characters/npc4.png";
                                       if (h == "unlock_items2") {
-                                        i = 1, b = 0
+                                        j = 1, b = 0
                                       }
                                       if (h == "unlock_items3") {
-                                        i = 1, b = 0
+                                        j = 1, b = 0
                                       }
                                       if (h == "unlock_items4") {
-                                        i = 1, b = 2
+                                        j = 1, b = 2
                                       }
                                       if (h == "unlock_items5") {
-                                        i = 1, b = 2
+                                        j = 1, b = 2
                                       }
                                       if (h == "unlock_items6") {
-                                        i = 0, b = 1
+                                        j = 0, b = 1
                                       }
                                       if (h == "unlock_items7") {
-                                        i = 0, b = 1
+                                        j = 0, b = 1
                                       }
                                     } else {
                                       return
@@ -2347,9 +2360,9 @@ function render_interaction(h, f) {
     }
   }
   if (c == "normal") {
-    g += "<div style='float: left; margin-top: -20px; width: 104px; height: 92px; overflow: hidden'><img style='margin-left: -" + (104 * (b * 3 + 1)) + "px; margin-top: -" + (144 * (i * 4)) + "px; width: 1248px; height: 1152px;' src='" + d + "'/></div>"
+    g += "<div style='float: left; margin-top: -20px; width: 104px; height: 92px; overflow: hidden'><img style='margin-left: -" + (104 * (b * 3 + 1)) + "px; margin-top: -" + (144 * (j * 4)) + "px; width: 1248px; height: 1152px;' src='" + d + "'/></div>"
   } else {
-    g += "<div style='float: left; margin-top: -20px; width: 104px; height: 98px; overflow: hidden'><img style='margin-left: -" + (188 * b + 40) + "px; margin-top: -" + (200 * i + 50) + "px; width: 2256px; height: 1600px;' src='" + d + "'/></div>"
+    g += "<div style='float: left; margin-top: -20px; width: 104px; height: 98px; overflow: hidden'><img style='margin-left: -" + (188 * b + 40) + "px; margin-top: -" + (200 * j + 50) + "px; width: 2256px; height: 1600px;' src='" + d + "'/></div>"
   }
   if (h.auto) {
     g += h.message
@@ -2471,26 +2484,26 @@ function render_interaction(h, f) {
                                                             g += "Hi Dear! The lottery tickets for this week haven't arrived yet. Apologies :)"
                                                           } else {
                                                             if (in_arr(h, ["unlock_items2", "unlock_items3", "unlock_items4", "unlock_items5", "unlock_items6", "unlock_items7"])) {
-                                                              var k = "items2",
+                                                              var l = "items2",
                                                                 e = 75000000,
-                                                                j = 600;
+                                                                k = 600;
                                                               if (h == "unlock_items3") {
-                                                                k = "items3"
+                                                                l = "items3"
                                                               }
                                                               if (h == "unlock_items4") {
-                                                                k = "items4", e = 100000000, j = 800
+                                                                l = "items4", e = 100000000, k = 800
                                                               }
                                                               if (h == "unlock_items5") {
-                                                                k = "items5", e = 100000000, j = 800
+                                                                l = "items5", e = 100000000, k = 800
                                                               }
                                                               if (h == "unlock_items6") {
-                                                                k = "items6", e = 112500000, j = 900
+                                                                l = "items6", e = 112500000, k = 900
                                                               }
                                                               if (h == "unlock_items7") {
-                                                                k = "items7", e = 112500000, j = 900
+                                                                l = "items7", e = 112500000, k = 900
                                                               }
-                                                              g += "Hello! You don't seem to have an account open with me. Would you like to open one? It costs " + to_pretty_num(e) + " Gold or " + to_pretty_num(j) + " Shells. We hold onto your items forever.";
-                                                              g += "<span style='float: right; margin-top: 5px'><div class='slimbutton' onclick='socket.emit(\"bank\",{operation:\"unlock\",gold:1,pack:\"" + k + "\"})' style='margin-right: 5px;'>USE GOLD</div><div class='slimbutton' onclick='socket.emit(\"bank\",{operation:\"unlock\",shells:1,pack:\"" + k + "\"})'>USE SHELLS</div></span>"
+                                                              g += "Hello! You don't seem to have an account open with me. Would you like to open one? It costs " + to_pretty_num(e) + " Gold or " + to_pretty_num(k) + " Shells. We hold onto your items forever.";
+                                                              g += "<span style='float: right; margin-top: 5px'><div class='slimbutton' onclick='socket.emit(\"bank\",{operation:\"unlock\",gold:1,pack:\"" + l + "\"})' style='margin-right: 5px;'>USE GOLD</div><div class='slimbutton' onclick='socket.emit(\"bank\",{operation:\"unlock\",shells:1,pack:\"" + l + "\"})'>USE SHELLS</div></span>"
                                                             } else {
                                                               return
                                                             }
