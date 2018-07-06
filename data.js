@@ -395,13 +395,6 @@ var G = {
     "key": "community"
   }],
   "skills": {
-    "open_snippet": {
-      "ui": false,
-      "explanation": "Open the Code Snippet interface",
-      "type": "utility",
-      "name": "Open Snippet",
-      "skin": "snippet"
-    },
     "use_town": {
       "explanation": "Teleports you to the center of the map.",
       "cooldown": 0,
@@ -620,6 +613,14 @@ var G = {
       "class": ["rogue"],
       "mp": 320
     },
+    "pure_eval": {
+      "code": true,
+      "name": "Pure Eval",
+      "explanation": "[Advanced] Maps a code snippet to be run directly inside the game, rather than using CODE. (Not to be confused with the text command, /eval, which evals inside the Code iframe)",
+      "skins": ["run_eval0", "run_eval1", "run_eval2"],
+      "skin": "run_eval0",
+      "type": "utility"
+    },
     "cburst": {
       "explanation": "A skill for experienced mages. Allows you to control your most powerful ability.",
       "share": "burst",
@@ -828,13 +829,12 @@ var G = {
       "name": "Toggle Code",
       "skin": "code"
     },
-    "eval": {
-      "code": true,
-      "name": "Eval",
-      "explanation": "Maps a code snippet to be run directly inside the game, rather than using CODE. [Advanced]",
-      "skins": ["run_eval0", "run_eval1", "run_eval2"],
-      "skin": "run_eval0",
-      "type": "utility"
+    "open_snippet": {
+      "ui": false,
+      "explanation": "Open the Code Snippet interface",
+      "type": "utility",
+      "name": "Open Snippet",
+      "skin": "snippet"
     },
     "stack": {
       "explanation": "Slowly learning the ways of your opponent each rogue attack deals one more pure damage.",
@@ -2529,7 +2529,7 @@ var G = {
     },
     "essenceofnature": {
       "name": "Essence of Nature",
-      "g": 40000,
+      "g": 5000,
       "explanation": "Earthly energy, waiting to spring",
       "s": true,
       "skin": "essenceofnature",
@@ -4194,25 +4194,29 @@ var G = {
     }
   },
   "craft": {
-    "wingedboots": {
-      "items": [[1, "shoes"], [20, "feather0"]],
-      "cost": 120000
+    "stealthcape": {
+      "items": [[1, "bcape"], [5, "shadowstone"], [200, "essenceofnature"], [1000, "cscale"]],
+      "cost": 2000000
     },
     "fclaw": {
       "items": [[1, "claw"], [2, "essenceoffrost"]],
       "cost": 80000
     },
-    "wblade": {
-      "items": [[1, "stick", 9], [1, "blade"], [800, "essenceoffrost"]],
-      "cost": 24000000
+    "wingedboots": {
+      "items": [[1, "shoes"], [20, "feather0"]],
+      "cost": 120000
+    },
+    "fireblade": {
+      "items": [[1, "blade"], [1, "essenceoffire"]],
+      "cost": 20000
     },
     "xbox": {
       "items": [[1, "x0"], [1, "x1"], [1, "x2"], [1, "x3"], [1, "x4"], [1, "x5"], [1, "x6"], [1, "x7"], [1, "x8"]],
       "cost": 1200
     },
-    "fireblade": {
-      "items": [[1, "blade"], [1, "essenceoffire"]],
-      "cost": 20000
+    "wblade": {
+      "items": [[1, "stick", 9], [1, "blade"], [800, "essenceoffrost"]],
+      "cost": 24000000
     },
     "firestaff": {
       "items": [[1, "staff"], [1, "essenceoffire"]],
@@ -4240,7 +4244,7 @@ var G = {
     "doors": "/images/tiles/map/doors.png",
     "dark": "/images/tiles/map/dark_dimension.png?v=0",
     "new": "/images/tiles/map/new.png?v=10",
-    "castle": "/images/tiles/map/castle.png",
+    "castle": "/images/tiles/map/castle.png?v=2",
     "fort": "/images/tiles/map/fort.png",
     "beach": "/images/tiles/map/beach_v2.png",
     "puzzle": "/images/tiles/map/puzzle.png?v=6",
@@ -5362,11 +5366,12 @@ var G = {
       "id": "witch"
     },
     "beans": {
-      "name": "Bean ",
+      "name": "Bean",
       "type": "full",
       "hp": 3200,
-      "role": "announcer",
+      "moving": true,
       "skin": "lionsuit",
+      "role": "announcer",
       "speed": 30,
       "id": "beans"
     },
@@ -6192,11 +6197,6 @@ var G = {
         "positions": [[232, 388], [325, 499, 1]],
         "id": "pvp"
       }, {
-        "positions": [[-94, -47], [98, -50], [5, 83]],
-        "manual": true,
-        "id": "bean",
-        "loop": true
-      }, {
         "position": [1588, -534],
         "id": "guard"
       }, {
@@ -6228,6 +6228,7 @@ var G = {
         "id": "funtokens"
       }, {
         "position": [74, -34],
+        "boundary": [-100, -100, 100, 100],
         "id": "beans"
       }, {
         "position": [303, -87],
@@ -6655,7 +6656,7 @@ var G = {
         "max_y": 248
       },
       "monsters": [{
-        "count": 1,
+        "count": 8,
         "boundary": [-992, -58, -666, 328],
         "type": "plantoid"
       }]
@@ -6839,7 +6840,7 @@ var G = {
       }]
     }
   },
-  "version": 294,
+  "version": 295,
   "games": {
     "tarot": {
       "cards": ["chariot", "death", "devil", "emperor", "empress", "fool", "fortune", "hangman", "hermit", "hierophant", "judgment", "justice", "lovers", "magician", "moon", "priestess", "star", "strength", "sun", "temperance", "theworld", "tower", "2cups", "2pentacles", "2swords", "2wands", "3cups", "3pentacles", "3swords", "3wands", "4cups", "4pentacles", "4swords", "4wands", "5cups", "5pentacles", "5swords", "5wands", "6cups", "6pentacles", "6swords", "6wands", "7cups", "7pentacles", "7swords", "7wands", "8cups", "8pentacles", "8swords", "8wands", "9cups", "9pentacles", "9swords", "9wands", "10cups", "10pentacles", "10swords", "10wands", "acecups", "acepentacles", "aceswords", "acewands", "kingcups", "kingpentacles", "kingswords", "kingwands", "knightcups", "knightpentacles", "knightswords", "knightwands", "pagecups", "pagepentacles", "pageswords", "pagewands", "queencups", "queenpentacles", "queenswords", "queenwands"],
@@ -8582,7 +8583,7 @@ var G = {
       "speed": 20,
       "name": "Sprawling",
       "evasion": 80,
-      "respawn": 1,
+      "respawn": 24,
       "range": 80,
       "attack": 1800,
       "aggro": 0.20000000000000001
