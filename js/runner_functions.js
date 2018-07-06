@@ -968,7 +968,8 @@ function smooth_path() {
     // Assume the path ahead is [i] [i+1] [i+2] - This routine checks whether [i+1] could be skipped
     // The resulting path is smooth rather than rectangular and bumpy
     // Try adding "function smooth_path(){}" or "smart.prune.smooth=false;" to your Code
-    while (i + 2 < smart.plot.length && smart.plot[i].map == smart.plot[i + 1].map && smart.plot[i].map == smart.plot[i + 1].map && can_move({
+    // [06/07/18]: (!smart.plot[i+2] || !smart.plot[i+2].transport) - without this condition, in "winterland", move(-160,-660), smart_move("main") fails
+    while (i + 2 < smart.plot.length && smart.plot[i].map == smart.plot[i + 1].map && smart.plot[i].map == smart.plot[i + 1].map && (!smart.plot[i + 2] || !smart.plot[i + 2].transport) && can_move({
       map: smart.plot[i].map,
       x: smart.plot[i].x,
       y: smart.plot[i].y,
