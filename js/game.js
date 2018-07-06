@@ -2765,6 +2765,13 @@ function npc_right_click(c) {
   if (this.role == "funtokens") {
     render_token_exchange("funtoken")
   }
+  if (this.role == "announcer") {
+    render_interaction({
+      auto: true,
+      skin: "lionsuit",
+      message: "Daily Events? Yes. Soon. Hopefully ... Definitely one day."
+    })
+  }
   if (a.interaction) {
     var b = a.interaction;
     if (is_array(b)) {
@@ -3641,8 +3648,8 @@ function add_character(e, d) {
   c.type = "character";
   c.me = d;
   if (e.npc && G.npcs[e.npc]) {
-    if (G.npcs[e.npc].role == "citizen") {
-      c.citizen = true, c.npc_onclick = true
+    if (G.npcs[e.npc].role == "citizen" || G.npcs[e.npc].moving) {
+      c.citizen = true, c.npc_onclick = true, c.role = G.npcs[e.npc].role
     }
   }
   c.awidth = c.width / a;
