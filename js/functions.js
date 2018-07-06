@@ -352,65 +352,82 @@ function add_greenlight_log() {
   $("#gamelog").append("<div class='gameentry' style='color: white'>Adventure Land is on Steam Greenlight! Would really appreciate your help: <a href='http://steamcommunity.com/sharedfiles/filedetails/?id=821265543' target='_blank' class='cancela' style='color: " + colors.xmas + "'>Browser</a> <a href='steam://url/CommunityFilePage/821265543' target='_blank' class='cancela' style='color: " + colors.xmasgreen + "'>Open: Steam</a></div>");
   $("#gamelog").scrollTop($("#gamelog")[0].scrollHeight)
 }
-function add_chat(c, n, f, b) {
+function add_chat(c, o, g, b) {
   if (no_html) {
     return
   }
-  var d = "#chatlog",
-    j = "",
-    m = 1,
-    h = false;
+  var f = "#chatlog",
+    k = "",
+    n = 1,
+    j = false;
   if (!window.character) {
-    d = "#gamelog"
+    f = "#gamelog"
   }
-  for (var k = 0; k < game_chats.length; k++) {
-    if (b && game_chats[k][3] == b || game_chats[k][0] == c && game_chats[k][1] == n && game_chats[k][3] == b) {
-      m = game_chats[k][4] + 1;
-      game_chats.splice(k, 1);
-      h = true;
+  for (var l = 0; l < game_chats.length; l++) {
+    if (b && game_chats[l][3] == b || game_chats[l][0] == c && game_chats[l][1] == o && game_chats[l][3] == b) {
+      if (c && l != game_chats.length - 1) {
+        continue
+      }
+      n = game_chats[l][4] + 1;
+      game_chats.splice(l, 1);
+      j = true;
       break
     }
   }
-  if (game_chats.length > 360 || h) {
-    var l = "";
+  if (game_chats.length > 360 || j) {
+    var m = "";
     if (game_chats.length > 360) {
-      l = "<div class='chatentry' style='color: gray'>- Truncated -</div>";
+      m = "<div class='chatentry' style='color: gray'>- Truncated -</div>";
       var a = [];
-      for (var k = 0; k < game_chats.length; k++) {
-        var g = game_chats[k];
-        if (k < 180 && !g[0]) {
+      for (var l = 0; l < game_chats.length; l++) {
+        var h = game_chats[l];
+        if (l < 180 && !h[0]) {
           continue
         }
-        a.push(g)
+        a.push(h)
       }
       game_chats = a.slice(-270)
     }
-    game_chats.forEach(function(q) {
-      var p = "",
-        o = q[4];
-      if (q[0]) {
-        p = "<span style='color:white'>" + q[0] + ":</span> "
+    game_chats.forEach(function(s) {
+      var r = "",
+        q = s[4],
+        p = "#999A4F";
+      if (s[0]) {
+        r = "<span style='color:white'>" + s[0] + ":</span> "
       }
-      if (o > 1) {
-        o = " <span style='color:#999A4F'>[" + o + "]</span>"
+      if (s[2] == colors.server_success) {
+        p = "#E0E0E0"
+      }
+      if (s[2] == colors.server_failure) {
+        p = "#626363"
+      }
+      if (q > 1) {
+        q = " <span style='color:" + p + "'>[" + q + "]</span>"
       } else {
-        o = ""
+        q = ""
       }
-      l += "<div class='chatentry' style='color: " + (q[2] || "gray") + "'>" + p + html_escape(q[1]) + o + "</div>"
+      m += "<div class='chatentry' style='color: " + (s[2] || "gray") + "'>" + r + html_escape(s[1]) + q + "</div>"
     });
-    $(d).html(l)
+    $(f).html(m)
   }
-  game_chats.push([c, n, f, b, m]);
+  var d = "#999A4F";
+  if (g == colors.server_success) {
+    d = "#E0E0E0"
+  }
+  if (g == colors.server_failure) {
+    d = "#626363"
+  }
+  game_chats.push([c, o, g, b, n]);
   if (c) {
-    j = "<span style='color:white'>" + c + ":</span> "
+    k = "<span style='color:white'>" + c + ":</span> "
   }
-  if (m > 1) {
-    m = " <span style='color:#999A4F'>[" + m + "]</span>"
+  if (n > 1) {
+    n = " <span style='color:" + d + "'>[" + n + "]</span>"
   } else {
-    m = ""
+    n = ""
   }
-  $(d).append("<div class='chatentry' style='color: " + (f || "gray") + "'>" + j + html_escape(n) + m + "</div>");
-  $(d).scrollTop($(d)[0].scrollHeight)
+  $(f).append("<div class='chatentry' style='color: " + (g || "gray") + "'>" + k + html_escape(o) + n + "</div>");
+  $(f).scrollTop($(f)[0].scrollHeight)
 }
 function cpm_window(a) {
   if (no_html) {
@@ -865,7 +882,7 @@ function on_skill(d, g) {
                                       if (c == "snippet") {
                                         code_eval(a.code)
                                       } else {
-                                        if (c == "eval") {
+                                        if (c == "eval" || c == "pure_eval") {
                                           smart_eval(a.code)
                                         } else {
                                           if (c == "magiport") {
@@ -1017,15 +1034,15 @@ function map_keys_and_skills() {
     keymap.ESC = "esc";
     keymap.T = "travel";
     keymap.TAB = {
-      name: "eval",
+      name: "pure_eval",
       code: "var list=get_nearby_hostiles(); if(list.length) ctarget=list[0];"
     };
     keymap.N = {
-      name: "eval",
+      name: "pure_eval",
       code: "options.show_names=!options.show_names;"
     };
     keymap.ENTER = {
-      name: "eval",
+      name: "pure_eval",
       code: "focus_chat()"
     };
     keymap.SPACE = {
@@ -1444,9 +1461,7 @@ function start_character_runner(b, d) {
   }
   $("#iframelist").append('<div class="clickable" onclick="show_character_snippet(\'' + b + '\')"><iframe src="' + a + "?no_html=true&code=" + d + '" id="' + c + '" style="border: 5px solid gray; background-color: black; margin-top: -5px; height: 60px; width: 128px; overflow: hidden; pointer-events: none" data-name="' + b + '"></iframe></div>');
   $("#iframelist").css("display", "inline-block");
-  if (!is_electron) {
-    add_log("This is a preview feature", "gray")
-  }
+  if (!is_electron) {}
 }
 function stop_character_runner(a) {
   var b = "ichar" + a.toLowerCase();
