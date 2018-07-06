@@ -17,6 +17,7 @@ var colors = {
   male: "#43A1C6",
   female: "#C06C9B",
   server_success: "#85C76B",
+  server_failure: "#C7302C",
   poison: "#41834A",
   ability: "#ff9100",
   xmas: "#C82F17",
