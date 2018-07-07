@@ -4837,7 +4837,7 @@ var G = {
       "rows": 2,
       "columns": 4,
       "file": "/images/tiles/characters/chara7.png",
-      "matrix": [["frozenrogue", null, "fmage", null], ["marven", "fwarrior", null, "lionsuit"]]
+      "matrix": [["frozenrogue", null, "fmage", null], ["marven", "fwarrior", "blingbling", "lionsuit"]]
     },
     "chara6": {
       "rows": 2,
@@ -5365,15 +5365,13 @@ var G = {
       "aspeed": "slow",
       "id": "witch"
     },
-    "beans": {
-      "name": "Bean",
-      "type": "full",
-      "hp": 3200,
-      "moving": true,
-      "skin": "lionsuit",
-      "role": "announcer",
-      "speed": 30,
-      "id": "beans"
+    "secondhands": {
+      "says": "There's some good stuff in here",
+      "color": "#7E65D3",
+      "role": "secondhands",
+      "skin": "blingbling",
+      "type": "fullstatic",
+      "id": "secondhands"
     },
     "santa": {
       "says": "Ho Ho Ho",
@@ -5415,6 +5413,16 @@ var G = {
       "skin": "xmas_tree",
       "aspeed": "fast",
       "id": "xmas_tree"
+    },
+    "beans": {
+      "name": "Bean",
+      "type": "full",
+      "hp": 3200,
+      "moving": true,
+      "skin": "lionsuit",
+      "role": "announcer",
+      "speed": 30,
+      "id": "beans"
     },
     "basics": {
       "says": "Blades, blades, blades",
@@ -6230,6 +6238,9 @@ var G = {
         "position": [74, -34],
         "boundary": [-100, -100, 100, 100],
         "id": "beans"
+      }, {
+        "position": [74, -34],
+        "id": "secondhands"
       }, {
         "position": [303, -87],
         "id": "pvptokens"
