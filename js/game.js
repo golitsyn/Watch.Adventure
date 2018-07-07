@@ -1876,6 +1876,9 @@ function init_socket() {
       get_input(buttons)
     }
   });
+  socket.on("secondhands", function(data) {
+    render_secondhands(data)
+  });
   socket.on("tavern", function(data) {});
   socket.on("game_chat_log", function(data) {
     draw_trigger(function() {
@@ -2670,6 +2673,9 @@ function npc_right_click(c) {
     d_text(f, this, {
       color: a.color
     })
+  }
+  if (this.role == "secondhands") {
+    socket.emit("secondhands")
   }
   if (this.role == "blocker") {
     socket.emit("blocker", {
