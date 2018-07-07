@@ -1072,6 +1072,59 @@ function render_computer_network(a) {
   $(a).html(b);
   render_computer($(".computernx"))
 }
+function render_secondhands(k) {
+  reset_inventory(1);
+  topleft_npc = "merchant";
+  rendered_target = topleft_npc;
+  var l = 0,
+    g = [];
+  var e = "<div style='background-color: black; border: 5px solid gray; padding: 2px; font-size: 24px; display: inline-block'>";
+  for (var d = 0; d < 4; d++) {
+    e += "<div>";
+    for (var c = 0; c < 5; c++) {
+      if (l < k.length && k[l++] && (c_enabled || !G.items[k[l - 1]].cash)) {
+        var h = k[l - 1];
+        var a = "item" + randomStr(10),
+          m = G.items[h.name];
+        e += item_container({
+          skin: m.skin_a || m.skin,
+          def: m,
+          id: a,
+          draggable: false,
+          on_rclick: "buy('" + h.name + "')",
+          actual: h
+        });
+        g.push({
+          id: a,
+          item: m,
+          name: h.name,
+          value: m.g,
+          cash: m.cash
+        })
+      } else {
+        e += item_container({
+          size: 40,
+          draggable: false,
+          droppable: true
+        })
+      }
+    }
+    e += "</div>"
+  }
+  e += "</div>";
+  e += "<div id='merchant-item' style='display: inline-block; vertical-align: top; margin-left: 5px'></div>";
+  $("#topleftcornerui").html(e);
+  for (var d = 0; d < g.length; d++) {
+    var b = g[d];
+
+    function f(j) {
+      return function() {
+        render_item("#merchant-item", j)
+      }
+    }
+    $("#" + b.id).on("click", f(b)).addClass("clickable")
+  }
+}
 function render_item(p, b) {
   var s = b.item || {
     skin: "test",
