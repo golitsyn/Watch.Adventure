@@ -2971,7 +2971,7 @@ function map_click(e) {
   }
   topleft_npc = false
 }
-function move(a, b) {
+function old_move(a, b) {
   map_click({
     x: a,
     y: b
