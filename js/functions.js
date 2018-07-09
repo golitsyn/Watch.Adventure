@@ -542,12 +542,12 @@ function get_nearby_hostiles(a) {
 var input_onclicks = [];
 
 function get_input(b) {
-  var c = "<div style='border: 5px solid gray; padding: 5px; background: black'>",
-    d = 0,
-    a = null;
   if (!b) {
     return
   }
+  var c = "<div style='" + (!b.no_wrap && "border: 5px solid gray; padding: 5px; background: black" || "") + "'>",
+    d = 0,
+    a = null;
   if (is_array(b)) {
     b = {
       elements: b
@@ -568,7 +568,7 @@ function get_input(b) {
     }
     if (f.button) {
       input_onclicks[d++] = f.onclick;
-      c += "<div class='gamebutton gamebutton-small' onclick='smart_eval(input_onclicks[" + (d - 1) + "])' style='display:block'>" + f.button + "</div>"
+      c += "<div class='gamebutton " + (f.small && "gamebutton-small mb2" || "mb5") + "' onclick='smart_eval(input_onclicks[" + (d - 1) + "])' style='display:block'>" + f.button + "</div>"
     }
   });
   c += "</div>";
@@ -765,7 +765,7 @@ function use_skill(b, h, k) {
     }
   }
 }
-function on_skill(d, g) {
+function on_skill(d, h) {
   var a = keymap[d],
     c = a && a.name || a;
   if (!a) {
@@ -780,8 +780,8 @@ function on_skill(d, g) {
       }
     }
     if (b > 0) {
-      var f = character.items[b];
-      if (G.items[f.name].type == "stand") {
+      var g = character.items[b];
+      if (G.items[g.name].type == "stand") {
         if (character.stand) {
           socket.emit("merchant", {
             close: 1
@@ -819,7 +819,7 @@ function on_skill(d, g) {
         }
       } else {
         if (c == "blink") {
-          if (g) {
+          if (h) {
             blink_pressed = true
           }
           last_blink_pressed = new Date()
@@ -847,8 +847,66 @@ function on_skill(d, g) {
                       render_travel()
                     } else {
                       if (c == "gm") {
-                        socket.emit("gm", {
-                          action: "jump_list"
+                        var f = [];
+                        hide_modal();
+                        f.push({
+                          button: "Jump",
+                          onclick: function() {
+                            socket.emit("gm", {
+                              action: "jump_list"
+                            })
+                          }
+                        });
+                        f.push({
+                          button: "Invincible",
+                          onclick: function() {
+                            socket.emit("gm", {
+                              action: "invincible"
+                            });
+                            hide_modal()
+                          }
+                        });
+                        f.push({
+                          button: "Mute",
+                          onclick: function() {
+                            hide_modal();
+                            get_input({
+                              button: "Mute",
+                              onclick: function() {
+                                socket.emit("gm", {
+                                  action: "mute",
+                                  id: $(".mglocx").val()
+                                });
+                                hide_modal()
+                              },
+                              input: "mglocx",
+                              placeholder: "Name",
+                              title: "Character"
+                            })
+                          }
+                        });
+                        f.push({
+                          button: "Jail",
+                          onclick: function() {
+                            hide_modal();
+                            get_input({
+                              button: "Jail",
+                              onclick: function() {
+                                socket.emit("gm", {
+                                  action: "jail",
+                                  id: $(".mglocx").val()
+                                });
+                                hide_modal()
+                              },
+                              input: "mglocx",
+                              placeholder: "Name",
+                              title: "Character"
+                            })
+                          }
+                        });
+                        get_input({
+                          no_wrap: true,
+                          elements: f
                         })
                       } else {
                         if (c == "interact") {
@@ -875,7 +933,7 @@ function on_skill(d, g) {
                                         setTimeout(function() {
                                           try {
                                             codemirror_render.focus()
-                                          } catch (h) {}
+                                          } catch (j) {}
                                         }, 1)
                                       }
                                     } else {
@@ -887,6 +945,7 @@ function on_skill(d, g) {
                                         } else {
                                           if (c == "magiport") {
                                             get_input({
+                                              small: true,
                                               button: "Engage",
                                               onclick: function() {
                                                 use_skill("magiport", $(".mglocx").val());
@@ -1056,22 +1115,26 @@ function map_keys_and_skills() {
     }
   }
 }
-function move(a, d) {
-  var c = c,
-    b = calculate_move(M, character.real_x, character.real_y, parseFloat(a) || 0, parseFloat(d) || 0);
+function move(a, f) {
+  var d = d,
+    b = calculate_move(M, character.real_x, character.real_y, parseFloat(a) || 0, parseFloat(f) || 0);
   character.from_x = character.real_x;
   character.from_y = character.real_y;
   character.going_x = b.x;
   character.going_y = b.y;
   character.moving = true;
   calculate_vxy(character);
-  socket.emit("move", {
+  var c = {
     x: character.real_x,
     y: character.real_y,
     going_x: character.going_x,
     going_y: character.going_y,
     m: character.m
-  })
+  };
+  if (next_minteraction) {
+    c.key = next_minteraction, next_minteraction = null
+  }
+  socket.emit("move", c)
 }
 function arrow_movement_logic() {
   if (!window.character || !window.options.move_with_arrows) {
