@@ -1873,7 +1873,10 @@ function init_socket() {
           }
         })
       });
-      get_input(buttons)
+      get_input({
+        no_wrap: true,
+        elements: buttons
+      })
     }
   });
   socket.on("secondhands", function(data) {
