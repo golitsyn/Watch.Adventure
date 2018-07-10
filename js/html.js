@@ -1080,7 +1080,13 @@ function render_secondhands() {
     e = [];
   var d = "<div style='background-color: black; border: 5px solid gray; padding: 2px; font-size: 24px; display: inline-block'>";
   var g = secondhands;
-  h = s_page * 20;
+  if (s_page) {
+    h += 19
+  } else {
+    if (s_page > 1) {
+      h += (s_page - 1) * 18
+    }
+  }
   for (var c = 0; c < 4; c++) {
     d += "<div>";
     for (var b = 0; b < 5; b++) {
@@ -1093,7 +1099,7 @@ function render_secondhands() {
           left: true
         })
       } else {
-        if (c == 3 && b == 4 && h < g.length) {
+        if (c == 3 && b == 4 && h < g.length - 1) {
           d += item_container({
             skin: "right",
             onclick: "s_page=" + (s_page + 1) + "; render_secondhands();"
@@ -1110,13 +1116,14 @@ function render_secondhands() {
               onclick: "sh_click(" + (h - 1) + ")",
               def: k,
               id: a,
-              draggable: false
+              draggable: false,
+              droppable: false
             }, f)
           } else {
             d += item_container({
               size: 40,
               draggable: false,
-              droppable: true
+              droppable: false
             })
           }
         }
