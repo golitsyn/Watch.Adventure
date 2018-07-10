@@ -1072,58 +1072,61 @@ function render_computer_network(a) {
   $(a).html(b);
   render_computer($(".computernx"))
 }
-function render_secondhands(k) {
+function render_secondhands() {
   reset_inventory(1);
-  topleft_npc = "merchant";
+  topleft_npc = "secondhands";
   rendered_target = topleft_npc;
-  var l = 0,
-    g = [];
-  var e = "<div style='background-color: black; border: 5px solid gray; padding: 2px; font-size: 24px; display: inline-block'>";
-  for (var d = 0; d < 4; d++) {
-    e += "<div>";
-    for (var c = 0; c < 5; c++) {
-      if (l < k.length && k[l++] && (c_enabled || !G.items[k[l - 1]].cash)) {
-        var h = k[l - 1];
-        var a = "item" + randomStr(10),
-          m = G.items[h.name];
-        e += item_container({
-          skin: m.skin_a || m.skin,
-          def: m,
-          id: a,
-          draggable: false,
-          on_rclick: "buy('" + h.name + "')",
-          actual: h
-        });
-        g.push({
-          id: a,
-          item: m,
-          name: h.name,
-          value: m.g,
-          cash: m.cash
+  var h = 0,
+    e = [];
+  var d = "<div style='background-color: black; border: 5px solid gray; padding: 2px; font-size: 24px; display: inline-block'>";
+  var g = secondhands;
+  h = s_page * 20;
+  for (var c = 0; c < 4; c++) {
+    d += "<div>";
+    for (var b = 0; b < 5; b++) {
+      if (c == 3 && b == 0 && s_page != 0) {
+        d += item_container({
+          skin: "left",
+          onclick: "s_page=" + (s_page - 1) + "; render_secondhands();"
+        }, {
+          q: s_page,
+          left: true
         })
       } else {
-        e += item_container({
-          size: 40,
-          draggable: false,
-          droppable: true
-        })
+        if (c == 3 && b == 4 && h < g.length) {
+          d += item_container({
+            skin: "right",
+            onclick: "s_page=" + (s_page + 1) + "; render_secondhands();"
+          }, {
+            q: s_page + 2
+          })
+        } else {
+          if (h < g.length && g[h++] && (c_enabled || !G.items[g[h - 1]].cash)) {
+            var f = g[h - 1];
+            var a = "secondhand" + c,
+              k = G.items[f.name];
+            d += item_container({
+              skin: k.skin,
+              onclick: "sh_click(" + (h - 1) + ")",
+              def: k,
+              id: a,
+              draggable: false
+            }, f)
+          } else {
+            d += item_container({
+              size: 40,
+              draggable: false,
+              droppable: true
+            })
+          }
+        }
       }
     }
-    e += "</div>"
+    d += "</div>"
   }
-  e += "</div>";
-  e += "<div id='merchant-item' style='display: inline-block; vertical-align: top; margin-left: 5px'></div>";
-  $("#topleftcornerui").html(e);
-  for (var d = 0; d < g.length; d++) {
-    var b = g[d];
-
-    function f(j) {
-      return function() {
-        render_item("#merchant-item", j)
-      }
-    }
-    $("#" + b.id).on("click", f(b)).addClass("clickable")
-  }
+  d += "</div>";
+  d += "<div id='merchant-item' style='display: inline-block; vertical-align: top; margin-left: 5px'></div>";
+  $("#topleftcornerui").html(d)
 }
 function render_item(p, b) {
   var s = b.item || {
@@ -1330,6 +1333,10 @@ function render_item(p, b) {
       }
       h += "<div style='color: gold'>" + to_pretty_num(m.price) + " GOLD" + ((m.q || 1) > 1 && " <span style='color: white'>[EACH]</span>" || "") + "</div>";
       h += "<div><span class='clickable' onclick='trade_buy(\"" + b.slot + '","' + b.from_player + '","' + (m.rid || "") + '",$(".tradenum").html())\'>BUY</span></div>'
+    }
+    if (b.secondhand) {
+      h += "<div style='color: gold'>" + to_pretty_num(calculate_item_value(m) * 2 * (m.q || 1)) + " GOLD</div>";
+      h += "<div><span class='clickable' onclick='secondhand_buy(\"" + (m.rid || "") + "\")'>BUY</span></div>"
     }
     if (n) {
       if (s.days) {
@@ -2002,14 +2009,18 @@ function item_container(A, r) {
       if (n && n.compound) {
         v = "c"
       }
-      if (r.q && r.q != 1) {
-        if (n && n.gives && n.gives[0] && n.gives[0][0] == "hp") {
-          k += "<div class='iqui iqhp'>" + r.q + "</div>"
-        } else {
-          if (n && n.gives && n.gives[0] && n.gives[0][0] == "mp") {
-            k += "<div class='iqui iqmp'>" + r.q + "</div>"
+      if (r.q && r.left) {
+        k += "<div class='iuui' style='color: white'>" + r.q + "</div>"
+      } else {
+        if (r.q && r.q != 1) {
+          if (n && n.gives && n.gives[0] && n.gives[0][0] == "hp") {
+            k += "<div class='iqui iqhp'>" + r.q + "</div>"
           } else {
-            k += "<div class='iqui'>" + r.q + "</div>"
+            if (n && n.gives && n.gives[0] && n.gives[0][0] == "mp") {
+              k += "<div class='iqui iqmp'>" + r.q + "</div>"
+            } else {
+              k += "<div class='iqui'>" + r.q + "</div>"
+            }
           }
         }
       }
