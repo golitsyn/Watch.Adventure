@@ -1209,6 +1209,16 @@ function inventory_click(a) {
     })
   }
 }
+function sh_click(a) {
+  dialogs_target = get_npc("secondhands");
+  render_item("#topleftcornerdialog", {
+    id: "sh" + a,
+    item: G.items[secondhands[a].name],
+    name: secondhands[a].name,
+    actual: secondhands[a],
+    secondhand: true
+  })
+}
 function slot_click(a) {
   if (ctarget && ctarget.slots && ctarget.slots[a]) {
     dialogs_target = ctarget;
@@ -2012,6 +2022,11 @@ function trade_buy(d, c, a, b) {
     q: b
   });
   $("#topleftcornerdialog").html("")
+}
+function secondhand_buy(a) {
+  socket.emit("sbuy", {
+    rid: a
+  })
 }
 function buy_shells(a) {
   if ((a * 15000000 / 100) > character.gold) {
@@ -3572,12 +3587,12 @@ function name_logic(a) {
   if (a.type != "character" && a.type != "npc") {
     return
   }
-  if (!options.show_names && a.name_tag) {
+  if ((!options.show_names && character) && a.name_tag) {
     destroy_sprite(a.name_tag, "children");
     a.name_tag = null;
     a.ntag_cache = null
   } else {
-    if (options.show_names) {
+    if (options.show_names || !character) {
       add_name_tag(a)
     }
   }
