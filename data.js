@@ -6854,7 +6854,7 @@ var G = {
       }]
     }
   },
-  "version": 299,
+  "version": 301,
   "games": {
     "tarot": {
       "cards": ["chariot", "death", "devil", "emperor", "empress", "fool", "fortune", "hangman", "hermit", "hierophant", "judgment", "justice", "lovers", "magician", "moon", "priestess", "star", "strength", "sun", "temperance", "theworld", "tower", "2cups", "2pentacles", "2swords", "2wands", "3cups", "3pentacles", "3swords", "3wands", "4cups", "4pentacles", "4swords", "4wands", "5cups", "5pentacles", "5swords", "5wands", "6cups", "6pentacles", "6swords", "6wands", "7cups", "7pentacles", "7swords", "7wands", "8cups", "8pentacles", "8swords", "8wands", "9cups", "9pentacles", "9swords", "9wands", "10cups", "10pentacles", "10swords", "10wands", "acecups", "acepentacles", "aceswords", "acewands", "kingcups", "kingpentacles", "kingswords", "kingwands", "knightcups", "knightpentacles", "knightswords", "knightwands", "pagecups", "pagepentacles", "pageswords", "pagewands", "queencups", "queenpentacles", "queenswords", "queenwands"],
