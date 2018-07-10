@@ -1080,7 +1080,7 @@ function render_secondhands() {
     e = [];
   var d = "<div style='background-color: black; border: 5px solid gray; padding: 2px; font-size: 24px; display: inline-block'>";
   var g = secondhands;
-  if (s_page) {
+  if (s_page == 1) {
     h += 19
   } else {
     if (s_page > 1) {
