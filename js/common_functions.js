@@ -93,12 +93,17 @@ function process_game_data() {
       if (g.items) {
         d.merchants.push(e);
         g.items.forEach(function(h) {
-          if (!h || G.items[h].cash) {
+          if (!h) {
+            return
+          }
+          if (G.items[h].cash) {
+            G.items[h].buy_with_cash = true;
             return
           }
           d.items[h] = d.items[h] || [];
           d.items[h].push(e);
-          can_buy[h] = true
+          can_buy[h] = true;
+          G.items[h].buy = true
         })
       }
       d.ref[f.id] = e;
