@@ -137,6 +137,8 @@ var draws = 0,
   in_draw = false;
 var keymap = {},
   skillbar = [];
+var secondhands = [],
+  s_page = 0;
 var options = {
   move_with_arrows: true,
   code_fx: false,
@@ -893,9 +895,10 @@ function adopt_soft_properties(a, c) {
       }
     })
   }
-  if (a.type == "character" && a.skin && a.skin != c.skin) {
+  if (a.type == "character" && a.skin && a.skin != c.skin && !a.rip) {
     a.skin = c.skin;
-    new_sprite(a, "full", "renew")
+    new_sprite(a, "full", "renew");
+    restore_dimensions(a)
   }
   for (prop in c) {
     if (asp_skip[prop]) {
@@ -1764,7 +1767,7 @@ function init_socket() {
                                                                                               ui_log("Received " + G.items[data.name].name, "white")
                                                                                             } else {
                                                                                               if (response == "dismantle") {
-                                                                                                var def = G.craft[data.name];
+                                                                                                var def = G.dismantle[data.name];
                                                                                                 ui_log("Spent " + to_pretty_num(def.cost) + " gold", "gray");
                                                                                                 ui_log("Dismantled " + G.items[data.name].name, "#CF5C65")
                                                                                               } else {
@@ -1880,7 +1883,11 @@ function init_socket() {
     }
   });
   socket.on("secondhands", function(data) {
-    render_secondhands(data)
+    secondhands = data;
+    if (topleft_npc != "secondhands") {
+      s_page = 0
+    }
+    render_secondhands()
   });
   socket.on("tavern", function(data) {});
   socket.on("game_chat_log", function(data) {
