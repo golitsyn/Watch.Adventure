@@ -1,113 +1,158 @@
-< !DOCTYPE html >
-<!--
-[if lt IE 7] > < html class = "no-js ie6 oldie"
-lang = "en-US" > < ![endif] -->
-<!--
-[if IE 7] > < html class = "no-js ie7 oldie"
-lang = "en-US" > < ![endif] -->
-<!--
-[if IE 8] > < html class = "no-js ie8 oldie"
-lang = "en-US" > < ![endif] -->
-<!--
-[if gt IE 8] > <!--
-> < html class = "no-js"
-lang = "en-US" > <!--
-< ![endif] -->
-< head >
+var stripe_state = "pay",
+  pamount = 25;
 
+function p_log(message, color, support) {
+  if (inside != "payments") return;
+  $("#plog").html("<span style='color: white'>&gt;</span> <span style='color: " + color + "'>" + message + "</span>");
+}
 
-< title > adventure.land | 524: A timeout occurred < /title>
-<meta charset="UTF-8" / > < meta http - equiv = "Content-Type"
-content = "text/html; charset=UTF-8" / > < meta http - equiv = "X-UA-Compatible"
-content = "IE=Edge,chrome=1" / > < meta name = "robots"
-content = "noindex, nofollow" / > < meta name = "viewport"
-content = "width=device-width,initial-scale=1,maximum-scale=1" / > < link rel = "stylesheet"
-id = "cf_styles-css"
-href = "/cdn-cgi/styles/cf.errors.css"
-type = "text/css"
-media = "screen,projection" / >
-<!--
-[if lt IE 9] > < link rel = "stylesheet"
-id = 'cf_styles-ie-css'
-href = "/cdn-cgi/styles/cf.errors.ie.css"
-type = "text/css"
-media = "screen,projection" / > < ![endif] -->
-< style type = "text/css" > body {
-  margin: 0;
-  padding: 0
-} < /style>
+function set_pamount(amount) {
+  pamount = parseInt(amount);
+  if (stripe_state == "success") {
+    setTimeout(function() {
+      if (inside != "payments") hide_modal();
+      stripe_state = "pay";
+      $(".pbutton").removeClass("psuccess");
+      $(".pbutton").html("Pay $" + pamount);
+    }, 20);
+    return;
+  }
+  if (stripe_state == "failed") stripe_state = "pay", $(".pbutton").removeClass("pfail");;
+  if (stripe_state == "declined") stripe_state = "pay", $(".pbutton").removeClass("pfail");;
+  if (stripe_state == "pay") $(".pbutton").html("Pay $" + pamount);
+}
 
+function stripe_pay() {
+  $("#plog").html("");
+  if (!window.Stripe) {
+    alert("Stripe hasn't loaded. Please refresh the page and email hello@adventure.land if this is persistent. Thank you.");
+    return;
+  }
+  if (stripe_state == "process") {
+    add_log("Currently processing your payment.");
+    p_log("Currently processing your payment.");
+    return;
+  }
+  if (stripe_state == "charge") {
+    add_log("Currently charging your credit card.");
+    return;
+  }
+  if (in_arr(stripe_state, ["failed", "declined", "success"])) return set_pamount(pamount);
+  $(".pbutton").html("Processing ...");
+  stripe_state = "process";
+  Stripe.card.createToken({
+    name: $('.modal .stripe-name').val(),
+    number: $('.modal .stripe-number').val(),
+    cvc: $('.modal .stripe-cvc').val(),
+    exp_month: $('.modal .stripe-month').val(),
+    exp_year: $('.modal .stripe-year').val()
+  }, stripe_response);
+}
 
+function stripe_response(status, response) {
+  if (status == 200) {
+    $("#plog").html("");
+    stripe_state = "charge";
+    $(".pbutton").html("Charging ...");
+    api_call("stripe_payment", {
+      usd: pamount,
+      response: response
+    });
+  } else {
+    $("#plog").html("");
+    stripe_state = "failed";
+    $(".pbutton").html("Failed.");
+    if (response.error && response.error.message) add_log(response.error.message, "gray"), p_log(response.error.message, "gray");
+  }
+  // if(is_sdk) show_json(response);
+}
 
+function stripe_result(result, cash) {
+  if (result == "success") {
+    $("#plog").html("");
+    stripe_state = "success";
+    $(".pbutton").addClass("psuccess");
+    $(".pbutton").html("Success!");
+    character.cash = cash;
+    reset_inventory(1);
+  } else if (result == "declined") {
+    $("#plog").html("");
+    stripe_state = "declined";
+    $(".pbutton").addClass("pfail");
+    $(".pbutton").html("Declined.");
+    p_log("If you need help, feel free to email hello@adventure.land", "#88E5BC");
+  } else {
+    $("#plog").html("");
+    stripe_state = "failed";
+    $(".pbutton").addClass("pfail");
+    $(".pbutton").html("Failed.");
+    p_log("If you need help, feel free to email hello@adventure.land", "#88E5BC");
+  }
+}
 
-</head > < body > < div id = "cf-wrapper" >
+function shells_click() {
+  if (stripe_enabled) show_payments();
+  else show_sroffers();
+}
 
+function show_payments() {
+  show_modal($("#paymentshtml").html(), {
+    wrap: false,
+    opacity: 0.4
+  });
+  return;
+  var html = "";
+  html += "<div style='position: fixed; top: 0px; bottom: 0px; left: 0px; right: 0px; z-index: 9999; background: rgba(0,0,0,0.5); text-align: center' class='paymentsui'>";
 
+  html += $("#paymentshtml").html();
 
-< div id = "cf-error-details"
-class = "cf-error-details-wrapper" > < div class = "cf-wrapper cf-error-overview" > < h1 >
+  html += "<div class='gamebutton clickable' onclick='$(\".paymentsui\").remove()' style='position: fixed; z-index: 10000; top: 0px; right: 0px; color: #CFCFCF'>Back &gt;</div>";
 
-< span class = "cf-error-type" > Error < /span>
-              <span class="cf-error-code">524</span > < small class = "heading-ray-id" > Ray ID: 43bf216fd4367678 & bull;
-2018 - 07 - 17 19: 33: 25 UTC < /small>
-            </h1 > < h2 class = "cf-subheadline" > A timeout occurred < /h2>
-        </div > <!--
-/.error-overview -->
-        
-        <div class="cf-section cf-highlight cf-status-display">
-            <div class="cf-wrapper">
-                <div class="cf-columns cols-3">
-                  
-<div id="cf-browser-status" class="cf-column cf-status-item cf-browser-status ">
-  <div class="cf-icon-error-container">
-    <i class="cf-icon cf-icon-browser"></i > < i class = "cf-icon-status cf-icon-ok" > < /i>
-  </div > < span class = "cf-status-desc" > You < /span>
-  <h3 class="cf-status-name">Browser</h3 > < span class = "cf-status-label" > Working < /span>
-</div >
+  html += "</div>";
+  $('body').append(html);
+}
 
-< div id = "cf-cloudflare-status"
-class = "cf-column cf-status-item cf-cloudflare-status " > < div class = "cf-icon-error-container" > < i class = "cf-icon cf-icon-cloud" > < /i>
-    <i class="cf-icon-status cf-icon-ok"></i > < /div>
-  <span class="cf-status-desc">Stockholm</span > < h3 class = "cf-status-name" > Cloudflare < /h3>
-  <span class="cf-status-label">Working</span > < /div>
+function show_ppayments() {
+  var html = "";
+  html += "<div style='position: fixed; top: 0px; bottom: 0px; left: 0px; right: 0px; z-index: 9999; background: rgba(0,0,0,0.5)' class='paymentsui'>";
 
-<div id="cf-host-status" class="cf-column cf-status-item cf-host-status cf-error-source">
-  <div class="cf-icon-error-container">
-    <i class="cf-icon cf-icon-server"></i > < i class = "cf-icon-status cf-icon-error" > < /i>
-  </div > < span class = "cf-status-desc" > adventure.land < /span>
-  <h3 class="cf-status-name">Host</h3 > < span class = "cf-status-label" > Error < /span>
-</div >
+  html += "<div style='position: fixed; top: " + round(($(window).height() - 520) / 2) + "px; left: " + round(($(window).width() - 750) / 2) + "px;'>";
+  html += '<iframe src="https://api.paymentwall.com/api/ps/?key=07119679ef07a110740ecfc89da924e6&uid=[USER_ID]&widget=p10_1" width="750" height="520" frameborder="0" ';
+  html += 'style="border: 5px solid gray; background: black"></iframe>';
+  html += "</div>";
 
-< /div>
-              
-            </div > < /div><!-- /.status - display -->
+  html += "<div class='gamebutton clickable' onclick='$(\".paymentsui\").remove()' style='position: fixed; z-index: 10000; top: 0px; right: 0px; color: #CFCFCF'>Back &gt;</div>";
 
-< div class = "cf-section cf-wrapper" > < div class = "cf-columns two" > < div class = "cf-column" > < h2 > What happened ? < /h2>
-                    <p>The origin web server timed out responding to this request.</p > < /div>
-              
-                <div class="cf-column">
-                    <h2>What can I do?</h2 > < h5 > If you 're a visitor of this website:</h5>
-      <p>Please try again in a few minutes.</p>
+  html += "</div>";
+  $('body').append(html);
+}
 
-      <h5>If you'
-re the owner of this website : < /h5>
-      <p><span>The connection to the origin web server was made, but the origin web server timed out before responding. The likely cause is an overloaded background task, database or application, stressing the resources on your web server. To resolve, please work with your hosting provider or web development team to free up resources for your database or overloaded application.</span > < a href = "https://support.cloudflare.com/hc/en-us/articles/200171926-Error-524" > Additional troubleshooting information here. < /a></p > < /div>
-            </div >
+function show_poffers() {
+  var html = "";
+  html += "<div style='position: fixed; top: 0px; bottom: 0px; left: 0px; right: 0px; z-index: 9999; background: rgba(0,0,0,0.5)' class='paymentsui'>";
 
-< /div><!-- /.section-- >
+  html += "<div style='position: fixed; top: 50px; left: " + round(($(window).width() - 800) / 2) + "px;'>";
+  html += '<iframe src="https://api.paymentwall.com/api/?key=07119679ef07a110740ecfc89da924e6&uid=[USER_ID]&widget=w6_1" width="800" height="' + ($(window).height() - 100) + '" frameborder="0" ';
+  html += 'style="border: 5px solid gray; background: black"></iframe>';
+  html += "</div>";
 
-< div class = "cf-error-footer cf-wrapper" > < p > < span class = "cf-footer-item" > Cloudflare Ray ID: < strong > 43bf216fd4367678 < /strong></span > < span class = "cf-footer-separator" > & bull; < /span>
-    <span class="cf-footer-item"><span>Your IP</span > : 2a02: 408: 7722: 1: 77: 222: 61: 176 < /span>
-    <span class="cf-footer-separator">&bull;</span > < span class = "cf-footer-item" > < span > Performance & amp;
-security by < /span> <a href="https:/ / www.cloudflare.com / 5xx - error - landing ? utm_source = error_footer " id="
-brand_link " target="
-_blank ">Cloudflare</a></span>
-    
-  </p>
-</div><!-- /.error-footer -->
+  html += "<div class='gamebutton clickable' onclick='$(\".paymentsui\").remove()' style='position: fixed; z-index: 10000; top: 0px; right: 0px'>Back &gt;</div>";
 
+  html += "</div>";
+  $('body').append(html);
+}
 
-    </div><!-- /#cf-error-details -->
-</div><!-- /#cf-wrapper -->
-</body>
-</html>
+function show_sroffers() {
+  var html = "";
+  html += "<div style='position: fixed; top: 0px; bottom: 0px; left: 0px; right: 0px; z-index: 9999; background: rgba(0,0,0,0.5); overflow-y: scroll' class='paymentsui'>";
+
+  html += "<div style='margin-top: 40px; margin-left: " + round(($(window).width() - 728) / 2) + "px; z-index: 9000'>";
+  html += '<iframe src="https://wall.superrewards.com/super/offers?h=shmimyttqnb.811777903063&uid=' + user_id + '" frameborder="0" width="728" height="2400" scrolling="no"';
+  html += 'style="border: 5px solid gray; background: #FAFAFA"></iframe>';
+  html += "</div>";
+
+  html += "<div class='gamebutton clickable' onclick='$(\".paymentsui\").remove()' style='position: fixed; z-index: 10000; bottom: 0px; right: 0px'>BACK &gt;</div>";
+
+  html += "</div>";
+  $('body').append(html);
+}
