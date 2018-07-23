@@ -224,7 +224,8 @@ function can_move_to(x, y) {
     x: character.real_x,
     y: character.real_y,
     going_x: x,
-    going_y: y
+    going_y: y,
+    base: character.base
   });
 }
 
@@ -352,12 +353,12 @@ function exchange(item_num) {
   parent.exchange(1);
 }
 
-function say(message) // please use responsibly, thank you! :)
+function say(message) // please use MORE responsibly, thank you! :)
 {
   parent.say(message, 1);
 }
 
-function pm(name, message) // please use MORE responsibly, thank you! :)
+function pm(name, message) // please use responsibly, thank you! :)
 {
   parent.private_say(name, message, 0)
 }
@@ -595,6 +596,7 @@ var buttons = parent.code_buttons;
 
 function draw_line(x, y, x2, y2, size, color) {
   // keep in mind that drawings could significantly slow redraws, especially if you don't .destroy() them
+  if (!game.graphics) return;
   if (!color) color = 0xF38D00;
   if (!size) size = 1;
   e = new PIXI.Graphics();
@@ -611,6 +613,7 @@ function draw_line(x, y, x2, y2, size, color) {
 
 
 function draw_circle(x, y, radius, size, color) {
+  if (!game.graphics) return;
   if (!color) color = 0x00F33E;
   if (!size) size = 1;
   e = new PIXI.Graphics();
@@ -863,6 +866,10 @@ function smart_move(destination, on_done) // despite the name, smart_move isn't 
   if (is_string(destination)) destination = {
     to: destination
   };
+  if (is_number(destination)) destination = {
+    x: destination,
+    y: on_done
+  }, on_done = null;
   if ("x" in destination) {
     smart.map = destination.map || character.map;
     smart.x = destination.x;
@@ -974,7 +981,8 @@ function smooth_path() {
       x: smart.plot[i].x,
       y: smart.plot[i].y,
       going_x: smart.plot[i + 2].x,
-      going_y: smart.plot[i + 2].y
+      going_y: smart.plot[i + 2].y,
+      base: character.base
     }))
     smart.plot.splice(i + 1, 1);
     i++;
@@ -988,6 +996,7 @@ function bfs() {
 
   while (start < queue.length) {
     var current = queue[start];
+    var map = G.maps[current.map];
     if (current.map == smart.map) {
       smart.flags.map = true;
       if (abs(current.x - smart.x) + abs(current.y - smart.y) < smart.edge) {
@@ -1001,14 +1010,14 @@ function bfs() {
         start++;
         continue;
       }
-      G.maps[current.map].doors.forEach(function(door) {
+      map.doors.forEach(function(door) {
         if (simple_distance({
-          x: door[0] + door[2] / 2,
-          y: door[1] + door[3] / 2
+          x: map.spawns[door[6]][0],
+          y: map.spawns[door[6]][1]
         }, {
           x: current.x,
           y: current.y
-        }) < 45) qpush({
+        }) < 30) qpush({
           map: door[4],
           x: G.maps[door[4]].spawns[door[5] || 0][0],
           y: G.maps[door[4]].spawns[door[5] || 0][1],
@@ -1016,7 +1025,7 @@ function bfs() {
           s: door[5] || 0
         });
       });
-      G.maps[current.map].npcs.forEach(function(npc) {
+      map.npcs.forEach(function(npc) {
         if (npc.id == "transporter" && simple_distance({
           x: npc.position[0],
           y: npc.position[1]
@@ -1039,8 +1048,8 @@ function bfs() {
 
     if (smart.use_town) qpush({
       map: current.map,
-      x: G.maps[current.map].spawns[0][0],
-      y: G.maps[current.map].spawns[0][1],
+      x: map.spawns[0][0],
+      y: map.spawns[0][1],
       town: true
     }); // "town"
     shuffle(moves);
@@ -1053,7 +1062,8 @@ function bfs() {
         x: current.x,
         y: current.y,
         going_x: new_x,
-        going_y: new_y
+        going_y: new_y,
+        base: character.base
       })) qpush({
         map: current.map,
         x: new_x,
@@ -1166,6 +1176,15 @@ function proxy(name) {
 setInterval(function() {
   for (var p in parent.character) proxy(p);
 }, 50); // bottom of the barrel
+
+function eval_s(code) // this is how snippets are eval'ed if they include "output="/"json_output=" - so if they include these, the scope of eval isn't global - doesn't matter much [13/07/18]
+{
+  var output = undefined,
+    json_output = undefined;
+  eval(code);
+  if (output !== undefined) parent.show_modal("<pre>" + output + "</pre>");
+  if (json_output !== undefined) parent.show_json(json_output);
+}
 
 function performance_trick() {
   parent.performance_trick(); // Just plays an empty sound file, so browsers don't throttle JS, only way to prevent it, interesting cheat [05/07/18]
