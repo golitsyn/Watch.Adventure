@@ -6,6 +6,7 @@ var u_item = null,
   c_offering = null,
   c_last = 0,
   e_item = null,
+  p_item = null,
   cr_items = e_array(9),
   cr_last = 0,
   ds_item = null;
@@ -149,7 +150,7 @@ function render_party() {
   for (var a in party) {
     var c = party[a];
     b += " <div class='gamebutton' style='padding: 6px 8px 6px 8px; font-size: 24px; line-height: 18px' onclick='party_click(\"" + a + "\")'>";
-    b += character_image(c.skin);
+    b += sprite_image(c.skin);
     if (c.rip) {
       b += "<div style='color:gray'>RIP</div>"
     } else {
@@ -558,21 +559,21 @@ function render_craftsman() {
   b += item_container({
     shade: a,
     cid: "critem0",
-    s_op: 0.3,
+    s_op: 0.36,
     draggable: false,
     droppable: true
   });
   b += item_container({
     shade: a,
     cid: "critem1",
-    s_op: 0.3,
+    s_op: 0.36,
     draggable: false,
     droppable: true
   });
   b += item_container({
     shade: a,
     cid: "critem2",
-    s_op: 0.3,
+    s_op: 0.36,
     draggable: false,
     droppable: true
   });
@@ -581,21 +582,21 @@ function render_craftsman() {
   b += item_container({
     shade: a,
     cid: "critem3",
-    s_op: 0.3,
+    s_op: 0.36,
     draggable: false,
     droppable: true
   });
   b += item_container({
     shade: a,
     cid: "critem4",
-    s_op: 0.3,
+    s_op: 0.36,
     draggable: false,
     droppable: true
   });
   b += item_container({
     shade: a,
     cid: "critem5",
-    s_op: 0.3,
+    s_op: 0.36,
     draggable: false,
     droppable: true
   });
@@ -604,21 +605,21 @@ function render_craftsman() {
   b += item_container({
     shade: a,
     cid: "critem6",
-    s_op: 0.3,
+    s_op: 0.36,
     draggable: false,
     droppable: true
   });
   b += item_container({
     shade: a,
     cid: "critem7",
-    s_op: 0.3,
+    s_op: 0.36,
     draggable: false,
     droppable: true
   });
   b += item_container({
     shade: a,
     cid: "critem8",
-    s_op: 0.3,
+    s_op: 0.36,
     draggable: false,
     droppable: true
   });
@@ -642,7 +643,7 @@ function render_dismantler() {
   b += item_container({
     shade: a,
     cid: "dsitem",
-    s_op: 0.3,
+    s_op: 0.36,
     draggable: false,
     droppable: true
   });
@@ -742,7 +743,7 @@ function render_exchange_shrine(d) {
   b += item_container({
     shade: a,
     cid: "eitem",
-    s_op: 0.3,
+    s_op: 0.36,
     draggable: false,
     droppable: true
   });
@@ -750,6 +751,34 @@ function render_exchange_shrine(d) {
   b += "</div>";
   b += "</div>";
   b += "<div><div class='gamebutton clickable' onclick='exchange()'>" + c + "</div></div>";
+  b += "</div>";
+  $("#topleftcornerui").html(b);
+  if (!inventory) {
+    render_inventory()
+  }
+}
+function render_none_shrine(d) {
+  var a = "cape0",
+    c = "POOF";
+  reset_inventory(1);
+  topleft_npc = "none";
+  rendered_target = topleft_npc;
+  p_item = null;
+  var b = "<div style='background-color: black; border: 5px solid gray; padding: 20px; font-size: 24px; display: inline-block; vertical-align: top; text-align: center'>";
+  b += "<div class='ering ering1 mb10'>";
+  b += "<div class='ering ering2'>";
+  b += "<div class='ering ering3'>";
+  b += item_container({
+    shade: a,
+    cid: "pitem",
+    s_op: 0.5,
+    draggable: false,
+    droppable: true
+  });
+  b += "</div>";
+  b += "</div>";
+  b += "</div>";
+  b += "<div><div class='gamebutton clickable' onclick='poof()'>" + c + "</div></div>";
   b += "</div>";
   $("#topleftcornerui").html(b);
   if (!inventory) {
@@ -787,7 +816,8 @@ function render_upgrade_shrine() {
     draggable: false,
     droppable: true,
     shade: "shade_uweapon",
-    cid: "uweapon"
+    cid: "uweapon",
+    s_op: 0.36
   });
   a += "</div>";
   a += "<div>";
@@ -802,7 +832,8 @@ function render_upgrade_shrine() {
     draggable: false,
     droppable: true,
     shade: "shade_scroll",
-    cid: "uscroll"
+    cid: "uscroll",
+    s_op: 0.36
   });
   a += "</div>";
   a += "</div>";
@@ -827,19 +858,22 @@ function render_compound_shrine() {
     draggable: false,
     droppable: true,
     shade: "shade_cring",
-    cid: "compound0"
+    cid: "compound0",
+    s_op: 0.36
   });
   a += item_container({
     draggable: false,
     droppable: true,
     shade: "shade_cring",
-    cid: "compound1"
+    cid: "compound1",
+    s_op: 0.36
   });
   a += item_container({
     draggable: false,
     droppable: true,
     shade: "shade_cring",
-    cid: "compound2"
+    cid: "compound2",
+    s_op: 0.36
   });
   a += "</div>";
   a += "<div>";
@@ -854,7 +888,8 @@ function render_compound_shrine() {
     draggable: false,
     droppable: true,
     shade: "shade_cscroll",
-    cid: "cscroll"
+    cid: "cscroll",
+    s_op: 0.36
   });
   a += "</div>";
   a += "</div>";
@@ -1072,25 +1107,33 @@ function render_computer_network(a) {
   $(a).html(b);
   render_computer($(".computernx"))
 }
-function render_secondhands() {
+function render_secondhands(l) {
   reset_inventory(1);
   topleft_npc = "secondhands";
+  if (l) {
+    topleft_npc = l
+  }
   rendered_target = topleft_npc;
-  var h = 0,
-    e = [];
+  var m = 0,
+    e = [],
+    g = "sh_click";
   var d = "<div style='background-color: black; border: 5px solid gray; padding: 2px; font-size: 24px; display: inline-block'>";
-  var g = secondhands;
-  if (s_page == 1) {
-    h += 19
+  var k = secondhands;
+  if (l) {
+    k = lostandfound;
+    if (l_page >= 1) {
+      m += 19 + (l_page - 1) * 18
+    }
+    g = "lf_click"
   } else {
-    if (s_page > 1) {
-      h += (s_page - 1) * 18
+    if (s_page >= 1) {
+      m += 19 + (s_page - 1) * 18
     }
   }
   for (var c = 0; c < 4; c++) {
     d += "<div>";
     for (var b = 0; b < 5; b++) {
-      if (c == 3 && b == 0 && s_page != 0) {
+      if (!l && c == 3 && b == 0 && s_page != 0) {
         d += item_container({
           skin: "left",
           onclick: "s_page=" + (s_page - 1) + "; render_secondhands();"
@@ -1099,7 +1142,7 @@ function render_secondhands() {
           left: true
         })
       } else {
-        if (c == 3 && b == 4 && h < g.length - 1) {
+        if (!l && c == 3 && b == 4 && m < k.length - 1) {
           d += item_container({
             skin: "right",
             onclick: "s_page=" + (s_page + 1) + "; render_secondhands();"
@@ -1107,24 +1150,43 @@ function render_secondhands() {
             q: s_page + 2
           })
         } else {
-          if (h < g.length && g[h++] && (c_enabled || !G.items[g[h - 1]].cash)) {
-            var f = g[h - 1];
-            var a = "secondhand" + c,
-              k = G.items[f.name];
+          if (l && c == 3 && b == 0 && l_page != 0) {
             d += item_container({
-              skin: k.skin,
-              onclick: "sh_click(" + (h - 1) + ")",
-              def: k,
-              id: a,
-              draggable: false,
-              droppable: false
-            }, f)
-          } else {
-            d += item_container({
-              size: 40,
-              draggable: false,
-              droppable: false
+              skin: "left",
+              onclick: "l_page=" + (l_page - 1) + "; render_secondhands('lostandfound');"
+            }, {
+              q: l_page,
+              left: true
             })
+          } else {
+            if (l && c == 3 && b == 4 && m < k.length - 1) {
+              d += item_container({
+                skin: "right",
+                onclick: "l_page=" + (l_page + 1) + "; render_secondhands('lostandfound');"
+              }, {
+                q: l_page + 2
+              })
+            } else {
+              if (m < k.length && k[m++]) {
+                var h = k[m - 1];
+                var a = "secondhand" + (m - 1),
+                  n = G.items[h.name];
+                d += item_container({
+                  skin: n.skin,
+                  onclick: g + "(" + (m - 1) + ")",
+                  def: n,
+                  id: a,
+                  draggable: false,
+                  droppable: false
+                }, h)
+              } else {
+                d += item_container({
+                  size: 40,
+                  draggable: false,
+                  droppable: false
+                })
+              }
+            }
           }
         }
       }
@@ -1342,8 +1404,14 @@ function render_item(p, b) {
       h += "<div><span class='clickable' onclick='trade_buy(\"" + b.slot + '","' + b.from_player + '","' + (m.rid || "") + '",$(".tradenum").html())\'>BUY</span></div>'
     }
     if (b.secondhand) {
+      c = true;
       h += "<div style='color: gold'>" + to_pretty_num(calculate_item_value(m) * 2 * (m.q || 1)) + " GOLD</div>";
       h += "<div><span class='clickable' onclick='secondhand_buy(\"" + (m.rid || "") + "\")'>BUY</span></div>"
+    }
+    if (b.lostandfound) {
+      c = true;
+      h += "<div style='color: gold'>" + to_pretty_num(calculate_item_value(m) * 4 * (m.q || 1)) + " GOLD</div>";
+      h += "<div><span class='clickable' onclick='lostandfound_buy(\"" + (m.rid || "") + "\")'>BUY</span></div>"
     }
     if (n) {
       if (s.days) {
@@ -1628,7 +1696,7 @@ function on_rclick(g) {
                   $("#eitem").html(e)
                 }
               } else {
-                if (topleft_npc == "upgrade") {
+                if (topleft_npc == "none") {
                   var g = character.items[a],
                     d = null;
                   if (g) {
@@ -1637,39 +1705,15 @@ function on_rclick(g) {
                   if (!d) {
                     return
                   }
-                  if (d.upgrade) {
-                    if (u_item !== null) {
-                      return
-                    }
-                    u_item = a;
-                    var e = $("#citem" + a).all_html();
-                    $("#citem" + a).parent().html("");
-                    $("#uweapon").html(e)
+                  if (p_item !== null) {
+                    return
                   }
-                  if (d.type == "uscroll" || d.type == "pscroll") {
-                    if (u_scroll !== null) {
-                      return
-                    }
-                    u_scroll = a;
-                    var e = $("#citem" + a).all_html();
-                    if ((character.items[a].q || 1) < 2) {
-                      $("#citem" + a).parent().html("")
-                    }
-                    $("#uscroll").html(e)
-                  }
-                  if (d.type == "offering") {
-                    if (u_offering !== null) {
-                      return
-                    }
-                    u_offering = a;
-                    var e = $("#citem" + a).all_html();
-                    if ((character.items[a].q || 1) < 2) {
-                      $("#citem" + a).parent().html("")
-                    }
-                    $("#uoffering").html(e)
-                  }
+                  p_item = a;
+                  var e = $("#citem" + a).all_html();
+                  $("#citem" + a).parent().html("");
+                  $("#pitem").html(e)
                 } else {
-                  if (topleft_npc == "compound") {
+                  if (topleft_npc == "upgrade") {
                     var g = character.items[a],
                       d = null;
                     if (g) {
@@ -1678,37 +1722,39 @@ function on_rclick(g) {
                     if (!d) {
                       return
                     }
-                    if (d.compound && c_last < 3) {
-                      c_items[c_last] = a;
+                    if (d.upgrade) {
+                      if (u_item !== null) {
+                        return
+                      }
+                      u_item = a;
                       var e = $("#citem" + a).all_html();
                       $("#citem" + a).parent().html("");
-                      $("#compound" + c_last).html(e);
-                      c_last++
+                      $("#uweapon").html(e)
                     }
-                    if (d.type == "cscroll") {
-                      if (c_scroll !== null) {
+                    if (d.type == "uscroll" || d.type == "pscroll") {
+                      if (u_scroll !== null) {
                         return
                       }
-                      c_scroll = a;
+                      u_scroll = a;
                       var e = $("#citem" + a).all_html();
                       if ((character.items[a].q || 1) < 2) {
                         $("#citem" + a).parent().html("")
                       }
-                      $("#cscroll").html(e)
+                      $("#uscroll").html(e)
                     }
                     if (d.type == "offering") {
-                      if (c_offering !== null) {
+                      if (u_offering !== null) {
                         return
                       }
-                      c_offering = a;
+                      u_offering = a;
                       var e = $("#citem" + a).all_html();
                       if ((character.items[a].q || 1) < 2) {
                         $("#citem" + a).parent().html("")
                       }
-                      $("#coffering").html(e)
+                      $("#uoffering").html(e)
                     }
                   } else {
-                    if (topleft_npc == "craftsman") {
+                    if (topleft_npc == "compound") {
                       var g = character.items[a],
                         d = null;
                       if (g) {
@@ -1717,32 +1763,72 @@ function on_rclick(g) {
                       if (!d) {
                         return
                       }
-                      if (cr_last < 9) {
-                        cr_items[cr_last] = a;
+                      if (d.compound && c_last < 3) {
+                        c_items[c_last] = a;
                         var e = $("#citem" + a).all_html();
                         $("#citem" + a).parent().html("");
-                        $("#critem" + cr_last).html(e);
-                        cr_last++
+                        $("#compound" + c_last).html(e);
+                        c_last++
                       }
-                    } else {
-                      if (topleft_npc == "dismantler") {
-                        if (ds_item !== null) {
+                      if (d.type == "cscroll") {
+                        if (c_scroll !== null) {
                           return
                         }
-                        ds_item = a;
+                        c_scroll = a;
                         var e = $("#citem" + a).all_html();
                         if ((character.items[a].q || 1) < 2) {
                           $("#citem" + a).parent().html("")
                         }
-                        $("#dsitem").html(e)
-                      } else {
-                        a = parseInt(a, 10);
-                        if (character && character.items[a] && G.items[character.items[a].name].type == "elixir") {
+                        $("#cscroll").html(e)
+                      }
+                      if (d.type == "offering") {
+                        if (c_offering !== null) {
                           return
                         }
-                        socket.emit("equip", {
-                          num: a
-                        })
+                        c_offering = a;
+                        var e = $("#citem" + a).all_html();
+                        if ((character.items[a].q || 1) < 2) {
+                          $("#citem" + a).parent().html("")
+                        }
+                        $("#coffering").html(e)
+                      }
+                    } else {
+                      if (topleft_npc == "craftsman") {
+                        var g = character.items[a],
+                          d = null;
+                        if (g) {
+                          d = G.items[g.name]
+                        }
+                        if (!d) {
+                          return
+                        }
+                        if (cr_last < 9) {
+                          cr_items[cr_last] = a;
+                          var e = $("#citem" + a).all_html();
+                          $("#citem" + a).parent().html("");
+                          $("#critem" + cr_last).html(e);
+                          cr_last++
+                        }
+                      } else {
+                        if (topleft_npc == "dismantler") {
+                          if (ds_item !== null) {
+                            return
+                          }
+                          ds_item = a;
+                          var e = $("#citem" + a).all_html();
+                          if ((character.items[a].q || 1) < 2) {
+                            $("#citem" + a).parent().html("")
+                          }
+                          $("#dsitem").html(e)
+                        } else {
+                          a = parseInt(a, 10);
+                          if (character && character.items[a] && G.items[character.items[a].name].type == "elixir") {
+                            return
+                          }
+                          socket.emit("equip", {
+                            num: a
+                          })
+                        }
                       }
                     }
                   }
@@ -1976,7 +2062,7 @@ function item_container(A, r) {
       o = G.positions[A.shade][2];
     k += "<div style='position: absolute; top: -2px; left: -2px; padding:" + (z + 2) + "px'>";
     k += "<div style='overflow: hidden; height: " + (q) + "px; width: " + (q) + "px;'>";
-    k += "<img style='width: " + (u.columns * u.size * c) + "px; height: " + (u.rows * u.size * c) + "px; margin-top: -" + (o * q) + "px; margin-left: -" + (p * q) + "px; opacity: " + (A.s_op || 0.2) + ";' src='" + u.file + "' draggable='false' />";
+    k += "<img style='width: " + (u.columns * u.size * c) + "px; height: " + (u.rows * u.size * c) + "px; margin-top: -" + (o * q) + "px; margin-left: -" + (p * q) + "px; opacity: " + (A.s_op || 0.36) + ";' src='" + u.file + "' draggable='false' />";
     k += "</div>";
     k += "</div>"
   }
@@ -2279,13 +2365,18 @@ function render_teleporter() {
     wrap: false
   })
 }
-function render_travel() {
-  var a = "<div style='max-width: 420px; text-align: center'>";
-  for (var b in G.maps) {
-    if (!G.maps[b].ignore && !G.maps[b].instance && !G.maps[b].irregular) {
-      a += "<div class='gamebutton' style='margin-left: 5px; margin-bottom: 5px' onclick='code_travel(\"" + b + "\"); hide_modal()'>" + G.maps[b].name + "</div>"
-    }
+function render_travel(b) {
+  var a = "<div style='max-width: 420px; text-align: center'>",
+    c = "code_travel";
+  if (b) {
+    c = "direct_travel"
   }
+  object_sort(G.maps).forEach(function(e) {
+    var d = e[0];
+    if (!G.maps[d].ignore && !G.maps[d].instance && (!G.maps[d].irregular || b)) {
+      a += "<div class='gamebutton' style='margin-left: 5px; margin-bottom: 5px' onclick='" + c + '("' + d + "\"); hide_modal()'>" + G.maps[d].name + "</div>"
+    }
+  });
   a += "</div>";
   show_modal(a, {
     wrap: false
@@ -2835,10 +2926,14 @@ function precompute_image_positions() {
       k = e.height || C[e.file] && C[e.file].height || 288;
     for (var f = 0; f < h.length; f++) {
       for (var d = 0; d < h[f].length; d++) {
-        if (!h[f][d]) {
+        var a = h[f][d];
+        if (!a) {
           continue
         }
-        IID[h[f][d]] = [b, k, d * b / e.columns, f * k / e.rows, b / (e.columns * 3), k / (e.rows * 4), e.file]
+        IID[a] = [b, k, d * b / e.columns, f * k / e.rows, b / (e.columns * 3), k / (e.rows * 4), e.file];
+        if (G.actual_dimensions[a]) {
+          IID[a][2] = IID[a][2] + (G.actual_dimensions[a][2] || 0)
+        }
       }
     }
   }
@@ -2848,16 +2943,19 @@ function precompute_image_positions() {
     }
   }
 }
-function character_image(a) {
+function sprite_image(b, a) {
   try {
     precompute_image_positions();
-    if (!IID[a]) {
-      a = "tf_template"
+    if (!a) {
+      a = {}
     }
-    return "<div style='display: inline-block; width: 39px; height: 50px; overflow: hidden'><img style='margin-left: " + (-IID[a][2] - IID[a][4] - Math.ceil((IID[a][4] - 39) / 2)) + "px; margin-top: " + (-IID[a][3] - IID[a][5] + 50) + "px; width: " + IID[a][0] + "px; height: " + IID[a][1] + "px;' src='" + IID[a][6] + "'/></div>";
-    return "<div style='display: inline-block; width: " + IID[a][4] + "px; height: " + IID[a][5] + "px; overflow: hidden'><img style='margin-left: " + (-IID[a][2] - IID[a][4]) + "px; margin-top: " + (-IID[a][3]) + "px; width: " + IID[a][0] + "px; height: " + IID[a][1] + "px;' src='" + IID[a][6] + "'/></div>"
-  } catch (b) {
-    console.log(b)
+    if (!IID[b]) {
+      b = "tf_template"
+    }
+    return "<div style='display: inline-block; width: 39px; height: 50px; overflow: hidden'><img style='margin-left: " + (-IID[b][2] - IID[b][4] - Math.ceil((IID[b][4] - 39) / 2)) + "px; margin-top: " + (-IID[b][3] - IID[b][5] + 50) + "px; width: " + IID[b][0] + "px; height: " + IID[b][1] + "px;' src='" + IID[b][6] + "'/></div>";
+    return "<div style='display: inline-block; width: " + IID[b][4] + "px; height: " + IID[b][5] + "px; overflow: hidden'><img style='margin-left: " + (-IID[b][2] - IID[b][4]) + "px; margin-top: " + (-IID[b][3]) + "px; width: " + IID[b][0] + "px; height: " + IID[b][1] + "px;' src='" + IID[b][6] + "'/></div>"
+  } catch (c) {
+    console.log(c)
   }
   return ""
 }
