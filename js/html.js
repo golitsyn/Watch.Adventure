@@ -2369,16 +2369,28 @@ function render_travel(b) {
   var a = "<div style='max-width: 420px; text-align: center'>",
     c = "code_travel";
   if (b) {
-    c = "direct_travel"
+    c = "render_spawns"
   }
   object_sort(G.maps).forEach(function(e) {
     var d = e[0];
     if (!G.maps[d].ignore && !G.maps[d].instance && (!G.maps[d].irregular || b)) {
-      a += "<div class='gamebutton' style='margin-left: 5px; margin-bottom: 5px' onclick='" + c + '("' + d + "\"); hide_modal()'>" + G.maps[d].name + "</div>"
+      a += "<div class='gamebutton' style='margin-left: 5px; margin-bottom: 5px' onclick='hide_modal(); " + c + '("' + d + "\");'>" + G.maps[d].name + "</div>"
     }
   });
   a += "</div>";
   show_modal(a, {
+    wrap: false
+  })
+}
+function render_spawns(c) {
+  var b = "<div style='max-width: 420px; text-align: center'>",
+    a = 0;
+  G.maps[c].spawns.forEach(function(d) {
+    b += "<div class='gamebutton' style='margin-left: 5px; margin-bottom: 5px' onclick='direct_travel(\"" + c + '","' + a + "\"); hide_modal()'>" + c + "[" + a + "]</div>";
+    a++
+  });
+  b += "</div>";
+  show_modal(b, {
     wrap: false
   })
 }
