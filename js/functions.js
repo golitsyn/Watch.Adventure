@@ -1548,9 +1548,10 @@ function code_eval_s(a) {
 function code_travel(a) {
   code_eval("smart_move({map:'" + a + "'})")
 }
-function direct_travel(a) {
+function direct_travel(b, a) {
   socket.emit("transport", {
-    to: a
+    to: b,
+    s: a
   })
 }
 function start_character_runner(b, d) {
