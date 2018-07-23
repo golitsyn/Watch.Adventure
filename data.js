@@ -1331,7 +1331,7 @@ var G = {
       "irregular": true
     }
   },
-  "version": 303,
+  "version": 304,
   "conditions": {
     "tarot_5swords": {
       "name": "Tarot Card",
@@ -5757,6 +5757,10 @@ var G = {
     "78": 1200000000
   },
   "games": {
+    "wheel": {
+      "gold": 1000000,
+      "slices": [["g0", "gold", 250000, "gold"], ["g1", "gold", 500000, "gold"], ["g2", "gold", 1000000, "gold"], ["g3", "gold", 2000000, "gold"], ["g4", "gold", 5000000, "gold"], ["g5", "gold", 10000000, "gold"], ["g6", "gold", 20000000, "gold"], ["g7", "gold", 50000000, "gold"], ["g7", "gold", 100000000, "gold"], ["g8", "gold", 250000000, "gold"], ["g9", "gold", 1000000000, "gold"], ["gg", "item", "glitch", "#1398D3"], ["ow", "item", "funtoken", "gold"]]
+    },
     "tarot": {
       "cards": ["chariot", "death", "devil", "emperor", "empress", "fool", "fortune", "hangman", "hermit", "hierophant", "judgment", "justice", "lovers", "magician", "moon", "priestess", "star", "strength", "sun", "temperance", "theworld", "tower", "2cups", "2pentacles", "2swords", "2wands", "3cups", "3pentacles", "3swords", "3wands", "4cups", "4pentacles", "4swords", "4wands", "5cups", "5pentacles", "5swords", "5wands", "6cups", "6pentacles", "6swords", "6wands", "7cups", "7pentacles", "7swords", "7wands", "8cups", "8pentacles", "8swords", "8wands", "9cups", "9pentacles", "9swords", "9wands", "10cups", "10pentacles", "10swords", "10wands", "acecups", "acepentacles", "aceswords", "acewands", "kingcups", "kingpentacles", "kingswords", "kingwands", "knightcups", "knightpentacles", "knightswords", "knightwands", "pagecups", "pagepentacles", "pageswords", "pagewands", "queencups", "queenpentacles", "queenswords", "queenwands"],
       "hours": 23,
@@ -5765,10 +5769,6 @@ var G = {
     "slots": {
       "glyphs": ["1", "2", "3", "4", "5", "6", "7", "8", "A", "L"],
       "gold": 1000000
-    },
-    "spin": {
-      "gold": 1000000,
-      "slices": [["g0", "gold", 250000, "gold"], ["g1", "gold", 500000, "gold"], ["g2", "gold", 1000000, "gold"], ["g3", "gold", 2000000, "gold"], ["g4", "gold", 5000000, "gold"], ["g5", "gold", 10000000, "gold"], ["g6", "gold", 20000000, "gold"], ["g7", "gold", 50000000, "gold"], ["g7", "gold", 100000000, "gold"], ["g8", "gold", 250000000, "gold"], ["g9", "gold", 1000000000, "gold"], ["gg", "item", "glitch", "#1398D3"], ["ow", "item", "funtoken", "gold"]]
     },
     "dice": {}
   },
