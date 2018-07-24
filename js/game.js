@@ -87,6 +87,7 @@ var map_npcs = [],
   map_animatables = {};
 var map_tiles = [],
   map_entities = [],
+  map_machines = {},
   dtile_size = 32,
   dtile_width = 0,
   dtile_height = 0;
@@ -1831,49 +1832,61 @@ function init_socket() {
                                                                                           if (response == "friend_failed") {
                                                                                             add_chat("", "Friendship failed, reason: " + data.reason, "#409BDD")
                                                                                           } else {
-                                                                                            if (response == "craft") {
-                                                                                              var def = G.craft[data.name];
-                                                                                              ui_log("Spent " + to_pretty_num(def.cost) + " gold", "gray");
-                                                                                              ui_log("Received " + G.items[data.name].name, "white")
+                                                                                            if (response == "gold_use") {
+                                                                                              ui_log("Used " + to_pretty_num(data.gold) + " gold", "gray")
                                                                                             } else {
-                                                                                              if (response == "dismantle") {
-                                                                                                var def = G.dismantle[data.name];
-                                                                                                ui_log("Spent " + to_pretty_num(def.cost) + " gold", "gray");
-                                                                                                ui_log("Dismantled " + G.items[data.name].name, "#CF5C65")
+                                                                                              if (response == "slots_success") {
+                                                                                                ui_log("Machine went crazy", "#9733FF")
                                                                                               } else {
-                                                                                                if (response == "dismantle_cant") {
-                                                                                                  ui_log("Can't dismantle", "gray")
+                                                                                                if (response == "slots_fail") {
+                                                                                                  ui_log("Machine got stuck", "gray")
                                                                                                 } else {
-                                                                                                  if (response == "inv_size") {
-                                                                                                    ui_log("Need more empty space", "gray")
+                                                                                                  if (response == "craft") {
+                                                                                                    var def = G.craft[data.name];
+                                                                                                    ui_log("Spent " + to_pretty_num(def.cost) + " gold", "gray");
+                                                                                                    ui_log("Received " + G.items[data.name].name, "white")
                                                                                                   } else {
-                                                                                                    if (response == "craft_cant") {
-                                                                                                      ui_log("Can't craft", "gray")
+                                                                                                    if (response == "dismantle") {
+                                                                                                      var def = G.dismantle[data.name];
+                                                                                                      ui_log("Spent " + to_pretty_num(def.cost) + " gold", "gray");
+                                                                                                      ui_log("Dismantled " + G.items[data.name].name, "#CF5C65")
                                                                                                     } else {
-                                                                                                      if (response == "craft_cant_quantity") {
-                                                                                                        ui_log("Not enough materials", "gray")
+                                                                                                      if (response == "dismantle_cant") {
+                                                                                                        ui_log("Can't dismantle", "gray")
                                                                                                       } else {
-                                                                                                        if (response == "craft_atleast2") {
-                                                                                                          ui_log("You need to provide at least 2 items", "gray")
+                                                                                                        if (response == "inv_size") {
+                                                                                                          ui_log("Need more empty space", "gray")
                                                                                                         } else {
-                                                                                                          if (response == "target_lock") {
-                                                                                                            ui_log("Target Acquired: " + G.monsters[data.monster].name, "#F00B22")
+                                                                                                          if (response == "craft_cant") {
+                                                                                                            ui_log("Can't craft", "gray")
                                                                                                           } else {
-                                                                                                            if (response == "cooldown") {
-                                                                                                              d_text("NOT READY", character)
+                                                                                                            if (response == "craft_cant_quantity") {
+                                                                                                              ui_log("Not enough materials", "gray")
                                                                                                             } else {
-                                                                                                              if (response == "blink_failed") {
-                                                                                                                no_no_no();
-                                                                                                                d_text("NO", character);
-                                                                                                                last_blink_pressed = inception
+                                                                                                              if (response == "craft_atleast2") {
+                                                                                                                ui_log("You need to provide at least 2 items", "gray")
                                                                                                               } else {
-                                                                                                                if (response == "magiport_failed") {
-                                                                                                                  ui_log("Magiport failed", "gray"), no_no_no(2)
+                                                                                                                if (response == "target_lock") {
+                                                                                                                  ui_log("Target Acquired: " + G.monsters[data.monster].name, "#F00B22")
                                                                                                                 } else {
-                                                                                                                  if (response == "revive_failed") {
-                                                                                                                    ui_log("Revival failed", "gray"), no_no_no(1)
+                                                                                                                  if (response == "cooldown") {
+                                                                                                                    d_text("NOT READY", character)
                                                                                                                   } else {
-                                                                                                                    console.log("Missed game_response: " + response)
+                                                                                                                    if (response == "blink_failed") {
+                                                                                                                      no_no_no();
+                                                                                                                      d_text("NO", character);
+                                                                                                                      last_blink_pressed = inception
+                                                                                                                    } else {
+                                                                                                                      if (response == "magiport_failed") {
+                                                                                                                        ui_log("Magiport failed", "gray"), no_no_no(2)
+                                                                                                                      } else {
+                                                                                                                        if (response == "revive_failed") {
+                                                                                                                          ui_log("Revival failed", "gray"), no_no_no(1)
+                                                                                                                        } else {
+                                                                                                                          console.log("Missed game_response: " + response)
+                                                                                                                        }
+                                                                                                                      }
+                                                                                                                    }
                                                                                                                   }
                                                                                                                 }
                                                                                                               }
@@ -2289,6 +2302,12 @@ function init_socket() {
                                         start_emblem(attacker, "o1", {
                                           frames: 5
                                         })
+                                      }
+                                    } else {
+                                      if (data.type == "slots") {
+                                        if (map_machines.slots) {
+                                          map_machines.slots.spinning = future_s(3)
+                                        }
                                       }
                                     }
                                   }
@@ -3336,13 +3355,26 @@ function update_sprite(m) {
       set_texture(m, m.frame)
     }
   }
-  if (m.mtype == "dice") {
-    if (m.shuffling) {
-      var h = m.updates % 4;
-      m.digits[h].texture = textures.dicesub[parseInt(Math.random() * 10)];
-      if (!(m.updates % 40)) {
-        m.cskin = "" + (parseInt(m.cskin) + 1) % 2;
-        m.texture = textures.dice[m.cskin]
+  if (m.mtype) {
+    if (m.mtype == "dice") {
+      if (m.shuffling) {
+        var h = m.updates % 4;
+        m.digits[h].texture = textures.dicesub[parseInt(Math.random() * 10)];
+        if (!(m.updates % 40)) {
+          m.cskin = "" + (parseInt(m.cskin) + 1) % 2;
+          m.texture = textures.dice[m.cskin]
+        }
+      }
+    }
+    if (m.mtype == "slots" || m.mtype == "wheel") {
+      if (m.spinning) {
+        if (!(m.updates % 2)) {
+          m.cskin = "" + (parseInt(m.cskin) + 1) % 3;
+          m.texture = textures[m.mtype][m.cskin]
+        }
+        if (m.spinning < new Date()) {
+          m.spinning = false
+        }
       }
     }
   }
@@ -3910,7 +3942,7 @@ function add_machine(d) {
   if (d.type == "dice") {
     c.digits = e_array(4);
     for (var b = 0; b < 4; b++) {
-      c.digits[b] = new PIXI.Sprite(textures.dicesub[parseInt(Math.random() * 10)]);
+      c.digits[b] = new PIXI.Sprite(textures.dicesub[8]);
       c.digits[b].anchor.set(0.5, 1);
       c.digits[b].x = -11 + b * 7;
       if (b > 1) {
@@ -3924,12 +3956,27 @@ function add_machine(d) {
     c.dot.x = 0;
     c.dot.y = -21;
     c.addChild(c.dot);
-    c.shuffling = true;
     c.shuffle_speed = 100
   }
   function a(f) {
     if (d.type == "dice") {
-      render_dice()
+      add_log("Curious device", "gray")
+    }
+    if (d.type == "wheel") {
+      add_log("The hostess isn't around", "gray")
+    }
+    if (d.type == "slots") {
+      render_interaction({
+        auto: true,
+        skin: character.skin,
+        message: "Hmm. This machine seems broken. Still give it a try? [1,000,000 gold]",
+        button: "YES!",
+        onclick: function() {
+          socket.emit("bet", {
+            type: "slots"
+          })
+        }
+      })
     }
     try {
       if (f) {
@@ -4073,6 +4120,7 @@ function create_map() {
   map_doors = [];
   map_tiles = [];
   map_entities = [];
+  map_machines = {};
   water_tiles = [];
   entities = {};
   if (!tile_sprites[current_map]) {
@@ -4361,6 +4409,7 @@ function create_map() {
     map.addChild(m);
     map_npcs.push(m);
     map_entities.push(m);
+    map_machines[m.mtype] = m;
     if (border_mode) {
       border_logic(m)
     }
