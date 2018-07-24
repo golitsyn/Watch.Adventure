@@ -3443,8 +3443,8 @@ function add_monster(d) {
   b.buttonMode = true;
   set_base(b);
   b.on("mousedown", monster_click).on("touchstart", monster_click).on("rightdown", monster_attack);
-  if (0 && G.actual_dimensions[d.type]) {
-    var e = G.actual_dimensions[d.type],
+  if (0 && G.dimensions[d.type]) {
+    var e = G.dimensions[d.type],
       a = b.anchor;
     b.hitArea = new PIXI.Rectangle(-e[0] * a.x - 2, -e[1] * a.y - 2, e[0] + 4, e[1] + 4);
     b.awidth = e[0];
