@@ -333,7 +333,7 @@ function render_slots(f) {
     for (var d = 0; d < 4; d++) {
       e += "<div>";
       for (var b = 0; b < 4; b++) {
-        c("trade" + ((d * 4) + b + 1), "shade_gold", 0.25)
+        c("trade" + ((d * 4) + b + 1), "shade_gold", 0.36)
       }
       e += "</div>"
     }
@@ -368,10 +368,10 @@ function render_slots(f) {
   e += "</div>";
   if ((f.me && f.slots.trade1 !== undefined || (f.slots.trade1 || f.slots.trade2 || f.slots.trade3 || f.slots.trade4)) && !f.stand) {
     e += "<div>";
-    c("trade1", "shade_gold", 0.25);
-    c("trade2", "shade_gold", 0.25);
-    c("trade3", "shade_gold", 0.25);
-    c("trade4", "shade_gold", 0.25);
+    c("trade1", "shade_gold", 0.36);
+    c("trade2", "shade_gold", 0.36);
+    c("trade3", "shade_gold", 0.36);
+    c("trade4", "shade_gold", 0.36);
     e += "</div>"
   }
   if (f.stand) {
@@ -743,7 +743,7 @@ function render_exchange_shrine(d) {
   b += item_container({
     shade: a,
     cid: "eitem",
-    s_op: 0.36,
+    s_op: 0.5,
     draggable: false,
     droppable: true
   });
@@ -1197,6 +1197,8 @@ function render_secondhands(l) {
   d += "<div id='merchant-item' style='display: inline-block; vertical-align: top; margin-left: 5px'></div>";
   $("#topleftcornerui").html(d)
 }
+var last_selector = "";
+
 function render_item(p, b) {
   var s = b.item || {
     skin: "test",
@@ -1210,10 +1212,19 @@ function render_item(p, b) {
     g = s.name,
     c = false;
   var m = b && b.actual;
-  var d = calculate_item_properties(s, m || {}),
+  if (p && p != "html") {
+    last_selector = p
+  } else {
+    if (p != "html") {
+      p = last_selector
+    }
+  }
+  var d = b.prop || calculate_item_properties(s, m || {}),
     a = calculate_item_grade(s, m || {});
   var h = "";
-  h += "<div style='background-color: black; border: 5px solid gray; font-size: 24px; display: inline-block; padding: 20px; line-height: 24px; max-width: 240px; " + (b.styles || "") + "' class='buyitem'>";
+  if (!b.pure) {
+    h += "<div style='background-color: black; border: 5px solid gray; font-size: 24px; display: inline-block; padding: 20px; line-height: 24px; max-width: 240px; " + (b.styles || "") + "' class='buyitem'>"
+  }
   if (!s) {
     h += "ITEM"
   } else {
@@ -1246,7 +1257,9 @@ function render_item(p, b) {
       h += "<div style='color: " + o + "; display: inline-block; border-bottom: 2px dashed gray; margin-bottom: 3px; color: #AB7951' class='cbold'>" + s.card + "</div>";
       h += "</div>"
     } else {
-      h += "<div style='color: " + o + "; display: inline-block; border-bottom: 2px dashed gray; margin-bottom: 3px' class='cbold'>" + g + "</div>"
+      if (!b.pure) {
+        h += "<div style='color: " + o + "; display: inline-block; border-bottom: 2px dashed gray; margin-bottom: 3px' class='cbold'>" + g + "</div>"
+      }
     }(s.gives || []).forEach(function(q) {
       if (q[0] == "hp") {
         h += bold_prop_line("HP", "+" + q[1], colors.hp)
@@ -1382,6 +1395,9 @@ function render_item(p, b) {
     }
     if (s.explanation) {
       h += "<div style='color: #C3C3C3'>" + s.explanation + "</div>"
+    }
+    if (s.set) {
+      h += "<div><span style='color: #f1c054;'>Set</span>: <span class='clickable' onclick='render_set(\"" + s.set + "\")'>" + G.sets[s.set].name + "</span></div>"
     }
     if (b.minutes) {
       h += bold_prop_line("Minutes", b.minutes, "gray")
@@ -1569,12 +1585,35 @@ function render_item(p, b) {
       h += bold_prop_line("From", b.from, "#BED4DE")
     }
   }
-  h += "</div>";
+  if (!b.pure) {
+    h += "</div>"
+  }
   if (p == "html") {
     return h
   } else {
     $(p).html(h)
   }
+}
+function render_set(b) {
+  var d = G.sets[b],
+    a = last_selector;
+  var c = "<div style='background-color: black; border: 5px solid gray; font-size: 24px; display: inline-block; padding: 20px; line-height: 24px; max-width: 280px;' class='buyitem'>";
+  c += "<div style='color: #f1c054; border-bottom: 2px dashed gray; margin-bottom: 3px' class='cbold'>" + d.name + "</div>";
+  d.items.forEach(function(e) {
+    c += item_container({
+      skin: G.items[e].skin
+    })
+  });[1, 2, 3, 4, 5].forEach(function(e) {
+    if (d[e]) {
+      c += "<div><span style='color:gray'>[" + e + " Item]</span> " + render_item("html", {
+        pure: true,
+        item: d[e],
+        prop: d[e]
+      }) + "</div>"
+    }
+  });
+  c += "</div>";
+  $(a).html(c)
 }
 function render_condition(a, b) {
   var d = G.conditions[b],
@@ -2946,8 +2985,8 @@ function precompute_image_positions() {
           continue
         }
         IID[a] = [b, k, d * b / e.columns, f * k / e.rows, b / (e.columns * 3), k / (e.rows * 4), e.file];
-        if (G.actual_dimensions[a]) {
-          IID[a][2] = IID[a][2] + (G.actual_dimensions[a][2] || 0)
+        if (G.dimensions[a]) {
+          IID[a][2] = IID[a][2] + (G.dimensions[a][2] || 0)
         }
       }
     }
