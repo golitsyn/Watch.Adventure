@@ -1,26 +1,27 @@
 var G = {
   "tilesets": {
-    "stands": "/images/tiles/items/stands.png?v=2",
-    "dungeon": "/images/tiles/map/dungeon.png?v=3",
-    "ash": "/images/tiles/map/ashlands.png",
-    "custom_a": "/images/tiles/map/custom_a.png?v=3",
-    "ship": "/images/tiles/map/ship.png",
     "house": "/images/tiles/map/house.png?v=4",
-    "inside": "/images/tiles/map/inside.png?v=5",
-    "licht": "/images/tiles/monsters/monster_lich.png",
-    "custom2": "/images/tiles/map/custom2.png?v=14",
-    "custom": "/images/tiles/map/custom.png?v=9",
-    "water": "/images/tiles/map/water_updated.png?v=8",
-    "outside": "/images/tiles/map/outside.png?v=4",
-    "jungle": "/images/tiles/map/jungle.png",
-    "doors": "/images/tiles/map/doors.png",
-    "dark": "/images/tiles/map/dark_dimension.png?v=0",
-    "new": "/images/tiles/map/new.png?v=11",
-    "castle": "/images/tiles/map/castle.png?v=2",
-    "fort": "/images/tiles/map/fort.png?v=3",
-    "beach": "/images/tiles/map/beach_v2.png",
     "puzzle": "/images/tiles/map/puzzle.png?v=6",
-    "winter": "/images/tiles/map/winter.png?v=4"
+    "custom2": "/images/tiles/map/custom2.png?v=14",
+    "ship": "/images/tiles/map/ship.png",
+    "dungeon": "/images/tiles/map/dungeon.png?v=3",
+    "stands": "/images/tiles/items/stands.png?v=2",
+    "winter": "/images/tiles/map/winter.png?v=4",
+    "custom": "/images/tiles/map/custom.png?v=9",
+    "outside": "/images/tiles/map/outside.png?v=4",
+    "doors": "/images/tiles/map/doors.png",
+    "new": "/images/tiles/map/new.png?v=11",
+    "beach": "/images/tiles/map/beach_v2.png",
+    "custom_a": "/images/tiles/map/custom_a.png?v=3",
+    "water": "/images/tiles/map/water_updated.png?v=8",
+    "ash": "/images/tiles/map/ashlands.png",
+    "fort": "/images/tiles/map/fort.png?v=3",
+    "dark": "/images/tiles/map/dark_dimension.png?v=0",
+    "inside": "/images/tiles/map/inside.png?v=5",
+    "jungle": "/images/tiles/map/jungle.png",
+    "castle": "/images/tiles/map/castle.png?v=2",
+    "ruins": "/images/tiles/map/ruins.png",
+    "licht": "/images/tiles/monsters/monster_lich.png"
   },
   "classes": {
     "merchant": {
@@ -277,6 +278,56 @@ var G = {
   }, {
     "key": "community"
   }],
+  "dimensions": {
+    "wolfie": [60, 48, -3],
+    "xscorpion": [30, 30, 1.5],
+    "kitty3": [20, 20, 0, 6, 5],
+    "boar": [42, 36, -4],
+    "skeletor": [24, 36, -4],
+    "poisio": [36, 34, -4],
+    "kitty4": [20, 20, 0, 6, 5],
+    "scorpion": [30, 30, 1.5],
+    "kitty1": [20, 20, 0, 6, 5],
+    "frog": [36, 24, -4],
+    "kitty2": [20, 20, 0, 6, 5],
+    "squig": [34, 26, -10, 1],
+    "plantoid": [30, 36, -2],
+    "jrat": [30, 22],
+    "wabbit": [30, 22],
+    "bbpompom": [32, 35, 2],
+    "puppy1": [20, 20, 0, 6, 5],
+    "armadillo": [36, 34, -4],
+    "snake": [30, 24],
+    "bat": [38, 36],
+    "iceroamer": [22, 36, -2],
+    "crabx": [36, 26, -1],
+    "bee": [26, 33],
+    "minimush": [23, 22, -3],
+    "creator": [48, 42],
+    "puppy4": [20, 20, 0, 6, 5],
+    "default_character": [26, 35],
+    "spider": [30, 20, 1.5],
+    "puppy2": [20, 20, 0, 6, 5],
+    "puppy3": [20, 20, 0, 6, 5],
+    "rat": [30, 22],
+    "mole": [30, 20],
+    "gscorpion": [30, 30, 1.5],
+    "goo": [23, 22, -3, 7, 6],
+    "dknight2": [47, 48],
+    "croc": [45, 32, -2],
+    "stoneworm": [30, 24],
+    "pinkgoo": [23, 22, -3],
+    "squigtoad": [36, 30, -4],
+    "phoenix": [61, 55],
+    "arcticbee": [26, 33],
+    "osnake": [30, 22],
+    "ghost": [27, 35, -2],
+    "cgoo": [23, 22, -3],
+    "tortoise": [36, 27, -3],
+    "bigbird": [58, 54],
+    "goldenbat": [38, 36],
+    "wolf": [60, 48, -3]
+  },
   "maps": {
     "abtesting": {
       "npcs": [],
@@ -1343,7 +1394,7 @@ var G = {
       "irregular": true
     }
   },
-  "version": 305,
+  "version": 306,
   "conditions": {
     "tarot_5swords": {
       "name": "Tarot Card",
@@ -2208,8 +2259,8 @@ var G = {
       "size": 20
     },
     "pack_20": {
-      "rows": 35,
-      "file": "/images/tiles/items/pack_20.png?v=25",
+      "rows": 39,
+      "file": "/images/tiles/items/pack_20.png?v=27",
       "columns": 16,
       "size": 20
     },
@@ -2420,55 +2471,3272 @@ var G = {
       "file": "/images/sprites/animations/Block.png"
     }
   },
-  "actual_dimensions": {
-    "wolfie": [60, 48, -3],
-    "xscorpion": [30, 30, 1.5],
-    "kitty3": [20, 20, 0, 6, 5],
-    "boar": [42, 36, -4],
-    "skeletor": [24, 36, -4],
-    "poisio": [36, 34, -4],
-    "kitty4": [20, 20, 0, 6, 5],
-    "scorpion": [30, 30, 1.5],
-    "kitty1": [20, 20, 0, 6, 5],
-    "frog": [36, 24, -4],
-    "kitty2": [20, 20, 0, 6, 5],
-    "squig": [34, 26, -10, 1],
-    "plantoid": [30, 36, -2],
-    "jrat": [30, 22],
-    "wabbit": [30, 22],
-    "bbpompom": [32, 35, 2],
-    "puppy1": [20, 20, 0, 6, 5],
-    "armadillo": [36, 34, -4],
-    "snake": [30, 24],
-    "bat": [38, 36],
-    "iceroamer": [22, 36, -2],
-    "crabx": [36, 26, -1],
-    "bee": [26, 33],
-    "minimush": [23, 22, -3],
-    "creator": [48, 42],
-    "puppy4": [20, 20, 0, 6, 5],
-    "default_character": [26, 35],
-    "spider": [30, 20, 1.5],
-    "puppy2": [20, 20, 0, 6, 5],
-    "puppy3": [20, 20, 0, 6, 5],
-    "rat": [30, 22],
-    "mole": [30, 20],
-    "gscorpion": [30, 30, 1.5],
-    "goo": [23, 22, -3, 7, 6],
-    "dknight2": [47, 48],
-    "croc": [45, 32, -2],
-    "stoneworm": [30, 24],
-    "pinkgoo": [23, 22, -3],
-    "squigtoad": [36, 30, -4],
-    "phoenix": [61, 55],
-    "arcticbee": [26, 33],
-    "osnake": [30, 22],
-    "ghost": [27, 35, -2],
-    "cgoo": [23, 22, -3],
-    "tortoise": [36, 27, -3],
-    "bigbird": [58, 54],
-    "goldenbat": [38, 36],
-    "wolf": [60, 48, -3]
+  "items": {
+    "harbringer": {
+      "explanation": "Pure, unfiltered power!",
+      "damage": "magical",
+      "grades": [0, 6],
+      "skin": "harbringer",
+      "a": true,
+      "upgrade": {
+        "attack": 6,
+        "range": 3,
+        "rpiercing": 5
+      },
+      "name": "Harbringer",
+      "g": 289000,
+      "wtype": "staff",
+      "range": 50,
+      "trex": "This staff is a relic of a past age long forgotten. Thought to be forged by the God of Lighting. Those who have seen this staff claim it radiates powerful energy. Though this staff is only wielded by few, it is feared by all.",
+      "attack": 40,
+      "edge": 3,
+      "rpiercing": 10,
+      "type": "weapon"
+    },
+    "test2": {
+      "ignore": true,
+      "explanation": "An item to test item looks, just set the 'skin' property.",
+      "type": "test",
+      "name": "Test",
+      "skin": "test"
+    },
+    "dexamulet": {
+      "dex": 4,
+      "name": "Amulet of Dexterity",
+      "g": 30000,
+      "skin": "dexamulet",
+      "grades": [3, 5],
+      "compound": {
+        "dex": 3
+      },
+      "type": "amulet"
+    },
+    "shoes": {
+      "stat": 1,
+      "set": "base",
+      "grades": [7, 9],
+      "skin": "shoes",
+      "tier": 1,
+      "speed": 5.0,
+      "upgrade": {
+        "armor": 1.25,
+        "stat": 1,
+        "speed": 0.625
+      },
+      "name": "Shoes",
+      "g": 12100,
+      "armor": 4,
+      "type": "shoes",
+      "scroll": true
+    },
+    "stoneofluck": {
+      "ignore": true,
+      "days": 30,
+      "skin_a": "stoneofluck",
+      "g": 153600000,
+      "skin": "stoneofluck",
+      "explanation": "Increases your chances to loot something from a monster by 20%.",
+      "type": "stone",
+      "cash": 4800,
+      "name": "Stone of Luck"
+    },
+    "candy1v2": {
+      "e": 1,
+      "name": "Candy",
+      "g": 2400,
+      "explanation": "A delicious candy. Xyn in New Town could give you something in exchange!",
+      "s": true,
+      "skin": "candy1",
+      "type": "gem"
+    },
+    "essenceoflife": {
+      "name": "Essence of Life",
+      "g": 1,
+      "explanation": "Full of life, literally.",
+      "s": true,
+      "skin": "essenceoflife",
+      "type": "material"
+    },
+    "xgloves": {
+      "stat": 1,
+      "grade": 2,
+      "resistance": 16,
+      "grades": [0, 0],
+      "skin": "xgloves",
+      "tier": 4,
+      "a": 2,
+      "upgrade": {
+        "armor": 5.5,
+        "stat": 1,
+        "resistance": 5.5
+      },
+      "name": "Darkforge Gloves",
+      "g": 3400000,
+      "armor": 32,
+      "edge": 6,
+      "type": "gloves",
+      "scroll": true
+    },
+    "elixirdex1": {
+      "dex": 8,
+      "name": "Elixir of Greater Dexterity",
+      "g": 20000,
+      "s": true,
+      "skin_a": "elixirdex1",
+      "skin": "elixirdex1",
+      "duration": 24,
+      "type": "elixir"
+    },
+    "vitscroll": {
+      "stat": "vit",
+      "name": "Vitality Scroll",
+      "g": 8000,
+      "explanation": "Adds Vitality to an armor with a Stat attribute.",
+      "s": true,
+      "skin": "vitscroll",
+      "type": "pscroll"
+    },
+    "cape": {
+      "stat": 4,
+      "upgrade": {
+        "armor": 2,
+        "resistance": 1
+      },
+      "grades": [0, 8],
+      "name": "Cape",
+      "g": 20000,
+      "skin": "cape0",
+      "armor": 10,
+      "type": "cape",
+      "resistance": 8
+    },
+    "pumpkinspice": {
+      "explanation": "Produced in bulk during the Halloween season. WARNING: The pumpkin comes from a non-vegetable source",
+      "crit": 5,
+      "skin_a": "pumpkinspice",
+      "skin": "pumpkinspice",
+      "duration": 8,
+      "reflection": 2,
+      "name": "Pumpkin Spice Latte",
+      "g": 200,
+      "type": "elixir",
+      "s": true,
+      "mp": -400,
+      "aspeed": -20
+    },
+    "hboots": {
+      "stat": 1,
+      "grade": 2,
+      "resistance": 6,
+      "grades": [0, 0],
+      "skin": "hboots",
+      "tier": 3,
+      "speed": 7.0,
+      "a": 2,
+      "upgrade": {
+        "armor": 4.25,
+        "stat": 1,
+        "speed": 1.125,
+        "resistance": 2.125
+      },
+      "name": "Heavy Boots",
+      "g": 1240000,
+      "armor": 12,
+      "edge": 4,
+      "type": "shoes",
+      "scroll": true
+    },
+    "phelmet": {
+      "stat": 1,
+      "grade": 1,
+      "resistance": 16,
+      "grades": [0, 7],
+      "protection": true,
+      "skin": "phelmet",
+      "tier": 2,
+      "name": "Pumpkin Head",
+      "a": 2,
+      "upgrade": {
+        "armor": 2.5,
+        "stat": 1,
+        "reflection": 0.40000000000000002,
+        "resistance": 2.5
+      },
+      "reflection": 1,
+      "g": 72000,
+      "armor": 14,
+      "edge": 4,
+      "type": "helmet",
+      "scroll": true
+    },
+    "bunnyelixir": {
+      "hp": 200,
+      "skin_a": "bunnyelixir",
+      "vit": 15,
+      "skin": "bunnyelixir",
+      "duration": 2,
+      "speed": 12,
+      "dex": 4,
+      "name": "Bunny Energy Drink",
+      "g": 6000,
+      "s": true,
+      "mp": 300,
+      "type": "elixir",
+      "explanation": "Ingredients: Rabbit sweat, bubble gum flavour"
+    },
+    "sshield": {
+      "dreturn": 3,
+      "grades": [4, 8],
+      "upgrade": {
+        "armor": 10,
+        "dreturn": 1.5,
+        "resistance": 7
+      },
+      "name": "Spiked Shield",
+      "g": 24000,
+      "skin": "sshield",
+      "armor": 60,
+      "type": "shield",
+      "resistance": 20
+    },
+    "cscale": {
+      "name": "Croc Scale",
+      "g": 200,
+      "explanation": "A very hard scale, can be sewn onto armors.",
+      "s": true,
+      "skin": "cscale",
+      "type": "material"
+    },
+    "puppyer": {
+      "name": "Licence to Adopt a Puppy",
+      "g": 10000,
+      "explanation": "Lets you adopt a puppy once they are ready. You'll have to wait a bit until they are ready to be adopted tho!",
+      "s": true,
+      "skin": "puppyer",
+      "type": "petlicence"
+    },
+    "bowofthedead": {
+      "a": true,
+      "upgrade": {
+        "crit": 0.20000000000000001,
+        "attack": 4.75,
+        "range": 7
+      },
+      "vit": -2,
+      "g": 228000,
+      "speed": -12,
+      "wtype": "bow",
+      "range": 50,
+      "damage": "physical",
+      "crit": 1,
+      "attack": 26,
+      "edge": 3,
+      "grades": [0, 6],
+      "str": 20,
+      "skin": "bowofthedead",
+      "tier": 2,
+      "type": "weapon",
+      "explanation": "A weapon of death",
+      "name": "Bow of the Dead"
+    },
+    "mistletoe": {
+      "a": true,
+      "s": true,
+      "e": 1,
+      "name": "Mistletoe",
+      "g": 20000,
+      "skin": "mistletoe",
+      "explanation": "Maybe someone could give you a kiss in exchange...",
+      "type": "gem"
+    },
+    "elixirstr2": {
+      "a": true,
+      "g": 120000,
+      "s": true,
+      "name": "Elixir of Extreme Strength",
+      "str": 12,
+      "skin": "elixirstr2",
+      "duration": 48,
+      "type": "elixir",
+      "skin_a": "elixirstr2"
+    },
+    "cupid": {
+      "damage": "heal",
+      "grades": [0, 6],
+      "vit": 10,
+      "skin": "cupid",
+      "tier": 2.5,
+      "event": true,
+      "a": true,
+      "upgrade": {
+        "attack": 5.125,
+        "range": 8,
+        "vit": 2
+      },
+      "name": "Cupid's Bow",
+      "g": 90000,
+      "wtype": "bow",
+      "range": 60,
+      "attack": 29.0,
+      "edge": 3,
+      "type": "weapon"
+    },
+    "x7": {
+      "a": true,
+      "name": "Quantum Piece",
+      "g": 4000,
+      "explanation": "A unique component of a curious puzzle",
+      "s": true,
+      "skin": "x7",
+      "type": "quest"
+    },
+    "armorbox": {
+      "a": true,
+      "s": true,
+      "e": 1,
+      "name": "Armor Box",
+      "g": 120000,
+      "skin": "armorbox",
+      "explanation": "Can be exchanged for a random, rare armor.",
+      "type": "box"
+    },
+    "orbofres": {
+      "name": "Orb of Resistance",
+      "g": 240000,
+      "skin": "blueorb",
+      "resistance": 40,
+      "ignore": true,
+      "compound": {
+        "resistance": 20
+      },
+      "type": "orb"
+    },
+    "evasionscroll": {
+      "stat": "evasion",
+      "name": "Evasion Scroll",
+      "g": 8000,
+      "explanation": "Adds Evasion to an armor with a Stat attribute.",
+      "s": true,
+      "skin": "vitscroll",
+      "type": "pscroll"
+    },
+    "x4": {
+      "a": true,
+      "name": "Quantum Piece",
+      "g": 4000,
+      "explanation": "A unique component of a curious puzzle",
+      "s": true,
+      "skin": "x4",
+      "type": "quest"
+    },
+    "hpamulet": {
+      "name": "Amulet of HP",
+      "g": 20000,
+      "hp": 100,
+      "skin": "hpamulet",
+      "grades": [3, 5],
+      "compound": {
+        "hp": 120
+      },
+      "type": "amulet"
+    },
+    "shoes1": {
+      "stat": 1,
+      "grade": 1,
+      "grades": [0, 7],
+      "skin": "shoes1",
+      "tier": 2,
+      "speed": 6.0,
+      "a": 2,
+      "upgrade": {
+        "armor": 2.5,
+        "stat": 1,
+        "speed": 0.875
+      },
+      "name": "Rugged Shoes",
+      "g": 120000,
+      "armor": 8,
+      "edge": 2,
+      "type": "shoes",
+      "scroll": true
+    },
+    "goldbooster": {
+      "gold": 30,
+      "explanation": "Boosts gold loot from chests.",
+      "compound": {
+        "gold": 10
+      },
+      "cash": 499,
+      "grades": [0, 10],
+      "skin_a": "goldbooster_a",
+      "skin": "goldbooster",
+      "name": "Gold Booster",
+      "g": 15968000,
+      "days": 30,
+      "type": "booster",
+      "gain": "gold"
+    },
+    "swirlipop": {
+      "intelligence": -40,
+      "explanation": "A dizzying candy, has some benefits.",
+      "resistance": -300,
+      "g": 10000,
+      "skin_a": "swirlipop",
+      "skin": "swirlipop",
+      "duration": 0.0080000000000000002,
+      "eat": true,
+      "a": true,
+      "name": "Swirlipop",
+      "evasion": 90,
+      "s": true,
+      "withdrawal": true,
+      "type": "elixir"
+    },
+    "throwingstars": {
+      "attack": 5,
+      "upgrade": {
+        "attack": 2.5,
+        "range": 4
+      },
+      "grades": [7, 9],
+      "name": "Throwing Stars",
+      "g": 72000,
+      "skin": "throwingstars",
+      "wtype": "stars",
+      "type": "weapon",
+      "range": 50,
+      "damage": "physical"
+    },
+    "rednose": {
+      "a": true,
+      "range": 3,
+      "grades": [2, 4],
+      "name": "Rudolph's Red Nose",
+      "g": 32000,
+      "skin": "rednose",
+      "cuteness": 9,
+      "compound": {
+        "cuteness": 3,
+        "range": 4
+      },
+      "type": "helmet",
+      "scroll": true
+    },
+    "stoneofgold": {
+      "ignore": true,
+      "days": 30,
+      "skin_a": "stoneofgold",
+      "g": 153600000,
+      "skin": "stoneofgold",
+      "explanation": "Helps you find up to 40% more gold from monsters.",
+      "type": "stone",
+      "cash": 4800,
+      "name": "Stone of Riches"
+    },
+    "wingedboots": {
+      "stat": 1,
+      "resistance": 20,
+      "grades": [0, 7],
+      "frequency": 3,
+      "skin": "wingedboots",
+      "tier": 1.5,
+      "speed": 8,
+      "upgrade": {
+        "armor": 1.875,
+        "stat": 1,
+        "frequency": 0.625,
+        "speed": 1,
+        "resistance": 1.875
+      },
+      "name": "Winged Boots",
+      "g": 150000,
+      "armor": 6.0,
+      "credit": "Pluet",
+      "edge": 1.0,
+      "type": "shoes",
+      "scroll": true
+    },
+    "wshield": {
+      "stat": 2,
+      "upgrade": {
+        "armor": 8,
+        "resistance": 5
+      },
+      "grades": [7, 9],
+      "name": "Wooden Shield",
+      "g": 4800,
+      "skin": "wshield",
+      "armor": 40,
+      "type": "shield",
+      "resistance": 15
+    },
+    "t2dexamulet": {
+      "dex": 6,
+      "g": 800000,
+      "grades": [0, 2],
+      "name": "Amulet of the Stubborn Ranger",
+      "vit": 5,
+      "skin": "t2dexamulet",
+      "compound": {
+        "dex": 3,
+        "vit": 3
+      },
+      "type": "amulet"
+    },
+    "bcape": {
+      "stat": 5,
+      "resistance": 12,
+      "grades": [0, 4],
+      "skin": "cape1",
+      "a": true,
+      "upgrade": {
+        "armor": 3,
+        "resistance": 2
+      },
+      "name": "Well-Crafted Cape",
+      "g": 2400000,
+      "armor": 18,
+      "edge": 10,
+      "type": "cape"
+    },
+    "dexbelt": {
+      "dex": 4,
+      "name": "Belt of Dexterity",
+      "g": 50000,
+      "skin": "dexbelt",
+      "grades": [2, 5],
+      "compound": {
+        "dex": 3
+      },
+      "type": "belt"
+    },
+    "hpbelt": {
+      "name": "Belt of HP",
+      "g": 20000,
+      "hp": 80,
+      "skin": "hpbelt",
+      "grades": [3, 5],
+      "compound": {
+        "hp": 120
+      },
+      "type": "belt"
+    },
+    "ringsj": {
+      "dex": 1,
+      "g": 24000,
+      "grades": [3, 5],
+      "name": "Ring of Small Joys",
+      "str": 1,
+      "skin": "ring",
+      "int": 1,
+      "compound": {
+        "int": 1,
+        "dex": 1,
+        "resistance": 5,
+        "str": 1
+      },
+      "type": "ring",
+      "resistance": 5
+    },
+    "confetti": {
+      "onclick": "socket.emit('throw',{num:locate_item('confetti'),x:character.real_x,y:character.real_y})",
+      "s": true,
+      "name": "Pack of Confetti's",
+      "g": 20,
+      "skin": "confetti",
+      "action": "THROW!",
+      "explanation": "To celebrate good times",
+      "type": "throw"
+    },
+    "candycanesword": {
+      "ability": "sugarrush",
+      "damage": "physical",
+      "grades": [0, 8],
+      "skin": "candycanesword",
+      "a": true,
+      "upgrade": {
+        "attack": 4.5,
+        "range": 1
+      },
+      "name": "Candy Cane Sword",
+      "g": 72000,
+      "wtype": "short_sword",
+      "range": 3,
+      "attack": 20,
+      "edge": 2,
+      "type": "weapon"
+    },
+    "t2stramulet": {
+      "g": 800000,
+      "grades": [0, 2],
+      "name": "Amulet of the Eager Warrior",
+      "str": 5,
+      "skin": "t2stramulet",
+      "compound": {
+        "resistance": 20,
+        "str": 3
+      },
+      "type": "amulet",
+      "resistance": 30
+    },
+    "molesteeth": {
+      "a": true,
+      "grades": [0, 1],
+      "name": "Mole's Teeth",
+      "g": 500000,
+      "skin": "molesteeth",
+      "compound": {
+        "apiercing": 15
+      },
+      "type": "earring",
+      "apiercing": 15
+    },
+    "xmassweater": {
+      "stat": 1,
+      "explanation": "Such a beautiful vest. But for some reason, every time you wear this, people seem to avoid you.",
+      "skin": "xmassweater",
+      "resistance": 12.0,
+      "grades": [4, 8],
+      "evasion": 0.5,
+      "tier": 1.5,
+      "a": true,
+      "upgrade": {
+        "armor": 1.875,
+        "stat": 1,
+        "resistance": 1.875,
+        "evasion": 0.25
+      },
+      "name": "Xmas Sweater",
+      "g": 16000,
+      "armor": 18.0,
+      "edge": 1.0,
+      "type": "chest",
+      "scroll": true
+    },
+    "gem1": {
+      "a": 2,
+      "s": true,
+      "e": 1,
+      "name": "Tiny Ruby",
+      "g": 24000,
+      "skin": "gem1",
+      "explanation": "A hard to find gem. Can be exchanged for random treasures.",
+      "type": "gem"
+    },
+    "gem0": {
+      "a": true,
+      "s": true,
+      "e": 1,
+      "name": "Raw Emerald",
+      "g": 240000,
+      "skin": "gem0",
+      "explanation": "A very rare gem. Can be exchanged for random treasures.",
+      "type": "gem"
+    },
+    "leather": {
+      "s": true,
+      "quest": "leather",
+      "e": 40,
+      "name": "Leather",
+      "g": 3000,
+      "skin": "leather",
+      "explanation": "A Leather piece.",
+      "type": "quest"
+    },
+    "supermittens": {
+      "stat": 1,
+      "grade": 1,
+      "explanation": "Swift and lethal!",
+      "resistance": 8,
+      "grades": [0, 0],
+      "skin": "supermittens",
+      "tier": 2,
+      "a": true,
+      "upgrade": {
+        "stat": 1,
+        "rpiercing": 3,
+        "armor": 2.5,
+        "apiercing": 3,
+        "resistance": 2.5,
+        "aspeed": 0.20000000000000001
+      },
+      "name": "Super Mittens",
+      "g": 340000,
+      "armor": 16,
+      "type": "gloves",
+      "apiercing": 32,
+      "edge": 2,
+      "rpiercing": 32,
+      "aspeed": 2,
+      "scroll": true
+    },
+    "figurine": {
+      "name": "Terracota Army Figurine",
+      "g": 40000,
+      "s": true,
+      "skin": "figurine",
+      "action": "BREAK!",
+      "type": "figurine"
+    },
+    "luckbooster": {
+      "explanation": "Increases your chances of looting something from a monster.",
+      "compound": {
+        "luck": 20
+      },
+      "cash": 499,
+      "grades": [0, 10],
+      "skin_a": "luckbooster_a",
+      "skin": "luckbooster",
+      "name": "Luck Booster",
+      "g": 15968000,
+      "days": 30,
+      "gain": "luck",
+      "type": "booster",
+      "luck": 25
+    },
+    "mittens": {
+      "stat": 1,
+      "explanation": "Cute but deadly.",
+      "resistance": 6.0,
+      "grades": [4, 8],
+      "skin": "mittens",
+      "tier": 1.5,
+      "a": true,
+      "upgrade": {
+        "armor": 1.875,
+        "stat": 1,
+        "apiercing": 2,
+        "rpiercing": 2,
+        "resistance": 1.875
+      },
+      "name": "Mittens",
+      "g": 34000,
+      "armor": 12.0,
+      "apiercing": 20,
+      "edge": 1.0,
+      "rpiercing": 20,
+      "type": "gloves",
+      "scroll": true
+    },
+    "elixirdex2": {
+      "dex": 12,
+      "a": true,
+      "s": true,
+      "name": "Elixir of Extreme Dexterity",
+      "g": 120000,
+      "skin": "elixirdex2",
+      "duration": 48,
+      "type": "elixir",
+      "skin_a": "elixirdex2"
+    },
+    "jewellerybox": {
+      "a": true,
+      "s": true,
+      "e": 1,
+      "name": "Jewellery Box",
+      "g": 80000,
+      "skin": "chest3",
+      "explanation": "Can be exchanged for a random acessory.",
+      "type": "box"
+    },
+    "funtoken": {
+      "name": "FUN Token",
+      "g": 12000,
+      "explanation": "A token representing fun with friends. Collect them from Daily events and exchange them for treasures!",
+      "s": true,
+      "skin": "funtoken",
+      "type": "token"
+    },
+    "gloves": {
+      "stat": 1,
+      "set": "base",
+      "resistance": 4,
+      "grades": [7, 9],
+      "skin": "gloves",
+      "tier": 1,
+      "upgrade": {
+        "armor": 1.25,
+        "stat": 1,
+        "resistance": 1.25
+      },
+      "name": "Gloves",
+      "g": 3400,
+      "armor": 8,
+      "type": "gloves",
+      "scroll": true
+    },
+    "xboots": {
+      "stat": 1,
+      "grade": 2,
+      "resistance": 8,
+      "grades": [0, 0],
+      "skin": "xboots",
+      "tier": 4,
+      "speed": 8.0,
+      "a": 2,
+      "upgrade": {
+        "armor": 5.5,
+        "stat": 1,
+        "speed": 1.375,
+        "resistance": 2.75
+      },
+      "name": "Darkforge Boots",
+      "g": 12400000,
+      "armor": 16,
+      "edge": 6,
+      "type": "shoes",
+      "scroll": true
+    },
+    "claw": {
+      "attack": 10,
+      "upgrade": {
+        "attack": 3,
+        "range": 1.5
+      },
+      "grades": [7, 9],
+      "name": "Claw",
+      "g": 7200,
+      "skin": "claw",
+      "wtype": "fist",
+      "type": "weapon",
+      "range": 5,
+      "damage": "physical"
+    },
+    "intring": {
+      "name": "Ring of Intelligence",
+      "g": 24000,
+      "int": 2,
+      "skin": "intring",
+      "grades": [3, 5],
+      "compound": {
+        "int": 2
+      },
+      "type": "ring"
+    },
+    "pants": {
+      "stat": 1,
+      "set": "base",
+      "resistance": 6,
+      "grades": [7, 9],
+      "skin": "pants",
+      "tier": 1,
+      "upgrade": {
+        "armor": 1.25,
+        "stat": 1,
+        "resistance": 1.25
+      },
+      "name": "Pants",
+      "g": 7800,
+      "armor": 10,
+      "type": "pants",
+      "scroll": true
+    },
+    "lantern": {
+      "g": 480000,
+      "grades": [0, 0],
+      "name": "The Lantern",
+      "evasion": 10,
+      "skin": "lantern",
+      "explanation": "Forged from a naturally vibrating metal",
+      "compound": {
+        "resistance": 10,
+        "evasion": 5
+      },
+      "type": "misc_offhand",
+      "resistance": 120
+    },
+    "scroll4": {
+      "a": true,
+      "s": true,
+      "name": "Ultimate Upgrade Scroll",
+      "g": 64000000,
+      "skin": "scroll4",
+      "grade": 4,
+      "explanation": "A scroll passed down from ancient times. Long believed to be extinct. Powers beyond imagination.",
+      "type": "uscroll"
+    },
+    "helmet1": {
+      "stat": 1,
+      "grade": 1,
+      "resistance": 16,
+      "grades": [0, 7],
+      "protection": true,
+      "skin": "helmet1",
+      "tier": 2,
+      "a": 2,
+      "upgrade": {
+        "armor": 2.5,
+        "stat": 1,
+        "resistance": 2.5
+      },
+      "name": "Rugged Helmet",
+      "g": 32000,
+      "armor": 14,
+      "edge": 2,
+      "type": "helmet",
+      "scroll": true
+    },
+    "scroll2": {
+      "name": "Upgrade Scroll",
+      "g": 1600000,
+      "grade": 2,
+      "explanation": "Scroll to upgrade a rare weapon or armor.",
+      "s": true,
+      "skin": "scroll2",
+      "type": "uscroll"
+    },
+    "scroll3": {
+      "a": true,
+      "s": true,
+      "name": "Legendary Upgrade Scroll",
+      "g": 3200000,
+      "skin": "scroll3",
+      "grade": 3,
+      "explanation": "A mysterious upgrade scroll, you can feel that it's very powerful.",
+      "type": "uscroll"
+    },
+    "scroll0": {
+      "name": "Upgrade Scroll",
+      "g": 1000,
+      "grade": 0,
+      "explanation": "Scroll to upgrade a weapon or armor. If the upgrade fails, the item is lost.",
+      "s": true,
+      "skin": "scroll0",
+      "type": "uscroll"
+    },
+    "scroll1": {
+      "name": "Upgrade Scroll",
+      "g": 40000,
+      "grade": 1,
+      "explanation": "Scroll to upgrade a high grade weapon or armor.",
+      "s": true,
+      "skin": "scroll1",
+      "type": "uscroll"
+    },
+    "greenbomb": {
+      "a": true,
+      "explanation": "It's a candy with very questionable ingredients, might be addictive.",
+      "resistance": -800,
+      "crit": 10,
+      "skin_a": "greenbomb",
+      "skin": "greenbomb",
+      "duration": 0.002,
+      "speed": 30,
+      "eat": true,
+      "dex": 120,
+      "name": "Green Bomb",
+      "g": 10000,
+      "s": true,
+      "str": 50,
+      "withdrawal": true,
+      "type": "elixir"
+    },
+    "daggerofthedead": {
+      "a": true,
+      "upgrade": {
+        "attack": 4.5,
+        "range": 2
+      },
+      "str": 20,
+      "g": 224000,
+      "speed": -2,
+      "wtype": "dagger",
+      "range": 5,
+      "apiercing": 20,
+      "attack": 18,
+      "grades": [0, 6],
+      "vit": -6,
+      "skin": "daggerofthedead",
+      "damage": "physical",
+      "type": "weapon",
+      "explanation": "A deadly weapon",
+      "name": "Dagger of the Dead"
+    },
+    "stonekey": {
+      "name": "The Stone Key",
+      "g": 50000,
+      "explanation": "A stone key, imbued with magical energy.",
+      "skin": "placeholder",
+      "type": "key",
+      "opens": "therush"
+    },
+    "puppy1": {
+      "a": true,
+      "name": "Egg",
+      "g": 40000,
+      "explanation": "A vibrant egg, it's inhabitant seems eager to get out.",
+      "skin": "egg1",
+      "type": "pet"
+    },
+    "darktristone": {
+      "dex": 1,
+      "evasion": 3,
+      "vit": 1,
+      "rpiercing": 5,
+      "onclick": "socket.emit('activate',{slot:$(this).data('id')})",
+      "int": 1,
+      "compound": {
+        "dex": 1,
+        "vit": 1,
+        "rpiercing": 5,
+        "int": 1,
+        "apiercing": 5,
+        "str": 1
+      },
+      "apiercing": 5,
+      "g": 50000,
+      "grades": [1, 4],
+      "skin_a": "darktristone_a",
+      "str": 1,
+      "skin": "darktristone",
+      "action": "ACTIVATE!",
+      "type": "ring",
+      "name": "Dark Tri-Stone"
+    },
+    "warmscarf": {
+      "a": true,
+      "int": 2,
+      "explanation": "Stylish and deadly!",
+      "resistance": 10,
+      "g": 20000,
+      "grades": [7, 9],
+      "skin": "warmscarf",
+      "dex": 2,
+      "upgrade": {
+        "apiercing": 1.25,
+        "rpiercing": 1.25
+      },
+      "name": "Warm Scarf",
+      "rpiercing": 5,
+      "armor": 10,
+      "apiercing": 5,
+      "str": 2,
+      "type": "amulet"
+    },
+    "oozingterror": {
+      "a": true,
+      "nopo": "Mutates the brain to maximize its potential, sapping the user's life in the process.",
+      "upgrade": {
+        "int": 1,
+        "attack": 6,
+        "range": 3,
+        "attr0": 0.02,
+        "reflection": 0.25
+      },
+      "reflection": 1,
+      "name": "Oozing Terror",
+      "int": 20,
+      "wtype": "staff",
+      "explanation": "It drains the life energy of the user",
+      "range": 50,
+      "damage": "magical",
+      "attr0": 0.10000000000000001,
+      "attack": 40,
+      "edge": 3,
+      "g": 289000,
+      "vit": -30,
+      "skin": "oozingterror",
+      "type": "weapon",
+      "grades": [0, 6],
+      "ability": "posion"
+    },
+    "pants1": {
+      "stat": 1,
+      "grade": 1,
+      "resistance": 12,
+      "grades": [0, 7],
+      "skin": "pants1",
+      "tier": 2,
+      "a": 2,
+      "upgrade": {
+        "armor": 2.5,
+        "stat": 1,
+        "resistance": 2.5
+      },
+      "name": "Rugged Pants",
+      "g": 78000,
+      "armor": 20,
+      "edge": 2,
+      "type": "pants",
+      "scroll": true
+    },
+    "xbox": {
+      "a": true,
+      "s": true,
+      "e": 1,
+      "name": "Xmas Box",
+      "g": 1000000,
+      "skin": "xbox",
+      "explanation": "Finally... They all came together. A unique gift lies within this box. Take it to Xyn to be unlocked.",
+      "type": "quest"
+    },
+    "reflectionscroll": {
+      "stat": "reflection",
+      "name": "Reflection Scroll",
+      "g": 8000,
+      "explanation": "Adds Reflection to an armor with a Stat attribute.",
+      "s": true,
+      "skin": "vitscroll",
+      "type": "pscroll"
+    },
+    "angelwings": {
+      "stat": 3,
+      "skin": "angelwings",
+      "resistance": 8,
+      "grades": [0, 6],
+      "evasion": 1,
+      "speed": 1,
+      "a": true,
+      "upgrade": {
+        "speed": 0.20000000000000001,
+        "resistance": 1,
+        "evasion": 0.20000000000000001
+      },
+      "name": "Angel Wings",
+      "g": 120000,
+      "onclick": "socket.emit('activate',{slot:$(this).data('id')})",
+      "action": "FLAP",
+      "type": "cape"
+    },
+    "storagebox": {
+      "name": "Storage Box",
+      "g": 9000,
+      "explanation": "It's a nifty little box",
+      "s": true,
+      "skin": "storagebox",
+      "type": "misc"
+    },
+    "elixirstr0": {
+      "name": "Elixir of Strength",
+      "g": 6000,
+      "s": true,
+      "skin_a": "elixirstr0",
+      "str": 6,
+      "skin": "elixirstr0",
+      "duration": 12,
+      "type": "elixir"
+    },
+    "rabbitsfoot": {
+      "a": true,
+      "grades": [0, 0],
+      "edge": 5,
+      "name": "Rabbit's Foot",
+      "g": 120000,
+      "skin": "rabbitsfoot",
+      "explanation": "Taken from a rabbit who lived a long and happy life, after the natural death occurred, with pre-consent",
+      "compound": {
+        "luck": 5
+      },
+      "type": "orb",
+      "luck": 10
+    },
+    "elixirint0": {
+      "name": "Elixir of Intelligence",
+      "g": 6000,
+      "int": 6,
+      "s": true,
+      "skin_a": "elixirint0",
+      "skin": "elixirint0",
+      "duration": 12,
+      "type": "elixir"
+    },
+    "elixirstr1": {
+      "name": "Elixir of Greater Strength",
+      "g": 20000,
+      "s": true,
+      "skin_a": "elixirstr1",
+      "str": 8,
+      "skin": "elixirstr1",
+      "duration": 24,
+      "type": "elixir"
+    },
+    "xhelmet": {
+      "stat": 1,
+      "grade": 2,
+      "resistance": 32,
+      "grades": [0, 0],
+      "protection": true,
+      "skin": "xhelmet",
+      "tier": 4,
+      "a": 2,
+      "upgrade": {
+        "armor": 5.5,
+        "stat": 1,
+        "resistance": 5.5
+      },
+      "name": "Darkforge Helmet",
+      "g": 3200000,
+      "armor": 28,
+      "edge": 6,
+      "type": "helmet",
+      "scroll": true
+    },
+    "hpot1": {
+      "name": "HP Potion",
+      "g": 100,
+      "s": true,
+      "skin": "hpot1",
+      "type": "pot",
+      "gives": [["hp", 400]]
+    },
+    "ornament": {
+      "e": 20,
+      "name": "Xmas Ornament",
+      "g": 3000,
+      "explanation": "A beautiful ornament. A bunch of these could decorate the trees of Winterland.",
+      "s": true,
+      "skin": "ornament",
+      "type": "quest"
+    },
+    "cscroll2": {
+      "name": "Compound Scroll",
+      "g": 9200000,
+      "grade": 2,
+      "explanation": "Scroll to combine 3 rare accessories.",
+      "s": true,
+      "skin": "cscroll2",
+      "type": "cscroll"
+    },
+    "poison": {
+      "name": "Poison Sack",
+      "g": 1000,
+      "explanation": "An organic poison sack, can be used to coat weapons or arrows.",
+      "s": true,
+      "skin": "poison",
+      "type": "skill_item"
+    },
+    "orbofint": {
+      "name": "Orb of Intelligence",
+      "g": 240000,
+      "int": 5,
+      "skin": "blueorb",
+      "ignore": true,
+      "compound": {
+        "int": 5
+      },
+      "type": "orb"
+    },
+    "staff": {
+      "attack": 25,
+      "upgrade": {
+        "attack": 5,
+        "range": 3
+      },
+      "grades": [7, 9],
+      "name": "Staff",
+      "g": 12400,
+      "skin": "staff",
+      "wtype": "staff",
+      "type": "weapon",
+      "range": 50,
+      "damage": "magical"
+    },
+    "strbelt": {
+      "name": "Belt of Strength",
+      "g": 50000,
+      "skin": "strbelt",
+      "grades": [2, 5],
+      "str": 4,
+      "compound": {
+        "str": 3
+      },
+      "type": "belt"
+    },
+    "carrotsword": {
+      "a": true,
+      "damage": "physical",
+      "grades": [0, 7],
+      "skin": "carrotsword",
+      "dex": 12,
+      "upgrade": {
+        "attack": 4.5,
+        "range": 1
+      },
+      "name": "Carrot Sword",
+      "g": 92000,
+      "wtype": "short_sword",
+      "range": 3,
+      "charisma": -20,
+      "edge": 2,
+      "attack": 20,
+      "type": "weapon"
+    },
+    "vitearring": {
+      "name": "Earring of Vitality",
+      "g": 50000,
+      "skin": "vitearring",
+      "grades": [2, 5],
+      "vit": 3,
+      "compound": {
+        "vit": 2
+      },
+      "type": "earring"
+    },
+    "fclaw": {
+      "ability": "freeze",
+      "int": 8,
+      "damage": "physical",
+      "grades": [0, 7],
+      "attr0": 0.20000000000000001,
+      "skin": "fclaw",
+      "a": true,
+      "upgrade": {
+        "attack": 4,
+        "range": 1.5,
+        "attr0": 0.10000000000000001
+      },
+      "name": "Frozen Claw",
+      "g": 72000,
+      "wtype": "fist",
+      "range": 5,
+      "attack": 14,
+      "type": "weapon"
+    },
+    "essenceofether": {
+      "name": "Ethereal Essence",
+      "g": 40000,
+      "explanation": "A ghostly essence, maybe it could allow you to shift from this world momentarily",
+      "s": true,
+      "skin": "essenceofether",
+      "type": "material"
+    },
+    "lostearring": {
+      "explanation": "Looks valuable",
+      "compound": {},
+      "grades": [0, 1],
+      "quest": "lostearring",
+      "skin": "lostearring",
+      "a": true,
+      "e": 1,
+      "name": "Gold Earring",
+      "g": 360000,
+      "edge": 3,
+      "type": "earring"
+    },
+    "feather0": {
+      "name": "Magical Feather",
+      "g": 200,
+      "explanation": "Holding this, you understand how those huge birds can fly, it's not a normal feather!",
+      "s": true,
+      "skin": "feather0",
+      "type": "material"
+    },
+    "warpvest": {
+      "stat": 1,
+      "grade": 2,
+      "explanation": "Warps space-time. Ancient Computer unlocks only a fraction of it's capabilities. Needs to be recharged in order to initiate a jump.",
+      "resistance": 24,
+      "grades": [0, 0],
+      "skin": "warpvest",
+      "tier": 3,
+      "a": 2,
+      "upgrade": {
+        "dex": 10,
+        "stat": 1,
+        "str": 10,
+        "int": 10,
+        "resistance": 4.25,
+        "armor": 4.25,
+        "vit": 10
+      },
+      "name": "Warp Vest",
+      "g": 4800000,
+      "armor": 36,
+      "edge": 5,
+      "type": "chest",
+      "scroll": true
+    },
+    "stramulet": {
+      "name": "Amulet of Strength",
+      "g": 30000,
+      "skin": "stramulet",
+      "grades": [3, 5],
+      "str": 4,
+      "compound": {
+        "str": 2
+      },
+      "type": "amulet"
+    },
+    "licence": {
+      "name": "Licence to Kill",
+      "g": 1000000,
+      "explanation": "Lets you run an additional character for 30 minutes.",
+      "ignore": true,
+      "s": true,
+      "skin": "licence",
+      "type": "licence"
+    },
+    "xptome": {
+      "name": "Tome of Protection",
+      "g": 320000,
+      "explanation": "Significantly reduces experience loss on death. If the owner is defeated by another player, the victor receives a portion of the Tome's cost.",
+      "cash": 10,
+      "s": true,
+      "skin": "xptome",
+      "type": "tome"
+    },
+    "intamulet": {
+      "name": "Amulet of Intelligence",
+      "g": 30000,
+      "int": 4,
+      "skin": "intamulet",
+      "grades": [3, 5],
+      "compound": {
+        "int": 3
+      },
+      "type": "amulet"
+    },
+    "hgloves": {
+      "stat": 1,
+      "grade": 2,
+      "resistance": 12,
+      "grades": [0, 0],
+      "skin": "hgloves",
+      "tier": 3,
+      "a": 2,
+      "upgrade": {
+        "armor": 4.25,
+        "stat": 1,
+        "resistance": 4.25
+      },
+      "name": "Heavy Gloves",
+      "g": 340000,
+      "armor": 24,
+      "edge": 4,
+      "type": "gloves",
+      "scroll": true
+    },
+    "orbofhp": {
+      "name": "Orb of Vitality",
+      "g": 120000,
+      "hp": 120,
+      "skin": "redorb",
+      "ignore": true,
+      "compound": {
+        "hp": 120
+      },
+      "type": "orb"
+    },
+    "shadowstone": {
+      "name": "Shadow Stone",
+      "g": 800,
+      "explanation": "A stone piece with curious properties, allows the bearer to shift to a parallel reality.",
+      "s": true,
+      "skin": "shadowstone",
+      "type": "skill_item"
+    },
+    "partyhat": {
+      "stat": 1,
+      "resistance": 8,
+      "grades": [7, 9],
+      "skin": "partyhat",
+      "tier": 1,
+      "a": 2,
+      "upgrade": {
+        "dex": 0.20000000000000001,
+        "stat": 1,
+        "str": 0.20000000000000001,
+        "int": 0.20000000000000001,
+        "resistance": 1.25,
+        "armor": 1.25,
+        "vit": 0.10000000000000001
+      },
+      "name": "Party Hat",
+      "g": 12000,
+      "armor": 7,
+      "type": "helmet",
+      "scroll": true
+    },
+    "weaponbox": {
+      "a": true,
+      "s": true,
+      "e": 1,
+      "name": "Weapon Box",
+      "g": 320000,
+      "skin": "weaponbox",
+      "explanation": "Can be exchanged for a random, rare weapon.",
+      "type": "box"
+    },
+    "stand1": {
+      "explanation": "You can become a merchant using this item.",
+      "type": "stand",
+      "name": "Merchant Stand [Sell+Buy]",
+      "g": 400000,
+      "skin": "stand1"
+    },
+    "dexearring": {
+      "dex": 3,
+      "name": "Earring of Dexterity",
+      "g": 50000,
+      "skin": "dexearring",
+      "grades": [2, 5],
+      "compound": {
+        "dex": 2
+      },
+      "type": "earring"
+    },
+    "xshield": {
+      "int": 4,
+      "explanation": "A metallurgical failure but a magical marvel",
+      "resistance": 24,
+      "g": 1200000,
+      "grades": [0, 0],
+      "skin": "xshield",
+      "crit": 1,
+      "xp": 8,
+      "speed": 5,
+      "dex": 6,
+      "upgrade": {
+        "resistance": 6,
+        "str": 1
+      },
+      "name": "Shield X",
+      "evasion": 4,
+      "str": 8,
+      "type": "shield"
+    },
+    "bow": {
+      "damage": "physical",
+      "grades": [7, 9],
+      "skin": "bow",
+      "tier": 1,
+      "upgrade": {
+        "attack": 4.0,
+        "range": 8
+      },
+      "name": "Bow",
+      "g": 16000,
+      "wtype": "bow",
+      "range": 60,
+      "attack": 20,
+      "type": "weapon"
+    },
+    "essenceoffire": {
+      "name": "Essence of Fire",
+      "g": 40000,
+      "explanation": "So fierce, so mesmerizing",
+      "s": true,
+      "skin": "essenceoffire",
+      "type": "material"
+    },
+    "hotchocolate": {
+      "explanation": "Fills your heart with warmth.",
+      "resistance": 30,
+      "skin_a": "hotchocolate",
+      "vit": 30,
+      "skin": "hotchocolate",
+      "duration": 1,
+      "name": "Hot Chocolate",
+      "g": 6000,
+      "armor": 30,
+      "s": true,
+      "type": "elixir"
+    },
+    "smoke": {
+      "onclick": "socket.emit('throw',{num:locate_item('smoke'),x:character.real_x,y:character.real_y})",
+      "s": true,
+      "name": "Pouch of Poof",
+      "g": 20,
+      "skin": "smoke",
+      "action": "THROW!",
+      "explanation": "A pyrotechnic pouch developed for those who want to feel like Rogue's",
+      "type": "throw"
+    },
+    "t2bow": {
+      "explanation": "Crafted with the finest of materials",
+      "damage": "physical",
+      "grades": [0, 7],
+      "skin": "t2bow",
+      "tier": 2,
+      "a": true,
+      "upgrade": {
+        "attack": 4.75,
+        "range": 8
+      },
+      "name": "Well-Crafted Bow",
+      "g": 78000,
+      "wtype": "bow",
+      "range": 60,
+      "attack": 26,
+      "edge": 3,
+      "type": "weapon"
+    },
+    "stoneofxp": {
+      "ignore": true,
+      "days": 30,
+      "skin_a": "stoneofxp_a",
+      "g": 153600000,
+      "skin": "stoneofxp",
+      "explanation": "Increases experience gain by 50%. Needs to be activated. Can be morphed into other stones.",
+      "type": "stone",
+      "cash": 4800,
+      "name": "Stone of Wisdom"
+    },
+    "emptyjar": {
+      "name": "Empty Jar",
+      "g": 100,
+      "explanation": "Always nice to have some empty jars lying around, you never know when you'll need one!",
+      "s": true,
+      "skin": "emptyjar",
+      "type": "jar"
+    },
+    "essenceofnature": {
+      "name": "Essence of Nature",
+      "g": 5000,
+      "explanation": "Earthly energy, waiting to spring",
+      "s": true,
+      "skin": "essenceofnature",
+      "type": "material"
+    },
+    "intearring": {
+      "name": "Earring of Intelligence",
+      "g": 50000,
+      "int": 3,
+      "skin": "intearring",
+      "grades": [2, 5],
+      "compound": {
+        "int": 2
+      },
+      "type": "earring"
+    },
+    "strscroll": {
+      "stat": "str",
+      "name": "Strength Scroll",
+      "g": 8000,
+      "explanation": "Adds Stength to an armor with a Stat attribute.",
+      "s": true,
+      "skin": "strscroll",
+      "type": "pscroll"
+    },
+    "hpants": {
+      "stat": 1,
+      "grade": 2,
+      "resistance": 18,
+      "grades": [0, 0],
+      "skin": "hpants",
+      "tier": 3,
+      "a": 2,
+      "upgrade": {
+        "armor": 4.25,
+        "stat": 1,
+        "resistance": 4.25
+      },
+      "name": "Heavy Underarmor",
+      "g": 780000,
+      "armor": 30,
+      "edge": 4,
+      "type": "pants",
+      "scroll": true
+    },
+    "gphelmet": {
+      "stat": 1,
+      "grade": 1,
+      "resistance": 16,
+      "tier": 2,
+      "grades": [0, 0],
+      "protection": true,
+      "skin": "gphelmet",
+      "crit": 0.5,
+      "reflection": 1,
+      "a": 2,
+      "upgrade": {
+        "crit": 0.10000000000000001,
+        "armor": 2.5,
+        "stat": 1,
+        "reflection": 0.40000000000000002,
+        "resistance": 2.5
+      },
+      "name": "Green Pumpkin Head",
+      "lifesteal": 2,
+      "armor": 14,
+      "edge": 4,
+      "g": 32000,
+      "rpiercing": 10,
+      "type": "helmet",
+      "scroll": true,
+      "luck": -20
+    },
+    "spear": {
+      "apiercing": 10,
+      "grades": [3, 8],
+      "skin": "spear",
+      "range": 15,
+      "a": 2,
+      "upgrade": {
+        "range": 2,
+        "attack": 4.25,
+        "apiercing": 5
+      },
+      "name": "Spear",
+      "g": 72000,
+      "wtype": "spear",
+      "damage": "physical",
+      "attack": 15,
+      "type": "weapon"
+    },
+    "amuletofm": {
+      "dex": 1,
+      "dreturn": 1,
+      "reflection": 0.5,
+      "evasion": 2,
+      "int": 1,
+      "hp": 40,
+      "compound": {
+        "dex": 1,
+        "int": 1,
+        "reflection": 0.5,
+        "evasion": 1,
+        "dreturn": 0.5,
+        "crit": 1,
+        "str": 1,
+        "hp": 60,
+        "armor": 2
+      },
+      "ignore": true,
+      "armor": 10,
+      "grades": [3, 5],
+      "g": 640000,
+      "a": true,
+      "str": 1,
+      "skin": "amuletofm",
+      "crit": 2,
+      "type": "amulet",
+      "name": "Amulet of Mystery"
+    },
+    "pvptoken": {
+      "name": "PVP Token",
+      "g": 24000,
+      "explanation": "A token representing valour in battles. Collect them from PVP events and exchange them for treasures!",
+      "s": true,
+      "skin": "pvptoken",
+      "type": "token"
+    },
+    "egg5": {
+      "name": "Easter Egg",
+      "g": 4000,
+      "explanation": "A uniquely painted Egg!",
+      "s": true,
+      "skin": "egg5",
+      "type": "quest"
+    },
+    "orbofstr": {
+      "name": "Orb of Strength",
+      "g": 240000,
+      "skin": "orangeorb",
+      "ignore": true,
+      "str": 5,
+      "compound": {
+        "str": 5
+      },
+      "type": "orb"
+    },
+    "glitch": {
+      "a": true,
+      "e": 1,
+      "name": "A Glitch",
+      "g": 10000,
+      "explanation": "Huh?! Wtf.",
+      "skin": "glitch",
+      "type": "misc"
+    },
+    "ornamentstaff": {
+      "damage": "magical",
+      "grades": [0, 7],
+      "awesomeness": 99,
+      "skin": "ornamentstaff",
+      "range": 60,
+      "a": true,
+      "upgrade": {
+        "attack": 6,
+        "awesomeness": 0.10000000000000001,
+        "range": 3
+      },
+      "name": "Ornament Staff",
+      "g": 120000,
+      "wtype": "staff",
+      "attack": 30,
+      "mp_cost": -40,
+      "edge": 2,
+      "type": "weapon"
+    },
+    "candy0v2": {
+      "e": 1,
+      "name": "Rare Candy",
+      "g": 12000,
+      "explanation": "A rare candy. Xyn in New Town could give you something exciting in exchange!",
+      "s": true,
+      "skin": "candy0",
+      "type": "gem"
+    },
+    "bataxe": {
+      "delia": "Now you see me, now you see the floor",
+      "damage": "physical",
+      "grades": [0, 6],
+      "wspeed": "slow",
+      "skin": "bataxe",
+      "name": "Ghastly Battle Axe",
+      "a": true,
+      "upgrade": {
+        "attack": 9.5,
+        "range": 1
+      },
+      "reflection": 4,
+      "g": 124000,
+      "wtype": "axe",
+      "range": 8,
+      "attack": 36,
+      "edge": 3,
+      "type": "weapon"
+    },
+    "bunnyears": {
+      "stat": 1,
+      "grade": 1,
+      "resistance": 16,
+      "tier": 2,
+      "grades": [4, 8],
+      "protection": true,
+      "vit": 4,
+      "skin": "bunnyears",
+      "cuteness": 12,
+      "name": "Bunny Ears",
+      "a": 2,
+      "upgrade": {
+        "armor": 2.5,
+        "stat": 1,
+        "resistance": 2.5,
+        "evasion": 0.20000000000000001
+      },
+      "evasion": 1,
+      "g": 32000,
+      "armor": 14,
+      "edge": 1,
+      "type": "helmet",
+      "scroll": true
+    },
+    "cdragon": {
+      "dreturn": 3,
+      "int": 10,
+      "resistance": 32,
+      "g": 8900000,
+      "grades": [0, 0],
+      "a": 2,
+      "vit": 2,
+      "skin": "dragonarmor",
+      "dex": 10,
+      "name": "Dragon Armor",
+      "rpiercing": 16,
+      "armor": 40,
+      "apiercing": 16,
+      "str": 10,
+      "type": "chest"
+    },
+    "santasbelt": {
+      "dex": 3,
+      "a": true,
+      "grades": [0, 3],
+      "g": 640000,
+      "name": "Santa's Belt",
+      "evasion": 4,
+      "skin": "santasbelt",
+      "compound": {
+        "dex": 2
+      },
+      "type": "belt"
+    },
+    "computer": {
+      "name": "Ancient Computer",
+      "g": 51200000,
+      "explanation": "Networks you to NPC's and extends the CODE capabilities.",
+      "cash": 1600,
+      "skin": "ancientcomputer",
+      "type": "computer"
+    },
+    "seashell": {
+      "s": true,
+      "quest": "seashell",
+      "e": 20,
+      "name": "Seashell",
+      "g": 2000,
+      "skin": "seashell",
+      "explanation": "A beautiful seashell.",
+      "type": "quest"
+    },
+    "vitring": {
+      "name": "Ring of Vitality",
+      "g": 24000,
+      "skin": "vitring",
+      "grades": [3, 5],
+      "vit": 2,
+      "compound": {
+        "vit": 2
+      },
+      "type": "ring"
+    },
+    "swordofthedead": {
+      "resistance": 20,
+      "damage": "physical",
+      "grades": [0, 6],
+      "vit": -8,
+      "skin": "swordofthedead",
+      "a": true,
+      "upgrade": {
+        "attack": 5,
+        "range": 1.75,
+        "resistance": 2.5
+      },
+      "name": "Sword of the Dead",
+      "g": 224000,
+      "wtype": "short_sword",
+      "range": 8,
+      "attack": 25,
+      "str": 10,
+      "type": "weapon"
+    },
+    "harmor": {
+      "stat": 1,
+      "grade": 2,
+      "resistance": 24,
+      "grades": [0, 0],
+      "skin": "harmor",
+      "tier": 3,
+      "a": 2,
+      "upgrade": {
+        "armor": 4.25,
+        "stat": 1,
+        "resistance": 4.25
+      },
+      "name": "Heavy Armor",
+      "g": 480000,
+      "armor": 36,
+      "edge": 4,
+      "type": "chest",
+      "scroll": true
+    },
+    "shield": {
+      "grades": [4, 8],
+      "upgrade": {
+        "armor": 12.5,
+        "resistance": 7.5
+      },
+      "name": "Shield",
+      "g": 24000,
+      "skin": "shield",
+      "armor": 60,
+      "type": "shield",
+      "resistance": 20
+    },
+    "maceofthedead": {
+      "a": true,
+      "grades": [0, 6],
+      "upgrade": {},
+      "explanation": "A weapon none in the realm can wield!",
+      "name": "Mace of the Dead",
+      "g": 224000,
+      "skin": "maceofthedead",
+      "wtype": "mace",
+      "type": "weapon",
+      "damage": "physical"
+    },
+    "coat1": {
+      "stat": 1,
+      "grade": 1,
+      "resistance": 16,
+      "grades": [0, 7],
+      "skin": "coat1",
+      "tier": 2,
+      "a": 2,
+      "upgrade": {
+        "armor": 2.5,
+        "stat": 1,
+        "resistance": 2.5
+      },
+      "name": "Rugged Coat",
+      "g": 48000,
+      "armor": 24,
+      "edge": 2,
+      "type": "chest",
+      "scroll": true
+    },
+    "elixirint1": {
+      "name": "Elixir of Greater Intelligence",
+      "g": 20000,
+      "int": 8,
+      "s": true,
+      "skin_a": "elixirint1",
+      "skin": "elixirint1",
+      "duration": 24,
+      "type": "elixir"
+    },
+    "hhelmet": {
+      "stat": 1,
+      "grade": 2,
+      "resistance": 24,
+      "grades": [0, 0],
+      "protection": true,
+      "skin": "hhelmet",
+      "tier": 3,
+      "a": 2,
+      "upgrade": {
+        "armor": 4.25,
+        "stat": 1,
+        "resistance": 4.25
+      },
+      "name": "Heavy Helmet",
+      "g": 320000,
+      "armor": 21,
+      "edge": 4,
+      "type": "helmet",
+      "scroll": true
+    },
+    "froststaff": {
+      "ability": "freeze",
+      "int": 2,
+      "damage": "magical",
+      "grades": [0, 8],
+      "attr0": 10.199999999999999,
+      "skin": "froststaff",
+      "a": true,
+      "upgrade": {
+        "int": 1,
+        "attack": 5.5,
+        "range": 3,
+        "attr0": 0.10000000000000001
+      },
+      "name": "Frost Staff",
+      "g": 289000,
+      "wtype": "staff",
+      "range": 50,
+      "attack": 30,
+      "edge": 2,
+      "type": "weapon"
+    },
+    "gloves1": {
+      "stat": 1,
+      "grade": 1,
+      "resistance": 8,
+      "grades": [0, 7],
+      "skin": "gloves1",
+      "tier": 2,
+      "a": 2,
+      "upgrade": {
+        "armor": 2.5,
+        "stat": 1,
+        "resistance": 2.5
+      },
+      "name": "Rugged Gloves",
+      "g": 34000,
+      "armor": 16,
+      "edge": 2,
+      "type": "gloves",
+      "scroll": true
+    },
+    "candy1": {
+      "a": 2,
+      "s": true,
+      "e": 1,
+      "name": "Candy",
+      "g": 24000,
+      "skin": "candy1",
+      "explanation": "Halloween candy. Can be exchanged for random treasures.",
+      "type": "gem"
+    },
+    "offering": {
+      "a": true,
+      "name": "Primordial Essence",
+      "g": 3168000,
+      "explanation": "The essence contained within can be transferred to items during upgrades and compounds. Significantly increases the chance to succeed.",
+      "cash": 99,
+      "s": true,
+      "skin": "shade_offering",
+      "type": "offering"
+    },
+    "powerglove": {
+      "stat": 1,
+      "ability": "power",
+      "grade": 1,
+      "resistance": 8,
+      "g": 1600000,
+      "grades": [0, 0],
+      "skin": "powerglove",
+      "tier": 2,
+      "a": true,
+      "upgrade": {
+        "stat": 1,
+        "rpiercing": 2,
+        "armor": 2.5,
+        "apiercing": 2,
+        "resistance": 2.5,
+        "aspeed": 0.20000000000000001
+      },
+      "name": "Power Glove",
+      "rpiercing": 16,
+      "armor": 16,
+      "type": "gloves",
+      "apiercing": 16,
+      "charge": 0,
+      "edge": 2,
+      "aspeed": 2,
+      "scroll": true
+    },
+    "xmashat": {
+      "stat": 1,
+      "resistance": 12.0,
+      "grades": [4, 8],
+      "vit": 2,
+      "skin": "xmashat",
+      "tier": 1.5,
+      "a": true,
+      "upgrade": {
+        "armor": 1.875,
+        "stat": 1,
+        "resistance": 1.875
+      },
+      "name": "Xmas Hat",
+      "g": 13200,
+      "armor": 10.5,
+      "edge": 1.0,
+      "type": "helmet",
+      "scroll": true
+    },
+    "orbofsc": {
+      "a": true,
+      "attr0": 1,
+      "int": 2,
+      "compound": {
+        "dex": 1,
+        "vit": 1,
+        "int": 2,
+        "mp": 100,
+        "str": 1,
+        "attr0": 1
+      },
+      "grades": [0, 0],
+      "vit": 2,
+      "skin": "orbofsc",
+      "ability": "secondchance",
+      "dex": 2,
+      "name": "Orb of Second Chances",
+      "g": 120000,
+      "edge": 5,
+      "mp": 200,
+      "str": 2,
+      "type": "orb"
+    },
+    "suckerpunch": {
+      "a": true,
+      "g": 3200000,
+      "grades": [0, 0],
+      "name": "Sucker Punch",
+      "lifesteal": 2,
+      "skin": "suckerpunch",
+      "crit": 2,
+      "compound": {
+        "crit": 1,
+        "apiercing": 20,
+        "lifesteal": 1
+      },
+      "type": "ring",
+      "apiercing": 20
+    },
+    "eggnog": {
+      "g": 6000,
+      "s": true,
+      "name": "Eggnog",
+      "evasion": 2.5,
+      "skin": "eggnog",
+      "duration": 48,
+      "hp": 600,
+      "type": "elixir",
+      "explanation": "Fills your heart with warmth and joy.",
+      "skin_a": "eggnog"
+    },
+    "xpants": {
+      "stat": 1,
+      "grade": 2,
+      "resistance": 24,
+      "grades": [0, 0],
+      "skin": "xpants",
+      "tier": 4,
+      "a": 2,
+      "upgrade": {
+        "armor": 5.5,
+        "stat": 1,
+        "resistance": 5.5
+      },
+      "name": "Darkforge Underarmor",
+      "g": 7800000,
+      "armor": 40,
+      "edge": 6,
+      "type": "pants",
+      "scroll": true
+    },
+    "stick": {
+      "a": true,
+      "grades": [4, 7],
+      "upgrade": {},
+      "name": "Stick",
+      "g": 299999,
+      "skin": "stick",
+      "explanation": "...",
+      "type": "misc"
+    },
+    "ftrinket": {
+      "a": true,
+      "int": 2,
+      "explanation": "Good things come to those who wait",
+      "compound": {
+        "armor": 5,
+        "speed": 1,
+        "vit": 3
+      },
+      "grades": [1, 3],
+      "vit": 2,
+      "skin": "ftrinket",
+      "speed": 0.5,
+      "dex": 2,
+      "name": "Trinket of Faith",
+      "g": 96000,
+      "armor": 5,
+      "edge": 5,
+      "str": 2,
+      "type": "orb"
+    },
+    "x2": {
+      "a": true,
+      "name": "Quantum Piece",
+      "g": 4000,
+      "explanation": "A unique component of a curious puzzle",
+      "s": true,
+      "skin": "x2",
+      "type": "quest"
+    },
+    "x3": {
+      "a": true,
+      "name": "Quantum Piece",
+      "g": 4000,
+      "explanation": "A unique component of a curious puzzle",
+      "s": true,
+      "skin": "x3",
+      "type": "quest"
+    },
+    "x0": {
+      "a": true,
+      "name": "Quantum Piece",
+      "g": 4000,
+      "explanation": "A unique component of a curious puzzle",
+      "s": true,
+      "skin": "x0",
+      "type": "quest"
+    },
+    "x1": {
+      "a": true,
+      "name": "Quantum Piece",
+      "g": 4000,
+      "explanation": "A unique component of a curious puzzle",
+      "s": true,
+      "skin": "x1",
+      "type": "quest"
+    },
+    "x6": {
+      "a": true,
+      "name": "Quantum Piece",
+      "g": 4000,
+      "explanation": "A unique component of a curious puzzle",
+      "s": true,
+      "skin": "x6",
+      "type": "quest"
+    },
+    "candycane": {
+      "a": true,
+      "s": true,
+      "e": 1,
+      "name": "Candy Cane",
+      "g": 24000,
+      "skin": "candycane",
+      "explanation": "The old man in Winterland was looking for sweets.",
+      "type": "gem"
+    },
+    "stealthcape": {
+      "stat": 3,
+      "upgrade": {
+        "resistance": 1
+      },
+      "grades": [0, 4],
+      "name": "Stealth Cape",
+      "g": 2000000,
+      "skin": "stealthcape",
+      "explanation": "Thanks to it's stealth capabilities, no one can track your endeavours any more.",
+      "type": "cape",
+      "resistance": 42
+    },
+    "x5": {
+      "a": true,
+      "name": "Quantum Piece",
+      "g": 4000,
+      "explanation": "A unique component of a curious puzzle",
+      "s": true,
+      "skin": "x5",
+      "type": "quest"
+    },
+    "essenceoffrost": {
+      "name": "Essence of Frost",
+      "g": 40000,
+      "explanation": "It's like an ice storm in a bottle",
+      "s": true,
+      "skin": "essenceoffrost",
+      "type": "material"
+    },
+    "stand0": {
+      "explanation": "You can become a merchant using this item.",
+      "type": "stand",
+      "name": "Merchant Stand",
+      "g": 40000,
+      "skin": "stand0"
+    },
+    "elixirvit0": {
+      "name": "Elixir of Vitality",
+      "g": 6000,
+      "s": true,
+      "skin_a": "elixirvit0",
+      "vit": 8,
+      "skin": "elixirvit0",
+      "duration": 12,
+      "type": "elixir"
+    },
+    "elixirvit1": {
+      "name": "Elixir of Greater Vitality",
+      "g": 20000,
+      "s": true,
+      "skin_a": "elixirvit1",
+      "vit": 12,
+      "skin": "elixirvit1",
+      "duration": 24,
+      "type": "elixir"
+    },
+    "elixirvit2": {
+      "a": true,
+      "g": 120000,
+      "s": true,
+      "name": "Elixir of Extreme Vitality",
+      "vit": 18,
+      "skin": "elixirvit2",
+      "duration": 48,
+      "type": "elixir",
+      "skin_a": "elixirvit2"
+    },
+    "blade": {
+      "attack": 15,
+      "upgrade": {
+        "attack": 4,
+        "range": 1.5
+      },
+      "grades": [7, 9],
+      "name": "Blade",
+      "g": 8400,
+      "skin": "blade",
+      "wtype": "short_sword",
+      "type": "weapon",
+      "range": 5,
+      "damage": "physical"
+    },
+    "staffofthedead": {
+      "damage": "magical",
+      "grades": [0, 6],
+      "skin": "staffofthedead",
+      "speed": -6,
+      "a": true,
+      "upgrade": {
+        "attack": 6,
+        "range": 2.5
+      },
+      "name": "Staff of the Dead",
+      "g": 224000,
+      "wtype": "staff",
+      "range": 50,
+      "attack": 40,
+      "edge": 2,
+      "str": 32,
+      "type": "weapon"
+    },
+    "cscroll0": {
+      "name": "Compound Scroll",
+      "g": 6400,
+      "grade": 0,
+      "explanation": "Scroll to combine 3 accessories. Things get challenging after +1.",
+      "s": true,
+      "skin": "cscroll0",
+      "type": "cscroll"
+    },
+    "cscroll1": {
+      "name": "Compound Scroll",
+      "g": 240000,
+      "grade": 1,
+      "explanation": "Scroll to combine 3 high grade accessories.",
+      "s": true,
+      "skin": "cscroll1",
+      "type": "cscroll"
+    },
+    "dexring": {
+      "dex": 2,
+      "name": "Ring of Dexterity",
+      "g": 24000,
+      "skin": "dexring",
+      "grades": [3, 5],
+      "compound": {
+        "dex": 2
+      },
+      "type": "ring"
+    },
+    "fireblade": {
+      "damage": "physical",
+      "grades": [0, 8],
+      "skin": "fireblade",
+      "a": true,
+      "upgrade": {
+        "attack": 4.5,
+        "range": 1.5
+      },
+      "name": "Fiery Blade",
+      "g": 96000,
+      "wtype": "short_sword",
+      "range": 5,
+      "attack": 18,
+      "edge": 2,
+      "type": "weapon"
+    },
+    "basher": {
+      "a": true,
+      "upgrade": {
+        "armor": 4,
+        "range": 1,
+        "attack": 8,
+        "attr0": 0.40000000000000002,
+        "attr1": 0.20000000000000001,
+        "speed": 1
+      },
+      "attr0": 0.5,
+      "name": "Basher",
+      "armor": 20,
+      "speed": -15,
+      "wtype": "basher",
+      "attr1": 1,
+      "range": 5,
+      "damage": "physical",
+      "g": 72000,
+      "attack": 24,
+      "edge": 1,
+      "grades": [0, 7],
+      "wspeed": "slow",
+      "skin": "basher",
+      "type": "weapon",
+      "ability": "bash"
+    },
+    "cake": {
+      "hp": 1200,
+      "skin_a": "cake",
+      "skin": "cake",
+      "duration": 6,
+      "speed": -30,
+      "eat": true,
+      "name": "Piece of Cake",
+      "g": 100,
+      "s": true,
+      "type": "elixir",
+      "explanation": "Delicious."
+    },
+    "elixirdex0": {
+      "dex": 6,
+      "name": "Elixir of Dexterity",
+      "g": 6000,
+      "s": true,
+      "skin_a": "elixirdex0",
+      "skin": "elixirdex0",
+      "duration": 12,
+      "type": "elixir"
+    },
+    "flute": {
+      "explanation": "The sound of each flute is unique and mesmerizing. Your pets will easily recognize the sound of yours and come to your call.",
+      "type": "flute",
+      "name": "Flute",
+      "skin": "flute"
+    },
+    "firestaff": {
+      "damage": "magical",
+      "grades": [0, 8],
+      "skin": "firestaff",
+      "a": true,
+      "upgrade": {
+        "attack": 5.5,
+        "range": 3
+      },
+      "name": "Fiery Staff",
+      "g": 189000,
+      "wtype": "staff",
+      "range": 50,
+      "attack": 30,
+      "edge": 2,
+      "type": "weapon"
+    },
+    "egg8": {
+      "name": "Easter Egg",
+      "g": 4000,
+      "explanation": "A uniquely painted Egg!",
+      "s": true,
+      "skin": "egg8",
+      "type": "quest"
+    },
+    "quiver": {
+      "dex": 2,
+      "range": 20,
+      "upgrade": {
+        "dex": 1,
+        "armor": 2,
+        "range": 3.5
+      },
+      "name": "Quiver",
+      "g": 24000,
+      "skin": "quiver",
+      "armor": 10,
+      "type": "quiver",
+      "grades": [3, 7]
+    },
+    "fury": {
+      "a": true,
+      "stat": 1,
+      "resistance": 12.0,
+      "tier": 1.5,
+      "grades": [0, 0],
+      "skin": "fury",
+      "crit": 6,
+      "dex": 2,
+      "upgrade": {
+        "crit": 0.5,
+        "armor": 1.875,
+        "stat": 1,
+        "apiercing": 10,
+        "resistance": 1.875
+      },
+      "name": "Band of Fury",
+      "g": 6400000,
+      "armor": 10.5,
+      "apiercing": 20,
+      "edge": 7,
+      "type": "helmet",
+      "scroll": true
+    },
+    "egg0": {
+      "name": "Easter Egg",
+      "g": 4000,
+      "explanation": "A uniquely painted Egg!",
+      "s": true,
+      "skin": "egg0",
+      "type": "quest"
+    },
+    "egg3": {
+      "name": "Easter Egg",
+      "g": 4000,
+      "explanation": "A uniquely painted Egg!",
+      "s": true,
+      "skin": "egg3",
+      "type": "quest"
+    },
+    "egg2": {
+      "name": "Easter Egg",
+      "g": 4000,
+      "explanation": "A uniquely painted Egg!",
+      "s": true,
+      "skin": "egg2",
+      "type": "quest"
+    },
+    "strring": {
+      "name": "Ring of Strength",
+      "g": 24000,
+      "skin": "strring",
+      "grades": [3, 5],
+      "str": 2,
+      "compound": {
+        "str": 2
+      },
+      "type": "ring"
+    },
+    "egg4": {
+      "name": "Easter Egg",
+      "g": 4000,
+      "explanation": "A uniquely painted Egg!",
+      "s": true,
+      "skin": "egg4",
+      "type": "quest"
+    },
+    "egg7": {
+      "name": "Easter Egg",
+      "g": 4000,
+      "explanation": "A uniquely painted Egg!",
+      "s": true,
+      "skin": "egg7",
+      "type": "quest"
+    },
+    "egg6": {
+      "name": "Easter Egg",
+      "g": 4000,
+      "explanation": "A uniquely painted Egg!",
+      "s": true,
+      "skin": "egg6",
+      "type": "quest"
+    },
+    "dexscroll": {
+      "stat": "dex",
+      "name": "Dexterity Scroll",
+      "g": 8000,
+      "explanation": "Adds Dexterity to an armor with a Stat attribute.",
+      "s": true,
+      "skin": "dexscroll",
+      "type": "pscroll"
+    },
+    "gift1": {
+      "a": 2,
+      "s": true,
+      "e": 1,
+      "name": "Gift",
+      "g": 100,
+      "skin": "gift1",
+      "explanation": "A Gift to celebrate our Anniversary!",
+      "type": "gem"
+    },
+    "gift0": {
+      "a": true,
+      "s": true,
+      "e": 1,
+      "name": "Rare Gift",
+      "g": 2400,
+      "skin": "gift0",
+      "explanation": "A Rare Gift to celebrate our Anniversary!",
+      "type": "gem"
+    },
+    "kitty1": {
+      "a": true,
+      "name": "Egg",
+      "g": 40000,
+      "explanation": "A vibrant egg, it's inhabitant seems eager to get out.",
+      "skin": "egg1",
+      "type": "pet"
+    },
+    "goldenegg": {
+      "a": true,
+      "s": true,
+      "e": 1,
+      "name": "Golden Egg",
+      "g": 60000,
+      "skin": "goldenegg",
+      "explanation": "Nope, it's not painted, an actual golden egg!",
+      "type": "quest"
+    },
+    "starkillers": {
+      "stat": 1,
+      "grade": 2,
+      "resistance": 18,
+      "tier": 3,
+      "grades": [0, 0],
+      "vit": 10,
+      "skin": "starkillers",
+      "crit": 2,
+      "name": "Star Killer's Pants",
+      "a": 2,
+      "upgrade": {
+        "crit": 0.20000000000000001,
+        "armor": 4.25,
+        "stat": 1,
+        "resistance": 4.25,
+        "rpiercing": 5
+      },
+      "rpiercing": 80,
+      "g": 7800000,
+      "armor": 30,
+      "edge": 4,
+      "type": "pants",
+      "scroll": true
+    },
+    "helmet": {
+      "stat": 1,
+      "set": "base",
+      "resistance": 8,
+      "grades": [7, 9],
+      "skin": "helmet",
+      "tier": 1,
+      "upgrade": {
+        "armor": 1.25,
+        "stat": 1,
+        "resistance": 1.25
+      },
+      "name": "Helmet",
+      "g": 3200,
+      "armor": 7,
+      "type": "helmet",
+      "scroll": true
+    },
+    "xmasshoes": {
+      "stat": 1,
+      "grades": [4, 8],
+      "vit": 2,
+      "skin": "xmasshoes",
+      "tier": 1.5,
+      "speed": 6.0,
+      "a": true,
+      "upgrade": {
+        "armor": 1.875,
+        "stat": 1,
+        "speed": 0.75
+      },
+      "name": "Xmas Shoes",
+      "g": 36000,
+      "armor": 6.0,
+      "edge": 1.0,
+      "type": "shoes",
+      "scroll": true
+    },
+    "pyjamas": {
+      "stat": 1,
+      "grade": 1,
+      "hp": 200,
+      "explanation": "Comfortable.",
+      "resistance": 16,
+      "grades": [4, 8],
+      "skin": "pyjamas",
+      "tier": 2,
+      "a": 2,
+      "upgrade": {
+        "armor": 2.5,
+        "hp": 25,
+        "stat": 1,
+        "resistance": 2.5
+      },
+      "name": "Pyjamas",
+      "g": 480000,
+      "armor": 24,
+      "charisma": -5,
+      "edge": 1,
+      "type": "chest",
+      "scroll": true
+    },
+    "mcape": {
+      "stat": 1,
+      "grade": 1,
+      "hp": 80,
+      "resistance": 16,
+      "grades": [0, 6],
+      "lifesteal": 1,
+      "skin": "mcape",
+      "tier": 2,
+      "a": 2,
+      "upgrade": {
+        "armor": 2.5,
+        "hp": 15,
+        "stat": 1,
+        "lifesteal": 0.20000000000000001,
+        "resistance": 2.5
+      },
+      "name": "Dracul's Attire",
+      "g": 480000,
+      "armor": 24,
+      "edge": 4,
+      "type": "chest",
+      "scroll": true
+    },
+    "hammer": {
+      "attack": 36,
+      "upgrade": {
+        "attack": 6,
+        "range": 2
+      },
+      "grades": [0, 0],
+      "name": "Hammer",
+      "g": 960000,
+      "skin": "hammer",
+      "wtype": "hammer",
+      "type": "weapon",
+      "range": 6,
+      "damage": "physical"
+    },
+    "strearring": {
+      "name": "Earring of Strength",
+      "g": 50000,
+      "skin": "strearring",
+      "grades": [2, 5],
+      "str": 3,
+      "compound": {
+        "str": 2
+      },
+      "type": "earring"
+    },
+    "ledger": {
+      "explanation": "Every decent merchant needs one!",
+      "type": "misc",
+      "name": "Ledger",
+      "g": 12000,
+      "skin": "ledger"
+    },
+    "t2quiver": {
+      "a": true,
+      "skin": "t2quiver",
+      "grades": [0, 4],
+      "evasion": 1,
+      "dex": 9,
+      "upgrade": {
+        "dex": 1.5,
+        "armor": 3,
+        "range": 3.5
+      },
+      "name": "Agile Quiver",
+      "g": 960000,
+      "armor": 12,
+      "range": 20,
+      "type": "quiver"
+    },
+    "xarmor": {
+      "stat": 1,
+      "grade": 2,
+      "resistance": 32,
+      "grades": [0, 0],
+      "skin": "xarmor",
+      "tier": 4,
+      "a": 2,
+      "upgrade": {
+        "armor": 5.5,
+        "stat": 1,
+        "resistance": 5.5
+      },
+      "name": "Darkforge Armor",
+      "g": 4800000,
+      "armor": 48,
+      "edge": 6,
+      "type": "chest",
+      "scroll": true
+    },
+    "goldenpowerglove": {
+      "stat": 6,
+      "ability": "power",
+      "grade": 2,
+      "resistance": 16,
+      "g": 16000000,
+      "grades": [0, 0],
+      "skin": "goldenpowerglove",
+      "tier": 4,
+      "a": true,
+      "upgrade": {
+        "stat": 1,
+        "rpiercing": 4,
+        "armor": 5.5,
+        "apiercing": 4,
+        "resistance": 5.5,
+        "aspeed": 0.20000000000000001
+      },
+      "name": "Golden Power Glove",
+      "rpiercing": 64,
+      "armor": 32,
+      "type": "gloves",
+      "apiercing": 64,
+      "charge": 0,
+      "edge": 6,
+      "aspeed": 5,
+      "scroll": true
+    },
+    "gemfragment": {
+      "s": true,
+      "quest": "gemfragment",
+      "e": 50,
+      "name": "Gem Fragment",
+      "g": 32000,
+      "skin": "gemfragment",
+      "explanation": "Beautiful, yet broken. Would be extremely valuable if they were whole.",
+      "type": "quest"
+    },
+    "xpbooster": {
+      "explanation": "Increases experience gain. Needs to be activated. Can be shifted into other boosters.",
+      "compound": {
+        "xp": 15
+      },
+      "cash": 499,
+      "grades": [0, 10],
+      "skin_a": "xpbooster_a",
+      "skin": "xpbooster",
+      "xp": 20,
+      "name": "XP Booster",
+      "g": 15968000,
+      "days": 30,
+      "type": "booster",
+      "gain": "xp"
+    },
+    "test": {
+      "ignore": true,
+      "explanation": "An item to test item looks, just set the 'skin' property.",
+      "type": "test",
+      "name": "Test",
+      "skin": "test"
+    },
+    "intbelt": {
+      "name": "Belt of Intelligence",
+      "g": 50000,
+      "int": 4,
+      "skin": "intbelt",
+      "grades": [2, 5],
+      "compound": {
+        "int": 3
+      },
+      "type": "belt"
+    },
+    "basketofeggs": {
+      "e": 1,
+      "name": "Basket of Easter Eggs",
+      "g": 20000,
+      "explanation": "A basket full of unique easter eggs. You can probably exchange this for a cool reward.",
+      "s": true,
+      "skin": "basketofeggs",
+      "type": "quest"
+    },
+    "poker": {
+      "stat": 1,
+      "ability": "poke",
+      "explanation": "Pokey pokey!",
+      "resistance": 6.0,
+      "tier": 1.5,
+      "grades": [4, 8],
+      "skin": "poker",
+      "crit": 0.5,
+      "a": true,
+      "upgrade": {
+        "armor": 1.875,
+        "stat": 1,
+        "resistance": 1.875
+      },
+      "name": "Poker",
+      "g": 16000,
+      "armor": 12.0,
+      "edge": 1.0,
+      "type": "gloves",
+      "scroll": true
+    },
+    "pmace": {
+      "a": true,
+      "int": 8,
+      "damage": "magical",
+      "grades": [0, 8],
+      "skin": "pmace",
+      "dex": 4,
+      "upgrade": {
+        "int": 2,
+        "dex": 1,
+        "attack": 6,
+        "range": 5
+      },
+      "name": "Priest's Mace",
+      "g": 89000,
+      "wtype": "mace",
+      "range": 10,
+      "attack": 25,
+      "edge": 3,
+      "type": "weapon"
+    },
+    "elixirint2": {
+      "a": true,
+      "duration": 48,
+      "s": true,
+      "name": "Elixir of Extreme Intelligence",
+      "g": 120000,
+      "skin": "elixirint2",
+      "int": 12,
+      "type": "elixir",
+      "skin_a": "elixirint2"
+    },
+    "hpot0": {
+      "name": "HP Potion",
+      "g": 20,
+      "s": true,
+      "skin": "hpot0",
+      "type": "pot",
+      "gives": [["hp", 200]]
+    },
+    "solitaire": {
+      "grades": [0, 0],
+      "bling": 100,
+      "name": "Solitaire Ring",
+      "g": 1200000,
+      "skin": "solitaire",
+      "explanation": "The diamond is mesmerizing",
+      "compound": {
+        "bling": 200
+      },
+      "type": "ring",
+      "event": true
+    },
+    "mysterybox": {
+      "name": "Mystery Box",
+      "g": 12000,
+      "explanation": "It looks super cool, but you have no idea what to do with it!",
+      "s": true,
+      "skin": "mysterybox",
+      "type": "misc"
+    },
+    "mpot1": {
+      "name": "MP Potion",
+      "g": 100,
+      "s": true,
+      "skin": "mpot1",
+      "type": "pot",
+      "gives": [["mp", 500]]
+    },
+    "mpot0": {
+      "name": "MP Potion",
+      "g": 20,
+      "s": true,
+      "skin": "mpot0",
+      "type": "pot",
+      "gives": [["mp", 300]]
+    },
+    "wblade": {
+      "damage": "magical",
+      "g": 4890000,
+      "grades": [0, 0],
+      "skin": "wblade",
+      "name": "The Ethereal Blade of Destiny",
+      "a": true,
+      "upgrade": {
+        "rpiercing": 16,
+        "attack": 8,
+        "range": 2,
+        "evasion": 1
+      },
+      "rpiercing": 40,
+      "evasion": 10,
+      "wtype": "wblade",
+      "range": 30,
+      "ignore": true,
+      "attack": 48,
+      "edge": 2,
+      "type": "weapon"
+    },
+    "wbook0": {
+      "name": "Book of Knowledge",
+      "g": 12000,
+      "int": 6,
+      "skin": "wbook0",
+      "grades": [7, 9],
+      "edge": -1,
+      "compound": {
+        "int": 5
+      },
+      "type": "source"
+    },
+    "wbook1": {
+      "g": 960000,
+      "grades": [0, 2],
+      "reflection": 2,
+      "vit": 6,
+      "skin": "wbook1",
+      "int": 16,
+      "compound": {
+        "int": 5,
+        "reflection": 1,
+        "vit": 2
+      },
+      "type": "source",
+      "name": "Book of Secrets"
+    },
+    "xmaspants": {
+      "stat": 1,
+      "resistance": 9.0,
+      "grades": [4, 8],
+      "vit": 2,
+      "skin": "xmaspants",
+      "tier": 1.5,
+      "a": true,
+      "upgrade": {
+        "armor": 1.875,
+        "stat": 1,
+        "resistance": 1.875
+      },
+      "name": "Xmas Pants",
+      "g": 17800,
+      "armor": 15.0,
+      "edge": 1.0,
+      "type": "pants",
+      "scroll": true
+    },
+    "intscroll": {
+      "stat": "int",
+      "name": "Intelligence Scroll",
+      "g": 8000,
+      "explanation": "Adds Intelligence to an armor with a Stat attribute.",
+      "s": true,
+      "skin": "intscroll",
+      "type": "pscroll"
+    },
+    "candy0": {
+      "a": 2,
+      "s": true,
+      "e": 1,
+      "name": "Rare Candy",
+      "g": 240000,
+      "skin": "candy0",
+      "explanation": "A rare Halloween candy. Can be exchanged for random treasures.",
+      "type": "gem"
+    },
+    "handofmidas": {
+      "gold": 10,
+      "grade": 2,
+      "explanation": "You can feel the thirst for gold move through your veins.",
+      "resistance": 14.0,
+      "grades": [0, 0],
+      "skin": "goldglove",
+      "tier": 3.5,
+      "speed": -20,
+      "a": true,
+      "upgrade": {
+        "armor": 4.875,
+        "resistance": 4.875,
+        "gold": 1
+      },
+      "name": "Hand of Midas",
+      "g": 800000,
+      "armor": 28.0,
+      "edge": 8,
+      "type": "gloves",
+      "scroll": true
+    },
+    "t2intamulet": {
+      "armor": 30,
+      "grades": [0, 2],
+      "name": "Amulet of the Fierce Mage",
+      "g": 800000,
+      "skin": "t2intamulet",
+      "int": 5,
+      "compound": {
+        "int": 2,
+        "armor": 20
+      },
+      "type": "amulet"
+    },
+    "redenvelope": {
+      "a": true,
+      "s": true,
+      "e": 1,
+      "name": "Red Envelope",
+      "g": 24000,
+      "skin": "redenvelope",
+      "explanation": "Congratulations and prosperity",
+      "type": "gem",
+      "event": true
+    },
+    "coat": {
+      "stat": 1,
+      "set": "base",
+      "resistance": 8,
+      "grades": [7, 9],
+      "skin": "coat",
+      "tier": 1,
+      "upgrade": {
+        "armor": 1.25,
+        "stat": 1,
+        "resistance": 1.25
+      },
+      "name": "Coat",
+      "g": 6000,
+      "armor": 12,
+      "type": "chest",
+      "scroll": true
+    },
+    "tristone": {
+      "onclick": "socket.emit('activate',{slot:$(this).data('id')})",
+      "int": 1,
+      "compound": {
+        "dex": 1,
+        "vit": 1,
+        "rpiercing": 5,
+        "int": 1,
+        "apiercing": 5,
+        "str": 1
+      },
+      "g": 50000,
+      "grades": [1, 4],
+      "skin_a": "tristone_a",
+      "vit": 1,
+      "skin": "tristone",
+      "dex": 1,
+      "name": "Tri-Stone",
+      "rpiercing": 5,
+      "apiercing": 5,
+      "str": 1,
+      "action": "ACTIVATE!",
+      "type": "ring"
+    },
+    "frozenstone": {
+      "onclick": "socket.emit('activate',{num:locate_item('confetti')})",
+      "s": true,
+      "name": "Frozen Stone",
+      "g": 20000,
+      "skin": "frozenstone",
+      "action": "SHAKE",
+      "explanation": "It's strangely not cold, must be a magical artifact.",
+      "type": "activator"
+    },
+    "x8": {
+      "a": true,
+      "name": "Quantum Piece",
+      "g": 4000,
+      "explanation": "A unique component of a curious puzzle",
+      "s": true,
+      "skin": "x8",
+      "type": "quest"
+    },
+    "egg1": {
+      "name": "Easter Egg",
+      "g": 4000,
+      "explanation": "A uniquely painted Egg!",
+      "s": true,
+      "skin": "egg1",
+      "type": "quest"
+    },
+    "coal": {
+      "a": true,
+      "name": "Coal",
+      "g": 10,
+      "explanation": "...",
+      "compound": {},
+      "skin": "coal",
+      "type": "misc"
+    },
+    "bow3": {
+      "damage": "physical",
+      "grades": [7, 9],
+      "skin": "bow",
+      "tier": 3,
+      "upgrade": {
+        "attack": 5.5,
+        "range": 8
+      },
+      "name": "T3 Bow",
+      "g": 16000,
+      "wtype": "bow",
+      "range": 60,
+      "ignore": true,
+      "attack": 32,
+      "type": "weapon"
+    },
+    "bow4": {
+      "damage": "physical",
+      "grades": [7, 9],
+      "skin": "bow",
+      "tier": 4,
+      "upgrade": {
+        "attack": 6.25,
+        "range": 8
+      },
+      "name": "T4 Bow",
+      "g": 16000,
+      "wtype": "bow",
+      "range": 60,
+      "ignore": true,
+      "attack": 38,
+      "type": "weapon"
+    }
   },
   "npcs": {
     "pvp": {
@@ -3574,7 +6842,7 @@ var G = {
     "gphelmet": ["pack_20", 15, 29],
     "weaponbox": ["pack_20", 3, 26],
     "essenceofpower": ["pack_20", 14, 34],
-    "shade_exchange": ["pack_20", 9, 30],
+    "shade_exchange": ["pack_20", 1, 35],
     "hotchocolate": ["pack_20", 11, 21],
     "skill_5shot": ["skills", 2, 2],
     "essenceoflight": ["pack_20", 7, 34],
@@ -3626,7 +6894,7 @@ var G = {
     "egg4": ["pack_20", 4, 30],
     "egg7": ["pack_20", 7, 30],
     "egg6": ["pack_20", 6, 30],
-    "shade_gold": ["", 12, 14],
+    "shade_gold": ["pack_20", 8, 35],
     "mcape": ["pack_20", 11, 1],
     "tristone_a": ["pack_20", 2, 16],
     "pmace": ["pack_20", 4, 10],
@@ -3661,6 +6929,7 @@ var G = {
     "goldbooster_a": ["pack_20", 5, 27],
     "intring": ["pack_20", 15, 15],
     "xmas": ["skills", 2, 9],
+    "scroll4": ["pack_20", 4, 24],
     "scroll2": ["pack_20", 14, 23],
     "scroll3": ["pack_20", 3, 24],
     "scroll0": ["pack_20", 13, 23],
@@ -5784,3266 +9053,25 @@ var G = {
     },
     "dice": {}
   },
-  "items": {
-    "harbringer": {
-      "explanation": "Pure, unfiltered power!",
-      "damage": "magical",
-      "grades": [0, 6],
-      "skin": "harbringer",
-      "a": true,
-      "upgrade": {
-        "attack": 6,
-        "range": 3,
-        "rpiercing": 5
+  "sets": {
+    "base": {
+      "1": {
+        "int": 10
       },
-      "name": "Harbringer",
-      "g": 289000,
-      "wtype": "staff",
-      "range": 50,
-      "trex": "This staff is a relic of a past age long forgotten. Thought to be forged by the God of Lighting. Those who have seen this staff claim it radiates powerful energy. Though this staff is only wielded by few, it is feared by all.",
-      "attack": 40,
-      "edge": 3,
-      "rpiercing": 10,
-      "type": "weapon"
-    },
-    "test2": {
-      "ignore": true,
-      "explanation": "An item to test item looks, just set the 'skin' property.",
-      "type": "test",
-      "name": "Test",
-      "skin": "test"
-    },
-    "dexamulet": {
-      "dex": 4,
-      "name": "Amulet of Dexterity",
-      "g": 30000,
-      "skin": "dexamulet",
-      "grades": [3, 5],
-      "compound": {
-        "dex": 3
+      "2": {
+        "str": 10
       },
-      "type": "amulet"
-    },
-    "shoes": {
-      "stat": 1,
-      "upgrade": {
-        "armor": 1.25,
-        "stat": 1,
-        "speed": 0.625
+      "3": {
+        "dex": 10
       },
-      "name": "Shoes",
-      "g": 12100,
-      "armor": 4,
-      "speed": 5.0,
-      "grades": [7, 9],
-      "skin": "shoes",
-      "tier": 1,
-      "type": "shoes",
-      "scroll": true
-    },
-    "stoneofluck": {
-      "ignore": true,
-      "days": 30,
-      "skin_a": "stoneofluck",
-      "g": 153600000,
-      "skin": "stoneofluck",
-      "explanation": "Increases your chances to loot something from a monster by 20%.",
-      "type": "stone",
-      "cash": 4800,
-      "name": "Stone of Luck"
-    },
-    "candy1v2": {
-      "e": 1,
-      "name": "Candy",
-      "g": 2400,
-      "explanation": "A delicious candy. Xyn in New Town could give you something in exchange!",
-      "s": true,
-      "skin": "candy1",
-      "type": "gem"
-    },
-    "essenceoflife": {
-      "name": "Essence of Life",
-      "g": 1,
-      "explanation": "Full of life, literally.",
-      "s": true,
-      "skin": "essenceoflife",
-      "type": "material"
-    },
-    "xgloves": {
-      "stat": 1,
-      "grade": 2,
-      "resistance": 16,
-      "grades": [0, 0],
-      "skin": "xgloves",
-      "tier": 4,
-      "a": 2,
-      "upgrade": {
-        "armor": 5.5,
-        "stat": 1,
-        "resistance": 5.5
-      },
-      "name": "Darkforge Gloves",
-      "g": 3400000,
-      "armor": 32,
-      "edge": 6,
-      "type": "gloves",
-      "scroll": true
-    },
-    "elixirdex1": {
-      "dex": 8,
-      "name": "Elixir of Greater Dexterity",
-      "g": 20000,
-      "s": true,
-      "skin_a": "elixirdex1",
-      "skin": "elixirdex1",
-      "duration": 24,
-      "type": "elixir"
-    },
-    "vitscroll": {
-      "stat": "vit",
-      "name": "Vitality Scroll",
-      "g": 8000,
-      "explanation": "Adds Vitality to an armor with a Stat attribute.",
-      "s": true,
-      "skin": "vitscroll",
-      "type": "pscroll"
-    },
-    "cape": {
-      "stat": 4,
-      "upgrade": {
-        "armor": 2,
-        "resistance": 1
-      },
-      "grades": [0, 8],
-      "name": "Cape",
-      "g": 20000,
-      "skin": "cape0",
-      "armor": 10,
-      "type": "cape",
-      "resistance": 8
-    },
-    "pumpkinspice": {
-      "explanation": "Produced in bulk during the Halloween season. WARNING: The pumpkin comes from a non-vegetable source",
-      "crit": 5,
-      "skin_a": "pumpkinspice",
-      "skin": "pumpkinspice",
-      "duration": 8,
-      "reflection": 2,
-      "name": "Pumpkin Spice Latte",
-      "g": 200,
-      "type": "elixir",
-      "s": true,
-      "mp": -400,
-      "aspeed": -20
-    },
-    "hboots": {
-      "stat": 1,
-      "grade": 2,
-      "resistance": 6,
-      "grades": [0, 0],
-      "skin": "hboots",
-      "tier": 3,
-      "speed": 7.0,
-      "a": 2,
-      "upgrade": {
-        "armor": 4.25,
-        "stat": 1,
-        "speed": 1.125,
-        "resistance": 2.125
-      },
-      "name": "Heavy Boots",
-      "g": 1240000,
-      "armor": 12,
-      "edge": 4,
-      "type": "shoes",
-      "scroll": true
-    },
-    "phelmet": {
-      "stat": 1,
-      "grade": 1,
-      "resistance": 16,
-      "grades": [0, 7],
-      "protection": true,
-      "skin": "phelmet",
-      "tier": 2,
-      "name": "Pumpkin Head",
-      "a": 2,
-      "upgrade": {
-        "armor": 2.5,
-        "stat": 1,
-        "reflection": 0.40000000000000002,
-        "resistance": 2.5
-      },
-      "reflection": 1,
-      "g": 72000,
-      "armor": 14,
-      "edge": 4,
-      "type": "helmet",
-      "scroll": true
-    },
-    "bunnyelixir": {
-      "hp": 200,
-      "skin_a": "bunnyelixir",
-      "vit": 15,
-      "skin": "bunnyelixir",
-      "duration": 2,
-      "speed": 12,
-      "dex": 4,
-      "name": "Bunny Energy Drink",
-      "g": 6000,
-      "s": true,
-      "mp": 300,
-      "type": "elixir",
-      "explanation": "Ingredients: Rabbit sweat, bubble gum flavour"
-    },
-    "sshield": {
-      "dreturn": 3,
-      "grades": [4, 8],
-      "upgrade": {
-        "armor": 10,
-        "dreturn": 1.5,
-        "resistance": 7
-      },
-      "name": "Spiked Shield",
-      "g": 24000,
-      "skin": "sshield",
-      "armor": 60,
-      "type": "shield",
-      "resistance": 20
-    },
-    "cscale": {
-      "name": "Croc Scale",
-      "g": 200,
-      "explanation": "A very hard scale, can be sewn onto armors.",
-      "s": true,
-      "skin": "cscale",
-      "type": "material"
-    },
-    "puppyer": {
-      "name": "Licence to Adopt a Puppy",
-      "g": 10000,
-      "explanation": "Lets you adopt a puppy once they are ready. You'll have to wait a bit until they are ready to be adopted tho!",
-      "s": true,
-      "skin": "puppyer",
-      "type": "petlicence"
-    },
-    "bowofthedead": {
-      "a": true,
-      "upgrade": {
-        "crit": 0.20000000000000001,
-        "attack": 4.75,
-        "range": 7
-      },
-      "vit": -2,
-      "g": 228000,
-      "speed": -12,
-      "wtype": "bow",
-      "range": 50,
-      "damage": "physical",
-      "crit": 1,
-      "attack": 26,
-      "edge": 3,
-      "grades": [0, 6],
-      "str": 20,
-      "skin": "bowofthedead",
-      "tier": 2,
-      "type": "weapon",
-      "explanation": "A weapon of death",
-      "name": "Bow of the Dead"
-    },
-    "mistletoe": {
-      "a": true,
-      "s": true,
-      "e": 1,
-      "name": "Mistletoe",
-      "g": 20000,
-      "skin": "mistletoe",
-      "explanation": "Maybe someone could give you a kiss in exchange...",
-      "type": "gem"
-    },
-    "elixirstr2": {
-      "a": true,
-      "g": 120000,
-      "s": true,
-      "name": "Elixir of Extreme Strength",
-      "str": 12,
-      "skin": "elixirstr2",
-      "duration": 48,
-      "type": "elixir",
-      "skin_a": "elixirstr2"
-    },
-    "cupid": {
-      "damage": "heal",
-      "grades": [0, 6],
-      "vit": 10,
-      "skin": "cupid",
-      "tier": 2.5,
-      "event": true,
-      "a": true,
-      "upgrade": {
-        "attack": 5.125,
-        "range": 8,
-        "vit": 2
-      },
-      "name": "Cupid's Bow",
-      "g": 90000,
-      "wtype": "bow",
-      "range": 60,
-      "attack": 29.0,
-      "edge": 3,
-      "type": "weapon"
-    },
-    "x7": {
-      "a": true,
-      "name": "Quantum Piece",
-      "g": 4000,
-      "explanation": "A unique component of a curious puzzle",
-      "s": true,
-      "skin": "x7",
-      "type": "quest"
-    },
-    "armorbox": {
-      "a": true,
-      "s": true,
-      "e": 1,
-      "name": "Armor Box",
-      "g": 120000,
-      "skin": "armorbox",
-      "explanation": "Can be exchanged for a random, rare armor.",
-      "type": "box"
-    },
-    "orbofres": {
-      "name": "Orb of Resistance",
-      "g": 240000,
-      "skin": "blueorb",
-      "resistance": 40,
-      "ignore": true,
-      "compound": {
-        "resistance": 20
-      },
-      "type": "orb"
-    },
-    "evasionscroll": {
-      "stat": "evasion",
-      "name": "Evasion Scroll",
-      "g": 8000,
-      "explanation": "Adds Evasion to an armor with a Stat attribute.",
-      "s": true,
-      "skin": "vitscroll",
-      "type": "pscroll"
-    },
-    "x4": {
-      "a": true,
-      "name": "Quantum Piece",
-      "g": 4000,
-      "explanation": "A unique component of a curious puzzle",
-      "s": true,
-      "skin": "x4",
-      "type": "quest"
-    },
-    "hpamulet": {
-      "name": "Amulet of HP",
-      "g": 20000,
-      "hp": 100,
-      "skin": "hpamulet",
-      "grades": [3, 5],
-      "compound": {
-        "hp": 120
-      },
-      "type": "amulet"
-    },
-    "shoes1": {
-      "stat": 1,
-      "grade": 1,
-      "grades": [0, 7],
-      "skin": "shoes1",
-      "tier": 2,
-      "speed": 6.0,
-      "a": 2,
-      "upgrade": {
-        "armor": 2.5,
-        "stat": 1,
-        "speed": 0.875
-      },
-      "name": "Rugged Shoes",
-      "g": 120000,
-      "armor": 8,
-      "edge": 2,
-      "type": "shoes",
-      "scroll": true
-    },
-    "goldbooster": {
-      "gold": 30,
-      "explanation": "Boosts gold loot from chests.",
-      "compound": {
-        "gold": 10
-      },
-      "cash": 499,
-      "grades": [0, 10],
-      "skin_a": "goldbooster_a",
-      "skin": "goldbooster",
-      "name": "Gold Booster",
-      "g": 15968000,
-      "days": 30,
-      "type": "booster",
-      "gain": "gold"
-    },
-    "swirlipop": {
-      "intelligence": -40,
-      "explanation": "A dizzying candy, has some benefits.",
-      "resistance": -300,
-      "g": 10000,
-      "skin_a": "swirlipop",
-      "skin": "swirlipop",
-      "duration": 0.0080000000000000002,
-      "eat": true,
-      "a": true,
-      "name": "Swirlipop",
-      "evasion": 90,
-      "s": true,
-      "withdrawal": true,
-      "type": "elixir"
-    },
-    "throwingstars": {
-      "attack": 5,
-      "upgrade": {
-        "attack": 2.5,
-        "range": 4
-      },
-      "grades": [7, 9],
-      "name": "Throwing Stars",
-      "g": 72000,
-      "skin": "throwingstars",
-      "wtype": "stars",
-      "type": "weapon",
-      "range": 50,
-      "damage": "physical"
-    },
-    "rednose": {
-      "a": true,
-      "range": 3,
-      "grades": [2, 4],
-      "name": "Rudolph's Red Nose",
-      "g": 32000,
-      "skin": "rednose",
-      "cuteness": 9,
-      "compound": {
-        "cuteness": 3,
-        "range": 4
-      },
-      "type": "helmet",
-      "scroll": true
-    },
-    "stoneofgold": {
-      "ignore": true,
-      "days": 30,
-      "skin_a": "stoneofgold",
-      "g": 153600000,
-      "skin": "stoneofgold",
-      "explanation": "Helps you find up to 40% more gold from monsters.",
-      "type": "stone",
-      "cash": 4800,
-      "name": "Stone of Riches"
-    },
-    "wingedboots": {
-      "stat": 1,
-      "resistance": 20,
-      "grades": [0, 7],
-      "frequency": 3,
-      "skin": "wingedboots",
-      "tier": 1.5,
-      "speed": 8,
-      "upgrade": {
-        "armor": 1.875,
-        "stat": 1,
-        "frequency": 0.625,
-        "speed": 1,
-        "resistance": 1.875
-      },
-      "name": "Winged Boots",
-      "g": 150000,
-      "armor": 6.0,
-      "credit": "Pluet",
-      "edge": 1.0,
-      "type": "shoes",
-      "scroll": true
-    },
-    "wshield": {
-      "stat": 2,
-      "upgrade": {
-        "armor": 8,
-        "resistance": 5
-      },
-      "grades": [7, 9],
-      "name": "Wooden Shield",
-      "g": 4800,
-      "skin": "wshield",
-      "armor": 40,
-      "type": "shield",
-      "resistance": 15
-    },
-    "t2dexamulet": {
-      "dex": 6,
-      "g": 800000,
-      "grades": [0, 2],
-      "name": "Amulet of the Stubborn Ranger",
-      "vit": 5,
-      "skin": "t2dexamulet",
-      "compound": {
-        "dex": 3,
-        "vit": 3
-      },
-      "type": "amulet"
-    },
-    "bcape": {
-      "stat": 5,
-      "resistance": 12,
-      "grades": [0, 4],
-      "skin": "cape1",
-      "a": true,
-      "upgrade": {
-        "armor": 3,
-        "resistance": 2
-      },
-      "name": "Well-Crafted Cape",
-      "g": 2400000,
-      "armor": 18,
-      "edge": 10,
-      "type": "cape"
-    },
-    "dexbelt": {
-      "dex": 4,
-      "name": "Belt of Dexterity",
-      "g": 50000,
-      "skin": "dexbelt",
-      "grades": [2, 5],
-      "compound": {
-        "dex": 3
-      },
-      "type": "belt"
-    },
-    "hpbelt": {
-      "name": "Belt of HP",
-      "g": 20000,
-      "hp": 80,
-      "skin": "hpbelt",
-      "grades": [3, 5],
-      "compound": {
-        "hp": 120
-      },
-      "type": "belt"
-    },
-    "ringsj": {
-      "dex": 1,
-      "g": 24000,
-      "grades": [3, 5],
-      "name": "Ring of Small Joys",
-      "str": 1,
-      "skin": "ring",
-      "int": 1,
-      "compound": {
-        "int": 1,
-        "dex": 1,
-        "resistance": 5,
-        "str": 1
-      },
-      "type": "ring",
-      "resistance": 5
-    },
-    "confetti": {
-      "onclick": "socket.emit('throw',{num:locate_item('confetti'),x:character.real_x,y:character.real_y})",
-      "s": true,
-      "name": "Pack of Confetti's",
-      "g": 20,
-      "skin": "confetti",
-      "action": "THROW!",
-      "explanation": "To celebrate good times",
-      "type": "throw"
-    },
-    "candycanesword": {
-      "ability": "sugarrush",
-      "damage": "physical",
-      "grades": [0, 8],
-      "skin": "candycanesword",
-      "a": true,
-      "upgrade": {
-        "attack": 4.5,
-        "range": 1
-      },
-      "name": "Candy Cane Sword",
-      "g": 72000,
-      "wtype": "short_sword",
-      "range": 3,
-      "attack": 20,
-      "edge": 2,
-      "type": "weapon"
-    },
-    "t2stramulet": {
-      "g": 800000,
-      "grades": [0, 2],
-      "name": "Amulet of the Eager Warrior",
-      "str": 5,
-      "skin": "t2stramulet",
-      "compound": {
-        "resistance": 20,
-        "str": 3
-      },
-      "type": "amulet",
-      "resistance": 30
-    },
-    "molesteeth": {
-      "a": true,
-      "grades": [0, 1],
-      "name": "Mole's Teeth",
-      "g": 500000,
-      "skin": "molesteeth",
-      "compound": {
-        "apiercing": 15
-      },
-      "type": "earring",
-      "apiercing": 15
-    },
-    "xmassweater": {
-      "stat": 1,
-      "explanation": "Such a beautiful vest. But for some reason, every time you wear this, people seem to avoid you.",
-      "skin": "xmassweater",
-      "resistance": 12.0,
-      "grades": [4, 8],
-      "evasion": 0.5,
-      "tier": 1.5,
-      "a": true,
-      "upgrade": {
-        "armor": 1.875,
-        "stat": 1,
-        "resistance": 1.875,
-        "evasion": 0.25
-      },
-      "name": "Xmas Sweater",
-      "g": 16000,
-      "armor": 18.0,
-      "edge": 1.0,
-      "type": "chest",
-      "scroll": true
-    },
-    "gem1": {
-      "a": 2,
-      "s": true,
-      "e": 1,
-      "name": "Tiny Ruby",
-      "g": 24000,
-      "skin": "gem1",
-      "explanation": "A hard to find gem. Can be exchanged for random treasures.",
-      "type": "gem"
-    },
-    "gem0": {
-      "a": true,
-      "s": true,
-      "e": 1,
-      "name": "Raw Emerald",
-      "g": 240000,
-      "skin": "gem0",
-      "explanation": "A very rare gem. Can be exchanged for random treasures.",
-      "type": "gem"
-    },
-    "leather": {
-      "s": true,
-      "quest": "leather",
-      "e": 40,
-      "name": "Leather",
-      "g": 3000,
-      "skin": "leather",
-      "explanation": "A Leather piece.",
-      "type": "quest"
-    },
-    "supermittens": {
-      "stat": 1,
-      "grade": 1,
-      "explanation": "Swift and lethal!",
-      "resistance": 8,
-      "grades": [0, 0],
-      "skin": "supermittens",
-      "tier": 2,
-      "a": true,
-      "upgrade": {
-        "stat": 1,
-        "rpiercing": 3,
-        "armor": 2.5,
-        "apiercing": 3,
-        "resistance": 2.5,
-        "aspeed": 0.20000000000000001
-      },
-      "name": "Super Mittens",
-      "g": 340000,
-      "armor": 16,
-      "type": "gloves",
-      "apiercing": 32,
-      "edge": 2,
-      "rpiercing": 32,
-      "aspeed": 2,
-      "scroll": true
-    },
-    "figurine": {
-      "name": "Terracota Army Figurine",
-      "g": 40000,
-      "s": true,
-      "skin": "figurine",
-      "action": "BREAK!",
-      "type": "figurine"
-    },
-    "luckbooster": {
-      "explanation": "Increases your chances of looting something from a monster.",
-      "compound": {
-        "luck": 20
-      },
-      "cash": 499,
-      "grades": [0, 10],
-      "skin_a": "luckbooster_a",
-      "skin": "luckbooster",
-      "name": "Luck Booster",
-      "g": 15968000,
-      "days": 30,
-      "gain": "luck",
-      "type": "booster",
-      "luck": 25
-    },
-    "mittens": {
-      "stat": 1,
-      "explanation": "Cute but deadly.",
-      "resistance": 6.0,
-      "grades": [4, 8],
-      "skin": "mittens",
-      "tier": 1.5,
-      "a": true,
-      "upgrade": {
-        "armor": 1.875,
-        "stat": 1,
-        "apiercing": 2,
-        "rpiercing": 2,
-        "resistance": 1.875
-      },
-      "name": "Mittens",
-      "g": 34000,
-      "armor": 12.0,
-      "apiercing": 20,
-      "edge": 1.0,
-      "rpiercing": 20,
-      "type": "gloves",
-      "scroll": true
-    },
-    "elixirdex2": {
-      "dex": 12,
-      "a": true,
-      "s": true,
-      "name": "Elixir of Extreme Dexterity",
-      "g": 120000,
-      "skin": "elixirdex2",
-      "duration": 48,
-      "type": "elixir",
-      "skin_a": "elixirdex2"
-    },
-    "jewellerybox": {
-      "a": true,
-      "s": true,
-      "e": 1,
-      "name": "Jewellery Box",
-      "g": 80000,
-      "skin": "chest3",
-      "explanation": "Can be exchanged for a random acessory.",
-      "type": "box"
-    },
-    "funtoken": {
-      "name": "FUN Token",
-      "g": 12000,
-      "explanation": "A token representing fun with friends. Collect them from Daily events and exchange them for treasures!",
-      "s": true,
-      "skin": "funtoken",
-      "type": "token"
-    },
-    "gloves": {
-      "stat": 1,
-      "upgrade": {
-        "armor": 1.25,
-        "stat": 1,
-        "resistance": 1.25
-      },
-      "name": "Gloves",
-      "g": 3400,
-      "armor": 8,
-      "resistance": 4,
-      "grades": [7, 9],
-      "skin": "gloves",
-      "tier": 1,
-      "type": "gloves",
-      "scroll": true
-    },
-    "xboots": {
-      "stat": 1,
-      "grade": 2,
-      "resistance": 8,
-      "grades": [0, 0],
-      "skin": "xboots",
-      "tier": 4,
-      "speed": 8.0,
-      "a": 2,
-      "upgrade": {
-        "armor": 5.5,
-        "stat": 1,
-        "speed": 1.375,
-        "resistance": 2.75
-      },
-      "name": "Darkforge Boots",
-      "g": 12400000,
-      "armor": 16,
-      "edge": 6,
-      "type": "shoes",
-      "scroll": true
-    },
-    "claw": {
-      "attack": 10,
-      "upgrade": {
-        "attack": 3,
-        "range": 1.5
-      },
-      "grades": [7, 9],
-      "name": "Claw",
-      "g": 7200,
-      "skin": "claw",
-      "wtype": "fist",
-      "type": "weapon",
-      "range": 5,
-      "damage": "physical"
-    },
-    "intring": {
-      "name": "Ring of Intelligence",
-      "g": 24000,
-      "int": 2,
-      "skin": "intring",
-      "grades": [3, 5],
-      "compound": {
-        "int": 2
-      },
-      "type": "ring"
-    },
-    "pants": {
-      "stat": 1,
-      "upgrade": {
-        "armor": 1.25,
-        "stat": 1,
-        "resistance": 1.25
-      },
-      "name": "Pants",
-      "g": 7800,
-      "armor": 10,
-      "resistance": 6,
-      "grades": [7, 9],
-      "skin": "pants",
-      "tier": 1,
-      "type": "pants",
-      "scroll": true
-    },
-    "lantern": {
-      "g": 480000,
-      "grades": [0, 0],
-      "name": "The Lantern",
-      "evasion": 10,
-      "skin": "lantern",
-      "explanation": "Forged from a naturally vibrating metal",
-      "compound": {
-        "resistance": 10,
-        "evasion": 5
-      },
-      "type": "misc_offhand",
-      "resistance": 120
-    },
-    "scroll4": {
-      "a": true,
-      "s": true,
-      "name": "Ultimate Upgrade Scroll",
-      "g": 64000000,
-      "skin": "scroll4",
-      "grade": 4,
-      "explanation": "A scroll passed down from ancient times. Long believed to be extinct. Powers beyond imagination.",
-      "type": "uscroll"
-    },
-    "helmet1": {
-      "stat": 1,
-      "grade": 1,
-      "resistance": 16,
-      "grades": [0, 7],
-      "protection": true,
-      "skin": "helmet1",
-      "tier": 2,
-      "a": 2,
-      "upgrade": {
-        "armor": 2.5,
-        "stat": 1,
-        "resistance": 2.5
-      },
-      "name": "Rugged Helmet",
-      "g": 32000,
-      "armor": 14,
-      "edge": 2,
-      "type": "helmet",
-      "scroll": true
-    },
-    "scroll2": {
-      "name": "Upgrade Scroll",
-      "g": 1600000,
-      "grade": 2,
-      "explanation": "Scroll to upgrade a rare weapon or armor.",
-      "s": true,
-      "skin": "scroll2",
-      "type": "uscroll"
-    },
-    "scroll3": {
-      "a": true,
-      "s": true,
-      "name": "Legendary Upgrade Scroll",
-      "g": 3200000,
-      "skin": "scroll3",
-      "grade": 3,
-      "explanation": "A mysterious upgrade scroll, you can feel that it's very powerful.",
-      "type": "uscroll"
-    },
-    "scroll0": {
-      "name": "Upgrade Scroll",
-      "g": 1000,
-      "grade": 0,
-      "explanation": "Scroll to upgrade a weapon or armor. If the upgrade fails, the item is lost.",
-      "s": true,
-      "skin": "scroll0",
-      "type": "uscroll"
-    },
-    "scroll1": {
-      "name": "Upgrade Scroll",
-      "g": 40000,
-      "grade": 1,
-      "explanation": "Scroll to upgrade a high grade weapon or armor.",
-      "s": true,
-      "skin": "scroll1",
-      "type": "uscroll"
-    },
-    "greenbomb": {
-      "a": true,
-      "explanation": "It's a candy with very questionable ingredients, might be addictive.",
-      "resistance": -800,
-      "crit": 10,
-      "skin_a": "greenbomb",
-      "skin": "greenbomb",
-      "duration": 0.002,
-      "speed": 30,
-      "eat": true,
-      "dex": 120,
-      "name": "Green Bomb",
-      "g": 10000,
-      "s": true,
-      "str": 50,
-      "withdrawal": true,
-      "type": "elixir"
-    },
-    "daggerofthedead": {
-      "a": true,
-      "upgrade": {
-        "attack": 4.5,
-        "range": 2
-      },
-      "str": 20,
-      "g": 224000,
-      "speed": -2,
-      "wtype": "dagger",
-      "range": 5,
-      "apiercing": 20,
-      "attack": 18,
-      "grades": [0, 6],
-      "vit": -6,
-      "skin": "daggerofthedead",
-      "damage": "physical",
-      "type": "weapon",
-      "explanation": "A deadly weapon",
-      "name": "Dagger of the Dead"
-    },
-    "stonekey": {
-      "name": "The Stone Key",
-      "g": 50000,
-      "explanation": "A stone key, imbued with magical energy.",
-      "skin": "placeholder",
-      "type": "key",
-      "opens": "therush"
-    },
-    "puppy1": {
-      "a": true,
-      "name": "Egg",
-      "g": 40000,
-      "explanation": "A vibrant egg, it's inhabitant seems eager to get out.",
-      "skin": "egg1",
-      "type": "pet"
-    },
-    "darktristone": {
-      "dex": 1,
-      "evasion": 3,
-      "vit": 1,
-      "rpiercing": 5,
-      "onclick": "socket.emit('activate',{slot:$(this).data('id')})",
-      "int": 1,
-      "compound": {
-        "dex": 1,
-        "vit": 1,
-        "rpiercing": 5,
-        "int": 1,
-        "apiercing": 5,
-        "str": 1
-      },
-      "apiercing": 5,
-      "g": 50000,
-      "grades": [1, 4],
-      "skin_a": "darktristone_a",
-      "str": 1,
-      "skin": "darktristone",
-      "action": "ACTIVATE!",
-      "type": "ring",
-      "name": "Dark Tri-Stone"
-    },
-    "warmscarf": {
-      "a": true,
-      "int": 2,
-      "explanation": "Stylish and deadly!",
-      "resistance": 10,
-      "g": 20000,
-      "grades": [7, 9],
-      "skin": "warmscarf",
-      "dex": 2,
-      "upgrade": {
-        "apiercing": 1.25,
-        "rpiercing": 1.25
-      },
-      "name": "Warm Scarf",
-      "rpiercing": 5,
-      "armor": 10,
-      "apiercing": 5,
-      "str": 2,
-      "type": "amulet"
-    },
-    "oozingterror": {
-      "a": true,
-      "nopo": "Mutates the brain to maximize its potential, sapping the user's life in the process.",
-      "upgrade": {
-        "int": 1,
-        "attack": 6,
-        "range": 3,
-        "attr0": 0.02,
-        "reflection": 0.25
-      },
-      "reflection": 1,
-      "name": "Oozing Terror",
-      "int": 20,
-      "wtype": "staff",
-      "explanation": "It drains the life energy of the user",
-      "range": 50,
-      "damage": "magical",
-      "attr0": 0.10000000000000001,
-      "attack": 40,
-      "edge": 3,
-      "g": 289000,
-      "vit": -30,
-      "skin": "oozingterror",
-      "type": "weapon",
-      "grades": [0, 6],
-      "ability": "posion"
-    },
-    "pants1": {
-      "stat": 1,
-      "grade": 1,
-      "resistance": 12,
-      "grades": [0, 7],
-      "skin": "pants1",
-      "tier": 2,
-      "a": 2,
-      "upgrade": {
-        "armor": 2.5,
-        "stat": 1,
-        "resistance": 2.5
-      },
-      "name": "Rugged Pants",
-      "g": 78000,
-      "armor": 20,
-      "edge": 2,
-      "type": "pants",
-      "scroll": true
-    },
-    "xbox": {
-      "a": true,
-      "s": true,
-      "e": 1,
-      "name": "Xmas Box",
-      "g": 1000000,
-      "skin": "xbox",
-      "explanation": "Finally... They all came together. A unique gift lies within this box. Take it to Xyn to be unlocked.",
-      "type": "quest"
-    },
-    "reflectionscroll": {
-      "stat": "reflection",
-      "name": "Reflection Scroll",
-      "g": 8000,
-      "explanation": "Adds Reflection to an armor with a Stat attribute.",
-      "s": true,
-      "skin": "vitscroll",
-      "type": "pscroll"
-    },
-    "angelwings": {
-      "stat": 3,
-      "skin": "angelwings",
-      "resistance": 8,
-      "grades": [0, 6],
-      "evasion": 1,
-      "speed": 1,
-      "a": true,
-      "upgrade": {
-        "speed": 0.20000000000000001,
-        "resistance": 1,
-        "evasion": 0.20000000000000001
-      },
-      "name": "Angel Wings",
-      "g": 120000,
-      "onclick": "socket.emit('activate',{slot:$(this).data('id')})",
-      "action": "FLAP",
-      "type": "cape"
-    },
-    "storagebox": {
-      "name": "Storage Box",
-      "g": 9000,
-      "explanation": "It's a nifty little box",
-      "s": true,
-      "skin": "storagebox",
-      "type": "misc"
-    },
-    "elixirstr0": {
-      "name": "Elixir of Strength",
-      "g": 6000,
-      "s": true,
-      "skin_a": "elixirstr0",
-      "str": 6,
-      "skin": "elixirstr0",
-      "duration": 12,
-      "type": "elixir"
-    },
-    "rabbitsfoot": {
-      "a": true,
-      "grades": [0, 0],
-      "edge": 5,
-      "name": "Rabbit's Foot",
-      "g": 120000,
-      "skin": "rabbitsfoot",
-      "explanation": "Taken from a rabbit who lived a long and happy life, after the natural death occurred, with pre-consent",
-      "compound": {
-        "luck": 5
-      },
-      "type": "orb",
-      "luck": 10
-    },
-    "elixirint0": {
-      "name": "Elixir of Intelligence",
-      "g": 6000,
-      "int": 6,
-      "s": true,
-      "skin_a": "elixirint0",
-      "skin": "elixirint0",
-      "duration": 12,
-      "type": "elixir"
-    },
-    "elixirstr1": {
-      "name": "Elixir of Greater Strength",
-      "g": 20000,
-      "s": true,
-      "skin_a": "elixirstr1",
-      "str": 8,
-      "skin": "elixirstr1",
-      "duration": 24,
-      "type": "elixir"
-    },
-    "xhelmet": {
-      "stat": 1,
-      "grade": 2,
-      "resistance": 32,
-      "grades": [0, 0],
-      "protection": true,
-      "skin": "xhelmet",
-      "tier": 4,
-      "a": 2,
-      "upgrade": {
-        "armor": 5.5,
-        "stat": 1,
-        "resistance": 5.5
-      },
-      "name": "Darkforge Helmet",
-      "g": 3200000,
-      "armor": 28,
-      "edge": 6,
-      "type": "helmet",
-      "scroll": true
-    },
-    "hpot1": {
-      "name": "HP Potion",
-      "g": 100,
-      "s": true,
-      "skin": "hpot1",
-      "type": "pot",
-      "gives": [["hp", 400]]
-    },
-    "ornament": {
-      "e": 20,
-      "name": "Xmas Ornament",
-      "g": 3000,
-      "explanation": "A beautiful ornament. A bunch of these could decorate the trees of Winterland.",
-      "s": true,
-      "skin": "ornament",
-      "type": "quest"
-    },
-    "cscroll2": {
-      "name": "Compound Scroll",
-      "g": 9200000,
-      "grade": 2,
-      "explanation": "Scroll to combine 3 rare accessories.",
-      "s": true,
-      "skin": "cscroll2",
-      "type": "cscroll"
-    },
-    "poison": {
-      "name": "Poison Sack",
-      "g": 1000,
-      "explanation": "An organic poison sack, can be used to coat weapons or arrows.",
-      "s": true,
-      "skin": "poison",
-      "type": "skill_item"
-    },
-    "orbofint": {
-      "name": "Orb of Intelligence",
-      "g": 240000,
-      "int": 5,
-      "skin": "blueorb",
-      "ignore": true,
-      "compound": {
-        "int": 5
-      },
-      "type": "orb"
-    },
-    "staff": {
-      "attack": 25,
-      "upgrade": {
-        "attack": 5,
-        "range": 3
-      },
-      "grades": [7, 9],
-      "name": "Staff",
-      "g": 12400,
-      "skin": "staff",
-      "wtype": "staff",
-      "type": "weapon",
-      "range": 50,
-      "damage": "magical"
-    },
-    "strbelt": {
-      "name": "Belt of Strength",
-      "g": 50000,
-      "skin": "strbelt",
-      "grades": [2, 5],
-      "str": 4,
-      "compound": {
-        "str": 3
-      },
-      "type": "belt"
-    },
-    "carrotsword": {
-      "a": true,
-      "damage": "physical",
-      "grades": [0, 7],
-      "skin": "carrotsword",
-      "dex": 12,
-      "upgrade": {
-        "attack": 4.5,
-        "range": 1
-      },
-      "name": "Carrot Sword",
-      "g": 92000,
-      "wtype": "short_sword",
-      "range": 3,
-      "charisma": -20,
-      "edge": 2,
-      "attack": 20,
-      "type": "weapon"
-    },
-    "vitearring": {
-      "name": "Earring of Vitality",
-      "g": 50000,
-      "skin": "vitearring",
-      "grades": [2, 5],
-      "vit": 3,
-      "compound": {
-        "vit": 2
-      },
-      "type": "earring"
-    },
-    "fclaw": {
-      "ability": "freeze",
-      "int": 8,
-      "damage": "physical",
-      "grades": [0, 7],
-      "attr0": 0.20000000000000001,
-      "skin": "fclaw",
-      "a": true,
-      "upgrade": {
-        "attack": 4,
-        "range": 1.5,
-        "attr0": 0.10000000000000001
-      },
-      "name": "Frozen Claw",
-      "g": 72000,
-      "wtype": "fist",
-      "range": 5,
-      "attack": 14,
-      "type": "weapon"
-    },
-    "essenceofether": {
-      "name": "Ethereal Essence",
-      "g": 40000,
-      "explanation": "A ghostly essence, maybe it could allow you to shift from this world momentarily",
-      "s": true,
-      "skin": "essenceofether",
-      "type": "material"
-    },
-    "lostearring": {
-      "explanation": "Looks valuable",
-      "compound": {},
-      "grades": [0, 1],
-      "quest": "lostearring",
-      "skin": "lostearring",
-      "a": true,
-      "e": 1,
-      "name": "Gold Earring",
-      "g": 360000,
-      "edge": 3,
-      "type": "earring"
-    },
-    "feather0": {
-      "name": "Magical Feather",
-      "g": 200,
-      "explanation": "Holding this, you understand how those huge birds can fly, it's not a normal feather!",
-      "s": true,
-      "skin": "feather0",
-      "type": "material"
-    },
-    "warpvest": {
-      "stat": 1,
-      "grade": 2,
-      "explanation": "Warps space-time. Ancient Computer unlocks only a fraction of it's capabilities. Needs to be recharged in order to initiate a jump.",
-      "resistance": 24,
-      "grades": [0, 0],
-      "skin": "warpvest",
-      "tier": 3,
-      "a": 2,
-      "upgrade": {
-        "dex": 10,
-        "stat": 1,
-        "str": 10,
-        "int": 10,
-        "resistance": 4.25,
-        "armor": 4.25,
+      "4": {
         "vit": 10
       },
-      "name": "Warp Vest",
-      "g": 4800000,
-      "armor": 36,
-      "edge": 5,
-      "type": "chest",
-      "scroll": true
-    },
-    "stramulet": {
-      "name": "Amulet of Strength",
-      "g": 30000,
-      "skin": "stramulet",
-      "grades": [3, 5],
-      "str": 4,
-      "compound": {
-        "str": 2
-      },
-      "type": "amulet"
-    },
-    "licence": {
-      "name": "Licence to Kill",
-      "g": 1000000,
-      "explanation": "Lets you run an additional character for 30 minutes.",
-      "ignore": true,
-      "s": true,
-      "skin": "licence",
-      "type": "licence"
-    },
-    "xptome": {
-      "name": "Tome of Protection",
-      "g": 320000,
-      "explanation": "Significantly reduces experience loss on death. If the owner is defeated by another player, the victor receives a portion of the Tome's cost.",
-      "cash": 10,
-      "s": true,
-      "skin": "xptome",
-      "type": "tome"
-    },
-    "intamulet": {
-      "name": "Amulet of Intelligence",
-      "g": 30000,
-      "int": 4,
-      "skin": "intamulet",
-      "grades": [3, 5],
-      "compound": {
-        "int": 3
-      },
-      "type": "amulet"
-    },
-    "hgloves": {
-      "stat": 1,
-      "grade": 2,
-      "resistance": 12,
-      "grades": [0, 0],
-      "skin": "hgloves",
-      "tier": 3,
-      "a": 2,
-      "upgrade": {
-        "armor": 4.25,
-        "stat": 1,
-        "resistance": 4.25
-      },
-      "name": "Heavy Gloves",
-      "g": 340000,
-      "armor": 24,
-      "edge": 4,
-      "type": "gloves",
-      "scroll": true
-    },
-    "orbofhp": {
-      "name": "Orb of Vitality",
-      "g": 120000,
-      "hp": 120,
-      "skin": "redorb",
-      "ignore": true,
-      "compound": {
-        "hp": 120
-      },
-      "type": "orb"
-    },
-    "shadowstone": {
-      "name": "Shadow Stone",
-      "g": 800,
-      "explanation": "A stone piece with curious properties, allows the bearer to shift to a parallel reality.",
-      "s": true,
-      "skin": "shadowstone",
-      "type": "skill_item"
-    },
-    "partyhat": {
-      "stat": 1,
-      "resistance": 8,
-      "grades": [7, 9],
-      "skin": "partyhat",
-      "tier": 1,
-      "a": 2,
-      "upgrade": {
-        "dex": 0.20000000000000001,
-        "stat": 1,
-        "str": 0.20000000000000001,
-        "int": 0.20000000000000001,
-        "resistance": 1.25,
-        "armor": 1.25,
-        "vit": 0.10000000000000001
-      },
-      "name": "Party Hat",
-      "g": 12000,
-      "armor": 7,
-      "type": "helmet",
-      "scroll": true
-    },
-    "weaponbox": {
-      "a": true,
-      "s": true,
-      "e": 1,
-      "name": "Weapon Box",
-      "g": 320000,
-      "skin": "weaponbox",
-      "explanation": "Can be exchanged for a random, rare weapon.",
-      "type": "box"
-    },
-    "stand1": {
-      "explanation": "You can become a merchant using this item.",
-      "type": "stand",
-      "name": "Merchant Stand [Sell+Buy]",
-      "g": 400000,
-      "skin": "stand1"
-    },
-    "dexearring": {
-      "dex": 3,
-      "name": "Earring of Dexterity",
-      "g": 50000,
-      "skin": "dexearring",
-      "grades": [2, 5],
-      "compound": {
-        "dex": 2
-      },
-      "type": "earring"
-    },
-    "xshield": {
-      "int": 4,
-      "explanation": "A metallurgical failure but a magical marvel",
-      "resistance": 24,
-      "g": 1200000,
-      "grades": [0, 0],
-      "skin": "xshield",
-      "crit": 1,
-      "xp": 8,
-      "speed": 5,
-      "dex": 6,
-      "upgrade": {
-        "resistance": 6,
-        "str": 1
-      },
-      "name": "Shield X",
-      "evasion": 4,
-      "str": 8,
-      "type": "shield"
-    },
-    "bow": {
-      "damage": "physical",
-      "grades": [7, 9],
-      "skin": "bow",
-      "tier": 1,
-      "upgrade": {
-        "attack": 4.0,
-        "range": 8
-      },
-      "name": "Bow",
-      "g": 16000,
-      "wtype": "bow",
-      "range": 60,
-      "attack": 20,
-      "type": "weapon"
-    },
-    "essenceoffire": {
-      "name": "Essence of Fire",
-      "g": 40000,
-      "explanation": "So fierce, so mesmerizing",
-      "s": true,
-      "skin": "essenceoffire",
-      "type": "material"
-    },
-    "hotchocolate": {
-      "explanation": "Fills your heart with warmth.",
-      "resistance": 30,
-      "skin_a": "hotchocolate",
-      "vit": 30,
-      "skin": "hotchocolate",
-      "duration": 1,
-      "name": "Hot Chocolate",
-      "g": 6000,
-      "armor": 30,
-      "s": true,
-      "type": "elixir"
-    },
-    "smoke": {
-      "onclick": "socket.emit('throw',{num:locate_item('smoke'),x:character.real_x,y:character.real_y})",
-      "s": true,
-      "name": "Pouch of Poof",
-      "g": 20,
-      "skin": "smoke",
-      "action": "THROW!",
-      "explanation": "A pyrotechnic pouch developed for those who want to feel like Rogue's",
-      "type": "throw"
-    },
-    "t2bow": {
-      "explanation": "Crafted with the finest of materials",
-      "damage": "physical",
-      "grades": [0, 7],
-      "skin": "t2bow",
-      "tier": 2,
-      "a": true,
-      "upgrade": {
-        "attack": 4.75,
-        "range": 8
-      },
-      "name": "Well-Crafted Bow",
-      "g": 78000,
-      "wtype": "bow",
-      "range": 60,
-      "attack": 26,
-      "edge": 3,
-      "type": "weapon"
-    },
-    "stoneofxp": {
-      "ignore": true,
-      "days": 30,
-      "skin_a": "stoneofxp_a",
-      "g": 153600000,
-      "skin": "stoneofxp",
-      "explanation": "Increases experience gain by 50%. Needs to be activated. Can be morphed into other stones.",
-      "type": "stone",
-      "cash": 4800,
-      "name": "Stone of Wisdom"
-    },
-    "emptyjar": {
-      "name": "Empty Jar",
-      "g": 100,
-      "explanation": "Always nice to have some empty jars lying around, you never know when you'll need one!",
-      "s": true,
-      "skin": "emptyjar",
-      "type": "jar"
-    },
-    "essenceofnature": {
-      "name": "Essence of Nature",
-      "g": 5000,
-      "explanation": "Earthly energy, waiting to spring",
-      "s": true,
-      "skin": "essenceofnature",
-      "type": "material"
-    },
-    "intearring": {
-      "name": "Earring of Intelligence",
-      "g": 50000,
-      "int": 3,
-      "skin": "intearring",
-      "grades": [2, 5],
-      "compound": {
-        "int": 2
-      },
-      "type": "earring"
-    },
-    "strscroll": {
-      "stat": "str",
-      "name": "Strength Scroll",
-      "g": 8000,
-      "explanation": "Adds Stength to an armor with a Stat attribute.",
-      "s": true,
-      "skin": "strscroll",
-      "type": "pscroll"
-    },
-    "hpants": {
-      "stat": 1,
-      "grade": 2,
-      "resistance": 18,
-      "grades": [0, 0],
-      "skin": "hpants",
-      "tier": 3,
-      "a": 2,
-      "upgrade": {
-        "armor": 4.25,
-        "stat": 1,
-        "resistance": 4.25
-      },
-      "name": "Heavy Underarmor",
-      "g": 780000,
-      "armor": 30,
-      "edge": 4,
-      "type": "pants",
-      "scroll": true
-    },
-    "gphelmet": {
-      "stat": 1,
-      "grade": 1,
-      "resistance": 16,
-      "tier": 2,
-      "grades": [0, 0],
-      "protection": true,
-      "skin": "gphelmet",
-      "crit": 0.5,
-      "reflection": 1,
-      "a": 2,
-      "upgrade": {
-        "crit": 0.10000000000000001,
-        "armor": 2.5,
-        "stat": 1,
-        "reflection": 0.40000000000000002,
-        "resistance": 2.5
-      },
-      "name": "Green Pumpkin Head",
-      "lifesteal": 2,
-      "armor": 14,
-      "edge": 4,
-      "g": 32000,
-      "rpiercing": 10,
-      "type": "helmet",
-      "scroll": true,
-      "luck": -20
-    },
-    "spear": {
-      "apiercing": 10,
-      "grades": [3, 8],
-      "skin": "spear",
-      "range": 15,
-      "a": 2,
-      "upgrade": {
-        "range": 2,
-        "attack": 4.25,
-        "apiercing": 5
-      },
-      "name": "Spear",
-      "g": 72000,
-      "wtype": "spear",
-      "damage": "physical",
-      "attack": 15,
-      "type": "weapon"
-    },
-    "amuletofm": {
-      "dex": 1,
-      "dreturn": 1,
-      "reflection": 0.5,
-      "evasion": 2,
-      "int": 1,
-      "hp": 40,
-      "compound": {
-        "dex": 1,
-        "int": 1,
-        "reflection": 0.5,
-        "evasion": 1,
-        "dreturn": 0.5,
-        "crit": 1,
-        "str": 1,
-        "hp": 60,
-        "armor": 2
-      },
-      "ignore": true,
-      "armor": 10,
-      "grades": [3, 5],
-      "g": 640000,
-      "a": true,
-      "str": 1,
-      "skin": "amuletofm",
-      "crit": 2,
-      "type": "amulet",
-      "name": "Amulet of Mystery"
-    },
-    "pvptoken": {
-      "name": "PVP Token",
-      "g": 24000,
-      "explanation": "A token representing valour in battles. Collect them from PVP events and exchange them for treasures!",
-      "s": true,
-      "skin": "pvptoken",
-      "type": "token"
-    },
-    "egg5": {
-      "name": "Easter Egg",
-      "g": 4000,
-      "explanation": "A uniquely painted Egg!",
-      "s": true,
-      "skin": "egg5",
-      "type": "quest"
-    },
-    "orbofstr": {
-      "name": "Orb of Strength",
-      "g": 240000,
-      "skin": "orangeorb",
-      "ignore": true,
-      "str": 5,
-      "compound": {
-        "str": 5
-      },
-      "type": "orb"
-    },
-    "glitch": {
-      "a": true,
-      "e": 1,
-      "name": "A Glitch",
-      "g": 10000,
-      "explanation": "Huh?! Wtf.",
-      "skin": "glitch",
-      "type": "misc"
-    },
-    "ornamentstaff": {
-      "damage": "magical",
-      "grades": [0, 7],
-      "awesomeness": 99,
-      "skin": "ornamentstaff",
-      "range": 60,
-      "a": true,
-      "upgrade": {
-        "attack": 6,
-        "awesomeness": 0.10000000000000001,
-        "range": 3
-      },
-      "name": "Ornament Staff",
-      "g": 120000,
-      "wtype": "staff",
-      "attack": 30,
-      "mp_cost": -40,
-      "edge": 2,
-      "type": "weapon"
-    },
-    "candy0v2": {
-      "e": 1,
-      "name": "Rare Candy",
-      "g": 12000,
-      "explanation": "A rare candy. Xyn in New Town could give you something exciting in exchange!",
-      "s": true,
-      "skin": "candy0",
-      "type": "gem"
-    },
-    "bataxe": {
-      "delia": "Now you see me, now you see the floor",
-      "damage": "physical",
-      "grades": [0, 6],
-      "wspeed": "slow",
-      "skin": "bataxe",
-      "name": "Ghastly Battle Axe",
-      "a": true,
-      "upgrade": {
-        "attack": 9.5,
-        "range": 1
-      },
-      "reflection": 4,
-      "g": 124000,
-      "wtype": "axe",
-      "range": 8,
-      "attack": 36,
-      "edge": 3,
-      "type": "weapon"
-    },
-    "bunnyears": {
-      "stat": 1,
-      "grade": 1,
-      "resistance": 16,
-      "tier": 2,
-      "grades": [4, 8],
-      "protection": true,
-      "vit": 4,
-      "skin": "bunnyears",
-      "cuteness": 12,
-      "name": "Bunny Ears",
-      "a": 2,
-      "upgrade": {
-        "armor": 2.5,
-        "stat": 1,
-        "resistance": 2.5,
-        "evasion": 0.20000000000000001
-      },
-      "evasion": 1,
-      "g": 32000,
-      "armor": 14,
-      "edge": 1,
-      "type": "helmet",
-      "scroll": true
-    },
-    "cdragon": {
-      "dreturn": 3,
-      "int": 10,
-      "resistance": 32,
-      "g": 8900000,
-      "grades": [0, 0],
-      "a": 2,
-      "vit": 2,
-      "skin": "dragonarmor",
-      "dex": 10,
-      "name": "Dragon Armor",
-      "rpiercing": 16,
-      "armor": 40,
-      "apiercing": 16,
-      "str": 10,
-      "type": "chest"
-    },
-    "santasbelt": {
-      "dex": 3,
-      "a": true,
-      "grades": [0, 3],
-      "g": 640000,
-      "name": "Santa's Belt",
-      "evasion": 4,
-      "skin": "santasbelt",
-      "compound": {
-        "dex": 2
-      },
-      "type": "belt"
-    },
-    "computer": {
-      "name": "Ancient Computer",
-      "g": 51200000,
-      "explanation": "Networks you to NPC's and extends the CODE capabilities.",
-      "cash": 1600,
-      "skin": "ancientcomputer",
-      "type": "computer"
-    },
-    "seashell": {
-      "s": true,
-      "quest": "seashell",
-      "e": 20,
-      "name": "Seashell",
-      "g": 2000,
-      "skin": "seashell",
-      "explanation": "A beautiful seashell.",
-      "type": "quest"
-    },
-    "vitring": {
-      "name": "Ring of Vitality",
-      "g": 24000,
-      "skin": "vitring",
-      "grades": [3, 5],
-      "vit": 2,
-      "compound": {
-        "vit": 2
-      },
-      "type": "ring"
-    },
-    "swordofthedead": {
-      "resistance": 20,
-      "damage": "physical",
-      "grades": [0, 6],
-      "vit": -8,
-      "skin": "swordofthedead",
-      "a": true,
-      "upgrade": {
-        "attack": 5,
-        "range": 1.75,
-        "resistance": 2.5
-      },
-      "name": "Sword of the Dead",
-      "g": 224000,
-      "wtype": "short_sword",
-      "range": 8,
-      "attack": 25,
-      "str": 10,
-      "type": "weapon"
-    },
-    "harmor": {
-      "stat": 1,
-      "grade": 2,
-      "resistance": 24,
-      "grades": [0, 0],
-      "skin": "harmor",
-      "tier": 3,
-      "a": 2,
-      "upgrade": {
-        "armor": 4.25,
-        "stat": 1,
-        "resistance": 4.25
-      },
-      "name": "Heavy Armor",
-      "g": 480000,
-      "armor": 36,
-      "edge": 4,
-      "type": "chest",
-      "scroll": true
-    },
-    "shield": {
-      "grades": [4, 8],
-      "upgrade": {
-        "armor": 12.5,
-        "resistance": 7.5
-      },
-      "name": "Shield",
-      "g": 24000,
-      "skin": "shield",
-      "armor": 60,
-      "type": "shield",
-      "resistance": 20
-    },
-    "maceofthedead": {
-      "a": true,
-      "grades": [0, 6],
-      "upgrade": {},
-      "explanation": "A weapon none in the realm can wield!",
-      "name": "Mace of the Dead",
-      "g": 224000,
-      "skin": "maceofthedead",
-      "wtype": "mace",
-      "type": "weapon",
-      "damage": "physical"
-    },
-    "coat1": {
-      "stat": 1,
-      "grade": 1,
-      "resistance": 16,
-      "grades": [0, 7],
-      "skin": "coat1",
-      "tier": 2,
-      "a": 2,
-      "upgrade": {
-        "armor": 2.5,
-        "stat": 1,
-        "resistance": 2.5
-      },
-      "name": "Rugged Coat",
-      "g": 48000,
-      "armor": 24,
-      "edge": 2,
-      "type": "chest",
-      "scroll": true
-    },
-    "elixirint1": {
-      "name": "Elixir of Greater Intelligence",
-      "g": 20000,
-      "int": 8,
-      "s": true,
-      "skin_a": "elixirint1",
-      "skin": "elixirint1",
-      "duration": 24,
-      "type": "elixir"
-    },
-    "hhelmet": {
-      "stat": 1,
-      "grade": 2,
-      "resistance": 24,
-      "grades": [0, 0],
-      "protection": true,
-      "skin": "hhelmet",
-      "tier": 3,
-      "a": 2,
-      "upgrade": {
-        "armor": 4.25,
-        "stat": 1,
-        "resistance": 4.25
-      },
-      "name": "Heavy Helmet",
-      "g": 320000,
-      "armor": 21,
-      "edge": 4,
-      "type": "helmet",
-      "scroll": true
-    },
-    "froststaff": {
-      "ability": "freeze",
-      "int": 2,
-      "damage": "magical",
-      "grades": [0, 8],
-      "attr0": 10.199999999999999,
-      "skin": "froststaff",
-      "a": true,
-      "upgrade": {
-        "int": 1,
-        "attack": 5.5,
-        "range": 3,
-        "attr0": 0.10000000000000001
-      },
-      "name": "Frost Staff",
-      "g": 289000,
-      "wtype": "staff",
-      "range": 50,
-      "attack": 30,
-      "edge": 2,
-      "type": "weapon"
-    },
-    "gloves1": {
-      "stat": 1,
-      "grade": 1,
-      "resistance": 8,
-      "grades": [0, 7],
-      "skin": "gloves1",
-      "tier": 2,
-      "a": 2,
-      "upgrade": {
-        "armor": 2.5,
-        "stat": 1,
-        "resistance": 2.5
-      },
-      "name": "Rugged Gloves",
-      "g": 34000,
-      "armor": 16,
-      "edge": 2,
-      "type": "gloves",
-      "scroll": true
-    },
-    "candy1": {
-      "a": 2,
-      "s": true,
-      "e": 1,
-      "name": "Candy",
-      "g": 24000,
-      "skin": "candy1",
-      "explanation": "Halloween candy. Can be exchanged for random treasures.",
-      "type": "gem"
-    },
-    "offering": {
-      "a": true,
-      "name": "Primordial Essence",
-      "g": 3168000,
-      "explanation": "The essence contained within can be transferred to items during upgrades and compounds. Significantly increases the chance to succeed.",
-      "cash": 99,
-      "s": true,
-      "skin": "shade_offering",
-      "type": "offering"
-    },
-    "powerglove": {
-      "stat": 1,
-      "ability": "power",
-      "grade": 1,
-      "resistance": 8,
-      "g": 1600000,
-      "grades": [0, 0],
-      "skin": "powerglove",
-      "tier": 2,
-      "a": true,
-      "upgrade": {
-        "stat": 1,
-        "rpiercing": 2,
-        "armor": 2.5,
-        "apiercing": 2,
-        "resistance": 2.5,
-        "aspeed": 0.20000000000000001
-      },
-      "name": "Power Glove",
-      "rpiercing": 16,
-      "armor": 16,
-      "type": "gloves",
-      "apiercing": 16,
-      "charge": 0,
-      "edge": 2,
-      "aspeed": 2,
-      "scroll": true
-    },
-    "xmashat": {
-      "stat": 1,
-      "resistance": 12.0,
-      "grades": [4, 8],
-      "vit": 2,
-      "skin": "xmashat",
-      "tier": 1.5,
-      "a": true,
-      "upgrade": {
-        "armor": 1.875,
-        "stat": 1,
-        "resistance": 1.875
-      },
-      "name": "Xmas Hat",
-      "g": 13200,
-      "armor": 10.5,
-      "edge": 1.0,
-      "type": "helmet",
-      "scroll": true
-    },
-    "orbofsc": {
-      "a": true,
-      "attr0": 1,
-      "int": 2,
-      "compound": {
-        "dex": 1,
-        "vit": 1,
-        "int": 2,
-        "mp": 100,
-        "str": 1,
-        "attr0": 1
-      },
-      "grades": [0, 0],
-      "vit": 2,
-      "skin": "orbofsc",
-      "ability": "secondchance",
-      "dex": 2,
-      "name": "Orb of Second Chances",
-      "g": 120000,
-      "edge": 5,
-      "mp": 200,
-      "str": 2,
-      "type": "orb"
-    },
-    "suckerpunch": {
-      "a": true,
-      "g": 3200000,
-      "grades": [0, 0],
-      "name": "Sucker Punch",
-      "lifesteal": 2,
-      "skin": "suckerpunch",
-      "crit": 2,
-      "compound": {
-        "crit": 1,
-        "apiercing": 20,
-        "lifesteal": 1
-      },
-      "type": "ring",
-      "apiercing": 20
-    },
-    "eggnog": {
-      "g": 6000,
-      "s": true,
-      "name": "Eggnog",
-      "evasion": 2.5,
-      "skin": "eggnog",
-      "duration": 48,
-      "hp": 600,
-      "type": "elixir",
-      "explanation": "Fills your heart with warmth and joy.",
-      "skin_a": "eggnog"
-    },
-    "xpants": {
-      "stat": 1,
-      "grade": 2,
-      "resistance": 24,
-      "grades": [0, 0],
-      "skin": "xpants",
-      "tier": 4,
-      "a": 2,
-      "upgrade": {
-        "armor": 5.5,
-        "stat": 1,
-        "resistance": 5.5
-      },
-      "name": "Darkforge Underarmor",
-      "g": 7800000,
-      "armor": 40,
-      "edge": 6,
-      "type": "pants",
-      "scroll": true
-    },
-    "stick": {
-      "a": true,
-      "grades": [4, 7],
-      "upgrade": {},
-      "name": "Stick",
-      "g": 299999,
-      "skin": "stick",
-      "explanation": "...",
-      "type": "misc"
-    },
-    "ftrinket": {
-      "a": true,
-      "int": 2,
-      "explanation": "Good things come to those who wait",
-      "compound": {
-        "armor": 5,
-        "speed": 1,
-        "vit": 3
-      },
-      "grades": [1, 3],
-      "vit": 2,
-      "skin": "ftrinket",
-      "speed": 0.5,
-      "dex": 2,
-      "name": "Trinket of Faith",
-      "g": 96000,
-      "armor": 5,
-      "edge": 5,
-      "str": 2,
-      "type": "orb"
-    },
-    "x2": {
-      "a": true,
-      "name": "Quantum Piece",
-      "g": 4000,
-      "explanation": "A unique component of a curious puzzle",
-      "s": true,
-      "skin": "x2",
-      "type": "quest"
-    },
-    "x3": {
-      "a": true,
-      "name": "Quantum Piece",
-      "g": 4000,
-      "explanation": "A unique component of a curious puzzle",
-      "s": true,
-      "skin": "x3",
-      "type": "quest"
-    },
-    "x0": {
-      "a": true,
-      "name": "Quantum Piece",
-      "g": 4000,
-      "explanation": "A unique component of a curious puzzle",
-      "s": true,
-      "skin": "x0",
-      "type": "quest"
-    },
-    "x1": {
-      "a": true,
-      "name": "Quantum Piece",
-      "g": 4000,
-      "explanation": "A unique component of a curious puzzle",
-      "s": true,
-      "skin": "x1",
-      "type": "quest"
-    },
-    "x6": {
-      "a": true,
-      "name": "Quantum Piece",
-      "g": 4000,
-      "explanation": "A unique component of a curious puzzle",
-      "s": true,
-      "skin": "x6",
-      "type": "quest"
-    },
-    "candycane": {
-      "a": true,
-      "s": true,
-      "e": 1,
-      "name": "Candy Cane",
-      "g": 24000,
-      "skin": "candycane",
-      "explanation": "The old man in Winterland was looking for sweets.",
-      "type": "gem"
-    },
-    "stealthcape": {
-      "stat": 3,
-      "upgrade": {
-        "resistance": 1
-      },
-      "grades": [0, 4],
-      "name": "Stealth Cape",
-      "g": 2000000,
-      "skin": "stealthcape",
-      "explanation": "Thanks to it's stealth capabilities, no one can track your endeavours any more.",
-      "type": "cape",
-      "resistance": 42
-    },
-    "x5": {
-      "a": true,
-      "name": "Quantum Piece",
-      "g": 4000,
-      "explanation": "A unique component of a curious puzzle",
-      "s": true,
-      "skin": "x5",
-      "type": "quest"
-    },
-    "essenceoffrost": {
-      "name": "Essence of Frost",
-      "g": 40000,
-      "explanation": "It's like an ice storm in a bottle",
-      "s": true,
-      "skin": "essenceoffrost",
-      "type": "material"
-    },
-    "stand0": {
-      "explanation": "You can become a merchant using this item.",
-      "type": "stand",
-      "name": "Merchant Stand",
-      "g": 40000,
-      "skin": "stand0"
-    },
-    "elixirvit0": {
-      "name": "Elixir of Vitality",
-      "g": 6000,
-      "s": true,
-      "skin_a": "elixirvit0",
-      "vit": 8,
-      "skin": "elixirvit0",
-      "duration": 12,
-      "type": "elixir"
-    },
-    "elixirvit1": {
-      "name": "Elixir of Greater Vitality",
-      "g": 20000,
-      "s": true,
-      "skin_a": "elixirvit1",
-      "vit": 12,
-      "skin": "elixirvit1",
-      "duration": 24,
-      "type": "elixir"
-    },
-    "elixirvit2": {
-      "a": true,
-      "g": 120000,
-      "s": true,
-      "name": "Elixir of Extreme Vitality",
-      "vit": 18,
-      "skin": "elixirvit2",
-      "duration": 48,
-      "type": "elixir",
-      "skin_a": "elixirvit2"
-    },
-    "blade": {
-      "attack": 15,
-      "upgrade": {
-        "attack": 4,
-        "range": 1.5
-      },
-      "grades": [7, 9],
-      "name": "Blade",
-      "g": 8400,
-      "skin": "blade",
-      "wtype": "short_sword",
-      "type": "weapon",
-      "range": 5,
-      "damage": "physical"
-    },
-    "staffofthedead": {
-      "damage": "magical",
-      "grades": [0, 6],
-      "skin": "staffofthedead",
-      "speed": -6,
-      "a": true,
-      "upgrade": {
-        "attack": 6,
-        "range": 2.5
-      },
-      "name": "Staff of the Dead",
-      "g": 224000,
-      "wtype": "staff",
-      "range": 50,
-      "attack": 40,
-      "edge": 2,
-      "str": 32,
-      "type": "weapon"
-    },
-    "cscroll0": {
-      "name": "Compound Scroll",
-      "g": 6400,
-      "grade": 0,
-      "explanation": "Scroll to combine 3 accessories. Things get challenging after +1.",
-      "s": true,
-      "skin": "cscroll0",
-      "type": "cscroll"
-    },
-    "cscroll1": {
-      "name": "Compound Scroll",
-      "g": 240000,
-      "grade": 1,
-      "explanation": "Scroll to combine 3 high grade accessories.",
-      "s": true,
-      "skin": "cscroll1",
-      "type": "cscroll"
-    },
-    "dexring": {
-      "dex": 2,
-      "name": "Ring of Dexterity",
-      "g": 24000,
-      "skin": "dexring",
-      "grades": [3, 5],
-      "compound": {
-        "dex": 2
-      },
-      "type": "ring"
-    },
-    "fireblade": {
-      "damage": "physical",
-      "grades": [0, 8],
-      "skin": "fireblade",
-      "a": true,
-      "upgrade": {
-        "attack": 4.5,
-        "range": 1.5
-      },
-      "name": "Fiery Blade",
-      "g": 96000,
-      "wtype": "short_sword",
-      "range": 5,
-      "attack": 18,
-      "edge": 2,
-      "type": "weapon"
-    },
-    "basher": {
-      "a": true,
-      "upgrade": {
-        "armor": 4,
-        "range": 1,
-        "attack": 8,
-        "attr0": 0.40000000000000002,
-        "attr1": 0.20000000000000001,
-        "speed": 1
-      },
-      "attr0": 0.5,
-      "name": "Basher",
-      "armor": 20,
-      "speed": -15,
-      "wtype": "basher",
-      "attr1": 1,
-      "range": 5,
-      "damage": "physical",
-      "g": 72000,
-      "attack": 24,
-      "edge": 1,
-      "grades": [0, 7],
-      "wspeed": "slow",
-      "skin": "basher",
-      "type": "weapon",
-      "ability": "bash"
-    },
-    "cake": {
-      "hp": 1200,
-      "skin_a": "cake",
-      "skin": "cake",
-      "duration": 6,
-      "speed": -30,
-      "eat": true,
-      "name": "Piece of Cake",
-      "g": 100,
-      "s": true,
-      "type": "elixir",
-      "explanation": "Delicious."
-    },
-    "elixirdex0": {
-      "dex": 6,
-      "name": "Elixir of Dexterity",
-      "g": 6000,
-      "s": true,
-      "skin_a": "elixirdex0",
-      "skin": "elixirdex0",
-      "duration": 12,
-      "type": "elixir"
-    },
-    "flute": {
-      "explanation": "The sound of each flute is unique and mesmerizing. Your pets will easily recognize the sound of yours and come to your call.",
-      "type": "flute",
-      "name": "Flute",
-      "skin": "flute"
-    },
-    "firestaff": {
-      "damage": "magical",
-      "grades": [0, 8],
-      "skin": "firestaff",
-      "a": true,
-      "upgrade": {
-        "attack": 5.5,
-        "range": 3
-      },
-      "name": "Fiery Staff",
-      "g": 189000,
-      "wtype": "staff",
-      "range": 50,
-      "attack": 30,
-      "edge": 2,
-      "type": "weapon"
-    },
-    "egg8": {
-      "name": "Easter Egg",
-      "g": 4000,
-      "explanation": "A uniquely painted Egg!",
-      "s": true,
-      "skin": "egg8",
-      "type": "quest"
-    },
-    "quiver": {
-      "dex": 2,
-      "range": 20,
-      "upgrade": {
-        "dex": 1,
-        "armor": 2,
-        "range": 3.5
-      },
-      "name": "Quiver",
-      "g": 24000,
-      "skin": "quiver",
-      "armor": 10,
-      "type": "quiver",
-      "grades": [3, 7]
-    },
-    "fury": {
-      "a": true,
-      "stat": 1,
-      "resistance": 12.0,
-      "tier": 1.5,
-      "grades": [0, 0],
-      "skin": "fury",
-      "crit": 6,
-      "dex": 2,
-      "upgrade": {
-        "crit": 0.5,
-        "armor": 1.875,
-        "stat": 1,
-        "apiercing": 10,
-        "resistance": 1.875
-      },
-      "name": "Band of Fury",
-      "g": 6400000,
-      "armor": 10.5,
-      "apiercing": 20,
-      "edge": 7,
-      "type": "helmet",
-      "scroll": true
-    },
-    "egg0": {
-      "name": "Easter Egg",
-      "g": 4000,
-      "explanation": "A uniquely painted Egg!",
-      "s": true,
-      "skin": "egg0",
-      "type": "quest"
-    },
-    "egg3": {
-      "name": "Easter Egg",
-      "g": 4000,
-      "explanation": "A uniquely painted Egg!",
-      "s": true,
-      "skin": "egg3",
-      "type": "quest"
-    },
-    "egg2": {
-      "name": "Easter Egg",
-      "g": 4000,
-      "explanation": "A uniquely painted Egg!",
-      "s": true,
-      "skin": "egg2",
-      "type": "quest"
-    },
-    "strring": {
-      "name": "Ring of Strength",
-      "g": 24000,
-      "skin": "strring",
-      "grades": [3, 5],
-      "str": 2,
-      "compound": {
-        "str": 2
-      },
-      "type": "ring"
-    },
-    "egg4": {
-      "name": "Easter Egg",
-      "g": 4000,
-      "explanation": "A uniquely painted Egg!",
-      "s": true,
-      "skin": "egg4",
-      "type": "quest"
-    },
-    "egg7": {
-      "name": "Easter Egg",
-      "g": 4000,
-      "explanation": "A uniquely painted Egg!",
-      "s": true,
-      "skin": "egg7",
-      "type": "quest"
-    },
-    "egg6": {
-      "name": "Easter Egg",
-      "g": 4000,
-      "explanation": "A uniquely painted Egg!",
-      "s": true,
-      "skin": "egg6",
-      "type": "quest"
-    },
-    "dexscroll": {
-      "stat": "dex",
-      "name": "Dexterity Scroll",
-      "g": 8000,
-      "explanation": "Adds Dexterity to an armor with a Stat attribute.",
-      "s": true,
-      "skin": "dexscroll",
-      "type": "pscroll"
-    },
-    "gift1": {
-      "a": 2,
-      "s": true,
-      "e": 1,
-      "name": "Gift",
-      "g": 100,
-      "skin": "gift1",
-      "explanation": "A Gift to celebrate our Anniversary!",
-      "type": "gem"
-    },
-    "gift0": {
-      "a": true,
-      "s": true,
-      "e": 1,
-      "name": "Rare Gift",
-      "g": 2400,
-      "skin": "gift0",
-      "explanation": "A Rare Gift to celebrate our Anniversary!",
-      "type": "gem"
-    },
-    "kitty1": {
-      "a": true,
-      "name": "Egg",
-      "g": 40000,
-      "explanation": "A vibrant egg, it's inhabitant seems eager to get out.",
-      "skin": "egg1",
-      "type": "pet"
-    },
-    "goldenegg": {
-      "a": true,
-      "s": true,
-      "e": 1,
-      "name": "Golden Egg",
-      "g": 60000,
-      "skin": "goldenegg",
-      "explanation": "Nope, it's not painted, an actual golden egg!",
-      "type": "quest"
-    },
-    "starkillers": {
-      "stat": 1,
-      "grade": 2,
-      "resistance": 18,
-      "tier": 3,
-      "grades": [0, 0],
-      "vit": 10,
-      "skin": "starkillers",
-      "crit": 2,
-      "name": "Star Killer's Pants",
-      "a": 2,
-      "upgrade": {
-        "crit": 0.20000000000000001,
-        "armor": 4.25,
-        "stat": 1,
-        "resistance": 4.25,
-        "rpiercing": 5
-      },
-      "rpiercing": 80,
-      "g": 7800000,
-      "armor": 30,
-      "edge": 4,
-      "type": "pants",
-      "scroll": true
-    },
-    "helmet": {
-      "stat": 1,
-      "upgrade": {
-        "armor": 1.25,
-        "stat": 1,
-        "resistance": 1.25
-      },
-      "name": "Helmet",
-      "g": 3200,
-      "armor": 7,
-      "resistance": 8,
-      "grades": [7, 9],
-      "skin": "helmet",
-      "tier": 1,
-      "type": "helmet",
-      "scroll": true
-    },
-    "xmasshoes": {
-      "stat": 1,
-      "grades": [4, 8],
-      "vit": 2,
-      "skin": "xmasshoes",
-      "tier": 1.5,
-      "speed": 6.0,
-      "a": true,
-      "upgrade": {
-        "armor": 1.875,
-        "stat": 1,
-        "speed": 0.75
-      },
-      "name": "Xmas Shoes",
-      "g": 36000,
-      "armor": 6.0,
-      "edge": 1.0,
-      "type": "shoes",
-      "scroll": true
-    },
-    "pyjamas": {
-      "stat": 1,
-      "grade": 1,
-      "hp": 200,
-      "explanation": "Comfortable.",
-      "resistance": 16,
-      "grades": [4, 8],
-      "skin": "pyjamas",
-      "tier": 2,
-      "a": 2,
-      "upgrade": {
-        "armor": 2.5,
-        "hp": 25,
-        "stat": 1,
-        "resistance": 2.5
-      },
-      "name": "Pyjamas",
-      "g": 480000,
-      "armor": 24,
-      "charisma": -5,
-      "edge": 1,
-      "type": "chest",
-      "scroll": true
-    },
-    "mcape": {
-      "stat": 1,
-      "grade": 1,
-      "hp": 80,
-      "resistance": 16,
-      "grades": [0, 6],
-      "lifesteal": 1,
-      "skin": "mcape",
-      "tier": 2,
-      "a": 2,
-      "upgrade": {
-        "armor": 2.5,
-        "hp": 15,
-        "stat": 1,
-        "lifesteal": 0.20000000000000001,
-        "resistance": 2.5
-      },
-      "name": "Dracul's Attire",
-      "g": 480000,
-      "armor": 24,
-      "edge": 4,
-      "type": "chest",
-      "scroll": true
-    },
-    "hammer": {
-      "attack": 36,
-      "upgrade": {
-        "attack": 6,
-        "range": 2
-      },
-      "grades": [0, 0],
-      "name": "Hammer",
-      "g": 960000,
-      "skin": "hammer",
-      "wtype": "hammer",
-      "type": "weapon",
-      "range": 6,
-      "damage": "physical"
-    },
-    "strearring": {
-      "name": "Earring of Strength",
-      "g": 50000,
-      "skin": "strearring",
-      "grades": [2, 5],
-      "str": 3,
-      "compound": {
-        "str": 2
-      },
-      "type": "earring"
-    },
-    "ledger": {
-      "explanation": "Every decent merchant needs one!",
-      "type": "misc",
-      "name": "Ledger",
-      "g": 12000,
-      "skin": "ledger"
-    },
-    "t2quiver": {
-      "a": true,
-      "skin": "t2quiver",
-      "grades": [0, 4],
-      "evasion": 1,
-      "dex": 9,
-      "upgrade": {
-        "dex": 1.5,
-        "armor": 3,
-        "range": 3.5
-      },
-      "name": "Agile Quiver",
-      "g": 960000,
-      "armor": 12,
-      "range": 20,
-      "type": "quiver"
-    },
-    "xarmor": {
-      "stat": 1,
-      "grade": 2,
-      "resistance": 32,
-      "grades": [0, 0],
-      "skin": "xarmor",
-      "tier": 4,
-      "a": 2,
-      "upgrade": {
-        "armor": 5.5,
-        "stat": 1,
-        "resistance": 5.5
-      },
-      "name": "Darkforge Armor",
-      "g": 4800000,
-      "armor": 48,
-      "edge": 6,
-      "type": "chest",
-      "scroll": true
-    },
-    "goldenpowerglove": {
-      "stat": 6,
-      "ability": "power",
-      "grade": 2,
-      "resistance": 16,
-      "g": 16000000,
-      "grades": [0, 0],
-      "skin": "goldenpowerglove",
-      "tier": 4,
-      "a": true,
-      "upgrade": {
-        "stat": 1,
-        "rpiercing": 4,
-        "armor": 5.5,
-        "apiercing": 4,
-        "resistance": 5.5,
-        "aspeed": 0.20000000000000001
-      },
-      "name": "Golden Power Glove",
-      "rpiercing": 64,
-      "armor": 32,
-      "type": "gloves",
-      "apiercing": 64,
-      "charge": 0,
-      "edge": 6,
-      "aspeed": 5,
-      "scroll": true
-    },
-    "gemfragment": {
-      "s": true,
-      "quest": "gemfragment",
-      "e": 50,
-      "name": "Gem Fragment",
-      "g": 32000,
-      "skin": "gemfragment",
-      "explanation": "Beautiful, yet broken. Would be extremely valuable if they were whole.",
-      "type": "quest"
-    },
-    "xpbooster": {
-      "explanation": "Increases experience gain. Needs to be activated. Can be shifted into other boosters.",
-      "compound": {
-        "xp": 15
-      },
-      "cash": 499,
-      "grades": [0, 10],
-      "skin_a": "xpbooster_a",
-      "skin": "xpbooster",
-      "xp": 20,
-      "name": "XP Booster",
-      "g": 15968000,
-      "days": 30,
-      "type": "booster",
-      "gain": "xp"
-    },
-    "test": {
-      "ignore": true,
-      "explanation": "An item to test item looks, just set the 'skin' property.",
-      "type": "test",
-      "name": "Test",
-      "skin": "test"
-    },
-    "intbelt": {
-      "name": "Belt of Intelligence",
-      "g": 50000,
-      "int": 4,
-      "skin": "intbelt",
-      "grades": [2, 5],
-      "compound": {
-        "int": 3
-      },
-      "type": "belt"
-    },
-    "basketofeggs": {
-      "e": 1,
-      "name": "Basket of Easter Eggs",
-      "g": 20000,
-      "explanation": "A basket full of unique easter eggs. You can probably exchange this for a cool reward.",
-      "s": true,
-      "skin": "basketofeggs",
-      "type": "quest"
-    },
-    "poker": {
-      "stat": 1,
-      "ability": "poke",
-      "explanation": "Pokey pokey!",
-      "resistance": 6.0,
-      "tier": 1.5,
-      "grades": [4, 8],
-      "skin": "poker",
-      "crit": 0.5,
-      "a": true,
-      "upgrade": {
-        "armor": 1.875,
-        "stat": 1,
-        "resistance": 1.875
-      },
-      "name": "Poker",
-      "g": 16000,
-      "armor": 12.0,
-      "edge": 1.0,
-      "type": "gloves",
-      "scroll": true
-    },
-    "pmace": {
-      "a": true,
-      "int": 8,
-      "damage": "magical",
-      "grades": [0, 8],
-      "skin": "pmace",
-      "dex": 4,
-      "upgrade": {
-        "int": 2,
-        "dex": 1,
-        "attack": 6,
-        "range": 5
-      },
-      "name": "Priest's Mace",
-      "g": 89000,
-      "wtype": "mace",
-      "range": 10,
-      "attack": 25,
-      "edge": 3,
-      "type": "weapon"
-    },
-    "elixirint2": {
-      "a": true,
-      "duration": 48,
-      "s": true,
-      "name": "Elixir of Extreme Intelligence",
-      "g": 120000,
-      "skin": "elixirint2",
-      "int": 12,
-      "type": "elixir",
-      "skin_a": "elixirint2"
-    },
-    "hpot0": {
-      "name": "HP Potion",
-      "g": 20,
-      "s": true,
-      "skin": "hpot0",
-      "type": "pot",
-      "gives": [["hp", 200]]
-    },
-    "solitaire": {
-      "grades": [0, 0],
-      "bling": 100,
-      "name": "Solitaire Ring",
-      "g": 1200000,
-      "skin": "solitaire",
-      "explanation": "The diamond is mesmerizing",
-      "compound": {
-        "bling": 200
-      },
-      "type": "ring",
-      "event": true
-    },
-    "mysterybox": {
-      "name": "Mystery Box",
-      "g": 12000,
-      "explanation": "It looks super cool, but you have no idea what to do with it!",
-      "s": true,
-      "skin": "mysterybox",
-      "type": "misc"
-    },
-    "mpot1": {
-      "name": "MP Potion",
-      "g": 100,
-      "s": true,
-      "skin": "mpot1",
-      "type": "pot",
-      "gives": [["mp", 500]]
-    },
-    "mpot0": {
-      "name": "MP Potion",
-      "g": 20,
-      "s": true,
-      "skin": "mpot0",
-      "type": "pot",
-      "gives": [["mp", 300]]
-    },
-    "wblade": {
-      "damage": "magical",
-      "g": 4890000,
-      "grades": [0, 0],
-      "skin": "wblade",
-      "name": "The Ethereal Blade of Destiny",
-      "a": true,
-      "upgrade": {
-        "rpiercing": 16,
-        "attack": 8,
-        "range": 2,
-        "evasion": 1
-      },
-      "rpiercing": 40,
-      "evasion": 10,
-      "wtype": "wblade",
-      "range": 30,
-      "ignore": true,
-      "attack": 48,
-      "edge": 2,
-      "type": "weapon"
-    },
-    "wbook0": {
-      "name": "Book of Knowledge",
-      "g": 12000,
-      "int": 6,
-      "skin": "wbook0",
-      "grades": [7, 9],
-      "edge": -1,
-      "compound": {
-        "int": 5
-      },
-      "type": "source"
-    },
-    "wbook1": {
-      "g": 960000,
-      "grades": [0, 2],
-      "reflection": 2,
-      "vit": 6,
-      "skin": "wbook1",
-      "int": 16,
-      "compound": {
-        "int": 5,
-        "reflection": 1,
-        "vit": 2
-      },
-      "type": "source",
-      "name": "Book of Secrets"
-    },
-    "xmaspants": {
-      "stat": 1,
-      "resistance": 9.0,
-      "grades": [4, 8],
-      "vit": 2,
-      "skin": "xmaspants",
-      "tier": 1.5,
-      "a": true,
-      "upgrade": {
-        "armor": 1.875,
-        "stat": 1,
-        "resistance": 1.875
-      },
-      "name": "Xmas Pants",
-      "g": 17800,
-      "armor": 15.0,
-      "edge": 1.0,
-      "type": "pants",
-      "scroll": true
-    },
-    "intscroll": {
-      "stat": "int",
-      "name": "Intelligence Scroll",
-      "g": 8000,
-      "explanation": "Adds Intelligence to an armor with a Stat attribute.",
-      "s": true,
-      "skin": "intscroll",
-      "type": "pscroll"
-    },
-    "candy0": {
-      "a": 2,
-      "s": true,
-      "e": 1,
-      "name": "Rare Candy",
-      "g": 240000,
-      "skin": "candy0",
-      "explanation": "A rare Halloween candy. Can be exchanged for random treasures.",
-      "type": "gem"
-    },
-    "handofmidas": {
-      "gold": 10,
-      "grade": 2,
-      "explanation": "You can feel the thirst for gold move through your veins.",
-      "resistance": 14.0,
-      "grades": [0, 0],
-      "skin": "goldglove",
-      "tier": 3.5,
-      "speed": -20,
-      "a": true,
-      "upgrade": {
-        "armor": 4.875,
-        "resistance": 4.875,
-        "gold": 1
-      },
-      "name": "Hand of Midas",
-      "g": 800000,
-      "armor": 28.0,
-      "edge": 8,
-      "type": "gloves",
-      "scroll": true
-    },
-    "t2intamulet": {
-      "armor": 30,
-      "grades": [0, 2],
-      "name": "Amulet of the Fierce Mage",
-      "g": 800000,
-      "skin": "t2intamulet",
-      "int": 5,
-      "compound": {
-        "int": 2,
-        "armor": 20
-      },
-      "type": "amulet"
-    },
-    "redenvelope": {
-      "a": true,
-      "s": true,
-      "e": 1,
-      "name": "Red Envelope",
-      "g": 24000,
-      "skin": "redenvelope",
-      "explanation": "Congratulations and prosperity",
-      "type": "gem",
-      "event": true
-    },
-    "coat": {
-      "stat": 1,
-      "upgrade": {
-        "armor": 1.25,
-        "stat": 1,
-        "resistance": 1.25
-      },
-      "name": "Coat",
-      "g": 6000,
-      "armor": 12,
-      "resistance": 8,
-      "grades": [7, 9],
-      "skin": "coat",
-      "tier": 1,
-      "type": "chest",
-      "scroll": true
-    },
-    "tristone": {
-      "onclick": "socket.emit('activate',{slot:$(this).data('id')})",
-      "int": 1,
-      "compound": {
-        "dex": 1,
-        "vit": 1,
-        "rpiercing": 5,
-        "int": 1,
-        "apiercing": 5,
-        "str": 1
-      },
-      "g": 50000,
-      "grades": [1, 4],
-      "skin_a": "tristone_a",
-      "vit": 1,
-      "skin": "tristone",
-      "dex": 1,
-      "name": "Tri-Stone",
-      "rpiercing": 5,
-      "apiercing": 5,
-      "str": 1,
-      "action": "ACTIVATE!",
-      "type": "ring"
-    },
-    "frozenstone": {
-      "onclick": "socket.emit('activate',{num:locate_item('confetti')})",
-      "s": true,
-      "name": "Frozen Stone",
-      "g": 20000,
-      "skin": "frozenstone",
-      "action": "SHAKE",
-      "explanation": "It's strangely not cold, must be a magical artifact.",
-      "type": "activator"
-    },
-    "x8": {
-      "a": true,
-      "name": "Quantum Piece",
-      "g": 4000,
-      "explanation": "A unique component of a curious puzzle",
-      "s": true,
-      "skin": "x8",
-      "type": "quest"
-    },
-    "egg1": {
-      "name": "Easter Egg",
-      "g": 4000,
-      "explanation": "A uniquely painted Egg!",
-      "s": true,
-      "skin": "egg1",
-      "type": "quest"
-    },
-    "coal": {
-      "a": true,
-      "name": "Coal",
-      "g": 10,
-      "explanation": "...",
-      "compound": {},
-      "skin": "coal",
-      "type": "misc"
-    },
-    "bow3": {
-      "damage": "physical",
-      "grades": [7, 9],
-      "skin": "bow",
-      "tier": 3,
-      "upgrade": {
-        "attack": 5.5,
-        "range": 8
-      },
-      "name": "T3 Bow",
-      "g": 16000,
-      "wtype": "bow",
-      "range": 60,
-      "ignore": true,
-      "attack": 32,
-      "type": "weapon"
-    },
-    "bow4": {
-      "damage": "physical",
-      "grades": [7, 9],
-      "skin": "bow",
-      "tier": 4,
-      "upgrade": {
-        "attack": 6.25,
-        "range": 8
-      },
-      "name": "T4 Bow",
-      "g": 16000,
-      "wtype": "bow",
-      "range": 60,
-      "ignore": true,
-      "attack": 38,
-      "type": "weapon"
+      "name": "Base Items",
+      "items": ["helmet", "coat", "pants", "gloves", "shoes"],
+      "5": {
+        "evasion": 10
+      }
     }
   },
   "sprites": {
