@@ -724,9 +724,9 @@ function set_base(a) {
     v: 7,
     vn: 2
   };
-  if (G.actual_dimensions[b] && G.actual_dimensions[b][3]) {
-    a.base.h = G.actual_dimensions[b][3];
-    a.base.v = min(9.9, G.actual_dimensions[b][4])
+  if (G.dimensions[b] && G.dimensions[b][3]) {
+    a.base.h = G.dimensions[b][3];
+    a.base.v = min(9.9, G.dimensions[b][4])
   } else {
     a.base.h = min(12, get_width(a) * 0.8);
     a.base.v = min(9.9, get_height(a) / 4)
