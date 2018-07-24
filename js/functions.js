@@ -2690,7 +2690,7 @@ function generate_textures(b, m) {
       p = l[3],
       r = 0,
       q = 0;
-    var o = G.actual_dimensions[b];
+    var o = G.dimensions[b];
     if (o) {
       c = o[0];
       p = o[1];
