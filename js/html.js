@@ -2539,7 +2539,10 @@ function render_interaction(h, f) {
     g += "<div style='float: left; margin-top: -20px; width: 104px; height: 98px; overflow: hidden'><img style='margin-left: -" + (188 * b + 40) + "px; margin-top: -" + (200 * j + 50) + "px; width: 2256px; height: 1600px;' src='" + d + "'/></div>"
   }
   if (h.auto) {
-    g += h.message
+    g += h.message;
+    if (h.button) {
+      interaction_onclick = h.onclick, g += "<span style='float: right; margin-top: 5px'><div class='slimbutton' onclick='interaction_onclick()'>" + h.button + "</div></span>"
+    }
   } else {
     if (h == "seashells") {
       g += "Ah, I love the sea, so calming. As a kid, I loved spending time on the beach. Collecting seashells. If you happen to find some, I would love to add them to my collection.";
