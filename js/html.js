@@ -333,7 +333,7 @@ function render_slots(f) {
     for (var d = 0; d < 4; d++) {
       e += "<div>";
       for (var b = 0; b < 4; b++) {
-        c("trade" + ((d * 4) + b + 1), "shade_gold", 0.36)
+        c("trade" + ((d * 4) + b + 1), "shade_gold", 0.25)
       }
       e += "</div>"
     }
@@ -368,10 +368,10 @@ function render_slots(f) {
   e += "</div>";
   if ((f.me && f.slots.trade1 !== undefined || (f.slots.trade1 || f.slots.trade2 || f.slots.trade3 || f.slots.trade4)) && !f.stand) {
     e += "<div>";
-    c("trade1", "shade_gold", 0.36);
-    c("trade2", "shade_gold", 0.36);
-    c("trade3", "shade_gold", 0.36);
-    c("trade4", "shade_gold", 0.36);
+    c("trade1", "shade_gold", 0.25);
+    c("trade2", "shade_gold", 0.25);
+    c("trade3", "shade_gold", 0.25);
+    c("trade4", "shade_gold", 0.25);
     e += "</div>"
   }
   if (f.stand) {
@@ -1598,14 +1598,16 @@ function render_set(b) {
   var d = G.sets[b],
     a = last_selector;
   var c = "<div style='background-color: black; border: 5px solid gray; font-size: 24px; display: inline-block; padding: 20px; line-height: 24px; max-width: 280px;' class='buyitem'>";
-  c += "<div style='color: #f1c054; border-bottom: 2px dashed gray; margin-bottom: 3px' class='cbold'>" + d.name + "</div>";
+  c += "<div style='color: #f1c054; border-bottom: 2px dashed #C7CACA; margin-bottom: 3px' class='cbold'>" + d.name + "</div>";
+  c += "<div style='margin-left:-2px; margin-right:-2px;'>";
   d.items.forEach(function(e) {
     c += item_container({
       skin: G.items[e].skin
     })
-  });[1, 2, 3, 4, 5].forEach(function(e) {
+  });
+  c += "</div>";[1, 2, 3, 4, 5].forEach(function(e) {
     if (d[e]) {
-      c += "<div><span style='color:gray'>[" + e + " Item]</span> " + render_item("html", {
+      c += "<div><span style='color:#8A8D8F'>[" + e + " Equipped]</span> " + render_item("html", {
         pure: true,
         item: d[e],
         prop: d[e]
