@@ -1239,6 +1239,13 @@ function lf_click(a) {
     lostandfound: true
   })
 }
+function wishlist_item_click(b, a) {
+  render_wishlist_item(b, a)
+}
+function wishlist_click(b) {
+  var a = parseInt(b.substr(5, 123));
+  render_wishlist(a, 0)
+}
 function slot_click(a) {
   if (ctarget && ctarget.slots && ctarget.slots[a]) {
     dialogs_target = ctarget;
@@ -2039,13 +2046,26 @@ function destroy_sprite(a, c) {
     console.log("Couldn't destroy sprite: " + a.type)
   }
 }
-function trade(d, a, c, b) {
-  b = b || 1;
+function wishlist(f, a, b, c, d) {
+  if (!is_string(f)) {
+    f = "trade" + f
+  }
+  socket.emit("trade_wishlist", {
+    q: c,
+    slot: f,
+    price: b,
+    level: d,
+    name: a
+  });
+  $("#topleftcornerdialog").html("")
+}
+function trade(d, a, b, c) {
+  c = c || 1;
   socket.emit("equip", {
-    q: b,
+    q: c,
     slot: d,
     num: a,
-    value: ("" + c).replace_all(",", "").replace_all(".", "")
+    price: b
   });
   $("#topleftcornerdialog").html("")
 }
@@ -2059,16 +2079,28 @@ function trade_buy(d, c, a, b) {
   });
   $("#topleftcornerdialog").html("")
 }
+function trade_sell(d, c, a, b) {
+  b = b || 1;
+  socket.emit("trade_sell", {
+    slot: d,
+    id: c,
+    rid: a,
+    q: b
+  });
+  $("#topleftcornerdialog").html("")
+}
 function secondhand_buy(a) {
   socket.emit("sbuy", {
     rid: a
-  })
+  });
+  $("#topleftcornerdialog").html("")
 }
 function lostandfound_buy(a) {
   socket.emit("sbuy", {
     rid: a,
     f: true
-  })
+  });
+  $("#topleftcornerdialog").html("")
 }
 function buy_shells(a) {
   if ((a * 15000000 / 100) > character.gold) {
@@ -4272,7 +4304,7 @@ function api_call(h, c, g) {
       if (k.silent || in_arr(h, auto_api_methods)) {
         return
       }
-      ui_error("An Unknown Error");
+      ui_error("An Unknown Error [HTTP]");
       if (j) {
         j.removeClass("disable")
       }
@@ -4788,6 +4820,12 @@ function syntax_highlight(a) {
 }
 jQuery.fn.all_html = function() {
   return jQuery("<div />").append(this.eq(0).clone()).html()
+};
+jQuery.fn.shtml = function(a) {
+  var b = jQuery(this);
+  var c = b.html();
+  c = ("" + c).replace_all(",", "").replace_all(".", "");
+  return c
 };
 jQuery.fn.rval = function(a) {
   var b = jQuery(this);
