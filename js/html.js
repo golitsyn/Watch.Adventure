@@ -170,6 +170,9 @@ function render_character_sheet() {
   a += "<div><span style='color:gray'>Class:</span> " + to_title(character.ctype) + "</div>";
   a += "<div><span style='color:gray'>Level:</span> " + character.level + "</div>";
   a += "<div><span style='color:gray'>XP:</span> " + to_pretty_num(character.xp) + " / " + to_pretty_num(character.max_xp) + "</div>";
+  if (character.ctype == "merchant") {
+    a += "<div><span style='color:gray'>Tax:</span> " + (character.tax * 100) + "%</div>"
+  }
   if (character.ctype == "priest") {
     a += "<div><span style='color:gray'>Heal:</span> " + character.attack + "</div>";
     a += "<div><span style='color:gray'>Attack:</span> " + round(character.attack * 0.4) + "</div>"
@@ -282,7 +285,7 @@ function render_info(h, f) {
     var b = c.color || "white";
     e += "<span style='color: " + b + "' class='clickable cbold' onclick=\"" + c.onclick + '">' + c.name + "</span>";
     if (c.pm_onclick) {
-      e += " <span style='color: " + ("#276bc5" || b) + "' class='clickable cbold' onclick=\"" + c.pm_onclick + '">PM</span>'
+      e += " <span style='color: " + ("#A255BA" || "#276bc5" || b) + "' class='clickable cbold' onclick=\"" + c.pm_onclick + '">PM</span>'
     }
     e += "<br />"
   }
@@ -317,13 +320,24 @@ function render_slots(f) {
         slot: n
       }, k)
     } else {
-      e += item_container({
-        size: 40,
-        draggable: f.me,
-        shade: g,
-        s_op: m,
-        slot: n
-      })
+      if (in_arr(n, trade_slots) && f.me) {
+        e += item_container({
+          size: 40,
+          draggable: f.me,
+          shade: g,
+          s_op: m,
+          slot: n,
+          onclick: "wishlist_click('" + n + "')",
+        })
+      } else {
+        e += item_container({
+          size: 40,
+          draggable: f.me,
+          shade: g,
+          s_op: m,
+          slot: n
+        })
+      }
     }
   }
   var a = f.me;
@@ -333,7 +347,7 @@ function render_slots(f) {
     for (var d = 0; d < 4; d++) {
       e += "<div>";
       for (var b = 0; b < 4; b++) {
-        c("trade" + ((d * 4) + b + 1), "shade_gold", 0.25)
+        c("trade" + ((d * 4) + b + 1), "shade_gold", 0.2)
       }
       e += "</div>"
     }
@@ -368,10 +382,10 @@ function render_slots(f) {
   e += "</div>";
   if ((f.me && f.slots.trade1 !== undefined || (f.slots.trade1 || f.slots.trade2 || f.slots.trade3 || f.slots.trade4)) && !f.stand) {
     e += "<div>";
-    c("trade1", "shade_gold", 0.25);
-    c("trade2", "shade_gold", 0.25);
-    c("trade3", "shade_gold", 0.25);
-    c("trade4", "shade_gold", 0.25);
+    c("trade1", "shade_gold", 0.2);
+    c("trade2", "shade_gold", 0.2);
+    c("trade3", "shade_gold", 0.2);
+    c("trade4", "shade_gold", 0.2);
     e += "</div>"
   }
   if (f.stand) {
@@ -1197,6 +1211,71 @@ function render_secondhands(l) {
   d += "<div id='merchant-item' style='display: inline-block; vertical-align: top; margin-left: 5px'></div>";
   $("#topleftcornerui").html(d)
 }
+function render_wishlist(f, g) {
+  var e = "<div style='background-color: black; border: 5px solid gray; padding: 12px 20px 20px 20px; font-size: 24px; display: inline-block'>";
+  e += "<div style='color: #f1c054; border-bottom: 2px dashed #C7CACA; margin-bottom: 3px; margin-left: 3px; margin-right: 3px' class='cbold'>Wishlist</div>";
+  var h = [],
+    k = 0;
+  for (var a in G.items) {
+    if (!G.items[a].ignore) {
+      h.push([a, G.items[a], G.items[a].g || 0])
+    }
+  }
+  h.sort(function(m, j) {
+    return j[2] - m[2]
+  });
+  if (g >= 1) {
+    k += 19 + (g - 1) * 18
+  }
+  for (var d = 0; d < 4; d++) {
+    e += "<div>";
+    for (var c = 0; c < 5; c++) {
+      if (d == 3 && c == 0 && g != 0) {
+        e += item_container({
+          skin: "left",
+          onclick: "render_wishlist(" + f + "," + (g - 1) + ");"
+        }, {
+          q: g,
+          left: true
+        })
+      } else {
+        if (d == 3 && c == 4 && k < h.length - 1) {
+          e += item_container({
+            skin: "right",
+            onclick: "render_wishlist(" + f + "," + (g + 1) + ");"
+          }, {
+            q: g + 2,
+            left: true
+          })
+        } else {
+          if (k < h.length && h[k++]) {
+            var b = "wishlist" + (k - 1),
+              l = h[k - 1][1],
+              a = h[k - 1][0];
+            e += item_container({
+              skin: l.skin,
+              onclick: "wishlist_item_click('" + a + "'," + f + ")",
+              def: l,
+              id: b,
+              draggable: false,
+              droppable: false
+            }, null)
+          } else {
+            e += item_container({
+              size: 40,
+              draggable: false,
+              droppable: false
+            })
+          }
+        }
+      }
+    }
+    e += "</div>"
+  }
+  e += "</div>";
+  $("#topleftcornerdialog").html(e);
+  dialogs_target = character
+}
 var last_selector = "";
 
 function render_item(p, b) {
@@ -1246,7 +1325,7 @@ function render_item(p, b) {
       g += " +" + d.level
     }
     if (b.thumbnail) {
-      h += "<div>" + item_container({
+      h += "<div style='margin-left:-2px'>" + item_container({
         skin: s.skin,
         def: s
       }) + "</div>"
@@ -1408,16 +1487,28 @@ function render_item(p, b) {
         h += "<div><span class='gray'>Q:</span> <div class='inline-block tradenum' contenteditable=true data-q='" + m.q + "'>" + m.q + "</div></div>"
       }
       h += "<div><span style='color:gold'>GOLD" + (((m.q || 1) > 1) && " [EACH]" || "") + ":</span> <div class='inline-block sellprice editable' contenteditable=true>1</div></div>";
-      h += "<div><span class='clickable' onclick='trade(\"" + b.slot + '","' + b.num + '",$(".sellprice").html(),$(".tradenum").html())\'>PUT UP FOR SALE</span></div>';
+      h += "<div><span class='clickable' onclick='trade(\"" + b.slot + '","' + b.num + '",$(".sellprice").shtml(),$(".tradenum").shtml())\'>PUT UP FOR SALE</span></div>';
       h += "</div>"
     }
-    if (in_arr(b.slot, trade_slots) && m && m.price && b.from_player) {
+    if (in_arr(b.slot, trade_slots) && m && m.price && b.from_player && !m.b) {
       c = true;
       if ((m.q || 1) > 1) {
         h += "<div><span class='gray'>Q:</span> <div class='inline-block tradenum' contenteditable=true data-q='1'>1</div></div>"
       }
       h += "<div style='color: gold'>" + to_pretty_num(m.price) + " GOLD" + ((m.q || 1) > 1 && " <span style='color: white'>[EACH]</span>" || "") + "</div>";
       h += "<div><span class='clickable' onclick='trade_buy(\"" + b.slot + '","' + b.from_player + '","' + (m.rid || "") + '",$(".tradenum").html())\'>BUY</span></div>'
+    }
+    if (in_arr(b.slot, trade_slots) && m && m.price && b.from_player && m.b) {
+      var k = false;
+      if ((m.q || 1) > 1 && s.s) {
+        k = true
+      }
+      c = true;
+      if (k) {
+        h += "<div><span class='gray'>Q:</span> <div class='inline-block tradenum' contenteditable=true data-q='1'>1</div></div>"
+      }
+      h += "<div style='color: gold'>" + to_pretty_num(m.price) + " GOLD" + (k && " <span style='color: white'>[EACH]</span>" || "") + "</div>";
+      h += "<div><span class='clickable' onclick='trade_sell(\"" + b.slot + '","' + b.from_player + '","' + (m.rid || "") + '",$(".tradenum").html())\'>SELL</span></div>'
     }
     if (b.secondhand) {
       c = true;
@@ -1593,6 +1684,34 @@ function render_item(p, b) {
   } else {
     $(p).html(h)
   }
+}
+function wishlist_form(b, a) {
+  wishlist(b, a, $(".wprice").shtml(), $(".wnumq").shtml(), $(".wlevel").shtml())
+}
+function render_wishlist_item(b, a) {
+  var d = G.items[b],
+    c = "";
+  c += "<div style='background-color: black; border: 5px solid gray; font-size: 24px; display: inline-block; padding: 20px; line-height: 24px; max-width: 240px; min-width:200px;' class='buyitem'>";
+  c += "<div style='margin-left:-2px; display:inline-block; vertical-align:middle'>" + item_container({
+    skin: d.skin,
+    def: d
+  }) + "</div>";
+  c += "<div style='display:inline-block; vertical-align:top; margin-left: 4px'>";
+  c += "<div style='color: #f1c054; border-bottom: 2px dashed #C7CACA; margin-bottom: 3px; margin-left: 3px; margin-right: 3px; display: inline-block' class='cbold'>Wishlist</div>";
+  c += "<div></div>";
+  c += "<div style='color: #E4E4E4; border-bottom: 2px dashed gray; margin-bottom: 3px; display: inline-block' class='cbold'>" + d.name + "</div>";
+  c += "</div>";
+  c += "<div><span class='gray'>Q:</span> <div class='inline-block wnumq' contenteditable=true data-q='1'>1</div></div>";
+  c += "<div><span style='color:gold'>GOLD" + (d.s && " [EACH]" || "") + ":</span> <div class='inline-block wprice editable' contenteditable=true>" + (calculate_item_value({
+    name: b
+  }) + 1) + "</div></div>";
+  if (d.compound || d.upgrade) {
+    c += "<div><span style='color:#9E7BCA'>LEVEL:</span> <div class='inline-block wlevel editable' contenteditable=true>0</div></div>"
+  }
+  c += "<div><span class='clickable' onclick='wishlist_form(" + a + ',"' + b + "\")'>WISHLIST</span></div>";
+  c += "</div>";
+  $("#topleftcornerdialog").html(c);
+  dialogs_target = character
 }
 function render_set(b) {
   var d = G.sets[b],
@@ -2147,13 +2266,17 @@ function item_container(A, r) {
         k += "<div class='iuui' style='color: white'>" + r.q + "</div>"
       } else {
         if (r.q && r.q != 1) {
-          if (n && n.gives && n.gives[0] && n.gives[0][0] == "hp") {
-            k += "<div class='iqui iqhp'>" + r.q + "</div>"
+          if (r.b) {
+            k += "<div class='iqui gray'>" + r.q + "</div>"
           } else {
-            if (n && n.gives && n.gives[0] && n.gives[0][0] == "mp") {
-              k += "<div class='iqui iqmp'>" + r.q + "</div>"
+            if (n && n.gives && n.gives[0] && n.gives[0][0] == "hp") {
+              k += "<div class='iqui iqhp'>" + r.q + "</div>"
             } else {
-              k += "<div class='iqui'>" + r.q + "</div>"
+              if (n && n.gives && n.gives[0] && n.gives[0][0] == "mp") {
+                k += "<div class='iqui iqmp'>" + r.q + "</div>"
+              } else {
+                k += "<div class='iqui'>" + r.q + "</div>"
+              }
             }
           }
         }
@@ -2177,7 +2300,11 @@ function item_container(A, r) {
       }
     }
     if (A.slot && in_arr(A.slot, trade_slots)) {
-      k += "<div class='truui' style='border-color: " + t + ";'>$</div>"
+      if (r && r.b) {
+        k += "<div class='truui ibu' style='border-color: " + t + ";'>?</div>"
+      } else {
+        k += "<div class='truui itu' style='border-color: " + t + ";'>$</div>"
+      }
     }
     if (r && r.v) {
       k += "<div class='trruui ivu' style='border-color: " + t + "; line-height: 7px'><br />^</div>"
