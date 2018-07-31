@@ -269,6 +269,9 @@ function code_button() {
 }
 function log_in(a, d, c, e) {
   real_id = d;
+  if (!e) {
+    e = window.localStorage.getItem("passphrase") || ""
+  }
   if (!game_loaded) {
     ui_log("Game hasn't loaded yet");
     return
@@ -414,12 +417,13 @@ function reset_topleft() {
   send_target_logic();
   if (ctarget && ctarget.type == "monster" && last_target_cid != ctarget.cid) {
     var c = ctarget;
-    var e = G.monsters[c.mtype];
+    var f = G.monsters[c.mtype],
+      e = "";
     if (c.dead) {
       a += " X", c.hp = 0
     }
-    var f = [{
-      line: e.name,
+    var g = [{
+      line: f.name,
       color: "gray"
     }, {
       name: "HP",
@@ -434,7 +438,7 @@ function reset_topleft() {
       value: round(c.xp * (character && character.xpm || 1))
     }, ];
     if (c.attack) {
-      f.push({
+      g.push({
         name: "ATT",
         color: "#316EE6",
         value: c.attack,
@@ -442,76 +446,83 @@ function reset_topleft() {
         poisoned: c.s.poisoned
       })
     }
-    if (e.evasion) {
-      f.push({
+    if (f.evasion) {
+      g.push({
         name: "EVASION",
         color: "gray",
-        value: e.evasion + "%"
+        value: f.evasion + "%"
       })
     }
-    if (e.reflection) {
-      f.push({
+    if (f.reflection) {
+      g.push({
         name: "REFLECT.",
         color: "gray",
-        value: e.reflection + "%"
+        value: f.reflection + "%"
       })
     }
-    if (e.dreturn) {
-      f.push({
+    if (f.dreturn) {
+      g.push({
         name: "D.RETURN",
         color: "gray",
-        value: e.dreturn + "%"
+        value: f.dreturn + "%"
       })
     }
-    if (e.armor) {
-      f.push({
+    if (f.armor) {
+      g.push({
         name: "ARMOR",
         color: "gray",
-        value: e.armor
+        value: f.armor
       })
     }
-    if (e.resistance) {
-      f.push({
+    if (f.resistance) {
+      g.push({
         name: "RESIST.",
         color: "gray",
-        value: e.resistance
+        value: f.resistance
       })
     }
-    if (e.rpiercing) {
-      f.push({
+    if (f.rpiercing) {
+      g.push({
         name: "PIERCE.",
         color: "gray",
-        value: e.rpiercing
+        value: f.rpiercing
       })
     }
-    if (e.apiercing) {
-      f.push({
+    if (f.apiercing) {
+      g.push({
         name: "PIERCE.",
         color: "gray",
-        value: e.apiercing
+        value: f.apiercing
       })
     }
-    if (e.immune) {
-      f.push({
+    if (f.immune) {
+      g.push({
         line: "IMMUNE",
         color: "#AEAEAE"
       })
     }
-    if (e.cooperative) {
-      f.push({
+    if (f.cooperative) {
+      g.push({
         line: "COOPERATIVE",
         color: "#AEAEAE"
       })
     }
+    if (f.ability) {
+      g.push({
+        name: "ABILITY",
+        color: "#FC5F39",
+        value: f.ability.toUpperCase()
+      })
+    }
     if (c.target) {
-      f.push({
+      g.push({
         name: "TRG",
         color: "orange",
         value: c.target
       })
     }
     if (c.pet) {
-      f = [{
+      g = [{
         name: "NAME",
         value: c.name,
         color: "#5CBD97"
@@ -522,16 +533,23 @@ function reset_topleft() {
       }, ]
     }
     if (c.heal) {
-      f.push({
+      g.push({
         line: "SELF HEALING",
         color: "#9E6367"
       })
     }
-    render_info(f);
+    if (f.explanation) {
+      g.push({
+        line: f.explanation,
+        color: "gray"
+      });
+      e = "max-width: 200px"
+    }
+    render_info(g, null, e);
     render_conditions(c)
   } else {
     if (ctarget && ctarget.npc) {
-      var f = [{
+      var g = [{
         name: "NPC",
         color: "gray",
         value: ctarget.name
@@ -540,11 +558,11 @@ function reset_topleft() {
         color: "orange",
         value: ctarget.level
       }, ];
-      render_info(f)
+      render_info(g)
     } else {
       if (ctarget && ctarget.type == "character" && last_target_cid != ctarget.cid) {
         var b = ctarget;
-        var f = [{
+        var g = [{
           name: b.role && b.role.toUpperCase() || "NAME",
           color: b.role && "#E14F8B" || "gray",
           value: b.name
@@ -590,14 +608,14 @@ function reset_topleft() {
         }, ],
           d = [];
         if (b.code) {
-          f.push({
+          g.push({
             name: "CODE",
             color: "gold",
             value: "Active"
           })
         }
         if (b.party) {
-          f.push({
+          g.push({
             name: "PARTY",
             color: "#FF4C73",
             value: b.party
@@ -678,7 +696,7 @@ function reset_topleft() {
             color: "#DF962B"
           })
         }
-        render_info(f, d);
+        render_info(g, d);
         render_conditions(b);
         render_slots(b)
       } else {
@@ -1464,29 +1482,36 @@ function init_socket() {
       }]);
       code_to_load = false
     } else {
-      if (persist_code || explicit_code) {
-        try {
-          if (explicit_code) {
-            start_runner()
-          } else {
-            var data = window.localStorage.getItem("code_cache"),
-              the_code = "",
-              to_run = false;
-            if (data) {
-              data = JSON.parse(data);
-              the_code = data["code_" + real_id] || "";
-              to_run = data["run_" + real_id];
-              if (the_code.length) {
-                handle_information([{
-                  type: "code",
-                  code: the_code,
-                  run: to_run
-                }])
+      if (gameplay == "hardcore" || gameplay == "test") {
+        api_call("load_gcode", {
+          file: "/examples/hardcore.js",
+          run: true
+        })
+      } else {
+        if (persist_code || explicit_code) {
+          try {
+            if (explicit_code) {
+              start_runner()
+            } else {
+              var data = window.localStorage.getItem("code_cache"),
+                the_code = "",
+                to_run = false;
+              if (data) {
+                data = JSON.parse(data);
+                the_code = data["code_" + real_id] || "";
+                to_run = data["run_" + real_id];
+                if (the_code.length) {
+                  handle_information([{
+                    type: "code",
+                    code: the_code,
+                    run: to_run
+                  }])
+                }
               }
             }
+          } catch (e) {
+            console.log(e)
           }
-        } catch (e) {
-          console.log(e)
         }
       }
     }
@@ -2966,6 +2991,7 @@ function player_click(a) {
     if (this.npc_onclick) {
       npc_right_click.apply(this, a)
     } else {
+      topleft_npc = false;
       ctarget = this
     }
   }
@@ -3243,7 +3269,7 @@ function update_sprite(m) {
     if (m.npc && !m.moving && m.allow === false) {
       m.direction = 0
     }
-    if (m.orientation && !m.moving) {
+    if (m.orientation && !m.moving && !m.target) {
       m.direction = m.orientation
     }
     if ((m.moving || a) && m.walking === null) {
@@ -3555,13 +3581,17 @@ function start_filter(b, a) {
             if (a == "rblur") {
               c = new PIXI.filters.RadialBlurFilter(random_one([-0.75, -0.5, 0.5, 0.75]), [5, 10], 11, -1)
             } else {
-              if (a == "rcolor") {
-                c = new PIXI.filters.ColorMatrixFilter();
-                c.desaturate()
+              if (a == "glow") {
+                c = new PIXI.filters.GlowFilter(8, 4, 0, 5868543)
               } else {
-                c = new PIXI.filters.ColorMatrixFilter();
-                c.step = 0.01;
-                c.b = 1
+                if (a == "rcolor") {
+                  c = new PIXI.filters.ColorMatrixFilter();
+                  c.desaturate()
+                } else {
+                  c = new PIXI.filters.ColorMatrixFilter();
+                  c.step = 0.01;
+                  c.b = 1
+                }
               }
             }
           }
@@ -3704,12 +3734,6 @@ function player_effects_logic(a) {
     a.alpha = 1;
     draw_timeout(fade_out_blink(0, a), 0)
   }
-  if (a.s.magiport && !a.fading_out) {
-    a.fading_out = new Date();
-    a.alpha = 1;
-    draw_timeout(fade_out_magiport(0, a), 0);
-    start_filter(a, "bloom")
-  }
   if (a.c.revival && !a.fx.revival) {
     a.fx.revival = true;
     start_animation(a, "revival")
@@ -3801,6 +3825,12 @@ function effects_logic(a) {
       delete a.fx.hardshell;
       stop_animation(a, "hardshell")
     }
+  }
+  if (a.s.magiport && !a.fading_out) {
+    a.fading_out = new Date();
+    a.alpha = 1;
+    draw_timeout(fade_out_magiport(0, a), 0);
+    start_filter(a, "bloom")
   }
 }
 function add_character(e, d) {
