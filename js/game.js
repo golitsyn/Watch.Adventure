@@ -4926,7 +4926,7 @@ function draw(f, a) {
     try {
       var h = get_active_characters();
       for (var b in h) {
-        if (h[b] != "self") {
+        if (h[b] != "self" && h[b] != "loading") {
           character_window_eval(b, "draw()")
         }
       }
