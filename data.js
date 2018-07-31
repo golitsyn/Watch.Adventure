@@ -1394,7 +1394,7 @@ var G = {
       "irregular": true
     }
   },
-  "version": 308,
+  "version": 310,
   "conditions": {
     "tarot_5swords": {
       "name": "Tarot Card",
@@ -2260,7 +2260,7 @@ var G = {
     },
     "pack_20": {
       "rows": 39,
-      "file": "/images/tiles/items/pack_20.png?v=27",
+      "file": "/images/tiles/items/pack_20.png?v=28",
       "columns": 16,
       "size": 20
     },
@@ -2272,6 +2272,22 @@ var G = {
     }
   },
   "dismantle": {
+    "essenceoffrost": {
+      "items": [[1, "emptyjar"]],
+      "cost": 10
+    },
+    "essenceofnature": {
+      "items": [[1, "emptyjar"]],
+      "cost": 10
+    },
+    "essenceoflife": {
+      "items": [[1, "emptyjar"]],
+      "cost": 10
+    },
+    "essenceoffire": {
+      "items": [[1, "emptyjar"]],
+      "cost": 10
+    },
     "fireblade": {
       "items": [[1, "essenceoffire"]],
       "cost": 10000
@@ -3351,6 +3367,15 @@ var G = {
       "type": "misc_offhand",
       "resistance": 120
     },
+    "bottleofxp": {
+      "name": "Bottle of XP",
+      "g": 999,
+      "explanation": "One million memories, experiences, bits and pieces of information.",
+      "s": true,
+      "skin": "bottleofxp",
+      "type": "xp",
+      "gives": [["xp", 1000000]]
+    },
     "scroll4": {
       "a": true,
       "s": true,
@@ -3462,7 +3487,6 @@ var G = {
       "name": "The Stone Key",
       "g": 50000,
       "explanation": "A stone key, imbued with magical energy.",
-      "ignore": true,
       "skin": "placeholder",
       "type": "key",
       "opens": "therush"
@@ -4083,7 +4107,7 @@ var G = {
     },
     "emptyjar": {
       "name": "Empty Jar",
-      "g": 100,
+      "g": 1,
       "explanation": "Always nice to have some empty jars lying around, you never know when you'll need one!",
       "s": true,
       "skin": "emptyjar",
@@ -4240,12 +4264,13 @@ var G = {
       "type": "orb"
     },
     "glitch": {
+      "ignore": true,
       "a": true,
       "e": 1,
       "name": "A Glitch",
       "g": 10000,
-      "explanation": "Huh?! Wtf.",
       "skin": "glitch",
+      "explanation": "Huh?! ??!",
       "type": "misc"
     },
     "ornamentstaff": {
@@ -6729,7 +6754,7 @@ var G = {
     "gm": ["skills", 4, 6],
     "sshield": ["pack_20", 1, 12],
     "ring220": ["pack_20", 1, 10],
-    "emptyjar": ["pack_20", 13, 34],
+    "emptyjar": ["pack_20", 14, 35],
     "shade_earring": ["pack_20", 5, 17],
     "armorbox": ["pack_20", 1, 26],
     "throwingstars": ["pack_20", 4, 9],
@@ -6788,7 +6813,7 @@ var G = {
     "essenceofether": ["pack_20", 0, 33],
     "quiver": ["pack_20", 0, 13],
     "powerglove": ["pack_20", 13, 2],
-    "standx_texture": ["stands", 26, 36, 26, 36],
+    "standx_texture": ["stands", 0, 36, 26, 36],
     "travel": ["skills", 7, 6],
     "strearring": ["pack_20", 6, 17],
     "snippet": ["skills", 2, 10],
@@ -6936,6 +6961,7 @@ var G = {
     "scroll0": ["pack_20", 13, 23],
     "scroll1": ["pack_20", 12, 23],
     "greenbomb": ["pack_20", 11, 32],
+    "stonekey": ["pack_20", 9, 35],
     "darktristone": ["pack_20", 3, 16],
     "dragonarmor": ["pack_20", 14, 1],
     "hammer": ["pack_20", 12, 10],
@@ -7021,6 +7047,7 @@ var G = {
     "xbox": ["pack_20", 3, 33],
     "xboots": ["pack_20", 5, 5],
     "claw": ["pack_20", 1, 11],
+    "bottleofxp": ["pack_20", 15, 35],
     "shade_offering": ["pack_20", 6, 26],
     "right": ["skills", 14, 6],
     "skill_revive": ["skills", 3, 4],
@@ -7083,7 +7110,7 @@ var G = {
     "stealthcape": ["pack_20", 1, 6],
     "skill_cburst": ["skills", 2, 0],
     "skill_agitate": ["skills", 7, 1],
-    "wblade": ["", 8, 108],
+    "wblade": ["pack_20", 8, 8],
     "stramulet": ["pack_20", 8, 19],
     "xmaspants": ["pack_20", 9, 29],
     "redenvelope": ["pack_20", 13, 33],
@@ -7182,6 +7209,21 @@ var G = {
       "range": 15,
       "attack": 7,
       "aggro": 0
+    },
+    "ligerx": {
+      "hp": 80000,
+      "frequency": 1.2,
+      "damage_type": "physical",
+      "skin": "ligerx",
+      "xp": 120000,
+      "speed": 30,
+      "charge": 60,
+      "name": "Liger X",
+      "respawn": 960,
+      "range": 80,
+      "attack": 1800,
+      "aggro": 0.20000000000000001,
+      "explanation": "A genetically modified and cybernetically enhanced beast!"
     },
     "spider": {
       "hp": 1800,
@@ -7405,7 +7447,8 @@ var G = {
       "damage_type": "physical",
       "skin": "target_r750",
       "xp": 1000,
-      "speed": 12,
+      "speed": 36,
+      "ability": "portal",
       "name": "Target Automatron",
       "respawn": 0,
       "range": 1,
@@ -7531,21 +7574,20 @@ var G = {
     },
     "mole": {
       "aa": 1,
-      "ability": "heal",
-      "name": "Mole",
-      "rage": 1,
       "hp": 12400,
-      "respawn": 6,
-      "attack": 480,
-      "aggro": 1,
-      "charge": 60,
+      "apiercing": 320,
       "frequency": 0.80000000000000004,
       "damage_type": "physical",
       "skin": "mole",
-      "range": 15,
       "xp": 8000,
       "speed": 18,
-      "apiercing": 320
+      "name": "Mole",
+      "rage": 1,
+      "respawn": 6,
+      "range": 15,
+      "charge": 60,
+      "aggro": 1,
+      "attack": 480
     },
     "wolfie": {
       "hp": 19200,
@@ -8800,7 +8842,8 @@ var G = {
       "level": 64,
       "range": 120,
       "mp": 260,
-      "type": "skill"
+      "type": "skill",
+      "monsters": false
     },
     "quickstab": {
       "explanation": "Use your agility to quickly stab your opponent between your devastating attacks!",
@@ -9108,6 +9151,12 @@ var G = {
       "columns": 4,
       "file": "/images/tiles/monsters/custom1.png?v=6",
       "matrix": [["cgoo", "crabx", "bbpompom", "gscorpion"], ["osnake", "mole", "xscorpion", "arcticbee"]]
+    },
+    "ligerx": {
+      "rows": 1,
+      "columns": 1,
+      "file": "/images/tiles/monsters/liger_x.png",
+      "matrix": [["ligerx"]]
     },
     "animation3": {
       "rows": 8,
