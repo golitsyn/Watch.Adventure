@@ -1394,7 +1394,7 @@ var G = {
       "irregular": true
     }
   },
-  "version": 310,
+  "version": 313,
   "conditions": {
     "tarot_5swords": {
       "name": "Tarot Card",
