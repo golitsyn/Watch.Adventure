@@ -326,9 +326,9 @@ function add_log(c, a) {
   if (mode.dom_tests || inside == "payments" || no_html) {
     return
   }
-  if (game_logs.length > 1000) {
+  if (game_logs.length > 480) {
     var b = "<div class='gameentry' style='color: gray'>- Truncated -</div>";
-    game_logs = game_logs.slice(-720);
+    game_logs = game_logs.slice(-160);
     game_logs.forEach(function(d) {
       b += "<div class='gameentry' style='color: " + (d[1] || "white") + "'>" + d[0] + "</div>"
     });
@@ -374,19 +374,19 @@ function add_chat(c, o, g, b) {
       break
     }
   }
-  if (game_chats.length > 360 || j) {
+  if (game_chats.length > 250 || j) {
     var m = "";
-    if (game_chats.length > 360) {
+    if (game_chats.length > 250) {
       m = "<div class='chatentry' style='color: gray'>- Truncated -</div>";
       var a = [];
       for (var l = 0; l < game_chats.length; l++) {
         var h = game_chats[l];
-        if (l < 180 && !h[0]) {
+        if (l < 100 && !h[0]) {
           continue
         }
         a.push(h)
       }
-      game_chats = a.slice(-270)
+      game_chats = a.slice(-225)
     }
     game_chats.forEach(function(s) {
       var r = "",
@@ -1482,7 +1482,7 @@ function get_active_characters() {
     if (c) {
       var f = "starting",
         b = c.toLowerCase(),
-        d = "ichar" + c.toLowerCase();
+        d = g.attr("id");
       if (document.getElementById(d) && document.getElementById(d).contentWindow) {
         f = "loading";
         if (document.getElementById(d).contentWindow.character) {
@@ -1491,6 +1491,9 @@ function get_active_characters() {
             f = "code"
           }
         }
+      }
+      if (document.getElementById(d).contentWindow.character.name && document.getElementById(d).contentWindow.character.name != c) {
+        c = document.getElementById(d).contentWindow.character.name, g.attr("id", "ichar" + c.toLowerCase())
       }
       a[c] = f
     }
@@ -1501,7 +1504,7 @@ function character_code_eval(name, snippet) {
   var rid = "ichar" + name.toLowerCase();
   var weval = document.getElementById(rid) && document.getElementById(rid).contentWindow && document.getElementById(rid).contentWindow.eval;
   if (!weval) {
-    add_log("Character not found!", "#993D42");
+    add_log("Character not found! ", "#993D42");
     return undefined
   }
   if (document.getElementById(rid).contentWindow.code_active) {
@@ -1563,6 +1566,9 @@ function direct_travel(b, a) {
 }
 function start_character_runner(b, d) {
   var c = "ichar" + b.toLowerCase();
+  if (gameplay == "test") {
+    c += randomStr(10)
+  }
   $("#" + c).remove();
   var a = window.location + "";
   a = a.replace(character.name, b);
@@ -4086,79 +4092,88 @@ function d_line(start, end, args) {
   }
   draw_timeout(disappear_line(0, e), 20)
 }
-function d_text(n, j, h, g) {
-  var l = null;
+function d_text(o, k, j, h) {
+  var m = null;
   if (mode.dom_tests_pixi || no_graphics || paused) {
     return
   }
-  if (is_object(j)) {
-    l = j;
-    g = h;
-    j = get_x(l);
-    h = get_y(l) - (l.aheight || l.height) - (l.hp_bar && 15 || 2);
-    if (l.mscale == 2) {
-      h += 14
+  if (is_object(k)) {
+    m = k;
+    h = j;
+    k = get_x(m);
+    j = get_y(m) - (m.aheight || m.height) - (m.hp_bar && 15 || 2);
+    if (m.mscale == 2) {
+      j += 14
     }
   }
-  if (!g) {
-    g = {}
+  if (!h) {
+    h = {}
   }
-  var b = g.color || "#4C4C4C";
-  if (b == "hp") {
-    b = "green"
+  var c = h.color || "#4C4C4C",
+    b = null;
+  if (c == "hp") {
+    c = "green"
   } else {
-    if (b == "mp") {
-      b = "#317188"
+    if (c == "mp") {
+      c = "#317188"
     } else {
-      if (b == "damage") {
-        b = "#C80000"
+      if (c == "damage") {
+        c = "#C80000"
       } else {
-        if (b == "+gold") {
-          b = "gold"
+        if (c == "+gold") {
+          c = "gold"
         } else {
-          if (b == "stun") {
-            b = "#FF9601", h -= 12
+          if (c == "stun") {
+            c = "#FF9601", j -= 12
           } else {
-            if (b == "sugar") {
-              b = "#D64770"
+            if (c == "sugar") {
+              c = "#D64770"
             } else {
-              if (b == "freeze") {
-                b = "#53C1FF", h -= 12
+              if (c == "freeze") {
+                c = "#53C1FF", j -= 12
               } else {
-                if (b == "crit") {
-                  b = "#D32D51", h -= 12
+                if (c == "crit") {
+                  c = "#D32D51", j -= 12
                 } else {
-                  if (b == "sneak") {
-                    b = "#2D9B41", h -= 12
+                  if (c == "sneak") {
+                    c = "#2D9B41", j -= 12
                   } else {
-                    if (b == "mana") {
-                      b = colors.mp
+                    if (c == "mana") {
+                      c = colors.mp
                     } else {
-                      if (b == "elixir") {
-                        b = "#E06A63"
+                      if (c == "elixir") {
+                        c = "#E06A63"
                       } else {
-                        if (b == "evade") {
-                          b = "#808B94";
-                          if (l && g.from && get_entity(g.from)) {
-                            d_line(get_entity(g.from), l, {
+                        if (c == "evade") {
+                          c = "#808B94";
+                          if (m && h.from && get_entity(h.from)) {
+                            d_line(get_entity(h.from), m, {
                               color: "evade"
                             })
                           }
                         } else {
-                          if (b == "reflect") {
-                            b = "#6D62A2"
+                          if (c == "reflect") {
+                            c = "#6D62A2"
                           } else {
-                            if (b == "supershot") {
-                              b = "#9B172E", h -= 12
+                            if (c == "supershot") {
+                              c = "#9B172E", j -= 12
                             } else {
-                              if (b == "quickpunch") {
-                                b = "#41338B", h -= 12
+                              if (c == "quickpunch") {
+                                c = "#41338B", j -= 12
                               } else {
-                                if (b == "burst") {
-                                  b = "#2A8A9A", o = "large"
+                                if (c == "burst") {
+                                  c = "#2A8A9A", p = "large"
                                 } else {
-                                  if (b == "poison") {
-                                    b = colors.poison, o = "large", h -= 12
+                                  if (c == "poison") {
+                                    c = colors.poison, p = "large", j -= 12
+                                  } else {
+                                    if (c == "1mxp") {
+                                      c = "#FFFFFF", b = "glow"
+                                    } else {
+                                      if (colors[c]) {
+                                        c = colors[c]
+                                      }
+                                    }
                                   }
                                 }
                               }
@@ -4176,81 +4191,88 @@ function d_text(n, j, h, g) {
       }
     }
   }
-  var o = S[g.size] || g.size || S.normal;
-  var k = g.parent || window.map;
-  var a = !g.dont_animate;
-  var c = 1000;
-  var m = new PIXI.Text(n, {
+  var p = S[h.size] || h.size || S.normal;
+  var l = h.parent || window.map;
+  var a = !h.dont_animate;
+  var d = 1000;
+  var n = new PIXI.Text(o, {
     fontFamily: S.font,
-    fontSize: o * text_quality,
+    fontSize: p * text_quality,
     fontWeight: "bold",
-    fill: b,
+    fill: c,
     align: "center"
   });
   if (use_layers) {
-    m.parentGroup = text_layer
+    n.parentGroup = text_layer
   } else {
-    m.displayGroup = text_layer
+    n.displayGroup = text_layer
   }
-  m.x = round(j);
-  m.y = round(h);
-  m.disp_m = S.normal / 18;
-  if (o > S.normal) {
-    m.disp_m = (S.normal + 1) / 18
+  n.x = round(k);
+  n.y = round(j);
+  n.disp_m = S.normal / 18;
+  if (p > S.normal) {
+    n.disp_m = (S.normal + 1) / 18
   }
-  m.anim_time = max(75, parseInt(100 * 18 / o));
-  m.type = "text";
-  m.alpha = 1;
-  m.last_fade = new Date();
-  m.anchor.set(0.5, 1);
+  n.anim_time = max(75, parseInt(100 * 18 / p));
+  n.type = "text";
+  n.alpha = 1;
+  n.last_fade = new Date();
+  n.anchor.set(0.5, 1);
+  if (b) {
+    start_filter(n, b)
+  }
   if (text_quality > 1) {
-    m.scale = new PIXI.Point(1 / text_quality, 1 / text_quality)
+    n.scale = new PIXI.Point(1 / text_quality, 1 / text_quality)
   }
-  k.addChild(m);
+  l.addChild(n);
 
-  function d(p, q) {
+  function f(q, r) {
     return function() {
-      var r = mssince(q.last_fade),
-        t = round(4 * r / q.anim_time);
-      if (2 < t && t < 7) {
-        t = 4
+      var s = mssince(r.last_fade),
+        u = round(4 * s / r.anim_time);
+      if (2 < u && u < 7) {
+        u = 4
       }
-      q.y -= q.disp_m * t;
-      q.alpha = max(0, q.alpha - (0.078 * r / q.anim_time));
-      q.last_fade = new Date();
-      if (q.alpha > 0.25) {
-        draw_timeout(d(p + 1, q), q.anim_time)
+      r.y -= r.disp_m * u;
+      r.alpha = max(0, r.alpha - (0.078 * s / r.anim_time));
+      r.last_fade = new Date();
+      if (r.alpha > 0.25) {
+        draw_timeout(f(q + 1, r), r.anim_time)
       } else {
-        remove_sprite(q);
+        remove_sprite(r);
         try {
-          q.destroy({
+          r.destroy({
             texture: true,
             baseTexture: true
           })
-        } catch (s) {}
+        } catch (t) {
+          console.log(t)
+        }
       }
     }
   }
-  function f(p, q) {
+  function g(q, r) {
     return function() {
-      q.position.y -= 4;
-      q.alpha -= 0.08;
-      if (p < 10) {
-        draw_timeout(d(p + 1, q), q.anim_time)
+      r.position.y -= 4;
+      r.alpha -= 0.08;
+      if (q < 10) {
+        draw_timeout(f(q + 1, r), r.anim_time)
       } else {
-        remove_sprite(q);
+        remove_sprite(r);
         try {
-          q.destroy({
+          r.destroy({
             texture: true,
             baseTexture: true
           })
-        } catch (r) {}
+        } catch (s) {
+          console.log(s)
+        }
       }
     }
   }
-  draw_timeout(d(0, m), m.anim_time);
-  if (g.s) {
-    sfx(g.s, m.x, m.y)
+  draw_timeout(f(0, n), n.anim_time);
+  if (h.s) {
+    sfx(h.s, n.x, n.y)
   }
 }
 function api_call(h, c, g) {
