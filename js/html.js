@@ -245,47 +245,47 @@ function render_conditions(b) {
     $(".renderedinfo").append(a)
   }
 }
-function render_info(h, f) {
-  if (!f) {
-    f = []
+function render_info(h, g, j) {
+  if (!g) {
+    g = []
   }
-  var e = "<div style='background-color: black; border: 5px solid gray; padding: 20px; font-size: 24px; display: inline-block; vertical-align: top' class='renderedinfo'>";
-  for (var d = 0; d < h.length; d++) {
-    var g = h[d],
-      a = "";
-    var b = g.color || "white";
-    if (g.afk && g.afk == "bot") {
-      a = " <span class='gray'>[BOT]</span>"
+  var e = "<div style='background-color: black; border: 5px solid gray; padding: 20px; font-size: 24px; display: inline-block; vertical-align: top; " + j + "' class='renderedinfo'>";
+  for (var c = 0; c < h.length; c++) {
+    var a = h[c],
+      f = "";
+    var b = a.color || "white";
+    if (a.afk && a.afk == "bot") {
+      f = " <span class='gray'>[BOT]</span>"
     } else {
-      if (g.afk && g.afk == "code") {
-        a = " <span class='gray'>[CODE]</span>"
+      if (a.afk && a.afk == "code") {
+        f = " <span class='gray'>[CODE]</span>"
       } else {
-        if (g.afk) {
-          a = " <span class='gray'>[AFK]</span>"
+        if (a.afk) {
+          f = " <span class='gray'>[AFK]</span>"
         }
       }
     }
-    if (g.cursed) {
-      a = " <span style='color: #7D4DAA'>[C]</span>"
+    if (a.cursed) {
+      f = " <span style='color: #7D4DAA'>[C]</span>"
     }
-    if (g.poisoned) {
-      a = " <span style='color: #45993F'>[P]</span>"
+    if (a.poisoned) {
+      f = " <span style='color: #45993F'>[P]</span>"
     }
-    if (g.stunned) {
-      a = " <span style='color: #FF9601'>[STUN]</span>"
+    if (a.stunned) {
+      f = " <span style='color: #FF9601'>[STUN]</span>"
     }
-    if (g.line) {
-      e += "<span class='cbold' style='color: " + b + "'>" + g.line + "</span>" + a + "<br />"
+    if (a.line) {
+      e += "<span class='cbold' style='color: " + b + "'>" + a.line + "</span>" + f + "<br />"
     } else {
-      e += "<span class='cbold' style='color: " + b + "'>" + g.name + "</span>: " + g.value + a + "<br />"
+      e += "<span class='cbold' style='color: " + b + "'>" + a.name + "</span>: " + a.value + f + "<br />"
     }
   }
-  for (var d = 0; d < f.length; d++) {
-    var c = f[d];
-    var b = c.color || "white";
-    e += "<span style='color: " + b + "' class='clickable cbold' onclick=\"" + c.onclick + '">' + c.name + "</span>";
-    if (c.pm_onclick) {
-      e += " <span style='color: " + ("#A255BA" || "#276bc5" || b) + "' class='clickable cbold' onclick=\"" + c.pm_onclick + '">PM</span>'
+  for (var c = 0; c < g.length; c++) {
+    var d = g[c];
+    var b = d.color || "white";
+    e += "<span style='color: " + b + "' class='clickable cbold' onclick=\"" + d.onclick + '">' + d.name + "</span>";
+    if (d.pm_onclick) {
+      e += " <span style='color: " + ("#A255BA" || "#276bc5" || b) + "' class='clickable cbold' onclick=\"" + d.pm_onclick + '">PM</span>'
     }
     e += "<br />"
   }
