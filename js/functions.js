@@ -1477,23 +1477,25 @@ function get_active_characters() {
   }
   a[character.name] = "self";
   $("iframe").each(function() {
-    var g = $(this),
-      c = g.data("name");
+    var h = $(this),
+      c = h.data("name"),
+      g = null;
     if (c) {
       var f = "starting",
         b = c.toLowerCase(),
-        d = g.attr("id");
+        d = h.attr("id");
       if (document.getElementById(d) && document.getElementById(d).contentWindow) {
         f = "loading";
         if (document.getElementById(d).contentWindow.character) {
+          g = document.getElementById(d).contentWindow.character.name;
           f = "active";
           if (document.getElementById(d).contentWindow.code_active) {
             f = "code"
           }
         }
       }
-      if (document.getElementById(d).contentWindow.character.name && document.getElementById(d).contentWindow.character.name != c) {
-        c = document.getElementById(d).contentWindow.character.name, g.attr("id", "ichar" + c.toLowerCase())
+      if (g && g != c) {
+        c = g, h.attr("id", "ichar" + c.toLowerCase())
       }
       a[c] = f
     }
