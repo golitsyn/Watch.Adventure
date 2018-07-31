@@ -127,6 +127,13 @@ function use_skill(name, target) {
   parent.use_skill(name, target);
 }
 
+function transport(map, spawn) {
+  parent.socket.emit("transport", {
+    to: map,
+    s: spawn
+  });
+}
+
 function item_properties(item) // example: item_properties(character.items[0])
 {
   if (!item || !item.name) return null;
