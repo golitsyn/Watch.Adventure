@@ -1394,7 +1394,7 @@ var G = {
       "irregular": true
     }
   },
-  "version": 315,
+  "version": 316,
   "conditions": {
     "tarot_5swords": {
       "name": "Tarot Card",
@@ -4302,6 +4302,14 @@ var G = {
       "skin": "candy0",
       "type": "gem"
     },
+    "egg7": {
+      "name": "Easter Egg",
+      "g": 4000,
+      "explanation": "A uniquely painted Egg!",
+      "s": true,
+      "skin": "egg7",
+      "type": "quest"
+    },
     "bataxe": {
       "delia": "Now you see me, now you see the floor",
       "damage": "physical",
@@ -5019,6 +5027,14 @@ var G = {
       "skin": "egg8",
       "type": "quest"
     },
+    "mpotx": {
+      "name": "Super MP Potion",
+      "g": 20000,
+      "s": true,
+      "skin": "mpotx",
+      "type": "pot",
+      "gives": [["mp", 10000]]
+    },
     "quiver": {
       "dex": 2,
       "range": 20,
@@ -5101,13 +5117,13 @@ var G = {
       "skin": "egg4",
       "type": "quest"
     },
-    "egg7": {
-      "name": "Easter Egg",
-      "g": 4000,
-      "explanation": "A uniquely painted Egg!",
+    "hpotx": {
+      "name": "Super HP Potion",
+      "g": 20000,
       "s": true,
-      "skin": "egg7",
-      "type": "quest"
+      "skin": "hpotx",
+      "type": "pot",
+      "gives": [["hp", 10000]]
     },
     "egg6": {
       "name": "Easter Egg",
