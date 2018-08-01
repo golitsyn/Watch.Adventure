@@ -1394,7 +1394,7 @@ var G = {
       "irregular": true
     }
   },
-  "version": 313,
+  "version": 315,
   "conditions": {
     "tarot_5swords": {
       "name": "Tarot Card",
@@ -3487,7 +3487,7 @@ var G = {
       "name": "The Stone Key",
       "g": 50000,
       "explanation": "A stone key, imbued with magical energy.",
-      "skin": "placeholder",
+      "skin": "stonekey",
       "type": "key",
       "opens": "therush"
     },
