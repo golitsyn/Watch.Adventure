@@ -2417,14 +2417,21 @@ function init_socket() {
   socket.on("chest_opened", function(data) {
     draw_trigger(function() {
       if (chests[data.id]) {
-        var chest = chests[data.id];
-        sfx("coins", chest.x, chest.y);
-        if (!chest.openning) {
-          chest.openning = new Date();
-          set_texture(chest, ++chest.frame)
+        var chest = chests[data.id],
+          x = chest.x,
+          y = chest.y;
+        if (is_hidden()) {
+          destroy_sprite(chest);
+          delete chests[data.id]
+        } else {
+          if (!chest.openning) {
+            chest.openning = new Date();
+            set_texture(chest, ++chest.frame)
+          }
+          chest.to_delete = true;
+          chest.alpha = 0.8
         }
-        chest.to_delete = true;
-        chest.alpha = 0.8
+        sfx("coins", x, y)
       }
       try {
         var chars = get_active_characters();
