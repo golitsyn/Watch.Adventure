@@ -1324,6 +1324,21 @@ function randomStr(a) {
   }
   return f
 }
+function log_trace(a, b) {
+  console.log("\n====================");
+  if (typeof b === "object") {
+    if (b.message) {
+      console.log("Exception[" + a + "]:\n" + b.message)
+    }
+    if (b.stack) {
+      console.log("Stacktrace:");
+      console.log(b.stack)
+    }
+  } else {
+    console.log("log_trace: argument is not an object")
+  }
+  console.log("====================\n")
+}
 function rough_size(d) {
   var c = [];
   var a = [d];
