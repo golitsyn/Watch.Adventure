@@ -1394,7 +1394,7 @@ var G = {
       "irregular": true
     }
   },
-  "version": 316,
+  "version": 318,
   "conditions": {
     "tarot_5swords": {
       "name": "Tarot Card",
@@ -2509,7 +2509,6 @@ var G = {
       "range": 50,
       "trex": "This staff is a relic of a past age long forgotten. Thought to be forged by the God of Lighting. Those who have seen this staff claim it radiates powerful energy. Though this staff is only wielded by few, it is feared by all.",
       "attack": 40,
-      "edge": 3,
       "rpiercing": 10,
       "type": "weapon"
     },
@@ -2593,7 +2592,6 @@ var G = {
       "name": "Darkforge Gloves",
       "g": 3400000,
       "armor": 32,
-      "edge": 6,
       "type": "gloves",
       "scroll": true
     },
@@ -2662,7 +2660,6 @@ var G = {
       "name": "Heavy Boots",
       "g": 1240000,
       "armor": 12,
-      "edge": 4,
       "type": "shoes",
       "scroll": true
     },
@@ -2685,7 +2682,6 @@ var G = {
       "reflection": 1,
       "g": 72000,
       "armor": 14,
-      "edge": 4,
       "type": "helmet",
       "scroll": true
     },
@@ -2750,7 +2746,6 @@ var G = {
       "damage": "physical",
       "crit": 1,
       "attack": 26,
-      "edge": 3,
       "grades": [0, 6],
       "str": 20,
       "skin": "bowofthedead",
@@ -2798,7 +2793,6 @@ var G = {
       "wtype": "bow",
       "range": 60,
       "attack": 29.0,
-      "edge": 3,
       "type": "weapon"
     },
     "x7": {
@@ -2876,7 +2870,6 @@ var G = {
       "name": "Rugged Shoes",
       "g": 120000,
       "armor": 8,
-      "edge": 2,
       "type": "shoes",
       "scroll": true
     },
@@ -2972,7 +2965,6 @@ var G = {
       "g": 150000,
       "armor": 6.0,
       "credit": "Pluet",
-      "edge": 1.0,
       "type": "shoes",
       "scroll": true
     },
@@ -3004,20 +2996,19 @@ var G = {
       "type": "amulet"
     },
     "bcape": {
-      "stat": 5,
-      "resistance": 12,
-      "grades": [0, 4],
-      "skin": "cape1",
       "a": true,
+      "stat": 5,
       "upgrade": {
         "armor": 3,
         "resistance": 2
       },
+      "grades": [0, 4],
       "name": "Well-Crafted Cape",
       "g": 2400000,
+      "skin": "cape1",
       "armor": 18,
-      "edge": 10,
-      "type": "cape"
+      "type": "cape",
+      "resistance": 12
     },
     "dexbelt": {
       "dex": 4,
@@ -3083,7 +3074,6 @@ var G = {
       "wtype": "short_sword",
       "range": 3,
       "attack": 20,
-      "edge": 2,
       "type": "weapon"
     },
     "t2stramulet": {
@@ -3129,7 +3119,6 @@ var G = {
       "name": "Xmas Sweater",
       "g": 16000,
       "armor": 18.0,
-      "edge": 1.0,
       "type": "chest",
       "scroll": true
     },
@@ -3185,7 +3174,6 @@ var G = {
       "armor": 16,
       "type": "gloves",
       "apiercing": 32,
-      "edge": 2,
       "rpiercing": 32,
       "aspeed": 2,
       "scroll": true
@@ -3235,7 +3223,6 @@ var G = {
       "g": 34000,
       "armor": 12.0,
       "apiercing": 20,
-      "edge": 1.0,
       "rpiercing": 20,
       "type": "gloves",
       "scroll": true
@@ -3305,7 +3292,6 @@ var G = {
       "name": "Darkforge Boots",
       "g": 12400000,
       "armor": 16,
-      "edge": 6,
       "type": "shoes",
       "scroll": true
     },
@@ -3403,7 +3389,6 @@ var G = {
       "name": "Rugged Helmet",
       "g": 32000,
       "armor": 14,
-      "edge": 2,
       "type": "helmet",
       "scroll": true
     },
@@ -3563,7 +3548,6 @@ var G = {
       "damage": "magical",
       "attr0": 0.10000000000000001,
       "attack": 40,
-      "edge": 3,
       "g": 289000,
       "vit": -30,
       "skin": "oozingterror",
@@ -3587,7 +3571,6 @@ var G = {
       "name": "Rugged Pants",
       "g": 78000,
       "armor": 20,
-      "edge": 2,
       "type": "pants",
       "scroll": true
     },
@@ -3651,7 +3634,6 @@ var G = {
     "rabbitsfoot": {
       "a": true,
       "grades": [0, 0],
-      "edge": 5,
       "name": "Rabbit's Foot",
       "g": 120000,
       "skin": "rabbitsfoot",
@@ -3699,7 +3681,6 @@ var G = {
       "name": "Darkforge Helmet",
       "g": 3200000,
       "armor": 28,
-      "edge": 6,
       "type": "helmet",
       "scroll": true
     },
@@ -3789,7 +3770,6 @@ var G = {
       "wtype": "short_sword",
       "range": 3,
       "charisma": -20,
-      "edge": 2,
       "attack": 20,
       "type": "weapon"
     },
@@ -3842,7 +3822,7 @@ var G = {
       "e": 1,
       "name": "Gold Earring",
       "g": 360000,
-      "edge": 3,
+      "edge": -2,
       "type": "earring"
     },
     "feather0": {
@@ -3934,7 +3914,6 @@ var G = {
       "name": "Heavy Gloves",
       "g": 340000,
       "armor": 24,
-      "edge": 4,
       "type": "gloves",
       "scroll": true
     },
@@ -4091,7 +4070,6 @@ var G = {
       "wtype": "bow",
       "range": 60,
       "attack": 26,
-      "edge": 3,
       "type": "weapon"
     },
     "stoneofxp": {
@@ -4157,7 +4135,6 @@ var G = {
       "name": "Heavy Underarmor",
       "g": 780000,
       "armor": 30,
-      "edge": 4,
       "type": "pants",
       "scroll": true
     },
@@ -4182,7 +4159,6 @@ var G = {
       "name": "Green Pumpkin Head",
       "lifesteal": 2,
       "armor": 14,
-      "edge": 4,
       "g": 32000,
       "rpiercing": 10,
       "type": "helmet",
@@ -4276,21 +4252,20 @@ var G = {
     "ornamentstaff": {
       "damage": "magical",
       "grades": [0, 7],
-      "awesomeness": 99,
-      "skin": "ornamentstaff",
-      "range": 60,
-      "a": true,
       "upgrade": {
         "attack": 6,
         "awesomeness": 0.10000000000000001,
         "range": 3
       },
+      "skin": "ornamentstaff",
+      "range": 60,
+      "a": true,
+      "awesomeness": 99,
       "name": "Ornament Staff",
       "g": 120000,
       "wtype": "staff",
       "attack": 30,
       "mp_cost": -40,
-      "edge": 2,
       "type": "weapon"
     },
     "candy0v2": {
@@ -4327,7 +4302,6 @@ var G = {
       "wtype": "axe",
       "range": 8,
       "attack": 36,
-      "edge": 3,
       "type": "weapon"
     },
     "bunnyears": {
@@ -4351,7 +4325,6 @@ var G = {
       "evasion": 1,
       "g": 32000,
       "armor": 14,
-      "edge": 1,
       "type": "helmet",
       "scroll": true
     },
@@ -4450,7 +4423,6 @@ var G = {
       "name": "Heavy Armor",
       "g": 480000,
       "armor": 36,
-      "edge": 4,
       "type": "chest",
       "scroll": true
     },
@@ -4495,7 +4467,6 @@ var G = {
       "name": "Rugged Coat",
       "g": 48000,
       "armor": 24,
-      "edge": 2,
       "type": "chest",
       "scroll": true
     },
@@ -4526,7 +4497,6 @@ var G = {
       "name": "Heavy Helmet",
       "g": 320000,
       "armor": 21,
-      "edge": 4,
       "type": "helmet",
       "scroll": true
     },
@@ -4549,7 +4519,6 @@ var G = {
       "wtype": "staff",
       "range": 50,
       "attack": 30,
-      "edge": 2,
       "type": "weapon"
     },
     "gloves1": {
@@ -4568,7 +4537,6 @@ var G = {
       "name": "Rugged Gloves",
       "g": 34000,
       "armor": 16,
-      "edge": 2,
       "type": "gloves",
       "scroll": true
     },
@@ -4616,7 +4584,6 @@ var G = {
       "type": "gloves",
       "apiercing": 16,
       "charge": 0,
-      "edge": 2,
       "aspeed": 2,
       "scroll": true
     },
@@ -4636,7 +4603,6 @@ var G = {
       "name": "Xmas Hat",
       "g": 13200,
       "armor": 10.5,
-      "edge": 1.0,
       "type": "helmet",
       "scroll": true
     },
@@ -4659,7 +4625,6 @@ var G = {
       "dex": 2,
       "name": "Orb of Second Chances",
       "g": 120000,
-      "edge": 5,
       "mp": 200,
       "str": 2,
       "type": "orb"
@@ -4708,7 +4673,6 @@ var G = {
       "name": "Darkforge Underarmor",
       "g": 7800000,
       "armor": 40,
-      "edge": 6,
       "type": "pants",
       "scroll": true
     },
@@ -4739,7 +4703,6 @@ var G = {
       "name": "Trinket of Faith",
       "g": 96000,
       "armor": 5,
-      "edge": 5,
       "str": 2,
       "type": "orb"
     },
@@ -4896,7 +4859,6 @@ var G = {
       "wtype": "staff",
       "range": 50,
       "attack": 40,
-      "edge": 2,
       "str": 32,
       "type": "weapon"
     },
@@ -4943,7 +4905,6 @@ var G = {
       "wtype": "short_sword",
       "range": 5,
       "attack": 18,
-      "edge": 2,
       "type": "weapon"
     },
     "basher": {
@@ -4966,7 +4927,6 @@ var G = {
       "damage": "physical",
       "g": 72000,
       "attack": 24,
-      "edge": 1,
       "grades": [0, 7],
       "wspeed": "slow",
       "skin": "basher",
@@ -5016,7 +4976,6 @@ var G = {
       "wtype": "staff",
       "range": 50,
       "attack": 30,
-      "edge": 2,
       "type": "weapon"
     },
     "egg8": {
@@ -5070,7 +5029,6 @@ var G = {
       "g": 6400000,
       "armor": 10.5,
       "apiercing": 20,
-      "edge": 7,
       "type": "helmet",
       "scroll": true
     },
@@ -5201,7 +5159,6 @@ var G = {
       "rpiercing": 80,
       "g": 7800000,
       "armor": 30,
-      "edge": 4,
       "type": "pants",
       "scroll": true
     },
@@ -5239,7 +5196,6 @@ var G = {
       "name": "Xmas Shoes",
       "g": 36000,
       "armor": 6.0,
-      "edge": 1.0,
       "type": "shoes",
       "scroll": true
     },
@@ -5263,7 +5219,6 @@ var G = {
       "g": 480000,
       "armor": 24,
       "charisma": -5,
-      "edge": 1,
       "type": "chest",
       "scroll": true
     },
@@ -5287,7 +5242,6 @@ var G = {
       "name": "Dracul's Attire",
       "g": 480000,
       "armor": 24,
-      "edge": 4,
       "type": "chest",
       "scroll": true
     },
@@ -5358,7 +5312,6 @@ var G = {
       "name": "Darkforge Armor",
       "g": 4800000,
       "armor": 48,
-      "edge": 6,
       "type": "chest",
       "scroll": true
     },
@@ -5386,7 +5339,6 @@ var G = {
       "type": "gloves",
       "apiercing": 64,
       "charge": 0,
-      "edge": 6,
       "aspeed": 5,
       "scroll": true
     },
@@ -5461,7 +5413,6 @@ var G = {
       "name": "Poker",
       "g": 16000,
       "armor": 12.0,
-      "edge": 1.0,
       "type": "gloves",
       "scroll": true
     },
@@ -5483,7 +5434,6 @@ var G = {
       "wtype": "mace",
       "range": 10,
       "attack": 25,
-      "edge": 3,
       "type": "weapon"
     },
     "elixirint2": {
@@ -5544,7 +5494,6 @@ var G = {
     },
     "wblade": {
       "damage": "magical",
-      "g": 4890000,
       "grades": [0, 0],
       "skin": "wblade",
       "name": "The Ethereal Blade of Destiny",
@@ -5555,13 +5504,13 @@ var G = {
         "range": 2,
         "evasion": 1
       },
-      "rpiercing": 40,
       "evasion": 10,
+      "g": 4890000,
       "wtype": "wblade",
       "range": 30,
       "ignore": true,
       "attack": 48,
-      "edge": 2,
+      "rpiercing": 40,
       "type": "weapon"
     },
     "wbook0": {
@@ -5570,7 +5519,6 @@ var G = {
       "int": 6,
       "skin": "wbook0",
       "grades": [7, 9],
-      "edge": -1,
       "compound": {
         "int": 5
       },
@@ -5607,7 +5555,6 @@ var G = {
       "name": "Xmas Pants",
       "g": 17800,
       "armor": 15.0,
-      "edge": 1.0,
       "type": "pants",
       "scroll": true
     },
@@ -5648,7 +5595,6 @@ var G = {
       "name": "Hand of Midas",
       "g": 800000,
       "armor": 28.0,
-      "edge": 8,
       "type": "gloves",
       "scroll": true
     },
