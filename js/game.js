@@ -1131,7 +1131,7 @@ function the_game(c) {
         }
       });
       animation_layer = new PIXI.display.Group(1, true);
-      entity_layer = new PIXI.display.Group(2, function(e) {
+      entity_layer = new PIXI.display.Group(6, function(e) {
         var d = 0;
         if (e.parent.stand) {
           d = -3
@@ -3787,60 +3787,62 @@ function player_effects_logic(a) {
     a.last_targets = a.targets
   }
 }
-function effects_logic(a) {
-  if (no_graphics || !a.s) {
+function effects_logic(b) {
+  if (no_graphics || !b.s) {
     return
   }
-  if ((a.s.cursed || a.s.poisoned || a.s.frozen) && !a.fx.cursed) {
-    a.fx.cursed = true;
-    start_filter(a, "curse")
+  if ((b.s.cursed || b.s.poisoned || b.s.frozen) && !b.fx.cursed) {
+    b.fx.cursed = true;
+    start_filter(b, "curse")
   } else {
-    if (!(a.s.cursed || a.s.poisoned || a.s.frozen) && a.fx.cursed) {
-      delete a.fx.cursed;
-      stop_filter(a, "curse")
+    if (!(b.s.cursed || b.s.poisoned || b.s.frozen) && b.fx.cursed) {
+      delete b.fx.cursed;
+      stop_filter(b, "curse")
     }
   }
-  if (a.s.fingered && !a.filter_fingered) {
-    start_filter(a, "fingered")
+  if (b.s.fingered && !b.filter_fingered) {
+    start_filter(b, "fingered")
   } else {
-    if (!a.s.fingered && a.filter_fingered) {
-      stop_filter(a, "fingered")
+    if (!b.s.fingered && b.filter_fingered) {
+      stop_filter(b, "fingered")
     }
   }
-  if (a.s.stunned && !a.fx.stunned && !a.s.fingered) {
-    a.fx.stunned = true;
-    start_animation(a, "stunned", "stun")
+  if (b.s.stunned && !b.fx.stunned && !b.s.fingered) {
+    b.fx.stunned = true;
+    start_animation(b, "stunned", "stun")
   } else {
-    if (!a.s.stunned && a.fx.stunned && !a.s.fingered) {
-      delete a.fx.stunned;
-      stop_animation(a, "stunned")
+    if (!b.s.stunned && b.fx.stunned && !b.s.fingered) {
+      delete b.fx.stunned;
+      stop_animation(b, "stunned")
     }
   }
-  if (a.s.invincible && !a.fx.invincible) {
-    a.fx.invincible = true;
-    start_animation(a, "invincible");
-    a.alpha = 0.9
+  if (b.s.invincible && !b.fx.invincible) {
+    var a = b.role == "gm" && "gm" || "invincible";
+    b.fx.invincible = true;
+    start_animation(b, a);
+    b.alpha = 0.9
   } else {
-    if (!a.s.invincible && a.fx.invincible) {
-      delete a.fx.invincible;
-      stop_animation(a, "invincible");
-      a.alpha = 1
+    if (!b.s.invincible && b.fx.invincible) {
+      var a = b.role == "gm" && "gm" || "invincible";
+      delete b.fx.invincible;
+      stop_animation(b, a);
+      b.alpha = 1
     }
   }
-  if (a.s.hardshell && !a.fx.hardshell) {
-    a.fx.hardshell = true;
-    start_animation(a, "hardshell")
+  if (b.s.hardshell && !b.fx.hardshell) {
+    b.fx.hardshell = true;
+    start_animation(b, "hardshell")
   } else {
-    if (!a.s.hardshell && a.fx.hardshell) {
-      delete a.fx.hardshell;
-      stop_animation(a, "hardshell")
+    if (!b.s.hardshell && b.fx.hardshell) {
+      delete b.fx.hardshell;
+      stop_animation(b, "hardshell")
     }
   }
-  if (a.s.magiport && !a.fading_out) {
-    a.fading_out = new Date();
-    a.alpha = 1;
-    draw_timeout(fade_out_magiport(0, a), 0);
-    start_filter(a, "bloom")
+  if (b.s.magiport && !b.fading_out) {
+    b.fading_out = new Date();
+    b.alpha = 1;
+    draw_timeout(fade_out_magiport(0, b), 0);
+    start_filter(b, "bloom")
   }
 }
 function add_character(e, d) {
