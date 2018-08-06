@@ -987,6 +987,46 @@ function closest_line(c, a, d) {
   });
   return b
 }
+function unstuck_logic(a) {
+  if (!can_move({
+    map: a.map,
+    x: get_x(a),
+    y: get_y(a),
+    going_x: get_x(a),
+    going_y: get_y(a) + EPS / 2,
+    base: a.base
+  })) {
+    var b = false;
+    if (can_move({
+      map: a.map,
+      x: get_x(a),
+      y: get_y(a) + 8.1,
+      going_x: get_x(a),
+      going_y: get_y(a) + 8.1 + EPS / 2,
+      base: a.base
+    })) {
+      set_xy(a, get_x(a), get_y(a) + 8.1);
+      b = true
+    } else {
+      if (can_move({
+        map: a.map,
+        x: get_x(a),
+        y: get_y(a) - 8.1,
+        going_x: get_x(a),
+        going_y: get_y(a) - 8.1 - EPS / 2,
+        base: a.base
+      })) {
+        set_xy(a, get_x(a), get_y(a) - 8.1);
+        b = true
+      }
+    }
+    if (!b) {
+      console.log("#CRITICAL: Couldn't fix blink onto line issue")
+    } else {
+      console.log("Blinked onto line, fixed")
+    }
+  }
+}
 function stop_logic(b) {
   if (!b.moving) {
     return
