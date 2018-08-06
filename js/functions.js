@@ -850,6 +850,13 @@ function on_skill(d, h) {
                         var f = [];
                         hide_modal();
                         f.push({
+                          button: "Travel",
+                          onclick: function() {
+                            hide_modal();
+                            render_travel(1)
+                          }
+                        });
+                        f.push({
                           button: "Jump",
                           onclick: function() {
                             socket.emit("gm", {
@@ -902,13 +909,6 @@ function on_skill(d, h) {
                               placeholder: "Name",
                               title: "Character"
                             })
-                          }
-                        });
-                        f.push({
-                          button: "Travel",
-                          onclick: function() {
-                            hide_modal();
-                            render_travel(1)
                           }
                         });
                         get_input({
@@ -3045,7 +3045,7 @@ function stop_emblem(b, a) {
     b.emblems[a].frames = 0
   }
 }
-function start_animation(d, c, g) {
+function start_animation(d, c, h) {
   if (d.animations[c]) {
     d.animations[c].frame = 0;
     return
@@ -3053,23 +3053,24 @@ function start_animation(d, c, g) {
   var b = new_sprite(c, "animation"),
     f = (d.hitArea && d.hitArea.width || d.texture.width),
     a = (d.hitArea && d.hitArea.height || d.texture.height);
+  var g = G.animations[c];
   d.animations[c] = b;
-  if (G.animations[c].alpha) {
-    b.alpha = G.animations[c].alpha
+  if (g.alpha) {
+    b.alpha = g.alpha
   } else {
     b.alpha = 0.5
   }
-  if (g == "stun") {
+  if (h == "stun") {
     b.continuous = true;
     b.width = round(f * 2 / 3);
     b.height = round(a / 3);
     b.y = -a + 8
   }
-  if (c == "transport" || c == "invincible" || c == "hardshell" || c == "revival") {
+  if (g.continuous) {
     b.continuous = true;
     b.height = round(a * 0.95)
   } else {
-    if (G.animations[c].proportional) {
+    if (g.proportional) {
       if (1 * b.height * f / b.width > a) {
         b.height = a;
         b.width = ceil(1 * b.width * a / b.height)
@@ -3078,9 +3079,9 @@ function start_animation(d, c, g) {
         b.width = d.width
       }
     } else {
-      if (G.animations[c].size) {
-        b.width = round(f * G.animations[c].size);
-        b.height = round(a * G.animations[c].size)
+      if (g.size) {
+        b.width = round(f * g.size);
+        b.height = round(a * g.size)
       } else {
         b.width = f;
         b.height = a
@@ -3091,10 +3092,10 @@ function start_animation(d, c, g) {
     b.height = d.texture.height;
     b.width = d.texture.width
   }
-  if (G.animations[c].speeding) {
+  if (g.speeding) {
     b.speeding = true
   }
-  b.aspeed = G.animations[c].aspeed;
+  b.aspeed = g.aspeed;
   b.aspeed = (b.aspeed == "fast" && 0.8) || (b.aspeed == "mild" && 1.4) || (b.aspeed == "slow" && 3) || 2;
   b.anchor.set(0.5, 1);
   d.addChild(b)
@@ -3765,7 +3766,7 @@ function add_name_tag(c) {
     c.ntag_cache = null
   }
   var f = new PIXI.Graphics();
-  var a = "Lv." + c.level + " " + c.name,
+  var a = ("" && "Lv." + c.level + " ") + c.name,
     h = 7433580,
     b = a.length * 4 + 4,
     j = 11,
@@ -3777,6 +3778,9 @@ function add_name_tag(c) {
       h = 14188294
     }
     b = a.length * 4 + 8
+  }
+  if (c.role == "gm") {
+    h = 15115055
   }
   f.beginFill(h);
   f.drawRect(0, 0, b, j);
