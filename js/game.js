@@ -1373,6 +1373,9 @@ function init_socket() {
       character.alpha = 0.5;
       restore_dimensions(character)
     }
+    if (data.effect) {
+      unstuck_logic(character)
+    }
     character.tp = data.effect;
     var cm_timer = new Date();
     if (create) {
@@ -4484,6 +4487,30 @@ function create_map() {
     G.maps[current_map].spawns.forEach(function(a) {
       var b = draw_circle(a[0], a[1], 10, 16609672);
       map.addChild(b)
+    });
+    (G.maps[current_map].monsters || []).forEach(function(b) {
+      if (b.boundary) {
+        var a = empty_rect(b.boundary[0], b.boundary[1], b.boundary[2] - b.boundary[0], b.boundary[3] - b.boundary[1], 2, 16539449);
+        map.addChild(a)
+      }
+      if (b.rage) {
+        var a = empty_rect(b.rage[0] - 3, b.rage[1] - 3, b.rage[2] - b.rage[0] + 6, b.rage[3] - b.rage[1] + 6, 2, 9530301);
+        map.addChild(a)
+      }(b.boundaries || []).forEach(function(h) {
+        if (h[0] != current_map) {
+          return
+        }
+        var j = empty_rect(h[1] + 2, h[2] + 2, h[3] - h[1], h[4] - h[2], 2, 5412095);
+        map.addChild(j)
+      })
+    });
+    M.x_lines.forEach(function(b) {
+      var a = draw_line(b[0], b[1], b[0], b[2], 2);
+      map.addChild(a)
+    });
+    M.y_lines.forEach(function(b) {
+      var a = draw_line(b[1], b[0], b[2], b[0], 2);
+      map.addChild(a)
     })
   }
   console.log("Map created: " + current_map)
