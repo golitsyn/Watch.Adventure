@@ -1131,7 +1131,7 @@ function the_game(c) {
         }
       });
       animation_layer = new PIXI.display.Group(1, true);
-      entity_layer = new PIXI.display.Group(6, function(e) {
+      entity_layer = new PIXI.display.Group(2, function(e) {
         var d = 0;
         if (e.parent.stand) {
           d = -3
