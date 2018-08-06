@@ -3793,7 +3793,7 @@ function add_name_tag(c) {
   if (!c.me) {
     k = 4
   } else {
-    k = 8
+    k = 2
   }
   var d = {
     fontFamily: S.font,
