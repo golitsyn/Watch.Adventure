@@ -320,9 +320,9 @@ function unequip(slot) // show_json(character.slots) => to see slot options
   });
 }
 
-function trade(num, trade_slot, price) // where trade_slot is 1 to 16 - example, trade(0,4,1000) puts the first item in inventory to the 4th trade slot for 1000 gold [27/10/16]
+function trade(num, trade_slot, price, quantity) // where trade_slot is 1 to 16 - example, trade(0,4,1000) puts the first item in inventory to the 4th trade slot for 1000 gold [27/10/16]
 {
-  parent.trade("trade" + trade_slot, num, price);
+  parent.trade("trade" + trade_slot, num, price, quantity || 1);
 }
 
 function trade_buy(target, trade_slot) // target needs to be an actual player
