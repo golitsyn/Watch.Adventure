@@ -2001,135 +2001,152 @@ function on_rclick(g) {
     }
   }
 }
-function on_drop(n) {
-  n.preventDefault();
-  var t = n.dataTransfer.getData("text"),
-    k = false,
-    m = false;
-  var c = $(document.getElementById(t)),
-    s = $(n.target);
-  while (s && s.parent() && s.attr("ondrop") == undefined) {
-    s = s.parent()
+function on_drop(q) {
+  q.preventDefault();
+  var w = q.dataTransfer.getData("text"),
+    m = false,
+    p = false;
+  var c = $(document.getElementById(w)),
+    v = $(q.target);
+  while (v && v.parent() && v.attr("ondrop") == undefined) {
+    v = v.parent()
   }
-  var b = s.data("cnum"),
-    f = s.data("slot"),
-    a = s.data("strnum"),
-    p = s.data("trigrc"),
-    q = s.data("skid");
-  var u = c.data("inum"),
-    r = c.data("sname"),
-    j = c.data("snum"),
+  var b = v.data("cnum"),
+    f = v.data("slot"),
+    a = v.data("strnum"),
+    s = v.data("trigrc"),
+    t = v.data("skid");
+  var x = c.data("inum"),
+    u = c.data("sname"),
+    l = c.data("snum"),
     d = c.data("skname");
-  console.log(b + " " + u + " " + f + " " + r + " skid: " + q + " skname: " + d);
-  if (u !== undefined && q !== undefined) {
-    u = parseInt(u);
-    if ((u || u === 0) && character.items[u]) {
-      keymap[q] = {
+  console.log(b + " " + x + " " + f + " " + u + " skid: " + t + " skname: " + d);
+  if (x !== undefined && t !== undefined) {
+    x = parseInt(x);
+    if ((x || x === 0) && character.items[x]) {
+      keymap[t] = {
         type: "item",
-        name: character.items[u].name
+        name: character.items[x].name
       };
       set_setting(real_id, "keymap", keymap);
       render_skills();
       render_skills()
     }
   } else {
-    if (d !== undefined && q !== undefined) {
+    if (d !== undefined && t !== undefined) {
       if (d == "eval") {
-        keymap[q] = {
+        keymap[t] = {
           name: "eval",
           code: "add_log('Empty eval','gray')"
         }
       } else {
         if (d == "snippet") {
-          keymap[q] = {
+          keymap[t] = {
             name: "snippet",
             code: "game_log('Empty snippet','gray')"
           }
         } else {
-          keymap[q] = d
+          if (d == "throw") {
+            var h = 0,
+              k = true;
+            while (k) {
+              k = false;
+              for (var n in keymap) {
+                if (keymap[n] && keymap[n].name && keymap[n].name == "throw" && keymap[n].num == h) {
+                  h++, k = true
+                }
+              }
+            }
+            keymap[t] = {
+              name: "throw",
+              num: h
+            }
+          } else {
+            keymap[t] = d
+          }
         }
       }
       set_setting(real_id, "keymap", keymap);
       render_skills();
       render_skills()
     } else {
-      if (p != undefined && u != undefined) {
+      if (s != undefined && x != undefined) {
         on_rclick(c.get(0))
       } else {
-        if (j != undefined && a != undefined) {
+        if (l != undefined && a != undefined) {
           socket.emit("bank", {
             operation: "move",
-            a: j,
+            a: l,
             b: a,
             pack: last_rendered_items
           });
-          k = true
+          m = true
         } else {
-          if (a != undefined && u != undefined) {
+          if (a != undefined && x != undefined) {
             socket.emit("bank", {
               operation: "swap",
-              inv: u,
+              inv: x,
               str: a,
               pack: last_rendered_items
             });
-            m = true
+            p = true
           } else {
-            if (b != undefined && j != undefined) {
+            if (b != undefined && l != undefined) {
               socket.emit("bank", {
                 operation: "swap",
                 inv: b,
-                str: j,
+                str: l,
                 pack: last_rendered_items
               });
-              m = true
+              p = true
             } else {
-              if (b !== undefined && b == u) {
+              if (b !== undefined && b == x) {
                 if (is_mobile && mssince(last_drag_start) < 300) {
-                  inventory_click(parseInt(u))
+                  inventory_click(parseInt(x))
                 }
               } else {
-                if (b != undefined && u != undefined) {
+                if (b != undefined && x != undefined) {
                   socket.emit("imove", {
                     a: b,
-                    b: u
+                    b: x
                   });
-                  k = true
+                  m = true
                 } else {
-                  if (r !== undefined && r == f) {
+                  if (u !== undefined && u == f) {
                     if (is_mobile && mssince(last_drag_start) < 300) {
                       slot_click(f)
                     }
                   } else {
-                    if (b != undefined && r != undefined) {
+                    if (b != undefined && u != undefined) {
                       socket.emit("unequip", {
-                        slot: r,
+                        slot: u,
                         position: b
                       })
                     } else {
-                      if (f != undefined && u != undefined) {
+                      if (f != undefined && x != undefined) {
                         if (in_arr(f, trade_slots)) {
                           if (character.slots[f]) {
                             return
                           }
                           try {
-                            var l = character.items[parseInt(u)];
+                            var o = character.items[parseInt(x)];
                             render_item("#topleftcornerdialog", {
                               trade: 1,
-                              item: G.items[l.name],
-                              actual: l,
-                              num: parseInt(u),
+                              item: G.items[o.name],
+                              actual: o,
+                              num: parseInt(x),
                               slot: f
                             });
                             $(".editable").focus();
                             dialogs_target = ctarget
-                          } catch (o) {
-                            console.log("TRADE-ERROR: " + o)
+                          } catch (r) {
+                            console.log("TRADE-ERROR: " + r)
                           }
                         } else {
                           socket.emit("equip", {
-                            num: u,
+                            num: x,
                             slot: f
-                          }), m = true
+                          }), p = true
                         }
                       }
                     }
@@ -2142,15 +2159,15 @@ function on_drop(n) {
       }
     }
   }
-  if (k) {
-    var h = c.all_html(),
-      g = s.html();
-    s.html("");
-    c.parent().html(g);
-    s.html(h)
-  }
   if (m) {
-    s.html(c.all_html())
+    var j = c.all_html(),
+      g = v.html();
+    v.html("");
+    c.parent().html(g);
+    v.html(j)
+  }
+  if (p) {
+    v.html(c.all_html())
   }
 }
 function item_container(A, r) {
@@ -2315,7 +2332,10 @@ function item_container(A, r) {
     }
     if (A.skid) {
       k += "<div class='skidloader" + A.skid + "' style='position: absolute; bottom: 0px; right: 0px; width: 4px; height: 0px; background-color: yellow'></div>";
-      k += "<div class='truui' style='border-color: gray; color: white'>" + A.skid + "</div>"
+      k += "<div class='truui' style='border-color: gray; color: white'>" + A.skid + "</div>";
+      if (r && r.name == "throw") {
+        k += "<div class='iqui'>[" + (r.num || 0) + "]</div>"
+      }
     }
     k += "</div>"
   }
