@@ -149,6 +149,7 @@ var options = {
   code_fx: false,
   show_names: false,
   move_with_mouse: false,
+  always_hpn: false,
 };
 var S = {
   font: "Pixel",
@@ -2172,142 +2173,117 @@ function init_socket() {
                     fnum: data.fnum
                   })
                 } else {
-                  if (data.type == "energize") {
+                  if (data.type == "throw") {
                     var sender = get_player(data.from),
-                      receiver = get_player(data.to);
+                      receiver = get_entity(data.to);
                     if (sender && receiver) {
                       d_line(sender, receiver, {
-                        color: "mana"
+                        color: "#323232"
                       })
                     }
-                    if (receiver) {
-                      start_animation(receiver, "block")
-                    }
                   } else {
-                    if (data.type == "mluck") {
+                    if (data.type == "energize") {
                       var sender = get_player(data.from),
                         receiver = get_player(data.to);
                       if (sender && receiver) {
                         d_line(sender, receiver, {
-                          color: "mluck"
+                          color: "mana"
                         })
                       }
                       if (receiver) {
-                        start_animation(receiver, "mluck")
+                        start_animation(receiver, "block")
                       }
                     } else {
-                      if (data.type == "rspeed") {
+                      if (data.type == "mluck") {
                         var sender = get_player(data.from),
                           receiver = get_player(data.to);
                         if (sender && receiver) {
                           d_line(sender, receiver, {
-                            color: "#D4C392"
+                            color: "mluck"
                           })
                         }
                         if (receiver) {
-                          start_animation(receiver, "rspeed")
+                          start_animation(receiver, "mluck")
                         }
                       } else {
-                        if (data.type == "4fingers") {
+                        if (data.type == "rspeed") {
                           var sender = get_player(data.from),
                             receiver = get_player(data.to);
                           if (sender && receiver) {
                             d_line(sender, receiver, {
-                              color: "#6F62AE"
+                              color: "#D4C392"
                             })
                           }
-                          if (sender) {
-                            mojo(sender)
+                          if (receiver) {
+                            start_animation(receiver, "rspeed")
                           }
                         } else {
-                          if (data.type == "mcourage") {
-                            var sender = get_player(data.name);
-                            if (sender) {
-                              d_text("OMG!", sender, {
-                                size: "huge",
-                                color: "#B9A08C"
+                          if (data.type == "4fingers") {
+                            var sender = get_player(data.from),
+                              receiver = get_player(data.to);
+                            if (sender && receiver) {
+                              d_line(sender, receiver, {
+                                color: "#6F62AE"
                               })
                             }
+                            if (sender) {
+                              mojo(sender)
+                            }
                           } else {
-                            if (data.type == "agitate") {
-                              var attacker = get_entity(data.name);
-                              data.ids.forEach(function(id) {
-                                var entity = entities[id];
-                                if (!entity) {
-                                  return
-                                }
-                                start_emblem(entity, "rr1", {
-                                  frames: 20
-                                })
-                              });
-                              if (attacker) {
-                                start_emblem(attacker, "rr1", {
-                                  frames: 10
+                            if (data.type == "mcourage") {
+                              var sender = get_player(data.name);
+                              if (sender) {
+                                d_text("OMG!", sender, {
+                                  size: "huge",
+                                  color: "#B9A08C"
                                 })
                               }
                             } else {
-                              if (data.type == "stomp") {
+                              if (data.type == "agitate") {
                                 var attacker = get_entity(data.name);
                                 data.ids.forEach(function(id) {
                                   var entity = entities[id];
                                   if (!entity) {
                                     return
                                   }
-                                  start_emblem(entity, "br1", {
-                                    frames: 30
-                                  });
-                                  if (1 || attacker != character) {
-                                    v_shake_i(entity)
-                                  }
+                                  start_emblem(entity, "rr1", {
+                                    frames: 20
+                                  })
                                 });
                                 if (attacker) {
-                                  start_emblem(attacker, "br1", {
-                                    frames: 5
+                                  start_emblem(attacker, "rr1", {
+                                    frames: 10
                                   })
                                 }
-                                if (attacker == character) {
-                                  v_dive()
-                                } else {
-                                  if (attacker) {
-                                    v_dive_i(attacker)
-                                  }
-                                }
                               } else {
-                                if (data.type == "cleave") {
-                                  var points = [],
-                                    attacker = get_entity(data.name);
+                                if (data.type == "stomp") {
+                                  var attacker = get_entity(data.name);
                                   data.ids.forEach(function(id) {
-                                    var entity = entities[id] || entities["DEAD" + id];
+                                    var entity = entities[id];
                                     if (!entity) {
                                       return
                                     }
-                                    points.push({
-                                      x: get_x(entity),
-                                      y: get_y(entity)
+                                    start_emblem(entity, "br1", {
+                                      frames: 30
                                     });
-                                    if (attacker) {
-                                      disappearing_clone(attacker, {
-                                        x: (get_x(entity) + get_x(attacker) * 2) / 3,
-                                        y: (get_y(entity) + get_y(attacker) * 2) / 3,
-                                        random: true
-                                      })
+                                    if (1 || attacker != character) {
+                                      v_shake_i(entity)
                                     }
                                   });
                                   if (attacker) {
-                                    points.push({
-                                      x: get_x(attacker),
-                                      y: get_y(attacker)
-                                    }), flurry(attacker)
-                                  }
-                                  cpoints = convexhull.makeHull(points);
-                                  for (var i = 0; i < cpoints.length; i++) {
-                                    var j = (i + 1) % cpoints.length;
-                                    d_line(cpoints[i], cpoints[j], {
-                                      color: "warrior"
+                                    start_emblem(attacker, "br1", {
+                                      frames: 5
                                     })
                                   }
+                                  if (attacker == character) {
+                                    v_dive()
+                                  } else {
+                                    if (attacker) {
+                                      v_dive_i(attacker)
+                                    }
+                                  }
                                 } else {
-                                  if (data.type == "shadowstrike") {
+                                  if (data.type == "cleave") {
                                     var points = [],
                                       attacker = get_entity(data.name);
                                     data.ids.forEach(function(id) {
@@ -2315,34 +2291,69 @@ function init_socket() {
                                       if (!entity) {
                                         return
                                       }
-                                      if (!attacker) {
-                                        return
-                                      }
-                                      disappearing_clone(attacker, {
-                                        x: (get_x(entity) + get_x(attacker) * 2) / 3,
-                                        y: (get_y(entity) + get_y(attacker) * 2) / 3,
-                                        random: true,
-                                        rcolor: true
-                                      });
-                                      disappearing_clone(attacker, {
+                                      points.push({
                                         x: get_x(entity),
-                                        y: get_y(entity),
-                                        random: true,
-                                        rcolor: true
-                                      })
-                                    })
-                                  } else {
-                                    if (data.type == "track") {
-                                      var attacker = get_entity(data.name);
+                                        y: get_y(entity)
+                                      });
                                       if (attacker) {
-                                        start_emblem(attacker, "o1", {
-                                          frames: 5
+                                        disappearing_clone(attacker, {
+                                          x: (get_x(entity) + get_x(attacker) * 2) / 3,
+                                          y: (get_y(entity) + get_y(attacker) * 2) / 3,
+                                          random: true
                                         })
                                       }
+                                    });
+                                    if (attacker) {
+                                      points.push({
+                                        x: get_x(attacker),
+                                        y: get_y(attacker)
+                                      }), flurry(attacker)
+                                    }
+                                    cpoints = convexhull.makeHull(points);
+                                    for (var i = 0; i < cpoints.length; i++) {
+                                      var j = (i + 1) % cpoints.length;
+                                      d_line(cpoints[i], cpoints[j], {
+                                        color: "warrior"
+                                      })
+                                    }
+                                  } else {
+                                    if (data.type == "shadowstrike") {
+                                      var points = [],
+                                        attacker = get_entity(data.name);
+                                      data.ids.forEach(function(id) {
+                                        var entity = entities[id] || entities["DEAD" + id];
+                                        if (!entity) {
+                                          return
+                                        }
+                                        if (!attacker) {
+                                          return
+                                        }
+                                        disappearing_clone(attacker, {
+                                          x: (get_x(entity) + get_x(attacker) * 2) / 3,
+                                          y: (get_y(entity) + get_y(attacker) * 2) / 3,
+                                          random: true,
+                                          rcolor: true
+                                        });
+                                        disappearing_clone(attacker, {
+                                          x: get_x(entity),
+                                          y: get_y(entity),
+                                          random: true,
+                                          rcolor: true
+                                        })
+                                      })
                                     } else {
-                                      if (data.type == "slots") {
-                                        if (map_machines.slots) {
-                                          map_machines.slots.spinning = future_s(3)
+                                      if (data.type == "track") {
+                                        var attacker = get_entity(data.name);
+                                        if (attacker) {
+                                          start_emblem(attacker, "o1", {
+                                            frames: 5
+                                          })
+                                        }
+                                      } else {
+                                        if (data.type == "slots") {
+                                          if (map_machines.slots) {
+                                            map_machines.slots.spinning = future_s(3)
+                                          }
                                         }
                                       }
                                     }
