@@ -1666,6 +1666,14 @@ var G = {
       "speed": -20,
       "mp": -300
     },
+    "eheal": {
+      "name": "Rejuvenate",
+      "heal": 200,
+      "interval": 320,
+      "ui": true,
+      "skin": "essenceoflife",
+      "duration": 4000
+    },
     "poisoned": {
       "healm": 0.25,
       "name": "Poisoned",
@@ -1683,14 +1691,15 @@ var G = {
       "type": "tarot",
       "minor": "king_wands"
     },
-    "tarot_7pentacles": {
-      "name": "Tarot Card",
+    "xmas": {
       "ui": true,
-      "card": "Pentacles of 7",
-      "vit": -7,
-      "skin": "tarot",
-      "type": "tarot",
-      "minor": "7_pentacles"
+      "name": "Blessing of 2018",
+      "gold": 200,
+      "skin": "xmas",
+      "duration": 86400000,
+      "xp": 200,
+      "buff": true,
+      "luck": 200
     },
     "tarot_2pentacles": {
       "name": "Tarot Card",
@@ -1721,14 +1730,13 @@ var G = {
       "resistance": 160,
       "buff": true
     },
-    "tarot_knightcups": {
-      "dex": 17,
-      "name": "Tarot Card",
+    "mcourage": {
+      "name": "Merchant's Courage",
+      "evasion": 40,
       "ui": true,
-      "card": "Cups of Knight",
-      "skin": "tarot",
-      "type": "tarot",
-      "minor": "knight_cups"
+      "skin": "skill_mcourage",
+      "duration": 5000,
+      "speed": 25
     },
     "tarot_queenswords": {
       "name": "Tarot Card",
@@ -1814,17 +1822,6 @@ var G = {
       "type": "tarot",
       "card": "Theworld"
     },
-    "burn": {
-      "intensity": "burnd",
-      "ui": true,
-      "name": "Burn",
-      "skin": "burn",
-      "duration": 12000,
-      "bad": true,
-      "interval": 200,
-      "speed": 5,
-      "damage": 50
-    },
     "tarot_queencups": {
       "dex": 14,
       "name": "Tarot Card",
@@ -1877,16 +1874,6 @@ var G = {
       "skin": "tarot",
       "type": "tarot",
       "minor": "5_wands"
-    },
-    "xmas": {
-      "ui": true,
-      "name": "Blessing of 2018",
-      "gold": 200,
-      "skin": "xmas",
-      "duration": 86400000,
-      "xp": 200,
-      "buff": true,
-      "luck": 200
     },
     "tarot_9swords": {
       "name": "Tarot Card",
@@ -2153,13 +2140,14 @@ var G = {
       "type": "tarot",
       "minor": "4_swords"
     },
-    "mcourage": {
-      "name": "Merchant's Courage",
-      "evasion": 40,
+    "tarot_knightcups": {
+      "dex": 17,
+      "name": "Tarot Card",
       "ui": true,
-      "skin": "skill_mcourage",
-      "duration": 5000,
-      "speed": 25
+      "card": "Cups of Knight",
+      "skin": "tarot",
+      "type": "tarot",
+      "minor": "knight_cups"
     },
     "tarot_tower": {
       "major": "tower",
@@ -2203,6 +2191,17 @@ var G = {
       "skin": "tarot",
       "type": "tarot",
       "minor": "3_wands"
+    },
+    "eburn": {
+      "intensity": "burnd",
+      "ui": true,
+      "name": "Burn",
+      "skin": "essenceoffire",
+      "duration": 12000,
+      "bad": true,
+      "interval": 200,
+      "speed": 5,
+      "damage": 50
     },
     "tarot_hermit": {
       "major": "hermit",
@@ -2285,6 +2284,15 @@ var G = {
       "skin": "tarot",
       "type": "tarot",
       "minor": "queen_wands"
+    },
+    "tarot_7pentacles": {
+      "name": "Tarot Card",
+      "ui": true,
+      "card": "Pentacles of 7",
+      "vit": -7,
+      "skin": "tarot",
+      "type": "tarot",
+      "minor": "7_pentacles"
     },
     "tarot_2cups": {
       "dex": 2,
@@ -3320,6 +3328,7 @@ var G = {
       "skin_a": "elixirdex2"
     },
     "jewellerybox": {
+      "ignore": true,
       "a": true,
       "s": true,
       "e": 1,
@@ -7054,7 +7063,7 @@ var G = {
     "elixirint0": ["pack_20", 5, 28],
     "elixirint1": ["pack_20", 6, 28],
     "mpot1": ["pack_20", 7, 21],
-    "mpot0": ["pack_20", 5, 21],
+    "vitearring": ["pack_20", 0, 17],
     "stone20": ["pack_20", 5, 5],
     "shadowstone": ["pack_20", 14, 28],
     "suckerpunch": ["pack_20", 11, 15],
@@ -7187,8 +7196,7 @@ var G = {
     "shade_pants": ["pack_20", 2, 31],
     "notverified": ["skills", 3, 9],
     "skill_teleport": ["skills", 4, 0],
-    "vitearring": ["pack_20", 0, 17],
-    "burn": ["pack_20", 9, 34],
+    "mpot0": ["pack_20", 5, 21],
     "chest3": ["", 9, 114],
     "chest2": ["", 9, 113],
     "chest1": ["", 8, 113],
@@ -8908,14 +8916,19 @@ var G = {
       "skin": "snippet"
     },
     "throw": {
-      "cooldown": 400,
-      "name": "Throw Stuff",
-      "skin": "skill_throw",
+      "code": "range=character.level+200",
+      "nprop": ["attack", "armor"],
       "explanation": "Terrified? Just throw whatever you can find at your opponent!",
-      "level": 60,
-      "type": "skill",
+      "cooldown": 400,
+      "skin": "skill_throw",
       "class": ["merchant"],
-      "mp": 200
+      "name": "Throw Stuff",
+      "level": 60,
+      "positive": ["essenceoflife"],
+      "negative": ["essenceoffire"],
+      "range": 200,
+      "mp": 200,
+      "type": "skill"
     },
     "invis": {
       "name": "Assassin's Smoke",
