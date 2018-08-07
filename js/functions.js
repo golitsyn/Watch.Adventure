@@ -730,24 +730,36 @@ function use_skill(b, h, k) {
                               num: d
                             })
                           } else {
-                            if (b == "blink") {
+                            if (b == "throw") {
+                              if (!character.items[k]) {
+                                add_log("Inventory slot is empty", "gray");
+                                return
+                              }
                               socket.emit("skill", {
-                                name: "blink",
-                                x: h[0],
-                                y: h[1]
+                                name: b,
+                                num: k,
+                                id: h
                               })
                             } else {
-                              if (b == "energize") {
+                              if (b == "blink") {
                                 socket.emit("skill", {
-                                  name: "energize",
-                                  id: h,
-                                  mana: k
+                                  name: "blink",
+                                  x: h[0],
+                                  y: h[1]
                                 })
                               } else {
-                                if (b == "stack") {
-                                  on_skill("attack")
+                                if (b == "energize") {
+                                  socket.emit("skill", {
+                                    name: "energize",
+                                    id: h,
+                                    mana: k
+                                  })
                                 } else {
-                                  add_log("Skill not found: " + b, "gray")
+                                  if (b == "stack") {
+                                    on_skill("attack")
+                                  } else {
+                                    add_log("Skill not found: " + b, "gray")
+                                  }
                                 }
                               }
                             }
@@ -779,7 +791,7 @@ function on_skill(d, h) {
         break
       }
     }
-    if (b > 0) {
+    if (b >= 0) {
       var g = character.items[b];
       if (G.items[g.name].type == "stand") {
         if (character.stand) {
@@ -963,7 +975,11 @@ function on_skill(d, h) {
                                               title: "Magiport"
                                             })
                                           } else {
-                                            use_skill(c, ctarget)
+                                            if (c == "throw") {
+                                              use_skill(c, ctarget, a.num || 0)
+                                            } else {
+                                              use_skill(c, ctarget)
+                                            }
                                           }
                                         }
                                       }
@@ -3745,12 +3761,12 @@ function name_logic(a) {
   if (a.type != "character" && a.type != "npc") {
     return
   }
-  if ((!options.show_names && character) && a.name_tag) {
+  if ((!options.show_names && !options.always_hpn && character) && a.name_tag) {
     destroy_sprite(a.name_tag, "children");
     a.name_tag = null;
     a.ntag_cache = null
   } else {
-    if (options.show_names || !character) {
+    if (options.show_names || !character || options.always_hpn) {
       add_name_tag(a)
     }
   }
@@ -3766,7 +3782,7 @@ function add_name_tag(c) {
     c.ntag_cache = null
   }
   var f = new PIXI.Graphics();
-  var a = ("" && "Lv." + c.level + " ") + c.name,
+  var a = ("Lv." + c.level + " ") + c.name,
     h = 7433580,
     b = a.length * 4 + 4,
     j = 11,
@@ -3782,14 +3798,6 @@ function add_name_tag(c) {
   if (c.role == "gm") {
     h = 15115055
   }
-  f.beginFill(h);
-  f.drawRect(0, 0, b, j);
-  f.endFill();
-  f.beginFill(2105119);
-  f.drawRect(1, 1, b - 2, j - 2);
-  f.endFill();
-  f.position = new PIXI.Point(-round(b / 2), 2);
-  c.addChild(f);
   if (!c.me) {
     k = 4
   } else {
@@ -3802,15 +3810,74 @@ function add_name_tag(c) {
     align: "center"
   };
   var a = new PIXI.Text(a, d);
-  a.x = (b / 2);
-  a.y = 2.5;
   a.anchor.set(0.5, 0);
   a.scale = new PIXI.Point(0.125 / k, 0.125 / k);
+  b = round(a.width + 10);
+  a.x = (b / 2);
+  a.y = 2.5;
+  f.beginFill(h);
+  f.drawRect(0, 0, b, j);
+  f.endFill();
+  f.beginFill(2105119);
+  f.drawRect(1, 1, b - 2, j - 2);
+  f.endFill();
+  f.position = new PIXI.Point(-round(b / 2), 2);
+  c.addChild(f);
   f.addChild(a);
   c.name_tag = f;
   c.ntag_cache = g;
   c.addChild(f);
   f.parentGroup = entity_layer
+}
+function add_name_tag_x(f) {
+  var h = f.name + "|" + f.level;
+  if (f.name_tag) {
+    if (f.ntag_cache == h) {
+      return
+    }
+    destroy_sprite(f.name_tag, "children");
+    f.name_tag = null;
+    f.ntag_cache = null
+  }
+  var d = ("" && "Lv." + f.level + " ") + f.name,
+    b = 7433580,
+    g = d.length * 4 + 4,
+    a = 11,
+    j = 1;
+  if (f.npc) {
+    d = f.name || "NPC";
+    b = 2531789;
+    if (f.citizen) {
+      b = 14188294
+    }
+    g = d.length * 4 + 8
+  }
+  if (f.role == "gm") {
+    b = 15115055
+  }
+  if (!f.me) {
+    j = 4
+  } else {
+    j = 2
+  }
+  var c = {
+    fontFamily: S.font,
+    fontSize: 64 * j,
+    fill: "white",
+    align: "center",
+    dropShadow: true,
+    dropShadowDistance: 1
+  };
+  var d = new PIXI.Text(d, c);
+  d.x = (g / 2);
+  d.y = 2.5;
+  d.anchor.set(0.5, 1);
+  d.scale = new PIXI.Point(0.125 / j, 0.125 / j);
+  d.position = new PIXI.Point(0, -get_height(f) - 10);
+  f.name_tag = d;
+  f.ntag_cache = h;
+  f.addChild(d);
+  d.parentGroup = entity_layer
 }
 function add_name_tag_large(d) {
   if (d.name_tag) {
@@ -3895,10 +3962,10 @@ function hp_bar_logic(a) {
   if (a.dead && !a.hp_bar) {
     return
   }
-  if (!hp_bars || a.me) {
+  if ((!hp_bars || a.me) && !options.always_hpn) {
     return
   }
-  if (ctarget == a || (character && character.party && character.party == a.party) || (character && character.party && a.target && in_arr(a.target, party_list)) || (character && a.target == character.name) || (character && character.map == "abtesting") || (character && a.controller == character.name)) {
+  if (ctarget == a || (character && character.party && character.party == a.party) || (character && character.party && a.target && in_arr(a.target, party_list)) || (character && a.target == character.name) || (character && character.map == "abtesting") || (character && a.controller == character.name) || options.always_hpn) {
     add_hp_bar(a)
   } else {
     if (a.hp_bar) {
@@ -3983,6 +4050,126 @@ function add_hp_bar(c) {
   c.hp_color = b;
   k.parentGroup = window.hp_layer;
   c.addChild(k)
+}
+function add_hp_bar_x(f) {
+  var c = max(32, round(get_width(f) * 2 * 0.8)),
+    g = 1,
+    m = round(2 * g);
+  var d = 11609895;
+  if (f.npc) {
+    d = 14717952
+  } else {
+    if (f.type == "character" && !pvp && !is_pvp && ctarget == f) {
+      d = 3574827
+    } else {
+      if (f.type == "character" && (pvp || is_pvp) && character && character.guild != f.guild && character.party != f.party && f.target == character.name) {} else {
+        if (character && character.party && character.party == f.party) {
+          d = 7290759
+        } else {
+          if (character && character.guild && character.guild == f.guild) {
+            d = 4110016
+          } else {
+            if (character && is_monster(f) && ctarget == f) {} else {
+              if (f.guild == "A") {
+                d = 3783508
+              } else {
+                if (f.guild == "B") {
+                  d = 14366627
+                } else {
+                  if (character && f.controller == character.name) {
+                    d = 9018258
+                  } else {
+                    if (character && f.target == character.name && is_player(f)) {
+                      d = 4171985
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  var h = round((c - round(2 * (g + 1))) * f.hp / f.max_hp);
+  if (!f.max_hp) {
+    h = round((c - round(2 * (g + 1))) * 1)
+  }
+  if (f.hp_bar) {
+    if (f.hp_width == h && f.hp_color == d) {
+      return
+    }
+    console.log("new hp_bar " + f.id);
+    destroy_sprite(f.hp_bar, "children");
+    f.hp_bar = null
+  }
+  f.hp_width = h;
+  var q = new PIXI.Graphics();
+  q.beginFill(7433580);
+  q.drawRect(0, 0, c, 6 + m);
+  q.endFill();
+  q.beginFill(2105119);
+  q.drawRect(g, g, c - m, 6);
+  q.endFill();
+  q.beginFill(d);
+  q.drawRect(g + 1, g + 1, f.hp_width, 4);
+  q.endFill();
+  q.beginFill(7433580);
+  q.drawRect(0, 0 - 9, c, 8 + m);
+  q.endFill();
+  q.beginFill(2105119);
+  q.drawRect(g, g - 9, c - m, 8);
+  q.endFill();
+  q.beginFill(7433580);
+  q.drawRect(9, 0 - 9, 1, 8 + m);
+  q.endFill();
+  var b = f.name || f.mtype || f.type,
+    a = f.level || "NPC",
+    k = b.length * 4 + 4,
+    l = 11,
+    o = 1;
+  if (f.npc) {
+    b = f.name || "NPC";
+    border_color = 2531789;
+    if (f.citizen) {
+      border_color = 14188294
+    }
+    k = b.length * 4 + 8
+  }
+  var j = {
+    fontFamily: S.font,
+    fontSize: 64 * o,
+    fill: "white",
+    align: "center"
+  };
+  var b = new PIXI.Text(b, j);
+  b.x = 12;
+  b.y = -7;
+  b.anchor.set(0, 0);
+  b.scale = new PIXI.Point(0.125 / o, 0.125 / o);
+  q.addChild(b);
+  var a = new PIXI.Text(a, j);
+  a.x = 5;
+  a.y = -7;
+  a.anchor.set(0.5, 0);
+  a.scale = new PIXI.Point(0.125 / o, 0.125 / o);
+  q.addChild(a);
+  var n = 12,
+    p = 0;
+  if (f.type == "character" && character_names) {
+    n += 8
+  }
+  if (f.mscale == 2) {
+    n += 6, p += c / 2
+  }
+  q.position = new PIXI.Point(-(c / 2) - p, -n - (f.aheight || f.height) + (f.mscale == 2 && -4 || 0));
+  if (f.mscale) {
+    q.scale = new PIXI.Point(f.mscale, f.mscale)
+  }
+  f.hp_bar = q;
+  f.hp_color = d;
+  q.parentGroup = window.hp_layer;
+  f.addChild(q)
 }
 function test_bitmap(a, d, b) {
   var c = new PIXI.BitmapText("YAY BITMAPS!", {
