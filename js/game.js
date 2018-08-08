@@ -2895,6 +2895,12 @@ function npc_right_click(c) {
       render_inventory()
     }
   }
+  if (this.role == "premium") {
+    render_merchant(this, a.side_interaction, 1);
+    if (!inventory) {
+      render_inventory()
+    }
+  }
   if (this.role == "gold") {
     render_gold_npc();
     if (!inventory) {
