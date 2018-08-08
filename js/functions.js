@@ -2140,11 +2140,30 @@ function buy(a, b) {
   if (mssince(last_npc_right_click) < 100) {
     return
   }
-  var c = "buy";
-  if (G.items[a].cash) {
-    c = "buy_with_cash"
+  if (G.items[a].cash && G.items[a].cash <= character.cash) {
+    method = "buy_with_cash"
   }
-  socket.emit(c, {
+  socket.emit(method, {
+    name: a,
+    quantity: b
+  });
+  $(".buynum").html($(".buynum").data("q"))
+}
+function buy_with_shells(a, b) {
+  if (mssince(last_npc_right_click) < 100) {
+    return
+  }
+  socket.emit("buy_with_cash", {
+    name: a,
+    quantity: b
+  });
+  $(".buynum").html($(".buynum").data("q"))
+}
+function buy_with_gold(a, b) {
+  if (mssince(last_npc_right_click) < 100) {
+    return
+  }
+  socket.emit("buy", {
     name: a,
     quantity: b
   });
