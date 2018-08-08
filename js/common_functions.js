@@ -103,7 +103,9 @@ function process_game_data() {
           }
           if (G.items[h].cash) {
             G.items[h].buy_with_cash = true;
-            return
+            if (!G.items[h].p2w) {
+              return
+            }
           }
           b.items[h] = b.items[h] || [];
           b.items[h].push(e);
@@ -132,7 +134,8 @@ function process_game_data() {
     id: "transporter",
     x: 0,
     y: 0
-  }
+  };
+  G.inflation = 5
 }
 function test_logic() {
   for (var a in G.items) {
