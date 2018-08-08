@@ -2140,10 +2140,11 @@ function buy(a, b) {
   if (mssince(last_npc_right_click) < 100) {
     return
   }
+  var c = "buy";
   if (G.items[a].cash && G.items[a].cash <= character.cash) {
-    method = "buy_with_cash"
+    c = "buy_with_cash"
   }
-  socket.emit(method, {
+  socket.emit(c, {
     name: a,
     quantity: b
   });
