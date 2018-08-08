@@ -918,35 +918,53 @@ function render_compound_shrine() {
 function render_dice() {
   add_log("Dice!", "#B6A786")
 }
-function render_merchant(l, b) {
+function render_merchant(l, b, m) {
   reset_inventory(1);
   topleft_npc = "merchant";
   rendered_target = topleft_npc;
   merchant_id = l.id;
-  var m = 0,
+  var n = 0,
     h = [];
   var f = "<div style='background-color: black; border: 5px solid gray; padding: 2px; font-size: 24px; display: inline-block'>";
   for (var e = 0; e < 4; e++) {
     f += "<div>";
     for (var d = 0; d < 5; d++) {
-      if (m < l.items.length && l.items[m++] && (c_enabled || !G.items[l.items[m - 1]].cash)) {
-        var k = l.items[m - 1];
+      if (n < l.items.length && l.items[n++] && (c_enabled || !G.items[l.items[n - 1]].cash)) {
+        var k = l.items[n - 1];
         var a = "item" + randomStr(10),
-          n = G.items[k];
+          o = G.items[k];
         f += item_container({
-          skin: n.skin_a || n.skin,
-          def: n,
+          skin: o.skin_a || o.skin,
+          def: o,
           id: a,
           draggable: false,
           on_rclick: "buy('" + k + "')"
         });
-        h.push({
-          id: a,
-          item: n,
-          name: k,
-          value: n.g,
-          cash: n.cash
-        })
+        if (m) {
+          h.push({
+            id: a,
+            item: o,
+            name: k,
+            value: o.g,
+            cash: o.cash
+          })
+        } else {
+          if (o.cash) {
+            h.push({
+              id: a,
+              item: o,
+              name: k,
+              value: o.g * G.inflation
+            })
+          } else {
+            h.push({
+              id: a,
+              item: o,
+              name: k,
+              value: o.g
+            })
+          }
+        }
       } else {
         f += item_container({
           size: 40,
@@ -1278,411 +1296,412 @@ function render_wishlist(f, g) {
 }
 var last_selector = "";
 
-function render_item(p, b) {
-  var s = b.item || {
+function render_item(r, b) {
+  var u = b.item || {
     skin: "test",
     name: "Unrecognized Item",
     explanation: "Hmm. Curious."
   },
-    t = b.name,
-    o = "gray",
-    n = b.value,
-    f = b.cash,
-    g = s.name,
+    v = b.name,
+    p = "gray",
+    o = b.value,
+    g = b.cash,
+    h = u.name,
     c = false;
-  var m = b && b.actual;
-  if (p && p != "html") {
-    last_selector = p
+  var n = b && b.actual;
+  if (r && r != "html") {
+    last_selector = r
   } else {
-    if (p != "html") {
-      p = last_selector
+    if (r != "html") {
+      r = last_selector
     }
   }
-  var d = b.prop || calculate_item_properties(s, m || {}),
-    a = calculate_item_grade(s, m || {});
-  var h = "";
+  var d = b.prop || calculate_item_properties(u, n || {}),
+    a = calculate_item_grade(u, n || {});
+  var j = "";
   if (!b.pure) {
-    h += "<div style='background-color: black; border: 5px solid gray; font-size: 24px; display: inline-block; padding: 20px; line-height: 24px; max-width: 240px; " + (b.styles || "") + "' class='buyitem'>"
+    j += "<div style='background-color: black; border: 5px solid gray; font-size: 24px; display: inline-block; padding: 20px; line-height: 24px; max-width: 240px; " + (b.styles || "") + "' class='buyitem'>"
   }
-  if (!s) {
-    h += "ITEM"
+  if (!u) {
+    j += "ITEM"
   } else {
-    if (s.type == "tarot" && s.minor) {
-      h += "<img style='display: inline-block; margin: -8px 2px -6px -8px;' src='/images/cards/tarot/minor_arcana/tarot__" + s.minor + ".png' />"
+    if (u.type == "tarot" && u.minor) {
+      j += "<img style='display: inline-block; margin: -8px 2px -6px -8px;' src='/images/cards/tarot/minor_arcana/tarot__" + u.minor + ".png' />"
     } else {
-      if (s.type == "tarot") {
-        h += "<img style='display: inline-block; margin: -8px 2px -6px -8px;' src='/images/cards/tarot/major_arcana/tarot__" + s.major + ".png' />"
+      if (u.type == "tarot") {
+        j += "<img style='display: inline-block; margin: -8px 2px -6px -8px;' src='/images/cards/tarot/major_arcana/tarot__" + u.major + ".png' />"
       }
     }
-    o = "#E4E4E4";
-    if (s.grade == "mid") {
-      o = "blue"
+    p = "#E4E4E4";
+    if (u.grade == "mid") {
+      p = "blue"
     }
-    if (m && m.p == "shiny") {
-      g = "Shiny " + g
+    if (n && n.p == "shiny") {
+      h = "Shiny " + h
     }
     if (d.level) {
-      g += " +" + d.level
+      h += " +" + d.level
     }
     if (b.thumbnail) {
-      h += "<div style='margin-left:-2px'>" + item_container({
-        skin: s.skin,
-        def: s
+      j += "<div style='margin-left:-2px'>" + item_container({
+        skin: u.skin,
+        def: u
       }) + "</div>"
     }
-    if (s.card) {
-      h += "<div style='display:inline-block; vertical-align: top'>";
-      h += "<div style='color: " + o + "; display: inline-block; border-bottom: 2px dashed gray; margin-bottom: 3px' class='cbold'>" + g + "</div><div></div>";
-      h += "<div style='color: " + o + "; display: inline-block; border-bottom: 2px dashed gray; margin-bottom: 3px; color: #AB7951' class='cbold'>" + s.card + "</div>";
-      h += "</div>"
+    if (u.card) {
+      j += "<div style='display:inline-block; vertical-align: top'>";
+      j += "<div style='color: " + p + "; display: inline-block; border-bottom: 2px dashed gray; margin-bottom: 3px' class='cbold'>" + h + "</div><div></div>";
+      j += "<div style='color: " + p + "; display: inline-block; border-bottom: 2px dashed gray; margin-bottom: 3px; color: #AB7951' class='cbold'>" + u.card + "</div>";
+      j += "</div>"
     } else {
       if (!b.pure) {
-        h += "<div style='color: " + o + "; display: inline-block; border-bottom: 2px dashed gray; margin-bottom: 3px' class='cbold'>" + g + "</div>"
+        j += "<div style='color: " + p + "; display: inline-block; border-bottom: 2px dashed gray; margin-bottom: 3px' class='cbold'>" + h + "</div>"
       }
-    }(s.gives || []).forEach(function(q) {
-      if (q[0] == "hp") {
-        h += bold_prop_line("HP", "+" + q[1], colors.hp)
+    }(u.gives || []).forEach(function(f) {
+      if (f[0] == "hp") {
+        j += bold_prop_line("HP", "+" + f[1], colors.hp)
       }
-      if (q[0] == "mp") {
-        h += bold_prop_line("MP", "+" + q[1], colors.mp)
+      if (f[0] == "mp") {
+        j += bold_prop_line("MP", "+" + f[1], colors.mp)
       }
     });
     if (d.gold) {
-      h += bold_prop_line("Gold", (d.gold > 0 && "+" || "") + d.gold + "%", "gold")
+      j += bold_prop_line("Gold", (d.gold > 0 && "+" || "") + d.gold + "%", "gold")
     }
     if (d.luck) {
-      h += bold_prop_line("Luck", (d.luck > 0 && "+" || "") + d.luck + "%", "#5DE376")
+      j += bold_prop_line("Luck", (d.luck > 0 && "+" || "") + d.luck + "%", "#5DE376")
     }
     if (d.xp) {
-      h += bold_prop_line("XP", "+" + d.xp + "%", "#1E73DE")
+      j += bold_prop_line("XP", "+" + d.xp + "%", "#1E73DE")
     }
     if (d.lifesteal) {
-      h += bold_prop_line("Lifesteal", d.lifesteal + "%", "#9A1D27")
+      j += bold_prop_line("Lifesteal", d.lifesteal + "%", "#9A1D27")
     }
     if (d.evasion) {
-      h += bold_prop_line("Evasion", d.evasion + "%", "#7AC0F5")
+      j += bold_prop_line("Evasion", d.evasion + "%", "#7AC0F5")
     }
     if (d.miss) {
-      h += bold_prop_line("Miss", d.miss + "%", "#F36C6E")
+      j += bold_prop_line("Miss", d.miss + "%", "#F36C6E")
     }
     if (d.reflection) {
-      h += bold_prop_line("Reflection", d.reflection + "%", "#B484E5")
+      j += bold_prop_line("Reflection", d.reflection + "%", "#B484E5")
     }
     if (d.dreturn) {
-      h += bold_prop_line("D.Return", d.dreturn + "%", "#E94959")
+      j += bold_prop_line("D.Return", d.dreturn + "%", "#E94959")
     }
     if (d.crit) {
-      h += bold_prop_line("Crit", d.crit + "%", "#E52967")
+      j += bold_prop_line("Crit", d.crit + "%", "#E52967")
     }
     if (d.attack) {
-      h += bold_prop_line("Damage", d.attack, colors.attack)
+      j += bold_prop_line("Damage", d.attack, colors.attack)
     }
     if (d.range) {
-      h += bold_prop_line("Range", "+" + d.range, colors.range)
+      j += bold_prop_line("Range", "+" + d.range, colors.range)
     }
     if (d.hp) {
-      h += bold_prop_line("HP", d.hp, colors.hp)
+      j += bold_prop_line("HP", d.hp, colors.hp)
     }
     if (d.str) {
-      h += bold_prop_line("Strength", d.str, colors.str)
+      j += bold_prop_line("Strength", d.str, colors.str)
     }
     if (d["int"]) {
-      h += bold_prop_line("Intelligence", d["int"], colors["int"])
+      j += bold_prop_line("Intelligence", d["int"], colors["int"])
     }
     if (d.dex) {
-      h += bold_prop_line("Dexterity", d.dex, colors.dex)
+      j += bold_prop_line("Dexterity", d.dex, colors.dex)
     }
     if (d.vit) {
-      h += bold_prop_line("Vitality", d.vit, colors.hp)
+      j += bold_prop_line("Vitality", d.vit, colors.hp)
     }
     if (d.mp) {
-      h += bold_prop_line("MP", d.mp, colors.mp)
+      j += bold_prop_line("MP", d.mp, colors.mp)
     }
     if (d.mp_cost) {
-      h += bold_prop_line("MP Cost", d.mp_cost, colors.mp)
+      j += bold_prop_line("MP Cost", d.mp_cost, colors.mp)
     }
     if (d.stat) {
-      h += bold_prop_line("Stat", d.stat)
+      j += bold_prop_line("Stat", d.stat)
     }
     if (d.armor) {
-      h += bold_prop_line("Armor", d.armor, colors.armor)
+      j += bold_prop_line("Armor", d.armor, colors.armor)
     }
     if (d.apiercing) {
-      h += bold_prop_line("A.Piercing", d.apiercing, colors.armor)
+      j += bold_prop_line("A.Piercing", d.apiercing, colors.armor)
     }
     if (d.rpiercing) {
-      h += bold_prop_line("R.Piercing", d.rpiercing, colors.resistance)
+      j += bold_prop_line("R.Piercing", d.rpiercing, colors.resistance)
     }
     if (d.resistance) {
-      h += bold_prop_line("Resistance", d.resistance, colors.resistance)
+      j += bold_prop_line("Resistance", d.resistance, colors.resistance)
     }
-    if (s.wspeed == "slow") {
-      h += bold_prop_line("Speed", "Slow", "gray")
+    if (u.wspeed == "slow") {
+      j += bold_prop_line("Speed", "Slow", "gray")
     }
     if (d.speed) {
-      h += bold_prop_line(s.wtype && "Run Speed" || "Speed", ((d.speed > 0) && "+" || "") + d.speed, colors.speed)
+      j += bold_prop_line(u.wtype && "Run Speed" || "Speed", ((d.speed > 0) && "+" || "") + d.speed, colors.speed)
     }
     if (d.frequency) {
-      h += bold_prop_line("A.Speed", d.frequency, "#3BE681")
+      j += bold_prop_line("A.Speed", d.frequency, "#3BE681")
     }
     if (d.output) {
-      h += bold_prop_line("Damage Output", "+" + d.output + "%", "#D93319")
+      j += bold_prop_line("Damage Output", "+" + d.output + "%", "#D93319")
     }
     if (d.charisma) {
-      h += bold_prop_line("Charisma", d.charisma, "#4DB174")
+      j += bold_prop_line("Charisma", d.charisma, "#4DB174")
     }
     if (d.awesomeness) {
-      h += bold_prop_line("Awesomeness", d.awesomeness, "#FFDE2F")
+      j += bold_prop_line("Awesomeness", d.awesomeness, "#FFDE2F")
     }
     if (d.bling) {
-      h += bold_prop_line("Bling", d.bling, "#A4E6FF")
+      j += bold_prop_line("Bling", d.bling, "#A4E6FF")
     }
     if (d.cuteness) {
-      h += bold_prop_line("Cuteness", d.cuteness, "#FD82F0")
+      j += bold_prop_line("Cuteness", d.cuteness, "#FD82F0")
     }
-    if (a == 1 && s.type != "booster") {
-      h += bold_prop_line("Grade", "High", "#696354")
+    if (a == 1 && u.type != "booster") {
+      j += bold_prop_line("Grade", "High", "#696354")
     }
-    if (a == 2 && s.type != "booster") {
-      h += bold_prop_line("Grade", "Rare", "#6668AC")
+    if (a == 2 && u.type != "booster") {
+      j += bold_prop_line("Grade", "Rare", "#6668AC")
     }
-    if (m && s.type == "elixir" && b.slot == "elixir") {
-      var e = round((-msince(new Date(m.expires))) / (6)) / 10;
-      h += bold_prop_line("Hours", e, "gray")
+    if (n && u.type == "elixir" && b.slot == "elixir") {
+      var e = round((-msince(new Date(n.expires))) / (6)) / 10;
+      j += bold_prop_line("Hours", e, "gray")
     } else {
-      if (s.type == "elixir") {
-        h += bold_prop_line("Hours", s.duration, "gray")
+      if (u.type == "elixir") {
+        j += bold_prop_line("Hours", u.duration, "gray")
       }
     }
-    if (s.ability) {
-      if (s.ability == "bash") {
-        h += bold_prop_line("Ability", "Bash", colors.ability);
-        h += "<div style='color: #C3C3C3'>Stuns the opponent for " + d.attr1 + " seconds with " + d.attr0 + "% chance.</div>"
+    if (u.ability) {
+      if (u.ability == "bash") {
+        j += bold_prop_line("Ability", "Bash", colors.ability);
+        j += "<div style='color: #C3C3C3'>Stuns the opponent for " + d.attr1 + " seconds with " + d.attr0 + "% chance.</div>"
       }
-      if (s.ability == "freeze") {
-        h += bold_prop_line("Ability", "Freeze", "#2EBCE2");
-        h += "<div style='color: #C3C3C3'>Freezes the opponent with a " + d.attr0 + "% chance.</div>"
+      if (u.ability == "freeze") {
+        j += bold_prop_line("Ability", "Freeze", "#2EBCE2");
+        j += "<div style='color: #C3C3C3'>Freezes the opponent with a " + d.attr0 + "% chance.</div>"
       }
-      if (s.ability == "secondchance") {
-        h += bold_prop_line("Ability", "Second Chance", colors.ability);
-        h += "<div style='color: #C3C3C3'>Avoid death with a " + d.attr0 + "% chance.</div>"
+      if (u.ability == "secondchance") {
+        j += bold_prop_line("Ability", "Second Chance", colors.ability);
+        j += "<div style='color: #C3C3C3'>Avoid death with a " + d.attr0 + "% chance.</div>"
       }
-      if (s.ability == "sugarrush") {
-        h += bold_prop_line("Ability", "Sugar Rush", "#D64770");
-        h += "<div style='color: #C3C3C3'>Trigger a Sugar Rush on attack with 0.25% chance. Gain 240 Attack Speed for 10 seconds!</div>"
+      if (u.ability == "sugarrush") {
+        j += bold_prop_line("Ability", "Sugar Rush", "#D64770");
+        j += "<div style='color: #C3C3C3'>Trigger a Sugar Rush on attack with 0.25% chance. Gain 240 Attack Speed for 10 seconds!</div>"
       }
     }
-    if (s.explanation) {
-      h += "<div style='color: #C3C3C3'>" + s.explanation + "</div>"
+    if (u.explanation) {
+      j += "<div style='color: #C3C3C3'>" + u.explanation + "</div>"
     }
-    if (s.set) {
-      h += "<div><span style='color: #f1c054;'>Set</span>: <span class='clickable' onclick='render_set(\"" + s.set + "\")'>" + G.sets[s.set].name + "</span></div>"
+    if (u.set) {
+      j += "<div><span style='color: #f1c054;'>Set</span>: <span class='clickable' onclick='render_set(\"" + u.set + "\")'>" + G.sets[u.set].name + "</span></div>"
     }
     if (b.minutes) {
-      h += bold_prop_line("Minutes", b.minutes, "gray")
+      j += bold_prop_line("Minutes", b.minutes, "gray")
     }
-    if (b.trade && m) {
-      h += "<div style='margin-top: 5px'>";
-      if ((m.q || 1) > 1) {
-        h += "<div><span class='gray'>Q:</span> <div class='inline-block tradenum' contenteditable=true data-q='" + m.q + "'>" + m.q + "</div></div>"
+    if (b.trade && n) {
+      j += "<div style='margin-top: 5px'>";
+      if ((n.q || 1) > 1) {
+        j += "<div><span class='gray'>Q:</span> <div class='inline-block tradenum' contenteditable=true data-q='" + n.q + "'>" + n.q + "</div></div>"
       }
-      h += "<div><span style='color:gold'>GOLD" + (((m.q || 1) > 1) && " [EACH]" || "") + ":</span> <div class='inline-block sellprice editable' contenteditable=true>1</div></div>";
-      h += "<div><span class='clickable' onclick='trade(\"" + b.slot + '","' + b.num + '",$(".sellprice").shtml(),$(".tradenum").shtml())\'>PUT UP FOR SALE</span></div>';
-      h += "</div>"
+      j += "<div><span style='color:gold'>GOLD" + (((n.q || 1) > 1) && " [EACH]" || "") + ":</span> <div class='inline-block sellprice editable' contenteditable=true>1</div></div>";
+      j += "<div><span class='clickable' onclick='trade(\"" + b.slot + '","' + b.num + '",$(".sellprice").shtml(),$(".tradenum").shtml())\'>PUT UP FOR SALE</span></div>';
+      j += "</div>"
     }
-    if (in_arr(b.slot, trade_slots) && m && m.price && b.from_player && !m.b) {
+    if (in_arr(b.slot, trade_slots) && n && n.price && b.from_player && !n.b) {
       c = true;
-      if ((m.q || 1) > 1) {
-        h += "<div><span class='gray'>Q:</span> <div class='inline-block tradenum' contenteditable=true data-q='1'>1</div></div>"
+      if ((n.q || 1) > 1) {
+        j += "<div><span class='gray'>Q:</span> <div class='inline-block tradenum' contenteditable=true data-q='1'>1</div></div>"
       }
-      h += "<div style='color: gold'>" + to_pretty_num(m.price) + " GOLD" + ((m.q || 1) > 1 && " <span style='color: white'>[EACH]</span>" || "") + "</div>";
-      h += "<div><span class='clickable' onclick='trade_buy(\"" + b.slot + '","' + b.from_player + '","' + (m.rid || "") + '",$(".tradenum").html())\'>BUY</span></div>'
+      j += "<div style='color: gold'>" + to_pretty_num(n.price) + " GOLD" + ((n.q || 1) > 1 && " <span style='color: white'>[EACH]</span>" || "") + "</div>";
+      j += "<div><span class='clickable itu' onclick='trade_buy(\"" + b.slot + '","' + b.from_player + '","' + (n.rid || "") + '",$(".tradenum").html())\'>BUY</span></div>'
     }
-    if (in_arr(b.slot, trade_slots) && m && m.price && b.from_player && m.b) {
-      var k = false;
-      if ((m.q || 1) > 1 && s.s) {
-        k = true
+    if (in_arr(b.slot, trade_slots) && n && n.price && b.from_player && n.b) {
+      var l = false;
+      if ((n.q || 1) > 1 && u.s) {
+        l = true
       }
       c = true;
-      if (k) {
-        h += "<div><span class='gray'>Q:</span> <div class='inline-block tradenum' contenteditable=true data-q='1'>1</div></div>"
+      if (l) {
+        j += "<div><span class='gray'>Q:</span> <div class='inline-block tradenum' contenteditable=true data-q='1'>1</div></div>"
       }
-      h += "<div style='color: gold'>" + to_pretty_num(m.price) + " GOLD" + (k && " <span style='color: white'>[EACH]</span>" || "") + "</div>";
-      h += "<div><span class='clickable' onclick='trade_sell(\"" + b.slot + '","' + b.from_player + '","' + (m.rid || "") + '",$(".tradenum").html())\'>SELL</span></div>'
+      j += "<div style='color: gold'>" + to_pretty_num(n.price) + " GOLD" + (l && " <span style='color: white'>[EACH]</span>" || "") + "</div>";
+      j += "<div><span class='clickable ibu' onclick='trade_sell(\"" + b.slot + '","' + b.from_player + '","' + (n.rid || "") + '",$(".tradenum").html())\'>SELL</span></div>'
     }
     if (b.secondhand) {
       c = true;
-      h += "<div style='color: gold'>" + to_pretty_num(calculate_item_value(m) * 2 * (m.q || 1)) + " GOLD</div>";
-      h += "<div><span class='clickable' onclick='secondhand_buy(\"" + (m.rid || "") + "\")'>BUY</span></div>"
+      j += "<div style='color: gold'>" + to_pretty_num(calculate_item_value(n) * 2 * (n.q || 1)) + " GOLD</div>";
+      j += "<div><span class='clickable' onclick='secondhand_buy(\"" + (n.rid || "") + "\")'>BUY</span></div>"
     }
     if (b.lostandfound) {
       c = true;
-      h += "<div style='color: gold'>" + to_pretty_num(calculate_item_value(m) * 4 * (m.q || 1)) + " GOLD</div>";
-      h += "<div><span class='clickable' onclick='lostandfound_buy(\"" + (m.rid || "") + "\")'>BUY</span></div>"
+      j += "<div style='color: gold'>" + to_pretty_num(calculate_item_value(n) * 4 * (n.q || 1)) + " GOLD</div>";
+      j += "<div><span class='clickable' onclick='lostandfound_buy(\"" + (n.rid || "") + "\")'>BUY</span></div>"
     }
-    if (n) {
-      if (s.days) {
-        h += "<div style='color: #C3C3C3'>Lasts 30 days</div>"
+    if (o) {
+      var t = "buy_with_gold";
+      if (u.days) {
+        j += "<div style='color: #C3C3C3'>Lasts 30 days</div>"
       }
-      if (f) {
-        h += "<div style='color: " + colors.cash + "'>" + to_pretty_num(s.cash) + " SHELLS</div>"
+      if (g) {
+        j += "<div style='color: " + colors.cash + "'>" + to_pretty_num(u.cash) + " SHELLS</div>", t = "buy_with_shells"
       } else {
-        h += "<div style='color: gold'>" + to_pretty_num(n) + " GOLD</div>"
+        j += "<div style='color: gold'>" + to_pretty_num(o) + " GOLD</div>"
       }
-      if (f && character && s.cash >= character.cash) {
-        h += "<div style='border-top: solid 2px gray; margin-bottom: 2px; margin-top: 3px; margin-left: -1px; margin-right: -1px'></div>";
-        h += "<div style='color: #C3C3C3'>You can find SHELLS from gems, monsters. In future, from achievements. For the time being, to receive SHELLS and support our game:</div>";
-        h += "<a href='https://adventure.land/shells' class='cancela' target='_blank'><span class='clickable' style='color: #EB8D3F'>BUY or EARN SHELLS</span></a> "
+      if (g && character && u.cash >= character.cash) {
+        j += "<div style='border-top: solid 2px gray; margin-bottom: 2px; margin-top: 3px; margin-left: -1px; margin-right: -1px'></div>";
+        j += "<div style='color: #C3C3C3'>You can find SHELLS from gems, monsters. In future, from achievements. For the time being, to receive SHELLS and support our game:</div>";
+        j += "<a href='https://adventure.land/shells' class='cancela' target='_blank'><span class='clickable' style='color: #EB8D3F'>BUY or EARN SHELLS</span></a> "
       } else {
-        if (s.s) {
-          var k = 1;
-          if (s.gives) {
-            k = 100
+        if (u.s) {
+          var l = 1;
+          if (u.gives) {
+            l = 100
           }
-          h += "<div style='margin-top: 5px'><!--<input type='number' value='1' class='buynum itemnumi'/> -->";
-          h += "<span class='gray'>Q:</span> <div class='inline-block buynum' contenteditable=true data-q='" + k + "'>" + k + "</div> <span class='gray'>|</span> ";
-          h += "<span class='clickable' onclick='buy(\"" + t + '",parseInt($(".buynum").html()))\'>BUY</span> ';
-          h += "</div>"
+          j += "<div style='margin-top: 5px'><!--<input type='number' value='1' class='buynum itemnumi'/> -->";
+          j += "<span class='gray'>Q:</span> <div class='inline-block buynum' contenteditable=true data-q='" + l + "'>" + l + "</div> <span class='gray'>|</span> ";
+          j += "<span class='clickable' onclick='" + t + '("' + v + '",parseInt($(".buynum").html()))\'>BUY</span> ';
+          j += "</div>"
         } else {
-          h += "<div><span class='clickable' onclick='buy(\"" + t + "\")'>BUY</span></div>"
+          j += "<div><span class='clickable' onclick='" + t + '("' + v + "\")'>BUY</span></div>"
         }
       }
     }
     if (b.token && b.name && b.name != b.token) {
-      var o = "#B6A786";
+      var p = "#B6A786";
       if (b.token == "funtoken") {
-        o = "#AA6AB3"
+        p = "#AA6AB3"
       }
       if (G.tokens[b.token][b.name] < 1) {
-        h += "<div><span class='clickable' style='color: " + o + "' onclick='exchange_buy(\"" + b.token + '","' + b.name + "\")'>EXCHANGE " + (1 / G.tokens[b.token][b.name]) + " FOR A TOKEN</span></div>"
+        j += "<div><span class='clickable' style='color: " + p + "' onclick='exchange_buy(\"" + b.token + '","' + b.name + "\")'>EXCHANGE " + (1 / G.tokens[b.token][b.name]) + " FOR A TOKEN</span></div>"
       } else {
-        h += "<div><span class='clickable' style='color: " + o + "' onclick='exchange_buy(\"" + b.token + '","' + b.name + "\")'>EXCHANGE FOR " + G.tokens[b.token][b.name] + " TOKENS</span></div>"
+        j += "<div><span class='clickable' style='color: " + p + "' onclick='exchange_buy(\"" + b.token + '","' + b.name + "\")'>EXCHANGE FOR " + G.tokens[b.token][b.name] + " TOKENS</span></div>"
       }
     }
-    if (b.sell && m) {
-      var n = calculate_item_value(m);
-      h += "<div style='color: gold'>" + to_pretty_num(n) + " GOLD</div>";
-      if (s.s && m.q) {
-        var k = m.q;
-        h += "<div style='margin-top: 5px'>";
-        h += "<span class='gray'>Q:</span> <div class='inline-block sellnum' contenteditable=true data-q='" + k + "'>" + k + "</div> <span class='gray'>|</span> ";
-        h += "<span class='clickable' onclick='sell(\"" + b.num + '",parseInt($(".sellnum").html()))\'>SELL</span> ';
-        h += "</div>"
+    if (b.sell && n) {
+      var o = calculate_item_value(n);
+      j += "<div style='color: gold'>" + to_pretty_num(o) + " GOLD</div>";
+      if (u.s && n.q) {
+        var l = n.q;
+        j += "<div style='margin-top: 5px'>";
+        j += "<span class='gray'>Q:</span> <div class='inline-block sellnum' contenteditable=true data-q='" + l + "'>" + l + "</div> <span class='gray'>|</span> ";
+        j += "<span class='clickable' onclick='sell(\"" + b.num + '",parseInt($(".sellnum").html()))\'>SELL</span> ';
+        j += "</div>"
       } else {
-        h += "<div><span class='clickable' onclick='sell(\"" + b.num + "\")'>SELL</span></div>"
+        j += "<div><span class='clickable' onclick='sell(\"" + b.num + "\")'>SELL</span></div>"
       }
     }
     if (b.cancel) {
-      h += "<div class='clickable' onclick='$(this).parent().remove()'>CLOSE</div>"
+      j += "<div class='clickable' onclick='$(this).parent().remove()'>CLOSE</div>"
     }
-    if (in_arr(t, booster_items)) {
-      if (m && m.expires) {
-        var e = round((-msince(new Date(m.expires))) / (6 * 24)) / 10;
-        h += "<div style='color: #C3C3C3'>" + e + " days</div>"
+    if (in_arr(v, booster_items)) {
+      if (n && n.expires) {
+        var e = round((-msince(new Date(n.expires))) / (6 * 24)) / 10;
+        j += "<div style='color: #C3C3C3'>" + e + " days</div>"
       }
       if (!b.sell) {
-        h += "<div class='clickable' onclick=\"btc(event); show_modal($('#boosterguide').html())\" style=\"color: #D86E89\">HOW TO USE</div>"
+        j += "<div class='clickable' onclick=\"btc(event); show_modal($('#boosterguide').html())\" style=\"color: #D86E89\">HOW TO USE</div>"
       }
     }
-    if (!n && !b.sell && m && !c && !b.trade && !b.npc) {
-      if (s.action) {
-        var l = b && b.slot || b && b.num;
-        h += '<div><span data-id="' + l + '" class="clickable" style="color: ' + o + '" onclick="' + s.onclick + '"">' + s.action + "</span></div>"
+    if (!o && !b.sell && n && !c && !b.trade && !b.npc) {
+      if (u.action) {
+        var m = b && b.slot || b && b.num;
+        j += '<div><span data-id="' + m + '" class="clickable" style="color: ' + p + '" onclick="' + u.onclick + '"">' + u.action + "</span></div>"
       }
-      if (s.type == "computer") {
-        h += "<div class='clickable' onclick='add_log(\"Beep. Boop.\")' style=\"color: #32A3B0\">NETWORK</div>"
+      if (u.type == "computer") {
+        j += "<div class='clickable' onclick='add_log(\"Beep. Boop.\")' style=\"color: #32A3B0\">NETWORK</div>"
       }
-      if (s.type == "stand") {
-        h += "<div class='clickable' onclick='socket.emit(\"trade_history\",{}); $(this).parent().remove()' style=\"color: #44484F\">TRADE HISTORY</div>"
+      if (u.type == "stand") {
+        j += "<div class='clickable' onclick='socket.emit(\"trade_history\",{}); $(this).parent().remove()' style=\"color: #44484F\">TRADE HISTORY</div>"
       }
-      if (0 && s.type == "computer" && (m.charges === undefined || m.charges) && gameplay == "normal") {
-        h += '<div class=\'clickable\' onclick=\'socket.emit("unlock",{name:"code",num:"' + b.num + '"});\' style="color: #BA61A4">UNLOCK</div>'
+      if (0 && u.type == "computer" && (n.charges === undefined || n.charges) && gameplay == "normal") {
+        j += '<div class=\'clickable\' onclick=\'socket.emit("unlock",{name:"code",num:"' + b.num + '"});\' style="color: #BA61A4">UNLOCK</div>'
       }
-      if (s.type == "computer") {
-        h += "<div class='clickable' onclick='render_computer($(this).parent())' style=\"color: #32A3B0\">NETWORK</div>"
+      if (u.type == "computer") {
+        j += "<div class='clickable' onclick='render_computer($(this).parent())' style=\"color: #32A3B0\">NETWORK</div>"
       }
-      if (s.type == "stand" && !character.stand) {
-        h += "<div class='clickable' onclick='open_merchant(\"" + b.num + '"); $(this).parent().remove()\' style="color: #8E5E2C">OPEN</div>'
+      if (u.type == "stand" && !character.stand) {
+        j += "<div class='clickable' onclick='open_merchant(\"" + b.num + '"); $(this).parent().remove()\' style="color: #8E5E2C">OPEN</div>'
       }
-      if (s.type == "stand" && character.stand) {
-        h += "<div class='clickable' onclick='close_merchant(); $(this).parent().remove()' style=\"color: #8E5E2C\">CLOSE</div>"
+      if (u.type == "stand" && character.stand) {
+        j += "<div class='clickable' onclick='close_merchant(); $(this).parent().remove()' style=\"color: #8E5E2C\">CLOSE</div>"
       }
-      if (s.type == "elixir" && !b.from_player) {
-        var j = "DRINK";
-        if (s.eat) {
-          j = "EAT"
+      if (u.type == "elixir" && !b.from_player) {
+        var k = "DRINK";
+        if (u.eat) {
+          k = "EAT"
         }
-        h += "<div class='clickable' onclick='socket.emit(\"equip\",{num:\"" + b.num + '"}); $(this).parent().remove()\' style="color: #D86E89">' + j + "</div>"
+        j += "<div class='clickable' onclick='socket.emit(\"equip\",{num:\"" + b.num + '"}); $(this).parent().remove()\' style="color: #D86E89">' + k + "</div>"
       }
-      if (in_arr(m.name, ["stoneofxp", "stoneofgold", "stoneofluck"])) {
-        h += "<div class='clickable' onclick='socket.emit(\"convert\",{num:\"" + b.num + '"});\' style="color: ' + colors.cash + '">CONVERT TO SHELLS</div>'
+      if (in_arr(n.name, ["stoneofxp", "stoneofgold", "stoneofluck"])) {
+        j += "<div class='clickable' onclick='socket.emit(\"convert\",{num:\"" + b.num + '"});\' style="color: ' + colors.cash + '">CONVERT TO SHELLS</div>'
       }
-      if (in_arr(m.name, booster_items)) {
-        if (m.expires) {
-          h += "<div class='clickable' onclick='shift(\"" + b.num + '","' + booster_items[(booster_items.indexOf(m.name) + 1) % 3] + '"); $(this).parent().remove()\' style="color: #438EE2">SHIFT</div>'
+      if (in_arr(n.name, booster_items)) {
+        if (n.expires) {
+          j += "<div class='clickable' onclick='shift(\"" + b.num + '","' + booster_items[(booster_items.indexOf(n.name) + 1) % 3] + '"); $(this).parent().remove()\' style="color: #438EE2">SHIFT</div>'
         } else {
-          h += "<div class='clickable' onclick='activate(\"" + b.num + '","activate"); $(this).parent().remove()\' style="color: #438EE2">ACTIVATE</div>'
+          j += "<div class='clickable' onclick='activate(\"" + b.num + '","activate"); $(this).parent().remove()\' style="color: #438EE2">ACTIVATE</div>'
         }
       }
     }
     if (b.craft) {
-      var r = 0;
-      h += "<div style='margin-top: 5px'></div>";
-      h += "<div style='color: " + o + "; display: inline-block; border-bottom: 2px dashed gray; margin-bottom: 3px' class='cbold'>Recipe</div>";
-      h += "<div></div>";
-      G.craft[t].items.forEach(function(u) {
-        var v = undefined;
-        if (u[0] != 1) {
-          v = u[0]
+      var s = 0;
+      j += "<div style='margin-top: 5px'></div>";
+      j += "<div style='color: " + p + "; display: inline-block; border-bottom: 2px dashed gray; margin-bottom: 3px' class='cbold'>Recipe</div>";
+      j += "<div></div>";
+      G.craft[v].items.forEach(function(f) {
+        var w = undefined;
+        if (f[0] != 1) {
+          w = f[0]
         }
-        h += item_container({
-          skin: G.items[u[1]].skin
+        j += item_container({
+          skin: G.items[f[1]].skin
         }, {
-          name: u[1],
-          q: v,
-          level: u[2]
+          name: f[1],
+          q: w,
+          level: f[2]
         });
-        r += 1;
-        if (!(r % 4)) {
-          h += "<div></div>"
+        s += 1;
+        if (!(s % 4)) {
+          j += "<div></div>"
         }
       });
-      h += bold_prop_line("Cost", to_pretty_num(G.craft[t].cost), "gold")
+      j += bold_prop_line("Cost", to_pretty_num(G.craft[v].cost), "gold")
     }
     if (b.dismantle) {
-      var r = 0;
-      h += "<div style='margin-top: 5px'></div>";
-      h += "<div style='color: " + o + "; display: inline-block; border-bottom: 2px dashed gray; margin-bottom: 3px' class='cbold'>Dismantles-to</div>";
-      h += "<div></div>";
-      G.dismantle[t].items.forEach(function(u) {
-        var v = undefined;
-        if (u[0] != 1) {
-          v = u[0]
+      var s = 0;
+      j += "<div style='margin-top: 5px'></div>";
+      j += "<div style='color: " + p + "; display: inline-block; border-bottom: 2px dashed gray; margin-bottom: 3px' class='cbold'>Dismantles-to</div>";
+      j += "<div></div>";
+      G.dismantle[v].items.forEach(function(f) {
+        var w = undefined;
+        if (f[0] != 1) {
+          w = f[0]
         }
-        h += item_container({
-          skin: G.items[u[1]].skin
+        j += item_container({
+          skin: G.items[f[1]].skin
         }, {
-          name: u[1],
-          q: v
+          name: f[1],
+          q: w
         });
-        r += 1;
-        if (!(r % 4)) {
-          h += "<div></div>"
+        s += 1;
+        if (!(s % 4)) {
+          j += "<div></div>"
         }
       });
-      h += bold_prop_line("Cost", to_pretty_num(G.dismantle[t].cost), "gold")
+      j += bold_prop_line("Cost", to_pretty_num(G.dismantle[v].cost), "gold")
     }
     if (b.from) {
-      h += bold_prop_line("From", b.from, "#BED4DE")
+      j += bold_prop_line("From", b.from, "#BED4DE")
     }
   }
   if (!b.pure) {
-    h += "</div>"
+    j += "</div>"
   }
-  if (p == "html") {
-    return h
+  if (r == "html") {
+    return j
   } else {
-    $(p).html(h)
+    $(r).html(j)
   }
 }
 function wishlist_form(b, a) {
@@ -2561,7 +2580,7 @@ function render_travel(b) {
   }
   object_sort(G.maps).forEach(function(e) {
     var d = e[0];
-    if (!G.maps[d].ignore && !G.maps[d].instance && (!G.maps[d].irregular || b)) {
+    if (!G.maps[d].ignore && !G.maps[d].unlist && !G.maps[d].instance && (!G.maps[d].irregular || b)) {
       a += "<div class='gamebutton' style='margin-left: 5px; margin-bottom: 5px' onclick='hide_modal(); " + c + '("' + d + "\");'>" + G.maps[d].name + "</div>"
     }
   });
