@@ -302,6 +302,14 @@ function buy(name, quantity) //item names can be spotted from show_json(characte
   parent.buy(name, quantity);
 }
 
+function buy_with_gold(name, quantity) {
+  parent.buy_with_gold(name, quantity);
+}
+
+function buy_with_shells(name, quantity) {
+  parent.buy_with_shells(name, quantity);
+}
+
 function sell(num, quantity) //sell an item from character.items by it's order - 0 to N-1
 {
   parent.sell(num, quantity);
@@ -322,7 +330,8 @@ function unequip(slot) // show_json(character.slots) => to see slot options
 
 function trade(num, trade_slot, price, quantity) // where trade_slot is 1 to 16 - example, trade(0,4,1000) puts the first item in inventory to the 4th trade slot for 1000 gold [27/10/16]
 {
-  parent.trade("trade" + trade_slot, num, price, quantity || 1);
+  if (!is_string(trade_slot) || !trade_slot.startsWith("trade")) trade_slot = "trade" + trade_slot;
+  parent.trade(trade_slot, num, price, quantity || 1);
 }
 
 function trade_buy(target, trade_slot) // target needs to be an actual player
