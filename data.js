@@ -1476,7 +1476,7 @@ var G = {
       }]
     }
   },
-  "version": 322,
+  "version": 323,
   "conditions": {
     "tarot_5swords": {
       "name": "Tarot Card",
