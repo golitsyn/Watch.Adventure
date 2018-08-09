@@ -1832,93 +1832,129 @@ function init_socket() {
                                                                             if (response == "signed_up") {
                                                                               ui_log("Signed Up!", "#39BB54")
                                                                             } else {
-                                                                              if (response == "item_received" || response == "item_sent") {
-                                                                                var additional = "";
-                                                                                if (data.q > 1) {
-                                                                                  additional = "(x" + data.q + ")"
-                                                                                }
-                                                                                if (response == "item_received") {
-                                                                                  add_chat("", "Received " + G.items[data.item].name + additional + " from " + data.name, "#6AB3FF")
-                                                                                } else {
-                                                                                  add_chat("", "Sent " + G.items[data.item].name + additional + " to " + data.name, "#6AB3FF")
-                                                                                }
+                                                                              if (response == "item_locked") {
+                                                                                ui_log("Item is locked", "gray")
                                                                               } else {
-                                                                                if (response == "gold_not_enough") {
-                                                                                  add_chat("", "Not enough gold", colors.gold)
-                                                                                } else {
-                                                                                  if (response == "gold_sent") {
-                                                                                    add_chat("", "Sent " + to_pretty_num(data.gold) + " gold to " + data.name, colors.gold)
+                                                                                if (response == "item_received" || response == "item_sent") {
+                                                                                  var additional = "";
+                                                                                  if (data.q > 1) {
+                                                                                    additional = "(x" + data.q + ")"
+                                                                                  }
+                                                                                  if (response == "item_received") {
+                                                                                    add_chat("", "Received " + G.items[data.item].name + additional + " from " + data.name, "#6AB3FF")
                                                                                   } else {
-                                                                                    if (response == "gold_received") {
-                                                                                      add_chat("", "Received " + to_pretty_num(data.gold) + " gold from " + data.name, colors.gold)
+                                                                                    add_chat("", "Sent " + G.items[data.item].name + additional + " to " + data.name, "#6AB3FF")
+                                                                                  }
+                                                                                } else {
+                                                                                  if (response == "gold_not_enough") {
+                                                                                    add_chat("", "Not enough gold", colors.gold)
+                                                                                  } else {
+                                                                                    if (response == "gold_sent") {
+                                                                                      add_chat("", "Sent " + to_pretty_num(data.gold) + " gold to " + data.name, colors.gold)
                                                                                     } else {
-                                                                                      if (response == "friend_already") {
-                                                                                        add_chat("", "You are already friends", "gray")
+                                                                                      if (response == "gold_received") {
+                                                                                        add_chat("", "Received " + to_pretty_num(data.gold) + " gold from " + data.name, colors.gold)
                                                                                       } else {
-                                                                                        if (response == "friend_rleft") {
-                                                                                          add_chat("", "Player left the server", "gray")
+                                                                                        if (response == "friend_already") {
+                                                                                          add_chat("", "You are already friends", "gray")
                                                                                         } else {
-                                                                                          if (response == "friend_rsent") {
-                                                                                            add_chat("", "Friend request sent", "#409BDD")
+                                                                                          if (response == "friend_rleft") {
+                                                                                            add_chat("", "Player left the server", "gray")
                                                                                           } else {
-                                                                                            if (response == "friend_expired") {
-                                                                                              add_chat("", "Request expired", "#409BDD")
+                                                                                            if (response == "friend_rsent") {
+                                                                                              add_chat("", "Friend request sent", "#409BDD")
                                                                                             } else {
-                                                                                              if (response == "friend_failed") {
-                                                                                                add_chat("", "Friendship failed, reason: " + data.reason, "#409BDD")
+                                                                                              if (response == "friend_expired") {
+                                                                                                add_chat("", "Request expired", "#409BDD")
                                                                                               } else {
-                                                                                                if (response == "gold_use") {
-                                                                                                  ui_log("Used " + to_pretty_num(data.gold) + " gold", "gray")
+                                                                                                if (response == "friend_failed") {
+                                                                                                  add_chat("", "Friendship failed, reason: " + data.reason, "#409BDD")
                                                                                                 } else {
-                                                                                                  if (response == "slots_success") {
-                                                                                                    ui_log("Machine went crazy", "#9733FF")
+                                                                                                  if (response == "gold_use") {
+                                                                                                    ui_log("Used " + to_pretty_num(data.gold) + " gold", "gray")
                                                                                                   } else {
-                                                                                                    if (response == "slots_fail") {
-                                                                                                      ui_log("Machine got stuck", "gray")
+                                                                                                    if (response == "slots_success") {
+                                                                                                      ui_log("Machine went crazy", "#9733FF")
                                                                                                     } else {
-                                                                                                      if (response == "craft") {
-                                                                                                        var def = G.craft[data.name];
-                                                                                                        ui_log("Spent " + to_pretty_num(def.cost) + " gold", "gray");
-                                                                                                        ui_log("Received " + G.items[data.name].name, "white")
+                                                                                                      if (response == "slots_fail") {
+                                                                                                        ui_log("Machine got stuck", "gray")
                                                                                                       } else {
-                                                                                                        if (response == "dismantle") {
-                                                                                                          var def = G.dismantle[data.name];
+                                                                                                        if (response == "craft") {
+                                                                                                          var def = G.craft[data.name];
                                                                                                           ui_log("Spent " + to_pretty_num(def.cost) + " gold", "gray");
-                                                                                                          ui_log("Dismantled " + G.items[data.name].name, "#CF5C65")
+                                                                                                          ui_log("Received " + G.items[data.name].name, "white")
                                                                                                         } else {
-                                                                                                          if (response == "dismantle_cant") {
-                                                                                                            ui_log("Can't dismantle", "gray")
+                                                                                                          if (response == "dismantle") {
+                                                                                                            var def = G.dismantle[data.name];
+                                                                                                            ui_log("Spent " + to_pretty_num(def.cost) + " gold", "gray");
+                                                                                                            ui_log("Dismantled " + G.items[data.name].name, "#CF5C65")
                                                                                                           } else {
-                                                                                                            if (response == "inv_size") {
-                                                                                                              ui_log("Need more empty space", "gray")
+                                                                                                            if (response == "dismantle_cant") {
+                                                                                                              ui_log("Can't dismantle", "gray")
                                                                                                             } else {
-                                                                                                              if (response == "craft_cant") {
-                                                                                                                ui_log("Can't craft", "gray")
+                                                                                                              if (response == "inv_size") {
+                                                                                                                ui_log("Need more empty space", "gray")
                                                                                                               } else {
-                                                                                                                if (response == "craft_cant_quantity") {
-                                                                                                                  ui_log("Not enough materials", "gray")
+                                                                                                                if (response == "craft_cant") {
+                                                                                                                  ui_log("Can't craft", "gray")
                                                                                                                 } else {
-                                                                                                                  if (response == "craft_atleast2") {
-                                                                                                                    ui_log("You need to provide at least 2 items", "gray")
+                                                                                                                  if (response == "craft_cant_quantity") {
+                                                                                                                    ui_log("Not enough materials", "gray")
                                                                                                                   } else {
-                                                                                                                    if (response == "target_lock") {
-                                                                                                                      ui_log("Target Acquired: " + G.monsters[data.monster].name, "#F00B22")
+                                                                                                                    if (response == "craft_atleast2") {
+                                                                                                                      ui_log("You need to provide at least 2 items", "gray")
                                                                                                                     } else {
-                                                                                                                      if (response == "cooldown") {
-                                                                                                                        d_text("NOT READY", character)
+                                                                                                                      if (response == "target_lock") {
+                                                                                                                        ui_log("Target Acquired: " + G.monsters[data.monster].name, "#F00B22")
                                                                                                                       } else {
-                                                                                                                        if (response == "blink_failed") {
-                                                                                                                          no_no_no();
-                                                                                                                          d_text("NO", character);
-                                                                                                                          last_blink_pressed = inception
+                                                                                                                        if (response == "cooldown") {
+                                                                                                                          d_text("NOT READY", character)
                                                                                                                         } else {
-                                                                                                                          if (response == "magiport_failed") {
-                                                                                                                            ui_log("Magiport failed", "gray"), no_no_no(2)
+                                                                                                                          if (response == "blink_failed") {
+                                                                                                                            no_no_no();
+                                                                                                                            d_text("NO", character);
+                                                                                                                            last_blink_pressed = inception
                                                                                                                           } else {
-                                                                                                                            if (response == "revive_failed") {
-                                                                                                                              ui_log("Revival failed", "gray"), no_no_no(1)
+                                                                                                                            if (response == "magiport_failed") {
+                                                                                                                              ui_log("Magiport failed", "gray"), no_no_no(2)
                                                                                                                             } else {
-                                                                                                                              console.log("Missed game_response: " + response)
+                                                                                                                              if (response == "revive_failed") {
+                                                                                                                                ui_log("Revival failed", "gray"), no_no_no(1)
+                                                                                                                              } else {
+                                                                                                                                if (response == "locksmith_cant") {
+                                                                                                                                  ui_log("Can't lock/unlock this item", "gray")
+                                                                                                                                } else {
+                                                                                                                                  if (response == "locksmith_aunlocked") {
+                                                                                                                                    ui_log("Already unlocked", "gray")
+                                                                                                                                  } else {
+                                                                                                                                    if (response == "locksmith_unsealed") {
+                                                                                                                                      ui_log("Unsealed the item", "gray");
+                                                                                                                                      ui_log("It can be unlocked in 7 days", "gray")
+                                                                                                                                    } else {
+                                                                                                                                      if (response == "locksmith_unsealing") {
+                                                                                                                                        ui_log("It can be unlocked in " + parseInt(data.hours) + " hours", "gray")
+                                                                                                                                      } else {
+                                                                                                                                        if (response == "locksmith_unlocked") {
+                                                                                                                                          ui_log("Spent 250,000 gold", "gray");
+                                                                                                                                          ui_log("Unlocked the item", "gray")
+                                                                                                                                        } else {
+                                                                                                                                          if (response == "locksmith_locked") {
+                                                                                                                                            ui_log("Spent 250,000 gold", "gray");
+                                                                                                                                            ui_log("Locked the item", "gray")
+                                                                                                                                          } else {
+                                                                                                                                            if (response == "locksmith_sealed") {
+                                                                                                                                              ui_log("Spent 250,000 gold", "gray");
+                                                                                                                                              ui_log("Sealed the item", "gray")
+                                                                                                                                            } else {
+                                                                                                                                              console.log("Missed game_response: " + response)
+                                                                                                                                            }
+                                                                                                                                          }
+                                                                                                                                        }
+                                                                                                                                      }
+                                                                                                                                    }
+                                                                                                                                  }
+                                                                                                                                }
+                                                                                                                              }
                                                                                                                             }
                                                                                                                           }
                                                                                                                         }
@@ -2919,6 +2955,13 @@ function npc_right_click(c) {
   if (this.role == "newupgrade") {
     render_interaction("newupgrade")
   }
+  if (this.role == "locksmith") {
+    render_interaction({
+      auto: true,
+      dialog: "locksmith",
+      skin: "asoldier"
+    })
+  }
   if (this.role == "compound") {
     render_compound_shrine()
   }
@@ -3014,6 +3057,9 @@ function npc_right_click(c) {
 function player_click(a) {
   if (is_npc(this) && this.role == "daily_events") {
     render_interaction("subscribe", this.party)
+  }
+  if (is_npc(this) && this.npc == "pvp") {
+    player_right_click.apply(this, a)
   } else {
     if (this.npc_onclick) {
       npc_right_click.apply(this, a)
@@ -3061,7 +3107,7 @@ function player_heal(a) {
   }
 }
 function player_right_click(b) {
-  if (this.npc && this.id == "pvp") {
+  if (this.npc && this.npc == "pvp") {
     if (this.allow) {
       var a = "Be careful in there!";
       add_chat("Ace", a);
