@@ -2460,6 +2460,33 @@ function upgrade() {
     })
   }
 }
+function lock_item(a) {
+  if (a === undefined) {
+    a = l_item
+  }
+  socket.emit("locksmith", {
+    num: a,
+    operation: "lock"
+  })
+}
+function seal_item(a) {
+  if (a === undefined) {
+    a = l_item
+  }
+  socket.emit("locksmith", {
+    num: a,
+    operation: "seal"
+  })
+}
+function free_item(a) {
+  if (a === undefined) {
+    a = l_item
+  }
+  socket.emit("locksmith", {
+    num: a,
+    operation: "free"
+  })
+}
 function deposit(a) {
   if (!G.maps[current_map].mount) {
     add_log("Not in the bank.", "gray");
@@ -2636,7 +2663,7 @@ function dismantle() {
   })
 }
 function reopen() {
-  u_scroll = c_scroll = e_item = p_item = null;
+  u_scroll = c_scroll = e_item = p_item = l_item = null;
   draw_trigger(function() {
     if (rendered_target == "upgrade") {
       render_upgrade_shrine()
@@ -2661,6 +2688,10 @@ function reopen() {
                 } else {
                   if (rendered_target == "none") {
                     render_none_shrine()
+                  } else {
+                    if (rendered_target == "locksmith") {
+                      render_locksmith()
+                    }
                   }
                 }
               }
@@ -2726,7 +2757,7 @@ function toggle_character() {
 }
 function reset_inventory(a) {
   if (inventory) {
-    if (a && !in_arr(rendered_target, ["upgrade", "compound", "exchange", "npc", "merchant", "craftsman", "dismantler", "none"])) {
+    if (a && !in_arr(rendered_target, ["upgrade", "compound", "exchange", "npc", "merchant", "craftsman", "dismantler", "none", "locksmith"])) {
       return
     }
     render_inventory(), render_inventory()
