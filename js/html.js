@@ -7,6 +7,7 @@ var u_item = null,
   c_last = 0,
   e_item = null,
   p_item = null,
+  l_item = null,
   cr_items = e_array(9),
   cr_last = 0,
   ds_item = null;
@@ -663,6 +664,43 @@ function render_dismantler() {
   });
   b += "</div>";
   b += "<div style='margin-top: 12px'><div class='gamebutton clickable' onclick='dismantle()'>" + c + "</div></div>";
+  b += "</div>";
+  $("#topleftcornerui").html(b);
+  if (!inventory) {
+    render_inventory()
+  }
+}
+var last_lmode = "lock";
+
+function render_locksmith(e) {
+  if (!e) {
+    e = last_lmode
+  }
+  last_lmode = e;
+  var c = "LOCK",
+    d = "lock_item",
+    a = "shade_lock";
+  if (e == "free") {
+    c = "FREE", d = "free_item", a = "shade_free"
+  }
+  if (e == "seal") {
+    c = "SEAL", d = "seal_item", a = "shade_seal"
+  }
+  reset_inventory(1);
+  topleft_npc = "locksmith";
+  rendered_target = topleft_npc;
+  l_item = null;
+  var b = "<div style='background-color: black; border: 5px solid gray; padding: 20px; font-size: 24px; display: inline-block; vertical-align: top; text-align: center'>";
+  b += "<div>";
+  b += item_container({
+    shade: a,
+    cid: "litem",
+    s_op: 0.4,
+    draggable: false,
+    droppable: true
+  });
+  b += "</div>";
+  b += "<div style='margin-top: 12px'><div class='gamebutton clickable' onclick='" + d + "()'>" + c + "</div></div>";
   b += "</div>";
   $("#topleftcornerui").html(b);
   if (!inventory) {
@@ -1694,6 +1732,9 @@ function render_item(r, b) {
     if (b.from) {
       j += bold_prop_line("From", b.from, "#BED4DE")
     }
+    if (n && n.l) {
+      j += "<div style='color: #404141'>Locked</div>"
+    }
   }
   if (!b.pure) {
     j += "</div>"
@@ -1892,7 +1933,7 @@ function on_rclick(g) {
                   $("#citem" + a).parent().html("");
                   $("#pitem").html(e)
                 } else {
-                  if (topleft_npc == "upgrade") {
+                  if (topleft_npc == "locksmith") {
                     var g = character.items[a],
                       d = null;
                     if (g) {
@@ -1901,39 +1942,15 @@ function on_rclick(g) {
                     if (!d) {
                       return
                     }
-                    if (d.upgrade) {
-                      if (u_item !== null) {
-                        return
-                      }
-                      u_item = a;
-                      var e = $("#citem" + a).all_html();
-                      $("#citem" + a).parent().html("");
-                      $("#uweapon").html(e)
+                    if (l_item !== null) {
+                      return
                     }
-                    if (d.type == "uscroll" || d.type == "pscroll") {
-                      if (u_scroll !== null) {
-                        return
-                      }
-                      u_scroll = a;
-                      var e = $("#citem" + a).all_html();
-                      if ((character.items[a].q || 1) < 2) {
-                        $("#citem" + a).parent().html("")
-                      }
-                      $("#uscroll").html(e)
-                    }
-                    if (d.type == "offering") {
-                      if (u_offering !== null) {
-                        return
-                      }
-                      u_offering = a;
-                      var e = $("#citem" + a).all_html();
-                      if ((character.items[a].q || 1) < 2) {
-                        $("#citem" + a).parent().html("")
-                      }
-                      $("#uoffering").html(e)
-                    }
+                    l_item = a;
+                    var e = $("#citem" + a).all_html();
+                    $("#citem" + a).parent().html("");
+                    $("#litem").html(e)
                   } else {
-                    if (topleft_npc == "compound") {
+                    if (topleft_npc == "upgrade") {
                       var g = character.items[a],
                         d = null;
                       if (g) {
@@ -1942,37 +1959,39 @@ function on_rclick(g) {
                       if (!d) {
                         return
                       }
-                      if (d.compound && c_last < 3) {
-                        c_items[c_last] = a;
+                      if (d.upgrade) {
+                        if (u_item !== null) {
+                          return
+                        }
+                        u_item = a;
                         var e = $("#citem" + a).all_html();
                         $("#citem" + a).parent().html("");
-                        $("#compound" + c_last).html(e);
-                        c_last++
+                        $("#uweapon").html(e)
                       }
-                      if (d.type == "cscroll") {
-                        if (c_scroll !== null) {
+                      if (d.type == "uscroll" || d.type == "pscroll") {
+                        if (u_scroll !== null) {
                           return
                         }
-                        c_scroll = a;
+                        u_scroll = a;
                         var e = $("#citem" + a).all_html();
                         if ((character.items[a].q || 1) < 2) {
                           $("#citem" + a).parent().html("")
                         }
-                        $("#cscroll").html(e)
+                        $("#uscroll").html(e)
                       }
                       if (d.type == "offering") {
-                        if (c_offering !== null) {
+                        if (u_offering !== null) {
                           return
                         }
-                        c_offering = a;
+                        u_offering = a;
                         var e = $("#citem" + a).all_html();
                         if ((character.items[a].q || 1) < 2) {
                           $("#citem" + a).parent().html("")
                         }
-                        $("#coffering").html(e)
+                        $("#uoffering").html(e)
                       }
                     } else {
-                      if (topleft_npc == "craftsman") {
+                      if (topleft_npc == "compound") {
                         var g = character.items[a],
                           d = null;
                         if (g) {
@@ -1981,32 +2000,72 @@ function on_rclick(g) {
                         if (!d) {
                           return
                         }
-                        if (cr_last < 9) {
-                          cr_items[cr_last] = a;
+                        if (d.compound && c_last < 3) {
+                          c_items[c_last] = a;
                           var e = $("#citem" + a).all_html();
                           $("#citem" + a).parent().html("");
-                          $("#critem" + cr_last).html(e);
-                          cr_last++
+                          $("#compound" + c_last).html(e);
+                          c_last++
                         }
-                      } else {
-                        if (topleft_npc == "dismantler") {
-                          if (ds_item !== null) {
+                        if (d.type == "cscroll") {
+                          if (c_scroll !== null) {
                             return
                           }
-                          ds_item = a;
+                          c_scroll = a;
                           var e = $("#citem" + a).all_html();
                           if ((character.items[a].q || 1) < 2) {
                             $("#citem" + a).parent().html("")
                           }
-                          $("#dsitem").html(e)
-                        } else {
-                          a = parseInt(a, 10);
-                          if (character && character.items[a] && G.items[character.items[a].name].type == "elixir") {
+                          $("#cscroll").html(e)
+                        }
+                        if (d.type == "offering") {
+                          if (c_offering !== null) {
                             return
                           }
-                          socket.emit("equip", {
-                            num: a
-                          })
+                          c_offering = a;
+                          var e = $("#citem" + a).all_html();
+                          if ((character.items[a].q || 1) < 2) {
+                            $("#citem" + a).parent().html("")
+                          }
+                          $("#coffering").html(e)
+                        }
+                      } else {
+                        if (topleft_npc == "craftsman") {
+                          var g = character.items[a],
+                            d = null;
+                          if (g) {
+                            d = G.items[g.name]
+                          }
+                          if (!d) {
+                            return
+                          }
+                          if (cr_last < 9) {
+                            cr_items[cr_last] = a;
+                            var e = $("#citem" + a).all_html();
+                            $("#citem" + a).parent().html("");
+                            $("#critem" + cr_last).html(e);
+                            cr_last++
+                          }
+                        } else {
+                          if (topleft_npc == "dismantler") {
+                            if (ds_item !== null) {
+                              return
+                            }
+                            ds_item = a;
+                            var e = $("#citem" + a).all_html();
+                            if ((character.items[a].q || 1) < 2) {
+                              $("#citem" + a).parent().html("")
+                            }
+                            $("#dsitem").html(e)
+                          } else {
+                            a = parseInt(a, 10);
+                            if (character && character.items[a] && G.items[character.items[a].name].type == "elixir") {
+                              return
+                            }
+                            socket.emit("equip", {
+                              num: a
+                            })
+                          }
                         }
                       }
                     }
@@ -2341,6 +2400,10 @@ function item_container(A, r) {
       } else {
         k += "<div class='truui itu' style='border-color: " + t + ";'>$</div>"
       }
+    } else {
+      if (r && r.l && !A.slot) {
+        k += "<div class='truui ixu' style='border-color: " + t + ";'>X</div>"
+      }
     }
     if (r && r.v) {
       k += "<div class='trruui ivu' style='border-color: " + t + "; line-height: 7px'><br />^</div>"
@@ -2615,7 +2678,10 @@ function render_interaction(h, f) {
   if (h.auto) {
     d = FC[h.skin];
     b = FM[h.skin][1];
-    j = FM[h.skin][0]
+    j = FM[h.skin][0];
+    if (h.dialog) {
+      h = h.dialog
+    }
   } else {
     if (in_arr(h, ["wizard", "hardcoretp"])) {
       b = 2;
@@ -2793,103 +2859,108 @@ function render_interaction(h, f) {
                         g += "Adventurer! I can upgrade your weapons or armors. Combine 3 accessories to make a stronger one! Tho, beware, the process isn't perfect. Sometimes the items are ... lost.";
                         g += "<span style='float: right; margin-top: 5px'><div class='slimbutton' onclick='render_upgrade_shrine()'>UPGRADE</div> <div class='slimbutton' onclick='render_compound_shrine()'>COMBINE</div></span>"
                       } else {
-                        if (h == "crafting") {
-                          g += "I can craft or dismantle items for you. Price differs from item to item. Check out my recipes if you are interested!";
-                          g += "<span style='float: right; margin-top: 5px'><div class='slimbutton' onclick='render_recipes()'>RECIPES</div> <div class='slimbutton' onclick='render_craftsman()'>CRAFT</div> <div class='slimbutton' onclick='render_dismantler()'>DISMANTLE</div></span>"
+                        if (h == "locksmith") {
+                          g += "Lock - Prevents anything that can destroy an item, selling, upgrading, you name it! Seal - Locks the item for least a week. Free - Frees it. Go it? Good. Cost? 250 big ones.";
+                          g += "<span style='float: right; margin-top: 5px'><div class='slimbutton' onclick='render_locksmith(\"lock\")'>LOCK</div> <div class='slimbutton' onclick='render_locksmith(\"seal\")'>SEAL</div> <div class='slimbutton' onclick='render_locksmith(\"free\")'>FREE</div></span>"
                         } else {
-                          if (h == "wizard") {
-                            g += "Well, Hello there! I'm Wizard, I made this game. Hope you enjoy it. If you have any issues, suggestions, feel free to email me at hello@adventure.land!"
+                          if (h == "crafting") {
+                            g += "I can craft or dismantle items for you. Price differs from item to item. Check out my recipes if you are interested!";
+                            g += "<span style='float: right; margin-top: 5px'><div class='slimbutton' onclick='render_recipes()'>RECIPES</div> <div class='slimbutton' onclick='render_craftsman()'>CRAFT</div> <div class='slimbutton' onclick='render_dismantler()'>DISMANTLE</div></span>"
                           } else {
-                            if (h == "santa") {
-                              g += "Happy holidays! Please excuse my companion, he is a bit grumpy. If you happen to find any candy canes, that might cheer him up!";
-                              g += "<span style='float: right; margin-top: 5px'><div class='slimbutton' onclick='render_exchange_shrine(\"candycane\")'>I HAVE ONE!</div></span>"
+                            if (h == "wizard") {
+                              g += "Well, Hello there! I'm Wizard, I made this game. Hope you enjoy it. If you have any issues, suggestions, feel free to email me at hello@adventure.land!"
                             } else {
-                              if (h == "standmerchant") {
-                                g += "Anyone can become a merchant and start trading. You only need a merchant stand to display your items on!";
-                                g += "<span style='float: right; margin-top: 5px'><div class='slimbutton' onclick='render_merchant(get_npc(\"standmerchant\"))'>LET ME BUY ONE!</div></span>"
+                              if (h == "santa") {
+                                g += "Happy holidays! Please excuse my companion, he is a bit grumpy. If you happen to find any candy canes, that might cheer him up!";
+                                g += "<span style='float: right; margin-top: 5px'><div class='slimbutton' onclick='render_exchange_shrine(\"candycane\")'>I HAVE ONE!</div></span>"
                               } else {
-                                if (h == "candycane_success") {
-                                  g += "Ah! Thanks for cheering him up. Here's something for you in return!"
+                                if (h == "standmerchant") {
+                                  g += "Anyone can become a merchant and start trading. You only need a merchant stand to display your items on!";
+                                  g += "<span style='float: right; margin-top: 5px'><div class='slimbutton' onclick='render_merchant(get_npc(\"standmerchant\"))'>LET ME BUY ONE!</div></span>"
                                 } else {
-                                  if (h == "lostearring") {
-                                    g += "Ewww. Ewww. Ewww. These wretched things ate my earrings. Kill them, kill them all. Bring my earrings back!";
-                                    g += "<span style='float: right; margin-top: 5px'><div class='slimbutton' onclick='render_exchange_shrine(\"lostearring\")'>AS YOU WISH</div></span>"
+                                  if (h == "candycane_success") {
+                                    g += "Ah! Thanks for cheering him up. Here's something for you in return!"
                                   } else {
-                                    if (h == "lostearring_success") {
-                                      g += "You did well. Here's something left from one of my old husbands..."
+                                    if (h == "lostearring") {
+                                      g += "Ewww. Ewww. Ewww. These wretched things ate my earrings. Kill them, kill them all. Bring my earrings back!";
+                                      g += "<span style='float: right; margin-top: 5px'><div class='slimbutton' onclick='render_exchange_shrine(\"lostearring\")'>AS YOU WISH</div></span>"
                                     } else {
-                                      if (h == "mistletoe") {
-                                        g += "You know, It gets boring in here sometimes ... I'm looking for some excitement. Uhm, Do you have a Mistletoe?";
-                                        g += "<span style='float: right; margin-top: 5px'><div class='slimbutton' onclick='render_exchange_shrine(\"mistletoe\")'>OH MY, I DO!</div></span>"
+                                      if (h == "lostearring_success") {
+                                        g += "You did well. Here's something left from one of my old husbands..."
                                       } else {
-                                        if (h == "mistletoe_success") {
-                                          g += "Haha! You thought I was going to give you a kiss?! You wish... Take this instead!"
+                                        if (h == "mistletoe") {
+                                          g += "You know, It gets boring in here sometimes ... I'm looking for some excitement. Uhm, Do you have a Mistletoe?";
+                                          g += "<span style='float: right; margin-top: 5px'><div class='slimbutton' onclick='render_exchange_shrine(\"mistletoe\")'>OH MY, I DO!</div></span>"
                                         } else {
-                                          if (h == "ornaments") {
-                                            g += "Hmm. We should decorate these trees. I need some Ornaments tho. If you happen to collect " + G.items.ornament.e + " of them, let me know!";
-                                            g += "<span style='float: right; margin-top: 5px'><div class='slimbutton' onclick='render_exchange_shrine(\"ornament\")'>YOU GOT IT!</div></span>"
+                                          if (h == "mistletoe_success") {
+                                            g += "Haha! You thought I was going to give you a kiss?! You wish... Take this instead!"
                                           } else {
-                                            if (h == "ornament_success") {
-                                              g += "Thank you! Here's something in return."
+                                            if (h == "ornaments") {
+                                              g += "Hmm. We should decorate these trees. I need some Ornaments tho. If you happen to collect " + G.items.ornament.e + " of them, let me know!";
+                                              g += "<span style='float: right; margin-top: 5px'><div class='slimbutton' onclick='render_exchange_shrine(\"ornament\")'>YOU GOT IT!</div></span>"
                                             } else {
-                                              if (h == "gemfragment_success") {
-                                                g += "Bwahahahahah *cough* Ehem.. Thanks! You got a good deal. Keep bringing these fragments to me, don't give them to anyone else.";
-                                                d_text("+1", get_npc("gemmerchant"), {
-                                                  color: "#E78295"
-                                                })
+                                              if (h == "ornament_success") {
+                                                g += "Thank you! Here's something in return."
                                               } else {
-                                                if (h == "gemfragments") {
-                                                  g += "Back in the day we had miners, then came the moles, they work for free yet retrieving the gems is a challenge. Bring me " + G.items.gemfragment.e + " gem fragments and I can give you something exciting in return, no questions asked.";
-                                                  g += "<span style='float: right; margin-top: 5px'><div class='slimbutton' onclick='render_exchange_shrine(\"gemfragment\")'>I GOT " + G.items.gemfragment.e + "!</div></span>"
+                                                if (h == "gemfragment_success") {
+                                                  g += "Bwahahahahah *cough* Ehem.. Thanks! You got a good deal. Keep bringing these fragments to me, don't give them to anyone else.";
+                                                  d_text("+1", get_npc("gemmerchant"), {
+                                                    color: "#E78295"
+                                                  })
                                                 } else {
-                                                  if (h == "leathers") {
-                                                    g += "Hey, hey, hey! What brings you to this cold land? I personally love it here, ideal for my work. If you can bring me " + G.items.leather.e + " Leathers, I can give you one of my products in return.";
-                                                    g += "<span style='float: right; margin-top: 5px'><div class='slimbutton' onclick='render_exchange_shrine(\"leather\")'>I HAVE " + G.items.leather.e + "!</div></span>"
+                                                  if (h == "gemfragments") {
+                                                    g += "Back in the day we had miners, then came the moles, they work for free yet retrieving the gems is a challenge. Bring me " + G.items.gemfragment.e + " gem fragments and I can give you something exciting in return, no questions asked.";
+                                                    g += "<span style='float: right; margin-top: 5px'><div class='slimbutton' onclick='render_exchange_shrine(\"gemfragment\")'>I GOT " + G.items.gemfragment.e + "!</div></span>"
                                                   } else {
-                                                    if (h == "leather_success") {
-                                                      g += "Here you go! Enjoy! Keep bringing leathers to me, I have a lot to offer!";
-                                                      d_text("+1", get_npc("leathermerchant"), {
-                                                        color: "#DFE9D9"
-                                                      })
+                                                    if (h == "leathers") {
+                                                      g += "Hey, hey, hey! What brings you to this cold land? I personally love it here, ideal for my work. If you can bring me " + G.items.leather.e + " Leathers, I can give you one of my products in return.";
+                                                      g += "<span style='float: right; margin-top: 5px'><div class='slimbutton' onclick='render_exchange_shrine(\"leather\")'>I HAVE " + G.items.leather.e + "!</div></span>"
                                                     } else {
-                                                      if (h == "jailer") {
-                                                        g += "Tu-tu-tu. Have you been a bad " + (Math.random() < 0.5 && "boy" || "girl") + "? No worries. The lawmakers must see the potential in you, so instead of getting rid of you, they sent you here. You are free to leave whenever you want. But please don't repeat your mistake.";
-                                                        g += "<span style='float: right; margin-top: 5px'><div class='slimbutton' onclick='socket.emit(\"leave\")'>LEAVE</div></span>"
+                                                      if (h == "leather_success") {
+                                                        g += "Here you go! Enjoy! Keep bringing leathers to me, I have a lot to offer!";
+                                                        d_text("+1", get_npc("leathermerchant"), {
+                                                          color: "#DFE9D9"
+                                                        })
                                                       } else {
-                                                        if (h == "blocker" || h == "guard") {
-                                                          var a = Math.random();
-                                                          if (a < 0.5) {
-                                                            g += "Hmm. hmm. hmm. Can't let you pass. Check again later tho!"
-                                                          } else {
-                                                            g += "There's some work going on inside. Maybe check back later!"
-                                                          }
+                                                        if (h == "jailer") {
+                                                          g += "Tu-tu-tu. Have you been a bad " + (Math.random() < 0.5 && "boy" || "girl") + "? No worries. The lawmakers must see the potential in you, so instead of getting rid of you, they sent you here. You are free to leave whenever you want. But please don't repeat your mistake.";
+                                                          g += "<span style='float: right; margin-top: 5px'><div class='slimbutton' onclick='socket.emit(\"leave\")'>LEAVE</div></span>"
                                                         } else {
-                                                          if (h == "lottery") {
-                                                            g += "Hi Dear! The lottery tickets for this week haven't arrived yet. Apologies :)"
-                                                          } else {
-                                                            if (in_arr(h, ["unlock_items2", "unlock_items3", "unlock_items4", "unlock_items5", "unlock_items6", "unlock_items7"])) {
-                                                              var l = "items2",
-                                                                e = 75000000,
-                                                                k = 600;
-                                                              if (h == "unlock_items3") {
-                                                                l = "items3"
-                                                              }
-                                                              if (h == "unlock_items4") {
-                                                                l = "items4", e = 100000000, k = 800
-                                                              }
-                                                              if (h == "unlock_items5") {
-                                                                l = "items5", e = 100000000, k = 800
-                                                              }
-                                                              if (h == "unlock_items6") {
-                                                                l = "items6", e = 112500000, k = 900
-                                                              }
-                                                              if (h == "unlock_items7") {
-                                                                l = "items7", e = 112500000, k = 900
-                                                              }
-                                                              g += "Hello! You don't seem to have an account open with me. Would you like to open one? It costs " + to_pretty_num(e) + " Gold or " + to_pretty_num(k) + " Shells. We hold onto your items forever.";
-                                                              g += "<span style='float: right; margin-top: 5px'><div class='slimbutton' onclick='socket.emit(\"bank\",{operation:\"unlock\",gold:1,pack:\"" + l + "\"})' style='margin-right: 5px;'>USE GOLD</div><div class='slimbutton' onclick='socket.emit(\"bank\",{operation:\"unlock\",shells:1,pack:\"" + l + "\"})'>USE SHELLS</div></span>"
+                                                          if (h == "blocker" || h == "guard") {
+                                                            var a = Math.random();
+                                                            if (a < 0.5) {
+                                                              g += "Hmm. hmm. hmm. Can't let you pass. Check again later tho!"
                                                             } else {
-                                                              return
+                                                              g += "There's some work going on inside. Maybe check back later!"
+                                                            }
+                                                          } else {
+                                                            if (h == "lottery") {
+                                                              g += "Hi Dear! The lottery tickets for this week haven't arrived yet. Apologies :)"
+                                                            } else {
+                                                              if (in_arr(h, ["unlock_items2", "unlock_items3", "unlock_items4", "unlock_items5", "unlock_items6", "unlock_items7"])) {
+                                                                var l = "items2",
+                                                                  e = 75000000,
+                                                                  k = 600;
+                                                                if (h == "unlock_items3") {
+                                                                  l = "items3"
+                                                                }
+                                                                if (h == "unlock_items4") {
+                                                                  l = "items4", e = 100000000, k = 800
+                                                                }
+                                                                if (h == "unlock_items5") {
+                                                                  l = "items5", e = 100000000, k = 800
+                                                                }
+                                                                if (h == "unlock_items6") {
+                                                                  l = "items6", e = 112500000, k = 900
+                                                                }
+                                                                if (h == "unlock_items7") {
+                                                                  l = "items7", e = 112500000, k = 900
+                                                                }
+                                                                g += "Hello! You don't seem to have an account open with me. Would you like to open one? It costs " + to_pretty_num(e) + " Gold or " + to_pretty_num(k) + " Shells. We hold onto your items forever.";
+                                                                g += "<span style='float: right; margin-top: 5px'><div class='slimbutton' onclick='socket.emit(\"bank\",{operation:\"unlock\",gold:1,pack:\"" + l + "\"})' style='margin-right: 5px;'>USE GOLD</div><div class='slimbutton' onclick='socket.emit(\"bank\",{operation:\"unlock\",shells:1,pack:\"" + l + "\"})'>USE SHELLS</div></span>"
+                                                              } else {
+                                                                return
+                                                              }
                                                             }
                                                           }
                                                         }
