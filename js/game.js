@@ -1699,8 +1699,8 @@ function init_socket() {
                 if (response == "target_alive") {
                   d_text("LOOKS LIVE?", character)
                 } else {
-                  if (response == "slot_oquppied") {
-                    ui_log("Slot oquppied", "gray")
+                  if (response == "slot_occuppied") {
+                    ui_log("Slot occuppied", "gray")
                   } else {
                     if (response == "no_target") {
                       if (!ctarget) {
@@ -1927,26 +1927,35 @@ function init_socket() {
                                                                                                                                   if (response == "locksmith_aunlocked") {
                                                                                                                                     ui_log("Already unlocked", "gray")
                                                                                                                                   } else {
-                                                                                                                                    if (response == "locksmith_unsealed") {
-                                                                                                                                      ui_log("Unsealed the item", "gray");
-                                                                                                                                      ui_log("It can be unlocked in 7 days", "gray")
+                                                                                                                                    if (response == "locksmith_alocked") {
+                                                                                                                                      ui_log("Already locked", "gray")
                                                                                                                                     } else {
-                                                                                                                                      if (response == "locksmith_unsealing") {
-                                                                                                                                        ui_log("It can be unlocked in " + parseInt(data.hours) + " hours", "gray")
+                                                                                                                                      if (response == "locksmith_unsealed") {
+                                                                                                                                        ui_log("Spent 250,000 gold", "gray");
+                                                                                                                                        ui_log("Unsealed the item", "gray");
+                                                                                                                                        ui_log("It can be unlocked in 7 days", "gray")
                                                                                                                                       } else {
-                                                                                                                                        if (response == "locksmith_unlocked") {
-                                                                                                                                          ui_log("Spent 250,000 gold", "gray");
-                                                                                                                                          ui_log("Unlocked the item", "gray")
+                                                                                                                                        if (response == "locksmith_unsealing") {
+                                                                                                                                          ui_log("It can be unlocked in " + parseInt(data.hours) + " hours", "gray")
                                                                                                                                         } else {
-                                                                                                                                          if (response == "locksmith_locked") {
+                                                                                                                                          if (response == "locksmith_unlocked") {
                                                                                                                                             ui_log("Spent 250,000 gold", "gray");
-                                                                                                                                            ui_log("Locked the item", "gray")
+                                                                                                                                            ui_log("Unlocked the item", "gray")
                                                                                                                                           } else {
-                                                                                                                                            if (response == "locksmith_sealed") {
-                                                                                                                                              ui_log("Spent 250,000 gold", "gray");
-                                                                                                                                              ui_log("Sealed the item", "gray")
+                                                                                                                                            if (response == "locksmith_unseal_complete") {
+                                                                                                                                              ui_log("Unlocked the item", "gray")
                                                                                                                                             } else {
-                                                                                                                                              console.log("Missed game_response: " + response)
+                                                                                                                                              if (response == "locksmith_locked") {
+                                                                                                                                                ui_log("Spent 250,000 gold", "gray");
+                                                                                                                                                ui_log("Locked the item", "gray")
+                                                                                                                                              } else {
+                                                                                                                                                if (response == "locksmith_sealed") {
+                                                                                                                                                  ui_log("Spent 250,000 gold", "gray");
+                                                                                                                                                  ui_log("Sealed the item", "gray")
+                                                                                                                                                } else {
+                                                                                                                                                  console.log("Missed game_response: " + response)
+                                                                                                                                                }
+                                                                                                                                              }
                                                                                                                                             }
                                                                                                                                           }
                                                                                                                                         }
