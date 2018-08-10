@@ -679,12 +679,12 @@ function render_locksmith(e) {
   last_lmode = e;
   var c = "LOCK",
     d = "lock_item",
-    a = "shade_lock";
-  if (e == "free") {
-    c = "FREE", d = "free_item", a = "shade_free"
+    a = "shade_seal";
+  if (e == "unlock") {
+    c = "UNLOCK", d = "unlock_item", a = "shade_unlock"
   }
   if (e == "seal") {
-    c = "SEAL", d = "seal_item", a = "shade_seal"
+    c = "SEAL", d = "seal_item", a = "shade_lock"
   }
   reset_inventory(1);
   topleft_npc = "locksmith";
@@ -1733,7 +1733,15 @@ function render_item(r, b) {
       j += bold_prop_line("From", b.from, "#BED4DE")
     }
     if (n && n.l) {
-      j += "<div style='color: #404141'>Locked</div>"
+      if (n.l == "s") {
+        j += "<div class='ilsu'>Sealed</div>"
+      } else {
+        if (n.l == "u") {
+          j += "<div class='iluu'>Unsealing</div>"
+        } else {
+          j += "<div style='color: #404141'>Locked</div>"
+        }
+      }
     }
   }
   if (!b.pure) {
@@ -2402,7 +2410,15 @@ function item_container(A, r) {
       }
     } else {
       if (r && r.l && !A.slot) {
-        k += "<div class='truui ixu' style='border-color: " + t + ";'>X</div>"
+        if (r.l == "s") {
+          k += "<div class='truui ilsu' style='border-color: " + t + ";'>S</div>"
+        } else {
+          if (r.l == "u") {
+            k += "<div class='truui iluu' style='border-color: " + t + ";'>U</div>"
+          } else {
+            k += "<div class='truui ixu' style='border-color: " + t + ";'>X</div>"
+          }
+        }
       }
     }
     if (r && r.v) {
@@ -2860,8 +2876,8 @@ function render_interaction(h, f) {
                         g += "<span style='float: right; margin-top: 5px'><div class='slimbutton' onclick='render_upgrade_shrine()'>UPGRADE</div> <div class='slimbutton' onclick='render_compound_shrine()'>COMBINE</div></span>"
                       } else {
                         if (h == "locksmith") {
-                          g += "Lock - Prevents anything that can destroy an item, selling, upgrading, you name it! Seal - Locks the item for least a week. Free - Frees it. Go it? Good. Cost? 250 big ones.";
-                          g += "<span style='float: right; margin-top: 5px'><div class='slimbutton' onclick='render_locksmith(\"lock\")'>LOCK</div> <div class='slimbutton' onclick='render_locksmith(\"seal\")'>SEAL</div> <div class='slimbutton' onclick='render_locksmith(\"free\")'>FREE</div></span>"
+                          g += "Lock - Prevents anything that can destroy an item, selling, upgrading, you name it! Seal - Locks the item in a way that unlocking it takes a week. Unlock - Frees it. Got it? Good. Cost? 250 big ones.";
+                          g += "<span style='float: right; margin-top: 5px'><div class='slimbutton' onclick='render_locksmith(\"lock\")'>LOCK</div> <div class='slimbutton' onclick='render_locksmith(\"seal\")'>SEAL</div> <div class='slimbutton' onclick='render_locksmith(\"unlock\")'>UNLOCK</div></span>"
                         } else {
                           if (h == "crafting") {
                             g += "I can craft or dismantle items for you. Price differs from item to item. Check out my recipes if you are interested!";
