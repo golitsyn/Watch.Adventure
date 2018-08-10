@@ -315,9 +315,11 @@ function sell(num, quantity) //sell an item from character.items by it's order -
   parent.sell(num, quantity);
 }
 
-function equip(num) {
+function equip(num, slot) // slot is optional
+{
   parent.socket.emit("equip", {
-    num: num
+    num: num,
+    slot: slot
   });
 }
 
