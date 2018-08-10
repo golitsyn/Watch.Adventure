@@ -1486,7 +1486,7 @@ var G = {
       }]
     }
   },
-  "version": 324,
+  "version": 325,
   "conditions": {
     "tarot_5swords": {
       "name": "Tarot Card",
@@ -2354,7 +2354,7 @@ var G = {
   "itemsets": {
     "skills": {
       "rows": 11,
-      "file": "/images/tiles/items/skills_20v3.png?v=0",
+      "file": "/images/tiles/items/skills_20v3.png?v=1",
       "columns": 16,
       "size": 20
     },
@@ -7100,6 +7100,7 @@ var G = {
     "skill_3shot": ["skills", 1, 2],
     "firestaff": ["pack_20", 3, 10],
     "egg8": ["pack_20", 8, 30],
+    "mpotx": ["pack_20", 13, 21],
     "egg1": ["pack_20", 1, 30],
     "egg0": ["pack_20", 0, 30],
     "egg3": ["pack_20", 3, 30],
@@ -7110,6 +7111,7 @@ var G = {
     "egg6": ["pack_20", 6, 30],
     "shade_gold": ["pack_20", 8, 35],
     "mcape": ["pack_20", 11, 1],
+    "shade_unlock": ["pack_20", 8, 6],
     "tristone_a": ["pack_20", 2, 16],
     "pmace": ["pack_20", 4, 10],
     "elixirint2": ["pack_20", 7, 28],
@@ -7119,6 +7121,7 @@ var G = {
     "mpot0": ["pack_20", 5, 21],
     "stone20": ["pack_20", 5, 5],
     "shadowstone": ["pack_20", 14, 28],
+    "skill_throw": ["skills", 1, 5],
     "suckerpunch": ["pack_20", 11, 15],
     "door0": [["custom", 0, 128, 32, 32], ["custom", 32, 128, 32, 32], ["custom", 64, 128, 32, 32], ["custom", 96, 128, 32, 32], ["custom", 128, 128, 32, 32], ["custom", 160, 128, 32, 32]],
     "shade_tome": ["", 2, 114],
@@ -7191,6 +7194,7 @@ var G = {
     "skill_pheal": ["skills", 1, 4],
     "candycane": ["pack_20", 4, 29],
     "strring": ["pack_20", 0, 16],
+    "hpotx": ["pack_20", 12, 21],
     "skill_abuff": ["skills", 5, 3],
     "starkillers": ["pack_20", 6, 4],
     "helmet": ["pack_20", 2, 0],
@@ -7288,7 +7292,6 @@ var G = {
     "dexscroll": ["pack_20", 9, 23],
     "gift1": ["pack_20", 0, 32],
     "gift0": ["pack_20", 1, 32],
-    "shade_free": ["pack_20", 8, 6],
     "essenceoflife": ["pack_20", 14, 34],
     "xgloves": ["pack_20", 5, 2],
     "t2quiver": ["pack_20", 1, 13],
