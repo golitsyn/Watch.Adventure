@@ -2478,13 +2478,13 @@ function seal_item(a) {
     operation: "seal"
   })
 }
-function free_item(a) {
+function unlock_item(a) {
   if (a === undefined) {
     a = l_item
   }
   socket.emit("locksmith", {
     num: a,
-    operation: "free"
+    operation: "unlock"
   })
 }
 function deposit(a) {
