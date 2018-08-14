@@ -49,8 +49,8 @@ var G = {
         "male": "mmerchant",
         "female": "fmerchant"
       },
-      "mainhand": ["mace", "staff", "bow", "spear", "short_sword", "fist"],
-      "attack": 5,
+      "mainhand": ["mace", "staff", "bow", "spear", "short_sword", "fist", "dart"],
+      "attack": 1,
       "lstats": {
         "dex": 0.40000000000000002,
         "int": 1,
@@ -59,7 +59,7 @@ var G = {
       },
       "frequency": 0.20000000000000001,
       "mp": 200,
-      "range": 120,
+      "range": 20,
       "speed": 55,
       "main_stat": "int",
       "damage_type": "none"
@@ -1486,7 +1486,7 @@ var G = {
       }]
     }
   },
-  "version": 325,
+  "version": 326,
   "conditions": {
     "tarot_5swords": {
       "name": "Tarot Card",
@@ -2372,21 +2372,41 @@ var G = {
     }
   },
   "dismantle": {
-    "essenceoffrost": {
-      "items": [[1, "emptyjar"]],
-      "cost": 10
+    "platinumingot": {
+      "items": [[8, "platinumnugget"]],
+      "cost": 120000
     },
     "essenceofnature": {
       "items": [[1, "emptyjar"]],
       "cost": 10
     },
+    "goldenegg": {
+      "items": [[1, "goldnugget"], [0.5, "goldnugget"]],
+      "cost": 120000
+    },
     "essenceoflife": {
       "items": [[1, "emptyjar"]],
       "cost": 10
     },
+    "molesteeth": {
+      "items": [[0.10000000000000001, "platinumnugget"]],
+      "cost": 100000
+    },
+    "essenceoffrost": {
+      "items": [[1, "emptyjar"]],
+      "cost": 10
+    },
+    "goldingot": {
+      "items": [[12, "goldnugget"]],
+      "cost": 12000
+    },
     "essenceoffire": {
       "items": [[1, "emptyjar"]],
       "cost": 10
+    },
+    "bronzeingot": {
+      "items": [[16, "bronzenugget"]],
+      "cost": 12000
     },
     "fireblade": {
       "items": [[1, "essenceoffire"]],
@@ -2422,9 +2442,29 @@ var G = {
       "items": [[1, "claw"], [2, "essenceoffrost"]],
       "cost": 80000
     },
+    "wblade": {
+      "items": [[1, "stick", 9], [1, "blade"], [800, "essenceoffrost"]],
+      "cost": 24000000
+    },
+    "computer": {
+      "items": [[1, "networkcard"], [8, "qubics"], [100, "electronics"]],
+      "cost": 12000000
+    },
+    "dartgun": {
+      "items": [[1, "blade", 9], [12, "qubics"], [4, "platinumnugget"], [20, "goldnugget"]],
+      "cost": 32000000
+    },
+    "basketofeggs": {
+      "items": [[1, "egg0"], [1, "egg1"], [1, "egg2"], [1, "egg3"], [1, "egg4"], [1, "egg5"], [1, "egg6"], [1, "egg7"], [1, "egg8"]],
+      "cost": 100
+    },
     "wingedboots": {
       "items": [[1, "shoes"], [20, "feather0"]],
       "cost": 120000
+    },
+    "xbox": {
+      "items": [[1, "x0"], [1, "x1"], [1, "x2"], [1, "x3"], [1, "x4"], [1, "x5"], [1, "x6"], [1, "x7"], [1, "x8"]],
+      "cost": 1200
     },
     "fireblade": {
       "items": [[1, "blade"], [1, "essenceoffire"]],
@@ -2434,21 +2474,9 @@ var G = {
       "items": [[1, "staff"], [6, "essenceoffrost"]],
       "cost": 80000
     },
-    "xbox": {
-      "items": [[1, "x0"], [1, "x1"], [1, "x2"], [1, "x3"], [1, "x4"], [1, "x5"], [1, "x6"], [1, "x7"], [1, "x8"]],
-      "cost": 1200
-    },
-    "wblade": {
-      "items": [[1, "stick", 9], [1, "blade"], [800, "essenceoffrost"]],
-      "cost": 24000000
-    },
     "firestaff": {
       "items": [[1, "staff"], [1, "essenceoffire"]],
       "cost": 20000
-    },
-    "basketofeggs": {
-      "items": [[1, "egg0"], [1, "egg1"], [1, "egg2"], [1, "egg3"], [1, "egg4"], [1, "egg5"], [1, "egg6"], [1, "egg7"], [1, "egg8"]],
-      "cost": 100
     }
   },
   "animations": {
@@ -2668,6 +2696,14 @@ var G = {
       "cash": 4800,
       "name": "Stone of Luck"
     },
+    "networkcard": {
+      "name": "Network Card",
+      "g": 23040000,
+      "explanation": "A critical component that is able to interact with the fabric of our universe. Possibly quantum technology.",
+      "cash": 720,
+      "skin": "networkcard",
+      "type": "material"
+    },
     "candy1v2": {
       "e": 1,
       "name": "Candy",
@@ -2685,24 +2721,13 @@ var G = {
       "skin": "essenceoflife",
       "type": "material"
     },
-    "xgloves": {
-      "stat": 1,
-      "grade": 2,
-      "resistance": 16,
-      "grades": [0, 0],
-      "skin": "xgloves",
-      "tier": 4,
-      "a": 2,
-      "upgrade": {
-        "armor": 5.5,
-        "stat": 1,
-        "resistance": 5.5
-      },
-      "name": "Darkforge Gloves",
-      "g": 3400000,
-      "armor": 32,
-      "type": "gloves",
-      "scroll": true
+    "ledger": {
+      "name": "Ledger",
+      "g": 12000,
+      "explanation": "Every decent merchant needs one!",
+      "ignore": true,
+      "skin": "ledger",
+      "type": "misc"
     },
     "elixirdex1": {
       "dex": 8,
@@ -2840,6 +2865,15 @@ var G = {
       "skin": "puppyer",
       "type": "petlicence"
     },
+    "x7": {
+      "a": true,
+      "name": "Quantum Piece",
+      "g": 4000,
+      "explanation": "A unique component of a curious puzzle",
+      "s": true,
+      "skin": "x7",
+      "type": "quest"
+    },
     "bowofthedead": {
       "a": true,
       "upgrade": {
@@ -2904,14 +2938,14 @@ var G = {
       "attack": 29.0,
       "type": "weapon"
     },
-    "x7": {
-      "a": true,
-      "name": "Quantum Piece",
-      "g": 4000,
-      "explanation": "A unique component of a curious puzzle",
+    "5bucks": {
+      "e": 1,
+      "name": "Old Money",
+      "g": 5,
+      "explanation": "It's not gold. Must be worthless.",
       "s": true,
-      "skin": "x7",
-      "type": "quest"
+      "skin": "5bucks",
+      "type": "misc"
     },
     "armorbox": {
       "a": true,
@@ -3198,6 +3232,14 @@ var G = {
       },
       "type": "amulet",
       "resistance": 30
+    },
+    "goldingot": {
+      "name": "Gold Ingot",
+      "g": 2000000,
+      "explanation": "Solid Gold",
+      "s": true,
+      "skin": "goldingot",
+      "type": "material"
     },
     "molesteeth": {
       "a": true,
@@ -3839,6 +3881,22 @@ var G = {
       },
       "type": "orb"
     },
+    "snakeoil": {
+      "name": "Snake Oil",
+      "g": 200,
+      "explanation": "?",
+      "s": true,
+      "skin": "snakeoil",
+      "type": "material"
+    },
+    "electronics": {
+      "name": "Electronics",
+      "g": 3000,
+      "explanation": "Various random electronic components",
+      "s": true,
+      "skin": "electronics",
+      "type": "material"
+    },
     "staff": {
       "attack": 25,
       "upgrade": {
@@ -3935,6 +3993,17 @@ var G = {
       "edge": -2,
       "type": "earring"
     },
+    "qubics": {
+      "a": true,
+      "s": true,
+      "name": "Qubics",
+      "g": 1024000,
+      "skin": "qubics",
+      "p2w": true,
+      "explanation": "Unique bio-electronic components, it's almost like they are alive. Can yield unexpected results if you introduce them to other materials!",
+      "type": "qubics",
+      "cash": 32
+    },
     "feather0": {
       "name": "Magical Feather",
       "g": 200,
@@ -3998,6 +4067,14 @@ var G = {
       "reward": 4,
       "type": "tome",
       "cash": 10
+    },
+    "bronzenugget": {
+      "name": "Bronze Nugget",
+      "g": 3200,
+      "explanation": "Ideal for crafting",
+      "s": true,
+      "skin": "bronzenugget",
+      "type": "material"
     },
     "intamulet": {
       "name": "Amulet of Intelligence",
@@ -4209,6 +4286,14 @@ var G = {
       "explanation": "Earthly energy, waiting to spring",
       "s": true,
       "skin": "essenceofnature",
+      "type": "material"
+    },
+    "platinumingot": {
+      "name": "Platinum Ingot",
+      "g": 40000000,
+      "explanation": "Solid Platinum",
+      "s": true,
+      "skin": "platinumingot",
       "type": "material"
     },
     "intearring": {
@@ -4471,12 +4556,11 @@ var G = {
       "type": "belt"
     },
     "computer": {
-      "name": "Ancient Computer",
-      "g": 51200000,
       "explanation": "Networks you to NPC's and extends the CODE capabilities.",
-      "cash": 1600,
-      "skin": "ancientcomputer",
-      "type": "computer"
+      "type": "computer",
+      "name": "Ancient Computer",
+      "g": 64000000,
+      "skin": "ancientcomputer"
     },
     "seashell": {
       "s": true,
@@ -5357,6 +5441,14 @@ var G = {
       "type": "chest",
       "scroll": true
     },
+    "goldnugget": {
+      "name": "Bronze Nugget",
+      "g": 120000,
+      "explanation": "Ideal for crafting",
+      "s": true,
+      "skin": "goldnugget",
+      "type": "material"
+    },
     "hammer": {
       "attack": 36,
       "upgrade": {
@@ -5383,13 +5475,24 @@ var G = {
       },
       "type": "earring"
     },
-    "ledger": {
-      "name": "Ledger",
-      "g": 12000,
-      "explanation": "Every decent merchant needs one!",
-      "ignore": true,
-      "skin": "ledger",
-      "type": "misc"
+    "xgloves": {
+      "stat": 1,
+      "grade": 2,
+      "resistance": 16,
+      "grades": [0, 0],
+      "skin": "xgloves",
+      "tier": 4,
+      "a": 2,
+      "upgrade": {
+        "armor": 5.5,
+        "stat": 1,
+        "resistance": 5.5
+      },
+      "name": "Darkforge Gloves",
+      "g": 3400000,
+      "armor": 32,
+      "type": "gloves",
+      "scroll": true
     },
     "t2quiver": {
       "a": true,
@@ -5690,6 +5793,23 @@ var G = {
       "explanation": "A rare Halloween candy. Can be exchanged for random treasures.",
       "type": "gem"
     },
+    "dartgun": {
+      "explanation": "Don't let the looks fool you. It's a solid weapon with most components forged from gold. The barrel and trigger mechanism is a platinum alloy. Can shoot anything that fits it's barrel, like actual gold.",
+      "damage": "physical",
+      "grades": [0, 0],
+      "skin": "dartgun",
+      "tier": 4,
+      "upgrade": {
+        "attack": 1,
+        "range": 20
+      },
+      "name": "Golden Dart Gun",
+      "g": 20000000,
+      "wtype": "dart",
+      "range": 50,
+      "attack": 1,
+      "type": "weapon"
+    },
     "handofmidas": {
       "gold": 10,
       "grade": 2,
@@ -5734,6 +5854,14 @@ var G = {
       "explanation": "Congratulations and prosperity",
       "type": "gem",
       "event": true
+    },
+    "platinumnugget": {
+      "name": "Platinum Nugget",
+      "g": 3000000,
+      "explanation": "Ideal for crafting",
+      "s": true,
+      "skin": "platinumnugget",
+      "type": "material"
     },
     "coat": {
       "stat": 1,
@@ -5811,6 +5939,14 @@ var G = {
       "compound": {},
       "skin": "coal",
       "type": "misc"
+    },
+    "bronzeingot": {
+      "name": "Bronze Ingot",
+      "g": 40000,
+      "explanation": "Solid Bronze",
+      "s": true,
+      "skin": "bronzeingot",
+      "type": "material"
     },
     "bow3": {
       "damage": "physical",
@@ -6086,7 +6222,7 @@ var G = {
     "antip2w": {
       "says": "Sup",
       "name": "Mr. Dworf",
-      "items": ["xpbooster", "goldbooster", "luckbooster", null, null, "xptome", "offering", null, null, null, null, null, null, null, null],
+      "items": ["xpbooster", "goldbooster", "luckbooster", null, null, "xptome", "offering", null, null, null, "qubics", null, null, null],
       "role": "merchant",
       "skin": "fancyd",
       "side_interaction": {
@@ -6291,7 +6427,7 @@ var G = {
     "premium": {
       "says": "MMM",
       "name": "Garwyn",
-      "items": ["xpbooster", "goldbooster", "luckbooster", null, null, "xptome", "offering", null, null, null, "computer", null, null, null, null],
+      "items": ["xpbooster", "goldbooster", "luckbooster", null, null, "xptome", "offering", null, null, null, "networkcard", "qubics", null, null, null],
       "atype": "flow",
       "role": "premium",
       "skin": "pflow",
@@ -6950,9 +7086,10 @@ var G = {
     "essenceofdarkness": ["pack_20", 11, 34],
     "wingedboots": ["pack_20", 10, 5],
     "orangeorb": ["", 11, 28],
+    "snakeoil": ["pack_20", 15, 28],
     "hpbelt": ["pack_20", 10, 3],
     "shade_elixir": ["", 12, 40],
-    "confetti": ["pack_20", 6, 32],
+    "shade_amulet": ["pack_20", 12, 31],
     "t2stramulet": ["pack_20", 11, 19],
     "skill_supershot": ["skills", 0, 2],
     "flute": ["pack_20", 14, 26],
@@ -6966,6 +7103,7 @@ var G = {
     "poison": ["pack_20", 8, 21],
     "carrotsword": ["pack_20", 11, 30],
     "textures": ["stone", "stand0_texture", "standx_texture", "standg_texture"],
+    "qubics": ["pack_20", 0, 36],
     "skill_corrosion": ["skills", 4, 4],
     "xptome": ["pack_20", 14, 27],
     "placeholder": ["pack_20", 15, 24],
@@ -7012,6 +7150,7 @@ var G = {
     "t2dexamulet": ["pack_20", 13, 19],
     "wbook0": ["pack_20", 1, 14],
     "wbook1": ["pack_20", 3, 14],
+    "dartgun": ["pack_20", 4, 37],
     "blade20": ["pack_20", 1, 11],
     "t2intamulet": ["pack_20", 12, 19],
     "coat": ["pack_20", 2, 1],
@@ -7022,7 +7161,7 @@ var G = {
     "shoes": ["pack_20", 2, 5],
     "use_town": ["skills", 0, 6],
     "shade_helmet": ["pack_20", 0, 31],
-    "shade_amulet": ["pack_20", 12, 31],
+    "confetti": ["pack_20", 6, 32],
     "shade_shoes": ["pack_20", 3, 31],
     "lostearring": ["pack_20", 4, 25],
     "phelmet": ["pack_20", 11, 29],
@@ -7047,6 +7186,7 @@ var G = {
     "gloves20": ["pack_20", 2, 5],
     "rabbitsfoot": ["pack_20", 14, 30],
     "essenceofthunder": ["pack_20", 12, 34],
+    "electronics": ["pack_20", 4, 36],
     "skill_curse": ["skills", 0, 4],
     "mittens": ["pack_20", 8, 29],
     "buff_speed": ["skills", 1, 9],
@@ -7144,6 +7284,7 @@ var G = {
     "run_code": ["skills", 1, 10],
     "gloves": ["pack_20", 2, 2],
     "goldbooster_a": ["pack_20", 5, 27],
+    "5bucks": ["pack_20", 5, 26],
     "intring": ["pack_20", 15, 15],
     "xmas": ["skills", 2, 9],
     "scroll4": ["pack_20", 4, 24],
@@ -7165,6 +7306,7 @@ var G = {
     "strbelt": ["pack_20", 11, 3],
     "pants": ["pack_20", 2, 4],
     "essenceofnature": ["pack_20", 8, 34],
+    "bronzenugget": ["pack_20", 5, 35],
     "feather0": ["pack_20", 1, 33],
     "intamulet": ["pack_20", 9, 19],
     "hgloves": ["pack_20", 4, 2],
@@ -7193,6 +7335,7 @@ var G = {
     "skill_quickpunch": ["skills", 4, 3],
     "skill_pheal": ["skills", 1, 4],
     "candycane": ["pack_20", 4, 29],
+    "platinumingot": ["pack_20", 4, 35],
     "strring": ["pack_20", 0, 16],
     "hpotx": ["pack_20", 12, 21],
     "skill_abuff": ["skills", 5, 3],
@@ -7210,10 +7353,12 @@ var G = {
     "stoneofxp": ["", 12, 113],
     "gloves1": ["pack_20", 3, 2],
     "tristone": ["pack_20", 1, 16],
+    "bronzeingot": ["pack_20", 2, 35],
     "xarmor": ["pack_20", 5, 1],
     "left": ["skills", 13, 6],
     "buff_luck": ["skills", 0, 9],
     "hboots": ["pack_20", 4, 5],
+    "networkcard": ["pack_20", 1, 36],
     "daggerofthedead": ["pack_20", 15, 7],
     "ancientcomputer": ["pack_20", 0, 26],
     "skill_blink": ["skills", 3, 0],
@@ -7289,6 +7434,7 @@ var G = {
     "shade_cring": ["pack_20", 7, 19],
     "skill_sacrifice": ["skills", 2, 4],
     "stoneofluck": ["", 10, 114],
+    "goldnugget": ["pack_20", 6, 35],
     "dexscroll": ["pack_20", 9, 23],
     "gift1": ["pack_20", 0, 32],
     "gift0": ["pack_20", 1, 32],
@@ -7307,6 +7453,8 @@ var G = {
     "stramulet": ["pack_20", 8, 19],
     "xmaspants": ["pack_20", 9, 29],
     "redenvelope": ["pack_20", 13, 33],
+    "platinumnugget": ["pack_20", 7, 35],
+    "goldingot": ["pack_20", 3, 35],
     "earring120": ["pack_20", 5, 10]
   },
   "monsters": {
