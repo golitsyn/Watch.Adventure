@@ -956,75 +956,79 @@ function render_compound_shrine() {
 function render_dice() {
   add_log("Dice!", "#B6A786")
 }
-function render_merchant(l, b, m) {
+function render_merchant(n, b, o) {
   reset_inventory(1);
   topleft_npc = "merchant";
   rendered_target = topleft_npc;
-  merchant_id = l.id;
-  var n = 0,
-    h = [];
-  var f = "<div style='background-color: black; border: 5px solid gray; padding: 2px; font-size: 24px; display: inline-block'>";
+  merchant_id = n.id;
+  var p = 0,
+    k = [];
+  var g = "<div style='background-color: black; border: 5px solid gray; padding: 2px; font-size: 24px; display: inline-block'>",
+    l = "buy_with_gold";
+  if (o) {
+    l = "buy_with_shells"
+  }
   for (var e = 0; e < 4; e++) {
-    f += "<div>";
+    g += "<div>";
     for (var d = 0; d < 5; d++) {
-      if (n < l.items.length && l.items[n++] && (c_enabled || !G.items[l.items[n - 1]].cash)) {
-        var k = l.items[n - 1];
+      if (p < n.items.length && n.items[p++] && (c_enabled || !G.items[n.items[p - 1]].cash)) {
+        var m = n.items[p - 1];
         var a = "item" + randomStr(10),
-          o = G.items[k];
-        f += item_container({
-          skin: o.skin_a || o.skin,
-          def: o,
+          q = G.items[m];
+        g += item_container({
+          skin: q.skin_a || q.skin,
+          def: q,
           id: a,
           draggable: false,
-          on_rclick: "buy('" + k + "')"
+          on_rclick: l + "('" + m + "')"
         });
-        if (m) {
-          h.push({
+        if (o) {
+          k.push({
             id: a,
-            item: o,
-            name: k,
-            value: o.g,
-            cash: o.cash
+            item: q,
+            name: m,
+            value: q.g,
+            cash: q.cash
           })
         } else {
-          if (o.cash) {
-            h.push({
+          if (q.cash) {
+            k.push({
               id: a,
-              item: o,
-              name: k,
-              value: o.g * G.inflation
+              item: q,
+              name: m,
+              value: q.g * G.inflation
             })
           } else {
-            h.push({
+            k.push({
               id: a,
-              item: o,
-              name: k,
-              value: o.g
+              item: q,
+              name: m,
+              value: q.g
             })
           }
         }
       } else {
-        f += item_container({
+        g += item_container({
           size: 40,
           draggable: false,
           droppable: true
         })
       }
     }
-    f += "</div>"
+    g += "</div>"
   }
-  f += "</div>";
-  f += "<div id='merchant-item' style='display: inline-block; vertical-align: top; margin-left: 5px'>" + (b && render_interaction(b, "return_html") || " ") + "</div>";
-  $("#topleftcornerui").html(f);
-  for (var e = 0; e < h.length; e++) {
-    var c = h[e];
+  g += "</div>";
+  g += "<div id='merchant-item' style='display: inline-block; vertical-align: top; margin-left: 5px'>" + (b && render_interaction(b, "return_html") || " ") + "</div>";
+  $("#topleftcornerui").html(g);
+  for (var e = 0; e < k.length; e++) {
+    var c = k[e];
 
-    function g(j) {
+    function h(f) {
       return function() {
-        render_item("#merchant-item", j)
+        render_item("#merchant-item", f)
       }
     }
-    $("#" + c.id).on("click", g(c)).addClass("clickable")
+    $("#" + c.id).on("click", h(c)).addClass("clickable")
   }
 }
 function render_token_exchange(c) {
@@ -1693,7 +1697,8 @@ function render_item(r, b) {
           w = f[0]
         }
         j += item_container({
-          skin: G.items[f[1]].skin
+          skin: G.items[f[1]].skin,
+          onclick: "render_item_by_name('" + f[1] + "')"
         }, {
           name: f[1],
           q: w,
@@ -1717,7 +1722,8 @@ function render_item(r, b) {
           w = f[0]
         }
         j += item_container({
-          skin: G.items[f[1]].skin
+          skin: G.items[f[1]].skin,
+          onclick: "render_item_by_name('" + f[1] + "')"
         }, {
           name: f[1],
           q: w
@@ -1752,6 +1758,12 @@ function render_item(r, b) {
   } else {
     $(r).html(j)
   }
+}
+function render_item_by_name(a) {
+  render_item(null, {
+    skin: G.items[a].skin,
+    item: G.items[a]
+  })
 }
 function wishlist_form(b, a) {
   wishlist(b, a, $(".wprice").shtml(), $(".wnumq").shtml(), $(".wlevel").shtml())
