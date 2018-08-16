@@ -52,12 +52,12 @@ var G = {
       "mainhand": ["mace", "staff", "bow", "spear", "short_sword", "fist", "dart"],
       "attack": 1,
       "lstats": {
-        "dex": 0.40000000000000002,
+        "dex": 0.4,
         "int": 1,
         "vit": 0.25,
-        "str": 0.10000000000000001
+        "str": 0.1
       },
-      "frequency": 0.20000000000000001,
+      "frequency": 0.2,
       "mp": 200,
       "range": 20,
       "speed": 55,
@@ -95,7 +95,7 @@ var G = {
       "lstats": {
         "dex": 0.25,
         "int": 0.25,
-        "vit": 0.40000000000000002,
+        "vit": 0.4,
         "str": 1
       },
       "frequency": 0.5,
@@ -134,11 +134,11 @@ var G = {
       "attack": 45,
       "lstats": {
         "dex": 1,
-        "int": 0.20000000000000001,
-        "vit": 0.29999999999999999,
-        "str": 0.20000000000000001
+        "int": 0.2,
+        "vit": 0.3,
+        "str": 0.2
       },
-      "frequency": 0.45000000000000001,
+      "frequency": 0.45,
       "mp": 30,
       "range": 15,
       "speed": 50,
@@ -175,10 +175,10 @@ var G = {
       "lstats": {
         "dex": 1,
         "int": 0.25,
-        "vit": 0.29999999999999999,
-        "str": 0.20000000000000001
+        "vit": 0.3,
+        "str": 0.2
       },
-      "frequency": 0.40000000000000002,
+      "frequency": 0.4,
       "mp": 60,
       "range": 15,
       "speed": 45,
@@ -213,12 +213,12 @@ var G = {
       "mainhand": ["mace", "staff"],
       "attack": 30,
       "lstats": {
-        "dex": 0.20000000000000001,
+        "dex": 0.2,
         "int": 1,
-        "vit": 0.40000000000000002,
-        "str": 0.20000000000000001
+        "vit": 0.4,
+        "str": 0.2
       },
-      "frequency": 0.34999999999999998,
+      "frequency": 0.35,
       "mp": 300,
       "range": 120,
       "speed": 45,
@@ -253,12 +253,12 @@ var G = {
       "mainhand": ["staff", "wblade"],
       "attack": 30,
       "lstats": {
-        "dex": 0.20000000000000001,
+        "dex": 0.2,
         "int": 1,
-        "vit": 0.29999999999999999,
-        "str": 0.20000000000000001
+        "vit": 0.3,
+        "str": 0.2
       },
-      "frequency": 0.34999999999999998,
+      "frequency": 0.35,
       "mp": 300,
       "range": 120,
       "speed": 45,
@@ -290,7 +290,7 @@ var G = {
     "kitty1": [20, 20, 0, 6, 5],
     "frog": [36, 24, -4],
     "kitty2": [20, 20, 0, 6, 5],
-    "squig": [34, 26, -10, 1],
+    "puppy4": [20, 20, 0, 6, 5],
     "plantoid": [30, 36, -2],
     "jrat": [30, 22],
     "wabbit": [30, 22],
@@ -304,7 +304,7 @@ var G = {
     "bee": [26, 33],
     "minimush": [23, 22, -3],
     "creator": [48, 42],
-    "puppy4": [20, 20, 0, 6, 5],
+    "squig": [34, 26, -10, 1],
     "default_character": [26, 35],
     "spider": [30, 20, 1.5],
     "puppy2": [20, 20, 0, 6, 5],
@@ -1698,7 +1698,7 @@ var G = {
     "poisoned": {
       "healm": 0.25,
       "name": "Poisoned",
-      "frequencym": 0.80000000000000004,
+      "frequencym": 0.8,
       "potionsm": 0.5,
       "skin": "poison",
       "duration": 5000
@@ -2389,7 +2389,7 @@ var G = {
       "cost": 10
     },
     "molesteeth": {
-      "items": [[0.10000000000000001, "platinumnugget"]],
+      "items": [[0.1, "platinumnugget"]],
       "cost": 100000
     },
     "essenceoffrost": {
@@ -2430,7 +2430,7 @@ var G = {
       "confetti": 0.01,
       "partyhat": 10,
       "rabbitsfoot": 100,
-      "smoke": 0.050000000000000003
+      "smoke": 0.05
     }
   },
   "craft": {
@@ -2498,7 +2498,7 @@ var G = {
     },
     "starkiller": {
       "frames": 12,
-      "alpha": 0.80000000000000004,
+      "alpha": 0.8,
       "aspeed": "mild",
       "file": "/images/sprites/animations/attack3.png"
     },
@@ -2512,31 +2512,31 @@ var G = {
     },
     "gm": {
       "frames": 9,
-      "alpha": 0.80000000000000004,
+      "alpha": 0.8,
       "continuous": true,
       "file": "/images/sprites/animations/Shield_Invincible.png"
     },
     "transport": {
       "frames": 9,
-      "alpha": 0.80000000000000004,
+      "alpha": 0.8,
       "continuous": true,
       "file": "/images/sprites/animations/Teleport2.png"
     },
     "curse": {
       "frames": 8,
-      "alpha": 0.90000000000000002,
+      "alpha": 0.9,
       "aspeed": "slow",
       "file": "/images/sprites/animations/Poison.png",
       "proportional": true
     },
     "stunned": {
       "frames": 6,
-      "alpha": 0.40000000000000002,
+      "alpha": 0.4,
       "file": "/images/sprites/animations/NuclearA1.png"
     },
     "revival": {
       "frames": 12,
-      "alpha": 0.80000000000000004,
+      "alpha": 0.8,
       "continuous": true,
       "file": "/images/sprites/animations/Teleport1P.png",
       "speeding": true
@@ -2548,7 +2548,7 @@ var G = {
     },
     "supershot": {
       "frames": 7,
-      "alpha": 0.90000000000000002,
+      "alpha": 0.9,
       "file": "/images/sprites/animations/Slash0Super.png"
     },
     "rspeed": {
@@ -2574,7 +2574,7 @@ var G = {
     },
     "confetti": {
       "frames": 12,
-      "alpha": 0.40000000000000002,
+      "alpha": 0.4,
       "file": "/images/sprites/animations/confetti2.png"
     },
     "success": {
@@ -2583,13 +2583,13 @@ var G = {
     },
     "arrow_hit": {
       "frames": 7,
-      "alpha": 0.90000000000000002,
+      "alpha": 0.9,
       "file": "/images/sprites/animations/Slash0Arrow.png",
-      "size": 0.80000000000000004
+      "size": 0.8
     },
     "invincible": {
       "frames": 9,
-      "alpha": 0.80000000000000004,
+      "alpha": 0.8,
       "continuous": true,
       "file": "/images/sprites/animations/Shield1.png"
     },
@@ -2599,7 +2599,7 @@ var G = {
     },
     "slash2": {
       "frames": 7,
-      "alpha": 0.90000000000000002,
+      "alpha": 0.9,
       "aspeed": "fast",
       "file": "/images/sprites/animations/Slash2Quick.png",
       "size": 0.75
@@ -2614,12 +2614,12 @@ var G = {
     },
     "light": {
       "frames": 11,
-      "alpha": 0.69999999999999996,
+      "alpha": 0.7,
       "file": "/images/sprites/animations/Light.png"
     },
     "hardshell": {
       "frames": 9,
-      "alpha": 0.80000000000000004,
+      "alpha": 0.8,
       "continuous": true,
       "aspeed": "slow",
       "file": "/images/sprites/animations/warrior_shield.png"
@@ -2684,17 +2684,6 @@ var G = {
       "tier": 1,
       "type": "shoes",
       "scroll": true
-    },
-    "stoneofluck": {
-      "ignore": true,
-      "days": 30,
-      "skin_a": "stoneofluck",
-      "g": 153600000,
-      "skin": "stoneofluck",
-      "explanation": "Increases your chances to loot something from a monster by 20%.",
-      "type": "stone",
-      "cash": 4800,
-      "name": "Stone of Luck"
     },
     "networkcard": {
       "name": "Network Card",
@@ -2810,7 +2799,7 @@ var G = {
       "upgrade": {
         "armor": 2.5,
         "stat": 1,
-        "reflection": 0.40000000000000002,
+        "reflection": 0.4,
         "resistance": 2.5
       },
       "reflection": 1,
@@ -2877,7 +2866,7 @@ var G = {
     "bowofthedead": {
       "a": true,
       "upgrade": {
-        "crit": 0.20000000000000001,
+        "crit": 0.2,
         "attack": 4.75,
         "range": 7
       },
@@ -3040,7 +3029,7 @@ var G = {
       "g": 10000,
       "skin_a": "swirlipop",
       "skin": "swirlipop",
-      "duration": 0.0080000000000000002,
+      "duration": 0.008,
       "eat": true,
       "a": true,
       "name": "Swirlipop",
@@ -3319,7 +3308,7 @@ var G = {
         "armor": 2.5,
         "apiercing": 3,
         "resistance": 2.5,
-        "aspeed": 0.20000000000000001
+        "aspeed": 0.2
       },
       "name": "Super Mittens",
       "g": 340000,
@@ -3698,7 +3687,7 @@ var G = {
       "explanation": "It drains the life energy of the user",
       "range": 50,
       "damage": "magical",
-      "attr0": 0.10000000000000001,
+      "attr0": 0.1,
       "attack": 40,
       "g": 289000,
       "vit": -30,
@@ -3754,9 +3743,9 @@ var G = {
       "speed": 1,
       "a": true,
       "upgrade": {
-        "speed": 0.20000000000000001,
+        "speed": 0.2,
         "resistance": 1,
-        "evasion": 0.20000000000000001
+        "evasion": 0.2
       },
       "name": "Angel Wings",
       "g": 120000,
@@ -3957,13 +3946,13 @@ var G = {
       "int": 8,
       "damage": "physical",
       "grades": [0, 7],
-      "attr0": 0.20000000000000001,
+      "attr0": 0.2,
       "skin": "fclaw",
       "a": true,
       "upgrade": {
         "attack": 4,
         "range": 1.5,
-        "attr0": 0.10000000000000001
+        "attr0": 0.1
       },
       "name": "Frozen Claw",
       "g": 72000,
@@ -4133,13 +4122,13 @@ var G = {
       "tier": 1,
       "a": 2,
       "upgrade": {
-        "dex": 0.20000000000000001,
+        "dex": 0.2,
         "stat": 1,
-        "str": 0.20000000000000001,
-        "int": 0.20000000000000001,
+        "str": 0.2,
+        "int": 0.2,
         "resistance": 1.25,
         "armor": 1.25,
-        "vit": 0.10000000000000001
+        "vit": 0.1
       },
       "name": "Party Hat",
       "g": 12000,
@@ -4344,16 +4333,16 @@ var G = {
       "protection": true,
       "skin": "gphelmet",
       "crit": 0.5,
-      "reflection": 1,
+      "name": "Green Pumpkin Head",
       "a": 2,
       "upgrade": {
-        "crit": 0.10000000000000001,
+        "crit": 0.1,
         "armor": 2.5,
         "stat": 1,
-        "reflection": 0.40000000000000002,
+        "reflection": 0.4,
         "resistance": 2.5
       },
-      "name": "Green Pumpkin Head",
+      "reflection": 1,
       "lifesteal": 2,
       "armor": 14,
       "g": 32000,
@@ -4451,7 +4440,7 @@ var G = {
       "grades": [0, 7],
       "upgrade": {
         "attack": 6,
-        "awesomeness": 0.10000000000000001,
+        "awesomeness": 0.1,
         "range": 3
       },
       "skin": "ornamentstaff",
@@ -4517,7 +4506,7 @@ var G = {
         "armor": 2.5,
         "stat": 1,
         "resistance": 2.5,
-        "evasion": 0.20000000000000001
+        "evasion": 0.2
       },
       "evasion": 1,
       "g": 32000,
@@ -4647,6 +4636,29 @@ var G = {
       "type": "weapon",
       "damage": "physical"
     },
+    "fury": {
+      "a": true,
+      "stat": 1,
+      "resistance": 12.0,
+      "tier": 1.5,
+      "grades": [0, 0],
+      "skin": "fury",
+      "crit": 6,
+      "dex": 2,
+      "upgrade": {
+        "crit": 0.5,
+        "armor": 1.875,
+        "stat": 1,
+        "apiercing": 10,
+        "resistance": 1.875
+      },
+      "name": "Band of Fury",
+      "g": 6400000,
+      "armor": 10.5,
+      "apiercing": 20,
+      "type": "helmet",
+      "scroll": true
+    },
     "coat1": {
       "stat": 1,
       "grade": 1,
@@ -4705,7 +4717,7 @@ var G = {
       "skin": "froststaff",
       "a": true,
       "upgrade": {
-        "int": 0.20000000000000001,
+        "int": 0.2,
         "attack": 5.5,
         "range": 3,
         "attr0": 1.25
@@ -4773,7 +4785,7 @@ var G = {
         "armor": 2.5,
         "apiercing": 2,
         "resistance": 2.5,
-        "aspeed": 0.20000000000000001
+        "aspeed": 0.2
       },
       "name": "Power Glove",
       "rpiercing": 16,
@@ -5110,8 +5122,8 @@ var G = {
         "armor": 4,
         "range": 1,
         "attack": 8,
-        "attr0": 0.40000000000000002,
-        "attr1": 0.20000000000000001,
+        "attr0": 0.4,
+        "attr1": 0.2,
         "speed": 1
       },
       "attr0": 0.5,
@@ -5206,28 +5218,16 @@ var G = {
       "type": "quiver",
       "grades": [3, 7]
     },
-    "fury": {
-      "a": true,
-      "stat": 1,
-      "resistance": 12.0,
-      "tier": 1.5,
-      "grades": [0, 0],
-      "skin": "fury",
-      "crit": 6,
-      "dex": 2,
-      "upgrade": {
-        "crit": 0.5,
-        "armor": 1.875,
-        "stat": 1,
-        "apiercing": 10,
-        "resistance": 1.875
-      },
-      "name": "Band of Fury",
-      "g": 6400000,
-      "armor": 10.5,
-      "apiercing": 20,
-      "type": "helmet",
-      "scroll": true
+    "stoneofluck": {
+      "ignore": true,
+      "days": 30,
+      "skin_a": "stoneofluck",
+      "g": 153600000,
+      "skin": "stoneofluck",
+      "explanation": "Increases your chances to loot something from a monster by 20%.",
+      "type": "stone",
+      "cash": 4800,
+      "name": "Stone of Luck"
     },
     "egg0": {
       "name": "Easter Egg",
@@ -5347,7 +5347,7 @@ var G = {
       "name": "Star Killer's Pants",
       "a": 2,
       "upgrade": {
-        "crit": 0.20000000000000001,
+        "crit": 0.2,
         "armor": 4.25,
         "stat": 1,
         "resistance": 4.25,
@@ -5432,7 +5432,7 @@ var G = {
         "armor": 2.5,
         "hp": 15,
         "stat": 1,
-        "lifesteal": 0.20000000000000001,
+        "lifesteal": 0.2,
         "resistance": 2.5
       },
       "name": "Dracul's Attire",
@@ -5546,7 +5546,7 @@ var G = {
         "armor": 5.5,
         "apiercing": 4,
         "resistance": 5.5,
-        "aspeed": 0.20000000000000001
+        "aspeed": 0.2
       },
       "name": "Golden Power Glove",
       "rpiercing": 64,
@@ -7462,7 +7462,7 @@ var G = {
       "hit": "explode_p",
       "hp": 6400,
       "resistance": 160,
-      "frequency": 0.59999999999999998,
+      "frequency": 0.6,
       "damage_type": "magical",
       "skin": "bbpompom",
       "xp": 6000,
@@ -7471,7 +7471,7 @@ var G = {
       "respawn": 4,
       "range": 280,
       "attack": 320,
-      "aggro": 0.20000000000000001
+      "aggro": 0.2
     },
     "snowman": {
       "1hp": true,
@@ -7502,13 +7502,13 @@ var G = {
       "respawn": 40,
       "range": 32,
       "attack": 275,
-      "aggro": 0.29999999999999999
+      "aggro": 0.3
     },
     "target_r500": {
       "orientation": 2,
       "hp": 50000,
       "resistance": 500,
-      "frequency": 0.10000000000000001,
+      "frequency": 0.1,
       "damage_type": "physical",
       "skin": "target_r500",
       "xp": 1000,
@@ -7523,7 +7523,7 @@ var G = {
     "mrgreen": {
       "hp": 120000,
       "resistance": 900,
-      "frequency": 1.6000000000000001,
+      "frequency": 1.6,
       "damage_type": "physical",
       "skin": "mrgreen",
       "xp": 240000,
@@ -7563,7 +7563,7 @@ var G = {
       "respawn": 960,
       "range": 80,
       "attack": 1800,
-      "aggro": 0.20000000000000001,
+      "aggro": 0.2,
       "explanation": "A genetically modified and cybernetically enhanced beast!"
     },
     "spider": {
@@ -7577,13 +7577,13 @@ var G = {
       "respawn": 14,
       "range": 32,
       "attack": 80,
-      "aggro": 0.29999999999999999
+      "aggro": 0.3
     },
     "chestm": {
       "hit": "explode_p",
       "hp": 6400,
       "resistance": 160,
-      "frequency": 0.59999999999999998,
+      "frequency": 0.6,
       "damage_type": "magical",
       "skin": "chestm",
       "xp": 6000,
@@ -7592,12 +7592,12 @@ var G = {
       "respawn": 4,
       "range": 280,
       "attack": 320,
-      "aggro": 0.20000000000000001
+      "aggro": 0.2
     },
     "puppy3": {
       "aa": 1,
       "hp": 100,
-      "frequency": 0.40000000000000002,
+      "frequency": 0.4,
       "damage_type": "physical",
       "skin": "puppy3",
       "xp": -500,
@@ -7645,7 +7645,7 @@ var G = {
     "kitty3": {
       "aa": 1,
       "hp": 100,
-      "frequency": 0.40000000000000002,
+      "frequency": 0.4,
       "damage_type": "physical",
       "skin": "kitty3",
       "xp": -500,
@@ -7669,11 +7669,11 @@ var G = {
       "respawn": 1,
       "range": 80,
       "attack": 1800,
-      "aggro": 0.20000000000000001
+      "aggro": 0.2
     },
     "boar": {
       "hp": 12000,
-      "frequency": 0.69999999999999996,
+      "frequency": 0.7,
       "damage_type": "physical",
       "skin": "boar",
       "xp": 10800,
@@ -7698,7 +7698,7 @@ var G = {
       "respawn": 960,
       "range": 80,
       "attack": 1800,
-      "aggro": 0.20000000000000001
+      "aggro": 0.2
     },
     "franky": {
       "aa": 1,
@@ -7732,13 +7732,13 @@ var G = {
       "respawn": 6,
       "range": 15,
       "attack": 48,
-      "aggro": 0.20000000000000001
+      "aggro": 0.2
     },
     "target_ar900": {
       "orientation": 2,
       "hp": 50000,
       "resistance": 900,
-      "frequency": 0.10000000000000001,
+      "frequency": 0.1,
       "damage_type": "physical",
       "skin": "target_ar900",
       "xp": 1000,
@@ -7753,7 +7753,7 @@ var G = {
     },
     "gscorpion": {
       "hp": 3200,
-      "frequency": 0.80000000000000004,
+      "frequency": 0.8,
       "damage_type": "physical",
       "skin": "gscorpion",
       "xp": 4800,
@@ -7762,12 +7762,12 @@ var G = {
       "respawn": 6,
       "range": 32,
       "attack": 120,
-      "aggro": 0.29999999999999999
+      "aggro": 0.3
     },
     "goo": {
       "aa": 1,
       "hp": 100,
-      "frequency": 0.40000000000000002,
+      "frequency": 0.4,
       "damage_type": "physical",
       "skin": "goo",
       "xp": 100,
@@ -7784,7 +7784,7 @@ var G = {
       "orientation": 2,
       "hp": 50000,
       "resistance": 750,
-      "frequency": 0.10000000000000001,
+      "frequency": 0.1,
       "damage_type": "physical",
       "skin": "target_r750",
       "xp": 1000,
@@ -7799,13 +7799,13 @@ var G = {
     },
     "poisio": {
       "hp": 1200,
-      "frequency": 0.59999999999999998,
+      "frequency": 0.6,
       "damage_type": "physical",
       "skin": "poisio",
       "xp": 1300,
       "speed": 24,
       "name": "Poisio",
-      "rage": 0.20000000000000001,
+      "rage": 0.2,
       "respawn": 6,
       "range": 20,
       "attack": 240,
@@ -7823,7 +7823,7 @@ var G = {
       "respawn": 1920,
       "range": 120,
       "attack": 1200,
-      "aggro": 0.050000000000000003
+      "aggro": 0.05
     },
     "mummy": {
       "aa": 1,
@@ -7844,7 +7844,7 @@ var G = {
     "kitty4": {
       "aa": 1,
       "hp": 100,
-      "frequency": 0.40000000000000002,
+      "frequency": 0.4,
       "damage_type": "physical",
       "skin": "kitty4",
       "xp": -500,
@@ -7858,7 +7858,7 @@ var G = {
     },
     "scorpion": {
       "hp": 2400,
-      "frequency": 0.80000000000000004,
+      "frequency": 0.8,
       "damage_type": "physical",
       "skin": "scorpion",
       "xp": 2000,
@@ -7867,12 +7867,12 @@ var G = {
       "respawn": 6,
       "range": 32,
       "attack": 100,
-      "aggro": 0.29999999999999999
+      "aggro": 0.3
     },
     "kitty1": {
       "aa": 1,
       "hp": 100,
-      "frequency": 0.40000000000000002,
+      "frequency": 0.4,
       "damage_type": "physical",
       "skin": "kitty1",
       "xp": -500,
@@ -7917,7 +7917,7 @@ var G = {
       "aa": 1,
       "hp": 12400,
       "apiercing": 320,
-      "frequency": 0.80000000000000004,
+      "frequency": 0.8,
       "damage_type": "physical",
       "skin": "mole",
       "xp": 8000,
@@ -7933,7 +7933,7 @@ var G = {
     "wolfie": {
       "hp": 19200,
       "resistance": 100,
-      "frequency": 0.80000000000000004,
+      "frequency": 0.8,
       "damage_type": "physical",
       "skin": "wolfie",
       "xp": 16400,
@@ -7965,28 +7965,28 @@ var G = {
     "crab": {
       "aa": 1,
       "hp": 200,
-      "frequency": 0.40000000000000002,
+      "frequency": 0.4,
       "damage_type": "physical",
       "skin": "crab",
       "xp": 300,
       "speed": 6,
       "size": 0.5,
       "name": "Tiny Crab",
-      "respawn": 0.64000000000000001,
+      "respawn": 0.64,
       "range": 15,
       "attack": 24,
-      "aggro": 0.20000000000000001
+      "aggro": 0.2
     },
     "arcticbee": {
       "aa": 1,
       "hp": 1600,
-      "frequency": 0.59999999999999998,
+      "frequency": 0.6,
       "damage_type": "physical",
       "skin": "arcticbee",
       "xp": 1800,
       "speed": 12,
       "name": "Arctic Bee",
-      "rage": 0.050000000000000003,
+      "rage": 0.05,
       "respawn": 1,
       "range": 20,
       "attack": 64,
@@ -8004,7 +8004,7 @@ var G = {
       "respawn": 24,
       "range": 80,
       "attack": 600,
-      "aggro": 0.20000000000000001
+      "aggro": 0.2
     },
     "redfairy": {
       "aa": 1,
@@ -8024,7 +8024,7 @@ var G = {
     "puppy2": {
       "aa": 1,
       "hp": 100,
-      "frequency": 0.40000000000000002,
+      "frequency": 0.4,
       "damage_type": "physical",
       "skin": "puppy2",
       "xp": -500,
@@ -8105,7 +8105,7 @@ var G = {
     },
     "squigtoad": {
       "hp": 600,
-      "frequency": 0.59999999999999998,
+      "frequency": 0.6,
       "damage_type": "physical",
       "skin": "squigtoad",
       "xp": 2400,
@@ -8130,7 +8130,7 @@ var G = {
       "respawn": 20,
       "range": 120,
       "attack": 125,
-      "aggro": 0.20000000000000001
+      "aggro": 0.2
     },
     "mvampire": {
       "hit": "explode_c",
@@ -8146,12 +8146,12 @@ var G = {
       "respawn": 1080,
       "range": 120,
       "attack": 245,
-      "aggro": 0.050000000000000003
+      "aggro": 0.05
     },
     "puppy4": {
       "aa": 1,
       "hp": 100,
-      "frequency": 0.40000000000000002,
+      "frequency": 0.4,
       "damage_type": "physical",
       "skin": "puppy4",
       "xp": -500,
@@ -8166,7 +8166,7 @@ var G = {
     "target_a500": {
       "orientation": 2,
       "hp": 50000,
-      "frequency": 0.10000000000000001,
+      "frequency": 0.1,
       "damage_type": "physical",
       "skin": "target_a500",
       "xp": 1000,
@@ -8181,14 +8181,14 @@ var G = {
     },
     "bigbird": {
       "hp": 32000,
-      "frequency": 0.80000000000000004,
+      "frequency": 0.8,
       "damage_type": "physical",
       "skin": "bigbird",
       "xp": 30000,
       "speed": 24,
       "name": "Hawk",
       "evasion": 20,
-      "rage": 0.40000000000000002,
+      "rage": 0.4,
       "respawn": 12,
       "range": 20,
       "charge": 52,
@@ -8215,7 +8215,7 @@ var G = {
     "puppy1": {
       "aa": 1,
       "hp": 100,
-      "frequency": 0.40000000000000002,
+      "frequency": 0.4,
       "damage_type": "physical",
       "skin": "puppy1",
       "xp": -500,
@@ -8248,7 +8248,7 @@ var G = {
     },
     "stompy": {
       "hp": 640000,
-      "frequency": 0.80000000000000004,
+      "frequency": 0.8,
       "damage_type": "physical",
       "skin": "stompy",
       "xp": 600000,
@@ -8257,7 +8257,7 @@ var G = {
       "respawn": 2160,
       "range": 64,
       "charge": 80,
-      "aggro": 0.20000000000000001,
+      "aggro": 0.2,
       "attack": 3600
     },
     "armadillo": {
@@ -8276,7 +8276,7 @@ var G = {
     },
     "snake": {
       "hp": 720,
-      "frequency": 0.59999999999999998,
+      "frequency": 0.6,
       "damage_type": "physical",
       "skin": "snake",
       "xp": 960,
@@ -8305,7 +8305,7 @@ var G = {
     },
     "osnake": {
       "hp": 720,
-      "frequency": 0.59999999999999998,
+      "frequency": 0.6,
       "damage_type": "physical",
       "skin": "osnake",
       "xp": 1600,
@@ -8319,7 +8319,7 @@ var G = {
     "target_a750": {
       "orientation": 2,
       "hp": 50000,
-      "frequency": 0.10000000000000001,
+      "frequency": 0.1,
       "damage_type": "physical",
       "skin": "target_a750",
       "xp": 1000,
@@ -8344,7 +8344,7 @@ var G = {
       "respawn": 1,
       "range": 80,
       "attack": 1800,
-      "aggro": 0.20000000000000001
+      "aggro": 0.2
     },
     "bluefairy": {
       "aa": 1,
@@ -8369,9 +8369,9 @@ var G = {
       "xp": 640000,
       "speed": 30,
       "special": true,
-      "reflection": 99.950000000000003,
+      "reflection": 99.95,
       "name": "Sneaky Goblin",
-      "evasion": 99.950000000000003,
+      "evasion": 99.95,
       "respawn": -1,
       "range": 2,
       "immune": true,
@@ -8392,7 +8392,7 @@ var G = {
       "respawn": 1440,
       "range": 120,
       "attack": 875,
-      "aggro": 0.050000000000000003
+      "aggro": 0.05
     },
     "greenjr": {
       "name": "Green Jr.",
@@ -8416,7 +8416,7 @@ var G = {
     "target": {
       "orientation": 2,
       "hp": 50000,
-      "frequency": 0.10000000000000001,
+      "frequency": 0.1,
       "damage_type": "physical",
       "skin": "target",
       "xp": 1000,
@@ -8442,12 +8442,12 @@ var G = {
       "respawn": 4,
       "range": 120,
       "attack": 200,
-      "aggro": 0.050000000000000003
+      "aggro": 0.05
     },
     "bat": {
       "aa": 1,
       "hp": 2400,
-      "frequency": 0.69999999999999996,
+      "frequency": 0.7,
       "damage_type": "physical",
       "skin": "bat",
       "xp": 2000,
@@ -8456,7 +8456,7 @@ var G = {
       "respawn": 12,
       "range": 35,
       "attack": 50,
-      "aggro": 0.29999999999999999
+      "aggro": 0.3
     },
     "cgoo": {
       "aa": 1,
@@ -8470,7 +8470,7 @@ var G = {
       "respawn": 48,
       "range": 64,
       "attack": 320,
-      "aggro": 0.10000000000000001
+      "aggro": 0.1
     },
     "tortoise": {
       "hp": 2000,
@@ -8490,7 +8490,7 @@ var G = {
       "hit": "explode_p",
       "hp": 3600,
       "skin": "iceroamer",
-      "frequency": 0.69999999999999996,
+      "frequency": 0.7,
       "damage_type": "magical",
       "evasion": 10,
       "xp": 4200,
@@ -8501,12 +8501,12 @@ var G = {
       "respawn": 2,
       "range": 80,
       "attack": 120,
-      "aggro": 0.20000000000000001
+      "aggro": 0.2
     },
     "crabx": {
       "aa": 1,
       "hp": 4200,
-      "frequency": 0.29999999999999999,
+      "frequency": 0.3,
       "damage_type": "physical",
       "skin": "crabx",
       "xp": 3600,
@@ -8520,7 +8520,7 @@ var G = {
     },
     "xscorpion": {
       "hp": 24000,
-      "frequency": 0.80000000000000004,
+      "frequency": 0.8,
       "damage_type": "physical",
       "skin": "xscorpion",
       "xp": 27200,
@@ -8529,7 +8529,7 @@ var G = {
       "respawn": 6,
       "range": 32,
       "attack": 720,
-      "aggro": 0.29999999999999999
+      "aggro": 0.3
     },
     "bee": {
       "aa": 1,
@@ -8540,7 +8540,7 @@ var G = {
       "xp": 400,
       "speed": 12,
       "name": "Bee",
-      "rage": 0.10000000000000001,
+      "rage": 0.1,
       "respawn": 2,
       "range": 20,
       "attack": 16,
@@ -8549,7 +8549,7 @@ var G = {
     "goldenbat": {
       "aa": 1,
       "hp": 2400,
-      "frequency": 0.69999999999999996,
+      "frequency": 0.7,
       "damage_type": "physical",
       "skin": "goldenbat",
       "xp": 2000,
@@ -8558,12 +8558,12 @@ var G = {
       "respawn": -1,
       "range": 35,
       "attack": 50,
-      "aggro": 0.29999999999999999
+      "aggro": 0.3
     },
     "wolf": {
       "hp": 24000,
       "resistance": 200,
-      "frequency": 0.80000000000000004,
+      "frequency": 0.8,
       "damage_type": "physical",
       "skin": "wolf",
       "xp": 24800,
@@ -8580,7 +8580,7 @@ var G = {
     "kitty2": {
       "aa": 1,
       "hp": 100,
-      "frequency": 0.40000000000000002,
+      "frequency": 0.4,
       "damage_type": "physical",
       "skin": "kitty2",
       "xp": -500,
@@ -8603,7 +8603,7 @@ var G = {
       "resistance": 500,
       "aggro": 0,
       "attack": 0,
-      "frequency": 0.10000000000000001,
+      "frequency": 0.1,
       "orientation": 2,
       "damage_type": "physical",
       "skin": "target_ar500red",
@@ -8625,12 +8625,12 @@ var G = {
       "respawn": 1,
       "range": 80,
       "attack": 1800,
-      "aggro": 0.20000000000000001
+      "aggro": 0.2
     },
     "stoneworm": {
       "hp": 2200,
       "apiercing": 800,
-      "frequency": 0.59999999999999998,
+      "frequency": 0.6,
       "damage_type": "physical",
       "skin": "stoneworm",
       "xp": 2400,
@@ -8656,7 +8656,7 @@ var G = {
       "respawn": 4,
       "range": 120,
       "attack": 120,
-      "aggro": 0.050000000000000003
+      "aggro": 0.05
     },
     "nelemental": {
       "hp": 80000,
@@ -8670,7 +8670,7 @@ var G = {
       "respawn": 1,
       "range": 80,
       "attack": 1800,
-      "aggro": 0.20000000000000001
+      "aggro": 0.2
     }
   },
   "skills": {
@@ -9205,7 +9205,7 @@ var G = {
       "explanation": "Use your agility to quickly stab your opponent between your devastating attacks!",
       "cooldown": 250,
       "skin": "skill_quickstab",
-      "dmultiplier": 0.35999999999999999,
+      "dmultiplier": 0.36,
       "class": ["rogue"],
       "name": "Quick Stab",
       "target": true,
@@ -9310,7 +9310,6 @@ var G = {
     "94": 50000000000,
     "162": 42000000000000,
     "96": 93000000000,
-    "41": 900000,
     "1": 200,
     "9": 1100,
     "146": 13000000000000,
@@ -9345,6 +9344,7 @@ var G = {
     "28": 58000,
     "29": 72000,
     "4": 380,
+    "118": 1400000000000,
     "59": 38000000,
     "58": 31000000,
     "55": 16000000,
@@ -9368,7 +9368,7 @@ var G = {
     "80": 1600000000,
     "81": 2000000000,
     "119": 1500000000000,
-    "118": 1400000000000,
+    "87": 7900000000,
     "84": 3900000000,
     "85": 4900000000,
     "7": 720,
@@ -9424,7 +9424,7 @@ var G = {
     "42": 1100000,
     "43": 1300000,
     "40": 720000,
-    "87": 7900000000,
+    "41": 900000,
     "5": 470,
     "200": 940000000000000,
     "77": 1000000000,
