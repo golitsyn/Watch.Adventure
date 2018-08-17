@@ -4571,6 +4571,18 @@ function api_call(h, c, g) {
         return
       }
       ui_error("An Unknown Error [HTTP]");
+      error_ct = l;
+      if (h != "log_error") {
+        setTimeout(function(m) {
+          return function() {
+            api_call("log_error", {
+              type: "api_call_error",
+              err: m.status + " " + m.statusText,
+              info: m.getAllResponseHeaders()
+            })
+          }
+        }(l), 40000)
+      }
       if (j) {
         j.removeClass("disable")
       }
