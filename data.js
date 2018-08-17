@@ -1486,7 +1486,7 @@ var G = {
       }]
     }
   },
-  "version": 327,
+  "version": 328,
   "conditions": {
     "tarot_5swords": {
       "name": "Tarot Card",
@@ -2360,7 +2360,7 @@ var G = {
     },
     "pack_20": {
       "rows": 39,
-      "file": "/images/tiles/items/pack_20.png?v=28",
+      "file": "/images/tiles/items/pack_20.png?v=29",
       "columns": 16,
       "size": 20
     },
@@ -2928,12 +2928,13 @@ var G = {
       "type": "weapon"
     },
     "5bucks": {
-      "e": 1,
-      "name": "Old Money",
-      "g": 5,
-      "explanation": "It's not gold. Must be worthless.",
       "s": true,
+      "rare": true,
+      "name": "Old Paper Money",
+      "g": 5,
       "skin": "5bucks",
+      "e": 1,
+      "explanation": "It's not gold. Must be worthless.",
       "type": "misc"
     },
     "armorbox": {
@@ -7286,7 +7287,7 @@ var G = {
     "run_code": ["skills", 1, 10],
     "gloves": ["pack_20", 2, 2],
     "goldbooster_a": ["pack_20", 5, 27],
-    "5bucks": ["pack_20", 5, 26],
+    "5bucks": ["pack_20", 8, 36],
     "intring": ["pack_20", 15, 15],
     "xmas": ["skills", 2, 9],
     "scroll4": ["pack_20", 4, 24],
@@ -7910,8 +7911,8 @@ var G = {
       "xp": 7200,
       "speed": 10,
       "name": "Froggie",
-      "evasion": 10,
-      "respawn": 360,
+      "evasion": 99,
+      "respawn": 960,
       "range": 15,
       "attack": 24,
       "aggro": 0
@@ -9689,9 +9690,9 @@ var G = {
     },
     "test": {
       "rows": 1,
-      "columns": 1,
-      "file": "/images/tiles/monsters/demonkingt2.png",
-      "matrix": [["test"]]
+      "columns": 4,
+      "file": "/images/tiles/monsters/ninja_turtles1.png",
+      "matrix": [["t1", "test", "t3", "t4"]]
     },
     "monsterbird2": {
       "skip": 1,
@@ -9713,6 +9714,12 @@ var G = {
       "columns": 1,
       "file": "/images/tiles/monsters/monster_raptor1.png",
       "matrix": [["greenlizard"]]
+    },
+    "deepsea": {
+      "rows": 1,
+      "columns": 1,
+      "file": "/images/tiles/monsters/deep_sea_king.png",
+      "matrix": [["deepsea"]]
     },
     "monsters1": {
       "rows": 2,
