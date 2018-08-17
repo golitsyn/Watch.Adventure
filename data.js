@@ -1486,7 +1486,7 @@ var G = {
       }]
     }
   },
-  "version": 326,
+  "version": 327,
   "conditions": {
     "tarot_5swords": {
       "name": "Tarot Card",
@@ -2963,7 +2963,7 @@ var G = {
       "g": 8000,
       "explanation": "Adds Evasion to an armor with a Stat attribute.",
       "s": true,
-      "skin": "vitscroll",
+      "skin": "evasionscroll",
       "type": "pscroll"
     },
     "x4": {
@@ -3731,7 +3731,7 @@ var G = {
       "g": 8000,
       "explanation": "Adds Reflection to an armor with a Stat attribute.",
       "s": true,
-      "skin": "vitscroll",
+      "skin": "reflectionscroll",
       "type": "pscroll"
     },
     "angelwings": {
@@ -7081,6 +7081,7 @@ var G = {
     "emptyjar": ["pack_20", 14, 35],
     "shade_earring": ["pack_20", 5, 17],
     "armorbox": ["pack_20", 1, 26],
+    "evasionscroll": ["pack_20", 6, 23],
     "throwingstars": ["pack_20", 4, 9],
     "shade_cscroll": ["pack_20", 1, 24],
     "essenceofdarkness": ["pack_20", 11, 34],
@@ -7103,6 +7104,7 @@ var G = {
     "poison": ["pack_20", 8, 21],
     "carrotsword": ["pack_20", 11, 30],
     "textures": ["stone", "stand0_texture", "standx_texture", "standg_texture"],
+    "lifestealscroll": ["pack_20", 6, 23],
     "qubics": ["pack_20", 0, 36],
     "skill_corrosion": ["skills", 4, 4],
     "xptome": ["pack_20", 14, 27],
@@ -7392,6 +7394,7 @@ var G = {
     "tarot": ["pack_20", 11, 24],
     "warmscarf": ["pack_20", 0, 20],
     "oozingterror": ["pack_20", 6, 10],
+    "reflectionscroll": ["pack_20", 6, 23],
     "angelwings": ["pack_20", 8, 6],
     "xhelmet": ["pack_20", 5, 0],
     "t2fist": ["pack_20", 2, 11],
@@ -9686,9 +9689,9 @@ var G = {
     },
     "test": {
       "rows": 1,
-      "columns": 5,
-      "file": "/images/tiles/characters/merch_male_cart1.png",
-      "matrix": [["m1"]]
+      "columns": 1,
+      "file": "/images/tiles/monsters/demonkingt2.png",
+      "matrix": [["test"]]
     },
     "monsterbird2": {
       "skip": 1,
