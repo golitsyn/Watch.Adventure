@@ -1401,10 +1401,10 @@ function render_item(r, b) {
       }
     }(u.gives || []).forEach(function(f) {
       if (f[0] == "hp") {
-        j += bold_prop_line("HP", "+" + f[1], colors.hp)
+        j += bold_prop_line("HP", "+" + to_pretty_num(f[1]), colors.hp)
       }
       if (f[0] == "mp") {
-        j += bold_prop_line("MP", "+" + f[1], colors.mp)
+        j += bold_prop_line("MP", "+" + to_pretty_num(f[1]), colors.mp)
       }
     });
     if (d.gold) {
