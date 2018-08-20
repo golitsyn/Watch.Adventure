@@ -1486,7 +1486,7 @@ var G = {
       }]
     }
   },
-  "version": 328,
+  "version": 329,
   "conditions": {
     "tarot_5swords": {
       "name": "Tarot Card",
@@ -9691,7 +9691,7 @@ var G = {
     "test": {
       "rows": 1,
       "columns": 4,
-      "file": "/images/tiles/monsters/ninja_turtles1.png",
+      "file": "/images/tiles/characters/ninja_turtles1.png",
       "matrix": [["t1", "test", "t3", "t4"]]
     },
     "monsterbird2": {
