@@ -1842,6 +1842,17 @@ function the_door() {
     }
   }, 3300)
 }
+function v_shake_minor() {
+  function b(c) {
+    return function() {
+      stage.y += c;
+      character.real_y -= c
+    }
+  }
+  var a = 0;[-1, 1].forEach(function(c) {
+    setTimeout(b(c), a++ * 20)
+  })
+}
 function v_shake() {
   function b(c) {
     return function() {
@@ -1861,6 +1872,16 @@ function v_shake_i(c) {
   }
   var a = 0;[-1, 1, -2, 2, -2, 2, -1, 1].forEach(function(f) {
     setTimeout(b(c, f), a++ * 40)
+  })
+}
+function v_shake_i_minor(c) {
+  function b(d, f) {
+    return function() {
+      d.y -= f
+    }
+  }
+  var a = 0;[-1, 1].forEach(function(f) {
+    setTimeout(b(c, f), a++ * 20)
   })
 }
 function v_dive() {
@@ -2028,13 +2049,6 @@ function set_direction(a, c) {
       }
     }, 60)
   }
-}
-function direction_logic(a, b, c) {
-  if (a.moving) {
-    return
-  }
-  a.angle = Math.atan2(b.real_y - a.real_y, b.real_x - a.real_x) * 180 / Math.PI;
-  set_direction(a, c)
 }
 function free_children(b) {
   if (!b.children) {
@@ -2448,6 +2462,20 @@ function close_merchant() {
     close: 1
   })
 }
+function dice(c, b, a) {
+  if (c == 1) {
+    c = "up"
+  }
+  if (c == 2) {
+    c = "down"
+  }
+  socket.emit("bet", {
+    type: "dice",
+    dir: c,
+    num: b,
+    gold: a
+  })
+}
 function upgrade() {
   if (u_item == null || (u_scroll == null && u_offering == null)) {
     d_text("INVALID", character)
@@ -2720,7 +2748,7 @@ function esc_pressed() {
         $("#rightcornerui").html("");
         topright_npc = false
       } else {
-        if (topleft_npc) {
+        if (topleft_npc && topleft_npc != "dice") {
           topleft_npc = false
         } else {
           if (ctarget && ctarget.type == "character") {
@@ -2731,6 +2759,10 @@ function esc_pressed() {
             } else {
               if (skillsui) {
                 draw_trigger(render_skills)
+              } else {
+                if (topleft_npc == "dice") {
+                  topleft_npc = false
+                }
               }
             }
           }
@@ -4623,6 +4655,7 @@ var warned = {},
 
 function new_map_logic(a, b) {
   map_info = b.info || {};
+  console.log(JSON.stringify(map_info));
   if (current_map == "abtesting" && !abtesting) {
     abtesting = {
       A: 0,
@@ -4642,7 +4675,18 @@ function new_map_logic(a, b) {
     add_log("Resort is a prototype with work in progress", "#ADA9E4")
   }
   if (current_map == "tavern") {
+    if (map_info.dice == "roll") {
+      map_machines.dice.shuffling = true, map_machines.dice.num = undefined, delete map_machines.dice.lock_start, map_machines.dice.locked = 0
+    }
+    if (map_info.dice == "lock") {
+      map_machines.dice.shuffling = true, map_machines.dice.num = map_info.num, map_machines.dice.lock_start = future_ms(-1200), map_machines.dice.locked = 0
+    }
+    if (map_info.dice == "bets") {
+      map_machines.dice.shuffling = false, map_machines.dice.num = map_info.num, map_machines.dice.seconds = map_info.seconds, map_machines.dice.count_start = future_s(-map_info.seconds)
+    }
     add_log("Tavern is a prototype with work in progress", "#63ABE4")
+  } else {
+    dice_bet.active = false, topleft_npc = false
   }
   if (is_pvp && (a == "start" || a == "welcome")) {
     add_log("This is a PVP Server. Be careful!", "#E1664C")
