@@ -535,6 +535,14 @@ function accept_party_request(name) {
   });
 }
 
+function unfriend(name) // instead of a name, an owner id also works, this is currently the only way to unfriend someone [20/08/18]
+{
+  parent.socket.emit('friend', {
+    event: 'unfriend',
+    name: name
+  });
+}
+
 function respawn() {
   parent.socket.emit('respawn');
 }
