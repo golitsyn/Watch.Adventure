@@ -7,7 +7,7 @@ var G = {
     "dungeon": "/images/tiles/map/dungeon.png?v=3",
     "stands": "/images/tiles/items/stands.png?v=3",
     "winter": "/images/tiles/map/winter.png?v=4",
-    "custom": "/images/tiles/map/custom.png?v=10",
+    "custom": "/images/tiles/map/custom.png?v=11",
     "outside": "/images/tiles/map/outside.png?v=4",
     "doors": "/images/tiles/map/doors.png",
     "new": "/images/tiles/map/new.png?v=11",
@@ -910,7 +910,7 @@ var G = {
         "set": "custom",
         "y": -209,
         "x": -169,
-        "frames": [[0, 256, 80, 44], [80, 256, 80, 44], [160, 256, 80, 44]],
+        "frames": [[0, 256, 80, 44], [80, 256, 80, 44], [160, 256, 80, 44], [240, 256, 80, 44], [320, 256, 80, 44], [400, 256, 80, 44]],
         "subframes": [[11, 301, 7, 14], [22, 301, 7, 14], [33, 301, 7, 14], [44, 301, 7, 14], [55, 301, 7, 14], [66, 301, 7, 14], [77, 301, 7, 14], [88, 301, 7, 14], [99, 301, 7, 14], [110, 301, 7, 14], [5, 310, 1, 1]],
         "type": "dice"
       }, {
@@ -1486,7 +1486,7 @@ var G = {
       }]
     }
   },
-  "version": 329,
+  "version": 330,
   "conditions": {
     "tarot_5swords": {
       "name": "Tarot Card",
@@ -5858,7 +5858,7 @@ var G = {
     },
     "platinumnugget": {
       "name": "Platinum Nugget",
-      "g": 3000000,
+      "g": 5200000,
       "explanation": "Ideal for crafting",
       "s": true,
       "skin": "platinumnugget",
@@ -9571,7 +9571,7 @@ var G = {
     "monsters2": {
       "rows": 2,
       "columns": 4,
-      "file": "/images/tiles/monsters/monster2.png?v=2",
+      "file": "/images/tiles/monsters/monster2.png?v=3",
       "matrix": [["crab", "tortoise", "squig", "croc"], ["frog", "squigtoad", "poisio", "armadillo"]]
     },
     "snow_angel": {
