@@ -953,8 +953,87 @@ function render_compound_shrine() {
     render_inventory()
   }
 }
+var dice_bet = {
+  active: false,
+  dir: 1
+};
+
+function on_dice_change() {
+  if (topleft_npc != "dice") {
+    return
+  }
+  var b = min(99.99, max(0, parseFloat($(".dicenum").html()))),
+    d;
+  var a = parseInt($(".dicegold").html().replace_all(",", ""));
+  if (!a) {
+    a = 100000
+  }
+  a = max(10000, a);
+  $(".dicegold").html(to_pretty_num(a));
+  dice_bet.gold = a;
+  var e = b.toFixed(2);
+  if (e.length != 5) {
+    e = "0" + e
+  }
+  $(".dicenum").html(e);
+  dice_bet.num = e;
+  if (dice_bet.dir == 1) {
+    d = 100 / (100 - b);
+    $(".diceup").css("border-color", "#A7C16D");
+    $(".dicedown").css("border-color", "gray")
+  } else {
+    d = 100 / b;
+    $(".diceup").css("border-color", "gray");
+    $(".dicedown").css("border-color", "#A7C16D")
+  }
+  d = min(d, 10000);
+  var c = d.toFixed(2);
+  if (parseFloat(c) == parseFloat(d.toFixed(1))) {
+    c = d.toFixed(1)
+  }
+  if (parseFloat(c) == parseInt(d)) {
+    c = parseInt(d)
+  }
+  $(".dicexx").html("FOR " + c + "X");
+  if (dice_bet.active) {
+    $(".diceb").css("border-color", "gold")
+  } else {
+    $(".diceb").css("border-color", "gray")
+  }
+}
+function on_dice_bet() {
+  var b = min(99.99, max(0, parseFloat($(".dicenum").html())));
+  var a = parseInt($(".dicegold").html().replace_all(",", ""));
+  dice(dice_bet.dir, b, a)
+}
 function render_dice() {
-  add_log("Dice!", "#B6A786")
+  var b = dice_bet.num || "50.00";
+  var a = dice_bet.gold || 100000;
+  reset_inventory(1);
+  topleft_npc = "dice";
+  rendered_target = topleft_npc;
+  c_items = e_array(3), c_scroll = null, c_offering = null;
+  c_last = 0;
+  var c = "<div style='background-color: black; border: 5px solid gray; padding: 20px; font-size: 32px; display: inline-block; vertical-align: top'>";
+  c += "<div class='mb5' align='center'>";
+  c += "<div><span class='gray'>NUMBER:</span> <div class='inline-block dicenum' contenteditable=true onblur='on_dice_change()'>" + b + "</div></div>";
+  c += "</div>";
+  c += "<div class='mb5' align='center'>";
+  c += "<div><span class='gold'>GOLD:</span> <div class='inline-block dicegold' contenteditable=true onblur='on_dice_change()'>" + to_pretty_num(a) + "</div></div>";
+  c += "</div>";
+  c += "<div class='mb5' align='center'>";
+  c += "<div class='gamebutton clickable diceup' onclick='dice_bet.dir=1; on_dice_change()' style='width: 64px;'>UP</div>";
+  c += "<div class='gamebutton clickable ml5 dicedown' onclick='dice_bet.dir=2; on_dice_change()' style='width: 64px'>DOWN</div>";
+  c += "</div>";
+  c += "<div class='mb5' align='center'>";
+  c += "<div class='gamebutton clickable diceb' onclick='on_dice_bet()' style='width: 200px;'>BET <span class='gray dicexx'>FOR 2X</span></div>";
+  c += "</div>";
+  c += "</div>";
+  $("#topleftcornerui").html(c);
+  if (!inventory) {
+    render_inventory()
+  }
+  on_dice_change()
 }
 function render_merchant(n, b, o) {
   reset_inventory(1);
