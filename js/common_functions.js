@@ -186,6 +186,13 @@ function object_sort(e, d) {
   }
   return c
 }
+function direction_logic(a, b, c) {
+  if (a.moving) {
+    return
+  }
+  a.angle = Math.atan2(get_y(b) - get_y(a), get_x(b) - get_x(a)) * 180 / Math.PI;
+  set_direction(a, c)
+}
 function within_xy_range(c, b) {
   if (c["in"] != b["in"]) {
     return false
@@ -1378,7 +1385,7 @@ function log_trace(a, b) {
       console.log(b.stack)
     }
   } else {
-    console.log("log_trace: argument is not an object")
+    console.log("log_trace: argument is not an object on :" + a)
   }
   console.log("====================\n")
 }
