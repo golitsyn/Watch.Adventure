@@ -1012,8 +1012,6 @@ function render_dice() {
   reset_inventory(1);
   topleft_npc = "dice";
   rendered_target = topleft_npc;
-  c_items = e_array(3), c_scroll = null, c_offering = null;
-  c_last = 0;
   var c = "<div style='background-color: black; border: 5px solid gray; padding: 20px; font-size: 32px; display: inline-block; vertical-align: top'>";
   c += "<div class='mb5' align='center'>";
   c += "<div><span class='gray'>NUMBER:</span> <div class='inline-block dicenum' contenteditable=true onblur='on_dice_change()'>" + b + "</div></div>";
@@ -1030,6 +1028,37 @@ function render_dice() {
   c += "</div>";
   c += "</div>";
   $("#topleftcornerui").html(c);
+  if (!inventory) {
+    render_inventory()
+  }
+  on_dice_change()
+}
+function on_donate_change() {
+  if (topleft_npc != "donate") {
+    return
+  }
+  var a = parseInt($(".dgold").html().replace_all(",", ""));
+  if (!a) {
+    a = 100000
+  }
+  a = max(1, a);
+  $(".dgold").html(to_pretty_num(a));
+  dice_bet.gold = a
+}
+function render_donate() {
+  var a = 10000000;
+  reset_inventory(1);
+  topleft_npc = "donate";
+  rendered_target = topleft_npc;
+  var b = "<div style='background-color: black; border: 5px solid gray; padding: 20px; font-size: 32px; display: inline-block; vertical-align: top'>";
+  b += "<div class='mb5' align='center'>";
+  b += "<div><span class='gold'>GOLD:</span> <div class='inline-block dgold' contenteditable=true onblur='on_donate_change()'>" + to_pretty_num(a) + "</div></div>";
+  b += "</div>";
+  b += "<div class='mb5' align='center'>";
+  b += "<div class='gamebutton clickable diceb' onclick='donate()' style='width: 160px; margin-top: 20px'>DONATE</div>";
+  b += "</div>";
+  b += "</div>";
+  $("#topleftcornerui").html(b);
   if (!inventory) {
     render_inventory()
   }
@@ -2923,6 +2952,9 @@ function render_interaction(h, f) {
     if (h.button) {
       interaction_onclick = h.onclick, g += "<span style='float: right; margin-top: 5px'><div class='slimbutton' onclick='interaction_onclick()'>" + h.button + "</div></span>"
     }
+    if (h.button2) {
+      interaction_onclick2 = h.onclick2, g += "<span style='float: right; margin-top: 5px; margin-right: 5px'><div class='slimbutton' onclick='interaction_onclick2()'>" + h.button2 + "</div></span>"
+    }
   } else {
     if (h == "seashells") {
       g += "Ah, I love the sea, so calming. As a kid, I loved spending time on the beach. Collecting seashells. If you happen to find some, I would love to add them to my collection.";
@@ -3350,7 +3382,7 @@ function sprite_image(b, a) {
       a = {}
     }
     if (!IID[b]) {
-      b = "tf_template"
+      b = "naked"
     }
     return "<div style='display: inline-block; width: 39px; height: 50px; overflow: hidden'><img style='margin-left: " + (-IID[b][2] - IID[b][4] - Math.ceil((IID[b][4] - 39) / 2)) + "px; margin-top: " + (-IID[b][3] - IID[b][5] + 50) + "px; width: " + IID[b][0] + "px; height: " + IID[b][1] + "px;' src='" + IID[b][6] + "'/></div>";
     return "<div style='display: inline-block; width: " + IID[b][4] + "px; height: " + IID[b][5] + "px; overflow: hidden'><img style='margin-left: " + (-IID[b][2] - IID[b][4]) + "px; margin-top: " + (-IID[b][3]) + "px; width: " + IID[b][0] + "px; height: " + IID[b][1] + "px;' src='" + IID[b][6] + "'/></div>"
