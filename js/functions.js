@@ -1842,6 +1842,22 @@ function the_door() {
     }
   }, 3300)
 }
+function the_lever() {
+  socket.emit("interaction", "the_lever");
+  if (animatables.the_lever) {
+    h_minor()
+  }
+  draw_timeout(function() {
+    if (animatables.the_lever) {
+      set_texture(animatables.the_lever, "1")
+    }
+  }, 100);
+  draw_timeout(function() {
+    if (animatables.the_lever) {
+      set_texture(animatables.the_lever, "2")
+    }
+  }, 200)
+}
 function v_shake_minor() {
   function b(c) {
     return function() {
@@ -1963,6 +1979,16 @@ function flurry(d) {
   shuffle(a);
   a.forEach(function(f) {
     setTimeout(c(f[0], f[1]), b++ * 16)
+  })
+}
+function h_minor() {
+  function b(c) {
+    return function() {
+      stage.x += c
+    }
+  }
+  var a = 0;[-1, 1, -1, 1, -1, 1, -1, 1].forEach(function(c) {
+    setTimeout(b(c), a++ * 30)
   })
 }
 function h_shake() {
@@ -2460,6 +2486,18 @@ function open_merchant(a) {
 function close_merchant() {
   socket.emit("merchant", {
     close: 1
+  })
+}
+function donate(a) {
+  if (a === undefined) {
+    var a = parseInt($(".dgold").html().replace_all(",", ""));
+    if (!a) {
+      a = 100000
+    }
+    a = max(1, a)
+  }
+  socket.emit("donate", {
+    gold: a
   })
 }
 function dice(c, b, a) {
