@@ -1303,6 +1303,24 @@ function shuffle(c) {
   }
   return c
 }
+function random_binary() {
+  var b = "";
+  for (var a = 0; a < 2 + parseInt(Math.random() * 12); a++) {
+    if (Math.random() < 0.5) {
+      b += "0"
+    } else {
+      b += "1"
+    }
+  }
+  return b
+}
+function random_binaries() {
+  var b = "";
+  for (var a = 0; a < 7 + parseInt(Math.random() * 23); a++) {
+    b += random_binary() + " "
+  }
+  return b
+}
 function randomStr(a) {
   var e = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz",
     c = "ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz";
