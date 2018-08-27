@@ -2210,16 +2210,19 @@ function buy_with_gold(a, b) {
   });
   $(".buynum").html($(".buynum").data("q"))
 }
-function sell(a, b) {
-  if (!b) {
-    b = 1
+function sell(a, c) {
+  if (!c) {
+    c = 1
   }
   socket.emit("sell", {
     num: a,
-    quantity: b
+    quantity: c
   });
-  $(".sellnum").html((parseInt($(".sellnum").data("q")) - b) + "");
-  $(".sellnum").data("q", $(".sellnum").html())
+  try {
+    $(".sellnum").html(max(0, character.items[a].q - c))
+  } catch (b) {
+    $(".sellnum").html(0)
+  }
 }
 function call_code_function(c, b, a, f) {
   try {
@@ -5195,6 +5198,17 @@ jQuery.fn.rval = function(a) {
   }
   b.val(a);
   return c
+};
+jQuery.fn.cfocus = function() {
+  var a = jQuery(this).html();
+  if (!(a || "").replace_all(" ", "").length) {
+    var b = "1";
+    if (jQuery(this).data("default") !== undefined) {
+      b = jQuery(this).data("default")
+    }
+    jQuery(this).html(b)
+  }
+  return jQuery(this).focus()
 };
 jQuery.fn.rfval = function(a) {
   var b = jQuery(this).rval(a);
