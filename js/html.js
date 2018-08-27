@@ -416,7 +416,7 @@ function render_gold_npc() {
   e_item = null;
   var a = "<div style='background-color: black; border: 5px solid gray; padding: 20px; font-size: 24px; display: inline-block; vertical-align: top; text-align: center' onclick='stpr(event); cfocus(\".npcgold\")'>";
   a += "<div style='font-size: 36px; margin-bottom: 10px'><span style='color:gold'>GOLD:</span> " + (character.user && to_pretty_num(character.user.gold) || "Unavailable") + "</div>";
-  a += "<div style='font-size: 36px; margin-bottom: 10px'><span style='color:gray'>Amount:</span> <div contenteditable='true' class='npcgold inline-block'>0</div></div>";
+  a += "<div style='font-size: 36px; margin-bottom: 10px'><span class='gray clickable' onclick='$(\".npcgold\").cfocus()'>Amount:</span> <div contenteditable='true' class='npcgold inline-block' data-default='0'>0</div></div>";
   a += "<div><div class='gamebutton clickable' onclick='deposit()'>DEPOSIT</div><div class='gamebutton clickable ml5' onclick='withdraw()'>WITHDRAW</div></div>";
   a += "</div>";
   $("#topleftcornerui").html(a);
@@ -1014,10 +1014,10 @@ function render_dice() {
   rendered_target = topleft_npc;
   var c = "<div style='background-color: black; border: 5px solid gray; padding: 20px; font-size: 32px; display: inline-block; vertical-align: top'>";
   c += "<div class='mb5' align='center'>";
-  c += "<div><span class='gray'>NUMBER:</span> <div class='inline-block dicenum' contenteditable=true onblur='on_dice_change()'>" + b + "</div></div>";
+  c += "<div><span class='gray clickable' onclick='$(\".dicenum\").cfocus()'>NUMBER:</span> <div class='inline-block dicenum' contenteditable=true onblur='on_dice_change()'>" + b + "</div></div>";
   c += "</div>";
   c += "<div class='mb5' align='center'>";
-  c += "<div><span class='gold'>GOLD:</span> <div class='inline-block dicegold' contenteditable=true onblur='on_dice_change()'>" + to_pretty_num(a) + "</div></div>";
+  c += "<div><span class='gold clickable' onclick='$(\".dicegold\").cfocus()'>GOLD:</span> <div class='inline-block dicegold' contenteditable=true onblur='on_dice_change()'>" + to_pretty_num(a) + "</div></div>";
   c += "</div>";
   c += "<div class='mb5' align='center'>";
   c += "<div class='gamebutton clickable diceup' onclick='dice_bet.dir=1; on_dice_change()' style='width: 64px;'>UP</div>";
@@ -1052,7 +1052,7 @@ function render_donate() {
   rendered_target = topleft_npc;
   var b = "<div style='background-color: black; border: 5px solid gray; padding: 20px; font-size: 32px; display: inline-block; vertical-align: top'>";
   b += "<div class='mb5' align='center'>";
-  b += "<div><span class='gold'>GOLD:</span> <div class='inline-block dgold' contenteditable=true onblur='on_donate_change()'>" + to_pretty_num(a) + "</div></div>";
+  b += "<div><span class='gold clickable' onclick='$(\".dgold\").cfocus()'>GOLD:</span> <div class='inline-block dgold' contenteditable=true onblur='on_donate_change()'>" + to_pretty_num(a) + "</div></div>";
   b += "</div>";
   b += "<div class='mb5' align='center'>";
   b += "<div class='gamebutton clickable diceb' onclick='donate()' style='width: 160px; margin-top: 20px'>DONATE</div>";
@@ -1652,16 +1652,16 @@ function render_item(r, b) {
     if (b.trade && n) {
       j += "<div style='margin-top: 5px'>";
       if ((n.q || 1) > 1) {
-        j += "<div><span class='gray'>Q:</span> <div class='inline-block tradenum' contenteditable=true data-q='" + n.q + "'>" + n.q + "</div></div>"
+        j += "<div><span class='gray clickable' onclick='$(\".tradenum\").cfocus()'>Q:</span> <div class='inline-block tradenum' contenteditable=true>" + n.q + "</div></div>"
       }
-      j += "<div><span style='color:gold'>GOLD" + (((n.q || 1) > 1) && " [EACH]" || "") + ":</span> <div class='inline-block sellprice editable' contenteditable=true>1</div></div>";
+      j += "<div><span class='gold clickable' onclick='$(\".sellprice\").focus()'>GOLD" + (((n.q || 1) > 1) && " [EACH]" || "") + ":</span> <div class='inline-block sellprice editable' contenteditable=true>1</div></div>";
       j += "<div><span class='clickable' onclick='trade(\"" + b.slot + '","' + b.num + '",$(".sellprice").shtml(),$(".tradenum").shtml())\'>PUT UP FOR SALE</span></div>';
       j += "</div>"
     }
     if (in_arr(b.slot, trade_slots) && n && n.price && b.from_player && !n.b) {
       c = true;
       if ((n.q || 1) > 1) {
-        j += "<div><span class='gray'>Q:</span> <div class='inline-block tradenum' contenteditable=true data-q='1'>1</div></div>"
+        j += "<div><span class='gray clickable' onclick='$(\".tradenum\").cfocus()'>Q:</span> <div class='inline-block tradenum' contenteditable=true>1</div></div>"
       }
       j += "<div style='color: gold'>" + to_pretty_num(n.price) + " GOLD" + ((n.q || 1) > 1 && " <span style='color: white'>[EACH]</span>" || "") + "</div>";
       j += "<div><span class='clickable itu' onclick='trade_buy(\"" + b.slot + '","' + b.from_player + '","' + (n.rid || "") + '",$(".tradenum").html())\'>BUY</span></div>'
@@ -1673,7 +1673,7 @@ function render_item(r, b) {
       }
       c = true;
       if (l) {
-        j += "<div><span class='gray'>Q:</span> <div class='inline-block tradenum' contenteditable=true data-q='1'>1</div></div>"
+        j += "<div><span class='gray clickable' onclick='$(\".tradenum\").cfocus()'>Q:</span> <div class='inline-block tradenum' contenteditable=true>1</div></div>"
       }
       j += "<div style='color: gold'>" + to_pretty_num(n.price) + " GOLD" + (l && " <span style='color: white'>[EACH]</span>" || "") + "</div>";
       j += "<div><span class='clickable ibu' onclick='trade_sell(\"" + b.slot + '","' + b.from_player + '","' + (n.rid || "") + '",$(".tradenum").html())\'>SELL</span></div>'
@@ -1709,7 +1709,7 @@ function render_item(r, b) {
             l = 100
           }
           j += "<div style='margin-top: 5px'><!--<input type='number' value='1' class='buynum itemnumi'/> -->";
-          j += "<span class='gray'>Q:</span> <div class='inline-block buynum' contenteditable=true data-q='" + l + "'>" + l + "</div> <span class='gray'>|</span> ";
+          j += "<span class='gray clickable' onclick='$(\".buynum\").cfocus()'>Q:</span> <div class='inline-block buynum' contenteditable=true>" + l + "</div> <span class='gray'>|</span> ";
           j += "<span class='clickable' onclick='" + t + '("' + v + '",parseInt($(".buynum").html()))\'>BUY</span> ';
           j += "</div>"
         } else {
@@ -1734,7 +1734,7 @@ function render_item(r, b) {
       if (u.s && n.q) {
         var l = n.q;
         j += "<div style='margin-top: 5px'>";
-        j += "<span class='gray'>Q:</span> <div class='inline-block sellnum' contenteditable=true data-q='" + l + "'>" + l + "</div> <span class='gray'>|</span> ";
+        j += "<span class='gray clickable' onclick='$(\".sellnum\").cfocus()'>Q:</span> <div class='inline-block sellnum' contenteditable=true>" + l + "</div> <span class='gray'>|</span> ";
         j += "<span class='clickable' onclick='sell(\"" + b.num + '",parseInt($(".sellnum").html()))\'>SELL</span> ';
         j += "</div>"
       } else {
@@ -1889,12 +1889,12 @@ function render_wishlist_item(b, a) {
   c += "<div></div>";
   c += "<div style='color: #E4E4E4; border-bottom: 2px dashed gray; margin-bottom: 3px; display: inline-block' class='cbold'>" + d.name + "</div>";
   c += "</div>";
-  c += "<div><span class='gray'>Q:</span> <div class='inline-block wnumq' contenteditable=true data-q='1'>1</div></div>";
-  c += "<div><span style='color:gold'>GOLD" + (d.s && " [EACH]" || "") + ":</span> <div class='inline-block wprice editable' contenteditable=true>" + (calculate_item_value({
+  c += "<div><span class='gray clickable' onclick='$(\".wnumq\").cfocus()'>Q:</span> <div class='inline-block wnumq' contenteditable=true>1</div></div>";
+  c += "<div><span class='gold clickable' onclick='$(\".wprice\").cfocus()'>GOLD" + (d.s && " [EACH]" || "") + ":</span> <div class='inline-block wprice editable' contenteditable=true>" + (calculate_item_value({
     name: b
   }) + 1) + "</div></div>";
   if (d.compound || d.upgrade) {
-    c += "<div><span style='color:#9E7BCA'>LEVEL:</span> <div class='inline-block wlevel editable' contenteditable=true>0</div></div>"
+    c += "<div><span style='color:#9E7BCA' class='clickable' onclick='$(\".wlevel\").cfocus()'>LEVEL:</span> <div class='inline-block wlevel editable' contenteditable=true data-default='0'>0</div></div>"
   }
   c += "<div><span class='clickable' onclick='wishlist_form(" + a + ',"' + b + "\")'>WISHLIST</span></div>";
   c += "</div>";
