@@ -3641,7 +3641,7 @@ function update_sprite(o) {
       set_texture(o, o.frame)
     }
   }
-  if (o.mtype) {
+  if (o.mtype && !(no_graphics || paused)) {
     if (o.mtype == "dice") {
       if (o.shuffling) {
         var f = false;
