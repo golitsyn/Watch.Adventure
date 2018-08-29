@@ -897,4 +897,540 @@ function can_move(l, t) {
         s = -l.base.h;
       m_line_x = max;
       if (v > w) {
-        u = -l.base.h, s = l.base.h, m
+        u = -l.base.h, s = l.base.h, mcy = m_line_x = min
+      }
+      var d = l.base.vn,
+        b = -l.base.v;
+      m_line_y = max;
+      if (e > f) {
+        d = -l.base.v, b = l.base.vn, m_line_y = min
+      }
+      m_dx = -s;
+      m_dy = -b;
+      if (!n || !can_move({
+        map: l.map,
+        x: v + s,
+        y: e + d,
+        going_x: v + s,
+        going_y: e + b
+      }, 1)) {
+        n = false
+      }
+      if (!n || !can_move({
+        map: l.map,
+        x: v + u,
+        y: e + b,
+        going_x: v + s,
+        going_y: e + b
+      }, 1)) {
+        n = false
+      }
+      m_line_x = m_line_y = false
+    }
+    return n
+  }
+  function m(y, c, A, z) {
+    line_hit_x = m_line_x(y, A), line_hit_x = m_line_x(line_hit_x + 6 * EPS, line_hit_x - 6 * EPS) + m_dx;
+    line_hit_y = m_line_y(c, z), line_hit_y = m_line_y(line_hit_y + 6 * EPS, line_hit_y - 6 * EPS) + m_dy
+  }
+  for (var r = bsearch_start(a.x_lines || [], k); r < (a.x_lines || []).length; r++) {
+    var o = a.x_lines[r];
+    if (o[0] == v && (o[1] <= e && o[2] >= e || o[0] == w && f <= o[1] && e > o[1])) {
+      if (m_line_y) {
+        m(o[0], o[1], o[0], o[2])
+      }
+      return false
+    }
+    if (k > o[0]) {
+      continue
+    }
+    if (j < o[0]) {
+      break
+    }
+    q = f + (e - f) * (o[0] - w) / (v - w + REPS);
+    if (!(o[1] - EPS <= q && q <= o[2] + EPS)) {
+      continue
+    }
+    if (m_line_y) {
+      m(o[0], o[1], o[0], o[2])
+    }
+    return false
+  }
+  for (var r = bsearch_start(a.y_lines || [], h); r < (a.y_lines || []).length; r++) {
+    var o = a.y_lines[r];
+    if (o[0] == e && (o[1] <= v && o[2] >= v || o[0] == f && w <= o[1] && v > o[1])) {
+      if (m_line_x) {
+        m(o[1], o[0], o[2], o[0])
+      }
+      return false
+    }
+    if (h > o[0]) {
+      continue
+    }
+    if (g < o[0]) {
+      break
+    }
+    q = w + (v - w) * (o[0] - f) / (e - f + REPS);
+    if (!(o[1] - EPS <= q && q <= o[2] + EPS)) {
+      continue
+    }
+    if (m_line_x) {
+      m(o[1], o[0], o[2], o[0])
+    }
+    return false
+  }
+  return true
+}
+function closest_line(c, a, d) {
+  var b = 16000;[[0, 16000], [0, -16000], [16000, 0], [-16000, 0]].forEach(function(f) {
+    var j = f[0],
+      g = f[1];
+    var e = calculate_move({
+      map: c,
+      x: a,
+      y: d
+    }, a + j, d + g);
+    var h = point_distance(a, d, e.x, e.y);
+    if (h < b) {
+      b = h
+    }
+  });
+  return b
+}
+function unstuck_logic(a) {
+  if (!can_move({
+    map: a.map,
+    x: get_x(a),
+    y: get_y(a),
+    going_x: get_x(a),
+    going_y: get_y(a) + EPS / 2,
+    base: a.base
+  })) {
+    var b = false;
+    if (can_move({
+      map: a.map,
+      x: get_x(a),
+      y: get_y(a) + 8.1,
+      going_x: get_x(a),
+      going_y: get_y(a) + 8.1 + EPS / 2,
+      base: a.base
+    })) {
+      set_xy(a, get_x(a), get_y(a) + 8.1);
+      b = true
+    } else {
+      if (can_move({
+        map: a.map,
+        x: get_x(a),
+        y: get_y(a) - 8.1,
+        going_x: get_x(a),
+        going_y: get_y(a) - 8.1 - EPS / 2,
+        base: a.base
+      })) {
+        set_xy(a, get_x(a), get_y(a) - 8.1);
+        b = true
+      }
+    }
+    if (!b) {
+      console.log("#CRITICAL: Couldn't fix blink onto line issue")
+    } else {
+      console.log("Blinked onto line, fixed")
+    }
+  }
+}
+function stop_logic(b) {
+  if (!b.moving) {
+    return
+  }
+  var a = get_x(b),
+    c = get_y(b);
+  if (((b.from_x <= b.going_x && a >= b.going_x - 0.1) || (b.from_x >= b.going_x && a <= b.going_x + 0.1)) && ((b.from_y <= b.going_y && c >= b.going_y - 0.1) || (b.from_y >= b.going_y && c <= b.going_y + 0.1))) {
+    set_xy(b, b.going_x, b.going_y);
+    if (b.loop) {
+      b.going_x = b.positions[(b.last + 1) % b.positions.length][0];
+      b.going_y = b.positions[(++b.last) % b.positions.length][1];
+      b.u = true;
+      start_moving_element(b);
+      return
+    }
+    b.moving = false;
+    b.vx = b.vy = 0
+  }
+}
+function trigger(a) {
+  setTimeout(a, 0)
+}
+function to_number(a) {
+  try {
+    a = round(parseInt(a));
+    if (a < 0) {
+      return 0
+    }
+    if (!a) {
+      a = 0
+    }
+  } catch (b) {
+    a = 0
+  }
+  return a
+}
+function is_number(b) {
+  try {
+    if (!isNaN(b) && 0 + b === b) {
+      return true
+    }
+  } catch (a) {}
+  return false
+}
+function is_string(b) {
+  try {
+    return Object.prototype.toString.call(b) == "[object String]"
+  } catch (a) {}
+  return false
+}
+function is_array(b) {
+  try {
+    if (Array.isArray(b)) {
+      return true
+    }
+  } catch (c) {}
+  return false
+}
+function is_function(b) {
+  try {
+    var a = {};
+    return b && a.toString.call(b) === "[object Function]"
+  } catch (c) {}
+  return false
+}
+function is_object(b) {
+  try {
+    return b !== null && typeof b === "object"
+  } catch (a) {}
+  return false
+}
+function clone(d, b) {
+  if (!b) {
+    b = {}
+  }
+  if (!b.seen && b.seen !== []) {
+    b.seen = []
+  }
+  if (null == d) {
+    return d
+  }
+  if (b.simple_functions && is_function(d)) {
+    return "[clone]:" + d.toString().substring(0, 40)
+  }
+  if ("object" != typeof d) {
+    return d
+  }
+  if (d instanceof Date) {
+    var e = new Date();
+    e.setTime(d.getTime());
+    return e
+  }
+  if (d instanceof Array) {
+    b.seen.push(d);
+    var e = [];
+    for (var c = 0; c < d.length; c++) {
+      e[c] = clone(d[c], b)
+    }
+    return e
+  }
+  if (d instanceof Object) {
+    b.seen.push(d);
+    var e = {};
+    for (var a in d) {
+      if (d.hasOwnProperty(a)) {
+        if (b.seen.indexOf(d[a]) !== -1) {
+          e[a] = "circular_attribute[clone]";
+          continue
+        }
+        e[a] = clone(d[a], b)
+      }
+    }
+    return e
+  }
+  throw "type not supported"
+}
+function safe_stringify(d, b) {
+  var a = [];
+  try {
+    return JSON.stringify(d, function(e, f) {
+      if (f != null && typeof f == "object") {
+        if (a.indexOf(f) >= 0) {
+          return
+        }
+        a.push(f)
+      }
+      return f
+    }, b)
+  } catch (c) {
+    return "safe_stringify_exception"
+  }
+}
+function smart_eval(code, args) {
+  if (!code) {
+    return
+  }
+  if (args && !is_array(args)) {
+    args = [args]
+  }
+  if (is_function(code)) {
+    if (args) {
+      code.apply(this, clone(args))
+    } else {
+      code()
+    }
+  } else {
+    if (is_string(code)) {
+      eval(code)
+    }
+  }
+}
+function is_substr(d, c) {
+  if (is_array(c)) {
+    for (var f = 0; f < c.length; f++) {
+      try {
+        if (d && d.toLowerCase().indexOf(c[f].toLowerCase()) != -1) {
+          return true
+        }
+      } catch (g) {}
+    }
+  } else {
+    try {
+      if (d && d.toLowerCase().indexOf(c.toLowerCase()) != -1) {
+        return true
+      }
+    } catch (g) {}
+  }
+  return false
+}
+function seed0() {
+  return parseInt((new Date()).getMinutes() / 10)
+}
+function seed1() {
+  return parseInt((new Date()).getSeconds() / 10)
+}
+function to_title(a) {
+  return a.replace(/\w\S*/g, function(b) {
+    return b.charAt(0).toUpperCase() + b.substr(1).toLowerCase()
+  })
+}
+function ascending_comp(d, c) {
+  return d - c
+}
+function delete_indices(c, a) {
+  a.sort(ascending_comp);
+  for (var b = a.length - 1; b >= 0; b--) {
+    c.splice(a[b], 1)
+  }
+}
+function array_delete(c, a) {
+  var b = c.indexOf(a);
+  if (b > -1) {
+    c.splice(b, 1)
+  }
+}
+function in_arr(b, d) {
+  if (is_array(b)) {
+    for (var a = 0; a < b.length; a++) {
+      for (var c in d) {
+        if (b[a] === d[c]) {
+          return true
+        }
+      }
+    }
+  }
+  for (var c in d) {
+    if (b === d[c]) {
+      return true
+    }
+  }
+  return false
+}
+function in_arrD2(c, a) {
+  for (var b = 0; b < a.length; b++) {
+    if (c[0] == a[b][0] && c[1] == a[b][1]) {
+      return true
+    }
+  }
+  return false
+}
+function c_round(a) {
+  if (window.floor_xy) {
+    return Math.floor(a)
+  }
+  if (!window.round_xy) {
+    return a
+  }
+  return Math.round(a)
+}
+function round(a) {
+  return Math.round(a)
+}
+function sq(a) {
+  return a * a
+}
+function sqrt(a) {
+  return Math.sqrt(a)
+}
+function floor(a) {
+  return Math.floor(a)
+}
+function ceil(a) {
+  return Math.ceil(a)
+}
+function eps_equal(d, c) {
+  return Math.abs(d - c) < 5 * EPS
+}
+function abs(a) {
+  return Math.abs(a)
+}
+function min(d, c) {
+  return Math.min(d, c)
+}
+function max(d, c) {
+  return Math.max(d, c)
+}
+function shuffle(c) {
+  var d, b, e;
+  for (e = c.length; e; e--) {
+    d = Math.floor(Math.random() * e);
+    b = c[e - 1];
+    c[e - 1] = c[d];
+    c[d] = b
+  }
+  return c
+}
+function random_binary() {
+  var b = "";
+  for (var a = 0; a < 2 + parseInt(Math.random() * 12); a++) {
+    if (Math.random() < 0.5) {
+      b += "0"
+    } else {
+      b += "1"
+    }
+  }
+  return b
+}
+function random_binaries() {
+  var b = "";
+  for (var a = 0; a < 7 + parseInt(Math.random() * 23); a++) {
+    b += random_binary() + " "
+  }
+  return b
+}
+function randomStr(a) {
+  var e = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz",
+    c = "ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz";
+  var f = "";
+  for (var d = 0; d < a; d++) {
+    if (d == 0) {
+      var b = Math.floor(Math.random() * c.length);
+      f += c.substring(b, b + 1)
+    } else {
+      var b = Math.floor(Math.random() * e.length);
+      f += e.substring(b, b + 1)
+    }
+  }
+  return f
+}
+String.prototype.replace_all = function(c, a) {
+  var b = this;
+  return b.replace(new RegExp(c.replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&"), "g"), a)
+};
+
+function html_escape(a) {
+  var d = a;
+  var b = [[/&/g, "&amp;"], [/</g, "&lt;"], [/>/g, "&gt;"], [/"/g, "&quot;"]];
+  for (var c in b) {
+    d = d.replace(b[c][0], b[c][1])
+  }
+  return d
+}
+function he(a) {
+  return html_escape(a)
+}
+function future_ms(a) {
+  var b = new Date();
+  b.setMilliseconds(b.getMilliseconds() + a);
+  return b
+}
+function future_s(a) {
+  var b = new Date();
+  b.setSeconds(b.getSeconds() + a);
+  return b
+}
+function mssince(a, b) {
+  if (!b) {
+    b = new Date()
+  }
+  return b.getTime() - a.getTime()
+}
+function ssince(a, b) {
+  return mssince(a, b) / 1000
+}
+function msince(a, b) {
+  return mssince(a, b) / 60000
+}
+function hsince(a, b) {
+  return mssince(a, b) / 3600000
+}
+function randomStr(a) {
+  var e = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz",
+    c = "ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz";
+  var f = "";
+  for (var d = 0; d < a; d++) {
+    if (d == 0) {
+      var b = Math.floor(Math.random() * c.length);
+      f += c.substring(b, b + 1)
+    } else {
+      var b = Math.floor(Math.random() * e.length);
+      f += e.substring(b, b + 1)
+    }
+  }
+  return f
+}
+function log_trace(a, b) {
+  console.log("\n====================");
+  if (typeof b === "object") {
+    if (b.message) {
+      console.log("Exception[" + a + "]:\n" + b.message)
+    }
+    if (b.stack) {
+      console.log("Stacktrace:");
+      console.log(b.stack)
+    }
+  } else {
+    console.log("log_trace: argument is not an object on :" + a)
+  }
+  console.log("====================\n")
+}
+function rough_size(d) {
+  var c = [];
+  var a = [d];
+  var b = 0;
+  while (a.length) {
+    var f = a.pop();
+    if (typeof f === "boolean") {
+      b += 4
+    } else {
+      if (typeof f === "string") {
+        b += f.length * 2
+      } else {
+        if (typeof f === "number") {
+          b += 8
+        } else {
+          if (typeof f === "object" && c.indexOf(f) === -1) {
+            c.push(f);
+            for (var e in f) {
+              a.push(f[e])
+            }
+          }
+        }
+      }
+    }
+  }
+  return b
+};
