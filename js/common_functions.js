@@ -508,6 +508,23 @@ function calculate_item_properties(e, d) {
 function random_one(a) {
   return a[parseInt(a.length * Math.random())]
 }
+function floor_f2(a) {
+  return parseInt(a * 100) / 100
+}
+function to_pretty_float(a) {
+  if (!a) {
+    return "0"
+  }
+  var b = floor_f2(a).toFixed(2),
+    a = parseFloat(b);
+  if (parseFloat(b) == parseFloat(a.toFixed(1))) {
+    b = a.toFixed(1)
+  }
+  if (parseFloat(b) == parseFloat(parseInt(a))) {
+    b = parseInt(a)
+  }
+  return b
+}
 function to_pretty_num(a) {
   if (!a) {
     return "0"
@@ -1335,6 +1352,12 @@ function randomStr(a) {
     }
   }
   return f
+}
+function lstack(a, c, b) {
+  a.unshift(c);
+  while (a.length > b) {
+    a.pop()
+  }
 }
 String.prototype.replace_all = function(c, a) {
   var b = this;
