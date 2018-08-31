@@ -922,7 +922,7 @@ function adopt_soft_properties(a, c) {
     })
   }
   if (a.type == "character" && a.skin && a.skin != c.skin && !a.rip) {
-    if (!XYHW[c.skin]) {
+    if (!XYWH[c.skin]) {
       c.skin = "naked"
     }
     a.skin = c.skin;
@@ -1172,7 +1172,7 @@ function the_game(c) {
   C = PIXI.utils.BaseTextureCache;
   FC = {};
   FM = {};
-  XYHW = {};
+  XYWH = {};
   T = {};
   loader = PIXI.loader;
   loader.on("progress", on_load_progress);
@@ -1758,6 +1758,7 @@ function init_socket() {
                                             }
                                           }
                                         }
+                                        ui_log("Donated " + to_pretty_num(data.gold) + " gold", "gray");
                                         render_interaction({
                                           auto: true,
                                           skin: "goblin",
@@ -2524,6 +2525,9 @@ function init_socket() {
         dice_bet.active = true;
         on_dice_change()
       }
+    }
+    if (data.event == "info") {
+      render_tavern_info(data)
     }
     if (data.event == "won") {
       var player = get_entity(data.name);
@@ -4195,7 +4199,7 @@ function add_character(e, d) {
     console.log("add character " + e.id)
   }
   var a = (d && manual_centering && 2) || 1;
-  if (!XYHW[e.skin]) {
+  if (!XYWH[e.skin]) {
     e.skin = "naked"
   }
   var c = new_sprite(e.skin, "full");
@@ -4437,23 +4441,29 @@ function add_quirk(c) {
       if (c[4] == "note") {
         add_log('Note reads: "' + c[5] + '"', "gray")
       } else {
-        if (c[4] == "the_lever") {
-          the_lever()
+        if (c[4] == "tavern_info") {
+          socket.emit("tavern", {
+            event: "info"
+          })
         } else {
-          if (c[4] == "log") {
-            add_log(c[5], "gray")
+          if (c[4] == "the_lever") {
+            the_lever()
           } else {
-            if (c[4] == "upgrade") {
-              render_upgrade_shrine()
+            if (c[4] == "log") {
+              add_log(c[5], "gray")
             } else {
-              if (c[4] == "compound") {
-                render_compound_shrine()
+              if (c[4] == "upgrade") {
+                render_upgrade_shrine()
               } else {
-                if (c[4] == "list_pvp") {
-                  socket.emit("list_pvp")
+                if (c[4] == "compound") {
+                  render_compound_shrine()
                 } else {
-                  if (c[4] == "invisible_statue") {
-                    render_none_shrine(), add_log("An invisible statue!", "gray")
+                  if (c[4] == "list_pvp") {
+                    socket.emit("list_pvp")
+                  } else {
+                    if (c[4] == "invisible_statue") {
+                      render_none_shrine(), add_log("An invisible statue!", "gray")
+                    }
                   }
                 }
               }
@@ -4472,6 +4482,7 @@ function add_quirk(c) {
     a.on("mousedown", b).on("touchstart", b)
   }
   a.on("rightdown", b);
+  a.on("mousedown", b).on("touchstart", b);
   return a
 }
 function add_animatable(a, b) {
@@ -5117,7 +5128,7 @@ function load_game(a) {
           }
           FC[l[h][f]] = g.file;
           FM[l[h][f]] = [h, f];
-          XYHW[l[h][f]] = [f * b * c, h * e * n, c, n];
+          XYWH[l[h][f]] = [f * b * c, h * e * n, c, n];
           T[l[h][f]] = k
         }
       }
