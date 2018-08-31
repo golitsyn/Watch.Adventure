@@ -963,7 +963,7 @@ function on_dice_change() {
     return
   }
   var b = min(99.99, max(0, parseFloat($(".dicenum").html()))),
-    d;
+    c;
   var a = parseInt($(".dicegold").html().replace_all(",", ""));
   if (!a) {
     a = 100000
@@ -971,30 +971,24 @@ function on_dice_change() {
   a = max(10000, a);
   $(".dicegold").html(to_pretty_num(a));
   dice_bet.gold = a;
-  var e = b.toFixed(2);
-  if (e.length != 5) {
-    e = "0" + e
+  var d = b.toFixed(2);
+  if (d.length != 5) {
+    d = "0" + d
   }
-  $(".dicenum").html(e);
-  dice_bet.num = e;
+  $(".dicenum").html(d);
+  dice_bet.num = d;
+  b = parseFloat(d);
   if (dice_bet.dir == 1) {
-    d = 100 / (100 - b);
+    c = 100 / (100 - b);
     $(".diceup").css("border-color", "#A7C16D");
     $(".dicedown").css("border-color", "gray")
   } else {
-    d = 100 / b;
+    c = 100 / b;
     $(".diceup").css("border-color", "gray");
     $(".dicedown").css("border-color", "#A7C16D")
   }
-  d = min(d, 10000);
-  var c = d.toFixed(2);
-  if (parseFloat(c) == parseFloat(d.toFixed(1))) {
-    c = d.toFixed(1)
-  }
-  if (parseFloat(c) == parseInt(d)) {
-    c = parseInt(d)
-  }
-  $(".dicexx").html("FOR " + c + "X");
+  c = min(c, 10000);
+  $(".dicexx").html("FOR " + to_pretty_float(c) + "X");
   if (dice_bet.active) {
     $(".diceb").css("border-color", "gold")
   } else {
@@ -1032,6 +1026,28 @@ function render_dice() {
     render_inventory()
   }
   on_dice_change()
+}
+function render_tavern_info(b) {
+  topleft_npc = "info";
+  rendered_target = topleft_npc;
+  var a = "<div style='background-color: black; border: 5px solid gray; padding: 20px; font-size: 32px; display: inline-block; vertical-align: top'>";
+  a += "<div class='mb5' align='center'>";
+  a += "<div><span class='gray'>House Edge</span></div>";
+  a += "</div>";
+  a += "<div class='mb5' align='center'>";
+  a += "<div><span>" + b.edge.toFixed(2) + "%</span></div>";
+  a += "</div>";
+  a += "<div class='mb5' align='center'>";
+  a += "<div><span class='gray'>Max. Net Win</span></div>";
+  a += "</div>";
+  a += "<div class='mb5' align='center'>";
+  a += "<div><span class='gold'>" + to_pretty_num(b.max) + "</span></div>";
+  a += "</div>";
+  a += "</div>";
+  $("#topleftcornerui").html(a);
+  if (!inventory) {
+    render_inventory()
+  }
 }
 function on_donate_change() {
   if (topleft_npc != "donate") {
@@ -1446,425 +1462,432 @@ function render_wishlist(f, g) {
 }
 var last_selector = "";
 
-function render_item(r, b) {
-  var u = b.item || {
+function render_item(s, b) {
+  var v = b.item || {
     skin: "test",
     name: "Unrecognized Item",
     explanation: "Hmm. Curious."
   },
-    v = b.name,
-    p = "gray",
-    o = b.value,
-    g = b.cash,
-    h = u.name,
+    w = b.name,
+    r = "gray",
+    p = b.value,
+    h = b.cash,
+    j = v.name,
     c = false;
-  var n = b && b.actual;
-  if (r && r != "html") {
-    last_selector = r
+  var o = b && b.actual;
+  if (s && s != "html") {
+    last_selector = s
   } else {
-    if (r != "html") {
-      r = last_selector
+    if (s != "html") {
+      s = last_selector
     }
   }
-  var d = b.prop || calculate_item_properties(u, n || {}),
-    a = calculate_item_grade(u, n || {});
-  var j = "";
+  var d = b.prop || calculate_item_properties(v, o || {}),
+    a = calculate_item_grade(v, o || {});
+  var k = "";
   if (!b.pure) {
-    j += "<div style='background-color: black; border: 5px solid gray; font-size: 24px; display: inline-block; padding: 20px; line-height: 24px; max-width: 240px; " + (b.styles || "") + "' class='buyitem'>"
+    k += "<div style='background-color: black; border: 5px solid gray; font-size: 24px; display: inline-block; padding: 20px; line-height: 24px; max-width: 240px; " + (b.styles || "") + "' class='buyitem'>"
   }
-  if (!u) {
-    j += "ITEM"
+  if (!v) {
+    k += "ITEM"
   } else {
-    if (u.type == "tarot" && u.minor) {
-      j += "<img style='display: inline-block; margin: -8px 2px -6px -8px;' src='/images/cards/tarot/minor_arcana/tarot__" + u.minor + ".png' />"
+    if (v.type == "tarot" && v.minor) {
+      k += "<img style='display: inline-block; margin: -8px 2px -6px -8px;' src='/images/cards/tarot/minor_arcana/tarot__" + v.minor + ".png' />"
     } else {
-      if (u.type == "tarot") {
-        j += "<img style='display: inline-block; margin: -8px 2px -6px -8px;' src='/images/cards/tarot/major_arcana/tarot__" + u.major + ".png' />"
+      if (v.type == "tarot") {
+        k += "<img style='display: inline-block; margin: -8px 2px -6px -8px;' src='/images/cards/tarot/major_arcana/tarot__" + v.major + ".png' />"
       }
     }
-    p = "#E4E4E4";
-    if (u.grade == "mid") {
-      p = "blue"
+    r = "#E4E4E4";
+    if (v.grade == "mid") {
+      r = "blue"
     }
-    if (n && n.p == "shiny") {
-      h = "Shiny " + h
+    if (o && o.p == "shiny") {
+      j = "Shiny " + j
     }
     if (d.level) {
-      h += " +" + d.level
+      j += " +" + d.level
     }
     if (b.thumbnail) {
-      j += "<div style='margin-left:-2px'>" + item_container({
-        skin: u.skin,
-        def: u
+      k += "<div style='margin-left:-2px'>" + item_container({
+        skin: v.skin,
+        def: v
       }) + "</div>"
     }
-    if (u.card) {
-      j += "<div style='display:inline-block; vertical-align: top'>";
-      j += "<div style='color: " + p + "; display: inline-block; border-bottom: 2px dashed gray; margin-bottom: 3px' class='cbold'>" + h + "</div><div></div>";
-      j += "<div style='color: " + p + "; display: inline-block; border-bottom: 2px dashed gray; margin-bottom: 3px; color: #AB7951' class='cbold'>" + u.card + "</div>";
-      j += "</div>"
+    if (v.card) {
+      k += "<div style='display:inline-block; vertical-align: top'>";
+      k += "<div style='color: " + r + "; display: inline-block; border-bottom: 2px dashed gray; margin-bottom: 3px' class='cbold'>" + j + "</div><div></div>";
+      k += "<div style='color: " + r + "; display: inline-block; border-bottom: 2px dashed gray; margin-bottom: 3px; color: #AB7951' class='cbold'>" + v.card + "</div>";
+      k += "</div>"
     } else {
       if (!b.pure) {
-        j += "<div style='color: " + p + "; display: inline-block; border-bottom: 2px dashed gray; margin-bottom: 3px' class='cbold'>" + h + "</div>"
+        k += "<div style='color: " + r + "; display: inline-block; border-bottom: 2px dashed gray; margin-bottom: 3px' class='cbold'>" + j + "</div>"
       }
-    }(u.gives || []).forEach(function(f) {
+    }
+    if (d.miss && v.type == "elixir") {
+      k += bold_prop_line("Alcohol", d.miss + "%", "#7CAAF6")
+    }(v.gives || []).forEach(function(f) {
       if (f[0] == "hp") {
-        j += bold_prop_line("HP", "+" + to_pretty_num(f[1]), colors.hp)
+        k += bold_prop_line("HP", "+" + to_pretty_num(f[1]), colors.hp)
       }
       if (f[0] == "mp") {
-        j += bold_prop_line("MP", "+" + to_pretty_num(f[1]), colors.mp)
+        k += bold_prop_line("MP", "+" + to_pretty_num(f[1]), colors.mp)
       }
     });
     if (d.gold) {
-      j += bold_prop_line("Gold", (d.gold > 0 && "+" || "") + d.gold + "%", "gold")
+      k += bold_prop_line("Gold", (d.gold > 0 && "+" || "") + d.gold + "%", "gold")
     }
     if (d.luck) {
-      j += bold_prop_line("Luck", (d.luck > 0 && "+" || "") + d.luck + "%", "#5DE376")
+      k += bold_prop_line("Luck", (d.luck > 0 && "+" || "") + d.luck + "%", "#5DE376")
     }
     if (d.xp) {
-      j += bold_prop_line("XP", "+" + d.xp + "%", "#1E73DE")
+      k += bold_prop_line("XP", "+" + d.xp + "%", "#1E73DE")
     }
     if (d.lifesteal) {
-      j += bold_prop_line("Lifesteal", d.lifesteal + "%", "#9A1D27")
+      k += bold_prop_line("Lifesteal", d.lifesteal + "%", "#9A1D27")
     }
     if (d.evasion) {
-      j += bold_prop_line("Evasion", d.evasion + "%", "#7AC0F5")
+      k += bold_prop_line("Evasion", d.evasion + "%", "#7AC0F5")
     }
-    if (d.miss) {
-      j += bold_prop_line("Miss", d.miss + "%", "#F36C6E")
+    if (d.miss && v.type != "elixir") {
+      k += bold_prop_line("Miss", d.miss + "%", "#F36C6E")
     }
     if (d.reflection) {
-      j += bold_prop_line("Reflection", d.reflection + "%", "#B484E5")
+      k += bold_prop_line("Reflection", d.reflection + "%", "#B484E5")
     }
     if (d.dreturn) {
-      j += bold_prop_line("D.Return", d.dreturn + "%", "#E94959")
+      k += bold_prop_line("D.Return", d.dreturn + "%", "#E94959")
     }
     if (d.crit) {
-      j += bold_prop_line("Crit", d.crit + "%", "#E52967")
+      k += bold_prop_line("Crit", d.crit + "%", "#E52967")
     }
     if (d.attack) {
-      j += bold_prop_line("Damage", d.attack, colors.attack)
+      k += bold_prop_line("Damage", d.attack, colors.attack)
     }
     if (d.range) {
-      j += bold_prop_line("Range", "+" + d.range, colors.range)
+      k += bold_prop_line("Range", "+" + d.range, colors.range)
     }
     if (d.hp) {
-      j += bold_prop_line("HP", d.hp, colors.hp)
+      k += bold_prop_line("HP", d.hp, colors.hp)
     }
     if (d.str) {
-      j += bold_prop_line("Strength", d.str, colors.str)
+      k += bold_prop_line("Strength", d.str, colors.str)
     }
     if (d["int"]) {
-      j += bold_prop_line("Intelligence", d["int"], colors["int"])
+      k += bold_prop_line("Intelligence", d["int"], colors["int"])
     }
     if (d.dex) {
-      j += bold_prop_line("Dexterity", d.dex, colors.dex)
+      k += bold_prop_line("Dexterity", d.dex, colors.dex)
     }
     if (d.vit) {
-      j += bold_prop_line("Vitality", d.vit, colors.hp)
+      k += bold_prop_line("Vitality", d.vit, colors.hp)
     }
     if (d.mp) {
-      j += bold_prop_line("MP", d.mp, colors.mp)
+      k += bold_prop_line("MP", d.mp, colors.mp)
     }
     if (d.mp_cost) {
-      j += bold_prop_line("MP Cost", d.mp_cost, colors.mp)
+      k += bold_prop_line("MP Cost", d.mp_cost, colors.mp)
     }
     if (d.stat) {
-      j += bold_prop_line("Stat", d.stat)
+      k += bold_prop_line("Stat", d.stat)
     }
     if (d.armor) {
-      j += bold_prop_line("Armor", d.armor, colors.armor)
+      k += bold_prop_line("Armor", d.armor, colors.armor)
     }
     if (d.apiercing) {
-      j += bold_prop_line("A.Piercing", d.apiercing, colors.armor)
+      k += bold_prop_line("A.Piercing", d.apiercing, colors.armor)
     }
     if (d.rpiercing) {
-      j += bold_prop_line("R.Piercing", d.rpiercing, colors.resistance)
+      k += bold_prop_line("R.Piercing", d.rpiercing, colors.resistance)
     }
     if (d.resistance) {
-      j += bold_prop_line("Resistance", d.resistance, colors.resistance)
+      k += bold_prop_line("Resistance", d.resistance, colors.resistance)
     }
-    if (u.wspeed == "slow") {
-      j += bold_prop_line("Speed", "Slow", "gray")
+    if (v.wspeed == "slow") {
+      k += bold_prop_line("Speed", "Slow", "gray")
     }
     if (d.speed) {
-      j += bold_prop_line(u.wtype && "Run Speed" || "Speed", ((d.speed > 0) && "+" || "") + d.speed, colors.speed)
+      k += bold_prop_line(v.wtype && "Run Speed" || "Speed", ((d.speed > 0) && "+" || "") + d.speed, colors.speed)
     }
     if (d.frequency) {
-      j += bold_prop_line("A.Speed", d.frequency, "#3BE681")
+      k += bold_prop_line("A.Speed", d.frequency, "#3BE681")
     }
     if (d.output) {
-      j += bold_prop_line("Damage Output", "+" + d.output + "%", "#D93319")
+      k += bold_prop_line("Damage Output", "+" + d.output + "%", "#D93319")
     }
     if (d.charisma) {
-      j += bold_prop_line("Charisma", d.charisma, "#4DB174")
+      k += bold_prop_line("Charisma", d.charisma, "#4DB174")
     }
     if (d.awesomeness) {
-      j += bold_prop_line("Awesomeness", d.awesomeness, "#FFDE2F")
+      k += bold_prop_line("Awesomeness", d.awesomeness, "#FFDE2F")
     }
     if (d.bling) {
-      j += bold_prop_line("Bling", d.bling, "#A4E6FF")
+      k += bold_prop_line("Bling", d.bling, "#A4E6FF")
     }
     if (d.cuteness) {
-      j += bold_prop_line("Cuteness", d.cuteness, "#FD82F0")
+      k += bold_prop_line("Cuteness", d.cuteness, "#FD82F0")
     }
-    if (a == 1 && u.type != "booster") {
-      j += bold_prop_line("Grade", "High", "#696354")
+    if (a == 1 && v.type != "booster") {
+      k += bold_prop_line("Grade", "High", "#696354")
     }
-    if (a == 2 && u.type != "booster") {
-      j += bold_prop_line("Grade", "Rare", "#6668AC")
+    if (a == 2 && v.type != "booster") {
+      k += bold_prop_line("Grade", "Rare", "#6668AC")
     }
-    if (n && u.type == "elixir" && b.slot == "elixir") {
-      var e = round((-msince(new Date(n.expires))) / (6)) / 10;
-      j += bold_prop_line("Hours", e, "gray")
+    if (o && v.type == "elixir" && b.slot == "elixir") {
+      var g = round((-msince(new Date(o.expires))) / (6)) / 10;
+      k += bold_prop_line("Hours", g, "gray")
     } else {
-      if (u.type == "elixir") {
-        j += bold_prop_line("Hours", u.duration, "gray")
+      if (v.type == "elixir") {
+        k += bold_prop_line("Hours", v.duration, "gray")
       }
     }
-    if (u.ability) {
-      if (u.ability == "bash") {
-        j += bold_prop_line("Ability", "Bash", colors.ability);
-        j += "<div style='color: #C3C3C3'>Stuns the opponent for " + d.attr1 + " seconds with " + d.attr0 + "% chance.</div>"
+    if (v.ability) {
+      if (v.ability == "bash") {
+        k += bold_prop_line("Ability", "Bash", colors.ability);
+        k += "<div style='color: #C3C3C3'>Stuns the opponent for " + d.attr1 + " seconds with " + d.attr0 + "% chance.</div>"
       }
-      if (u.ability == "freeze") {
-        j += bold_prop_line("Ability", "Freeze", "#2EBCE2");
-        j += "<div style='color: #C3C3C3'>Freezes the opponent with a " + d.attr0 + "% chance.</div>"
+      if (v.ability == "freeze") {
+        k += bold_prop_line("Ability", "Freeze", "#2EBCE2");
+        k += "<div style='color: #C3C3C3'>Freezes the opponent with a " + d.attr0 + "% chance.</div>"
       }
-      if (u.ability == "secondchance") {
-        j += bold_prop_line("Ability", "Second Chance", colors.ability);
-        j += "<div style='color: #C3C3C3'>Avoid death with a " + d.attr0 + "% chance.</div>"
+      if (v.ability == "secondchance") {
+        k += bold_prop_line("Ability", "Second Chance", colors.ability);
+        k += "<div style='color: #C3C3C3'>Avoid death with a " + d.attr0 + "% chance.</div>"
       }
-      if (u.ability == "sugarrush") {
-        j += bold_prop_line("Ability", "Sugar Rush", "#D64770");
-        j += "<div style='color: #C3C3C3'>Trigger a Sugar Rush on attack with 0.25% chance. Gain 240 Attack Speed for 10 seconds!</div>"
+      if (v.ability == "sugarrush") {
+        k += bold_prop_line("Ability", "Sugar Rush", "#D64770");
+        k += "<div style='color: #C3C3C3'>Trigger a Sugar Rush on attack with 0.25% chance. Gain 240 Attack Speed for 10 seconds!</div>"
       }
     }
-    if (u.explanation) {
-      j += "<div style='color: #C3C3C3'>" + u.explanation + "</div>"
+    if (v.explanation) {
+      k += "<div style='color: #C3C3C3'>" + v.explanation + "</div>"
     }
-    if (u.set) {
-      j += "<div><span style='color: #f1c054;'>Set</span>: <span class='clickable' onclick='render_set(\"" + u.set + "\")'>" + G.sets[u.set].name + "</span></div>"
+    if (v.set) {
+      k += "<div><span style='color: #f1c054;'>Set</span>: <span class='clickable' onclick='render_set(\"" + v.set + "\")'>" + G.sets[v.set].name + "</span></div>"
     }
     if (b.minutes) {
-      j += bold_prop_line("Minutes", b.minutes, "gray")
+      k += bold_prop_line("Minutes", b.minutes, "gray")
     }
-    if (b.trade && n) {
-      j += "<div style='margin-top: 5px'>";
-      if ((n.q || 1) > 1) {
-        j += "<div><span class='gray clickable' onclick='$(\".tradenum\").cfocus()'>Q:</span> <div class='inline-block tradenum' contenteditable=true>" + n.q + "</div></div>"
+    if (b.trade && o) {
+      k += "<div style='margin-top: 5px'>";
+      if ((o.q || 1) > 1) {
+        k += "<div><span class='gray clickable' onclick='$(\".tradenum\").cfocus()'>Q:</span> <div class='inline-block tradenum' contenteditable=true>" + o.q + "</div></div>"
       }
-      j += "<div><span class='gold clickable' onclick='$(\".sellprice\").focus()'>GOLD" + (((n.q || 1) > 1) && " [EACH]" || "") + ":</span> <div class='inline-block sellprice editable' contenteditable=true>1</div></div>";
-      j += "<div><span class='clickable' onclick='trade(\"" + b.slot + '","' + b.num + '",$(".sellprice").shtml(),$(".tradenum").shtml())\'>PUT UP FOR SALE</span></div>';
-      j += "</div>"
+      k += "<div><span class='gold clickable' onclick='$(\".sellprice\").focus()'>GOLD" + (((o.q || 1) > 1) && " [EACH]" || "") + ":</span> <div class='inline-block sellprice editable' contenteditable=true>1</div></div>";
+      k += "<div><span class='clickable' onclick='trade(\"" + b.slot + '","' + b.num + '",$(".sellprice").shtml(),$(".tradenum").shtml())\'>PUT UP FOR SALE</span></div>';
+      k += "</div>"
     }
-    if (in_arr(b.slot, trade_slots) && n && n.price && b.from_player && !n.b) {
+    if (in_arr(b.slot, trade_slots) && o && o.price && b.from_player && !o.b) {
       c = true;
-      if ((n.q || 1) > 1) {
-        j += "<div><span class='gray clickable' onclick='$(\".tradenum\").cfocus()'>Q:</span> <div class='inline-block tradenum' contenteditable=true>1</div></div>"
+      if ((o.q || 1) > 1) {
+        k += "<div><span class='gray clickable' onclick='$(\".tradenum\").cfocus()'>Q:</span> <div class='inline-block tradenum' contenteditable=true>1</div></div>"
       }
-      j += "<div style='color: gold'>" + to_pretty_num(n.price) + " GOLD" + ((n.q || 1) > 1 && " <span style='color: white'>[EACH]</span>" || "") + "</div>";
-      j += "<div><span class='clickable itu' onclick='trade_buy(\"" + b.slot + '","' + b.from_player + '","' + (n.rid || "") + '",$(".tradenum").html())\'>BUY</span></div>'
+      k += "<div style='color: gold'>" + to_pretty_num(o.price) + " GOLD" + ((o.q || 1) > 1 && " <span style='color: white'>[EACH]</span>" || "") + "</div>";
+      k += "<div><span class='clickable itu' onclick='trade_buy(\"" + b.slot + '","' + b.from_player + '","' + (o.rid || "") + '",$(".tradenum").html())\'>BUY</span></div>'
     }
-    if (in_arr(b.slot, trade_slots) && n && n.price && b.from_player && n.b) {
-      var l = false;
-      if ((n.q || 1) > 1 && u.s) {
-        l = true
+    if (in_arr(b.slot, trade_slots) && o && o.price && b.from_player && o.b) {
+      var m = false;
+      if ((o.q || 1) > 1 && v.s) {
+        m = true
       }
       c = true;
-      if (l) {
-        j += "<div><span class='gray clickable' onclick='$(\".tradenum\").cfocus()'>Q:</span> <div class='inline-block tradenum' contenteditable=true>1</div></div>"
+      if (m) {
+        k += "<div><span class='gray clickable' onclick='$(\".tradenum\").cfocus()'>Q:</span> <div class='inline-block tradenum' contenteditable=true>1</div></div>"
       }
-      j += "<div style='color: gold'>" + to_pretty_num(n.price) + " GOLD" + (l && " <span style='color: white'>[EACH]</span>" || "") + "</div>";
-      j += "<div><span class='clickable ibu' onclick='trade_sell(\"" + b.slot + '","' + b.from_player + '","' + (n.rid || "") + '",$(".tradenum").html())\'>SELL</span></div>'
+      k += "<div style='color: gold'>" + to_pretty_num(o.price) + " GOLD" + (m && " <span style='color: white'>[EACH]</span>" || "") + "</div>";
+      k += "<div><span class='clickable ibu' onclick='trade_sell(\"" + b.slot + '","' + b.from_player + '","' + (o.rid || "") + '",$(".tradenum").html())\'>SELL</span></div>'
     }
     if (b.secondhand) {
+      var e = 2;
+      if (v.cash) {
+        e = 3
+      }
       c = true;
-      j += "<div style='color: gold'>" + to_pretty_num(calculate_item_value(n) * 2 * (n.q || 1)) + " GOLD</div>";
-      j += "<div><span class='clickable' onclick='secondhand_buy(\"" + (n.rid || "") + "\")'>BUY</span></div>"
+      k += "<div style='color: gold'>" + to_pretty_num(calculate_item_value(o) * e * (o.q || 1)) + " GOLD</div>";
+      k += "<div><span class='clickable' onclick='secondhand_buy(\"" + (o.rid || "") + "\")'>BUY</span></div>"
     }
     if (b.lostandfound) {
       c = true;
-      j += "<div style='color: gold'>" + to_pretty_num(calculate_item_value(n) * 4 * (n.q || 1)) + " GOLD</div>";
-      j += "<div><span class='clickable' onclick='lostandfound_buy(\"" + (n.rid || "") + "\")'>BUY</span></div>"
+      k += "<div style='color: gold'>" + to_pretty_num(calculate_item_value(o) * 4 * (o.q || 1)) + " GOLD</div>";
+      k += "<div><span class='clickable' onclick='lostandfound_buy(\"" + (o.rid || "") + "\")'>BUY</span></div>"
     }
-    if (o) {
-      var t = "buy_with_gold";
-      if (u.days) {
-        j += "<div style='color: #C3C3C3'>Lasts 30 days</div>"
+    if (p) {
+      var u = "buy_with_gold";
+      if (v.days) {
+        k += "<div style='color: #C3C3C3'>Lasts 30 days</div>"
       }
-      if (g) {
-        j += "<div style='color: " + colors.cash + "'>" + to_pretty_num(u.cash) + " SHELLS</div>", t = "buy_with_shells"
+      if (h) {
+        k += "<div style='color: " + colors.cash + "'>" + to_pretty_num(v.cash) + " SHELLS</div>", u = "buy_with_shells"
       } else {
-        j += "<div style='color: gold'>" + to_pretty_num(o) + " GOLD</div>"
+        k += "<div style='color: gold'>" + to_pretty_num(p) + " GOLD</div>"
       }
-      if (g && character && u.cash >= character.cash) {
-        j += "<div style='border-top: solid 2px gray; margin-bottom: 2px; margin-top: 3px; margin-left: -1px; margin-right: -1px'></div>";
-        j += "<div style='color: #C3C3C3'>You can find SHELLS from gems, monsters. In future, from achievements. For the time being, to receive SHELLS and support our game:</div>";
-        j += "<a href='https://adventure.land/shells' class='cancela' target='_blank'><span class='clickable' style='color: #EB8D3F'>BUY or EARN SHELLS</span></a> "
+      if (h && character && v.cash >= character.cash) {
+        k += "<div style='border-top: solid 2px gray; margin-bottom: 2px; margin-top: 3px; margin-left: -1px; margin-right: -1px'></div>";
+        k += "<div style='color: #C3C3C3'>You can find SHELLS from gems, monsters. In future, from achievements. For the time being, to receive SHELLS and support our game:</div>";
+        k += "<a href='https://adventure.land/shells' class='cancela' target='_blank'><span class='clickable' style='color: #EB8D3F'>BUY or EARN SHELLS</span></a> "
       } else {
-        if (u.s) {
-          var l = 1;
-          if (u.gives) {
-            l = 100
+        if (v.s) {
+          var m = 1;
+          if (v.gives) {
+            m = 100
           }
-          j += "<div style='margin-top: 5px'><!--<input type='number' value='1' class='buynum itemnumi'/> -->";
-          j += "<span class='gray clickable' onclick='$(\".buynum\").cfocus()'>Q:</span> <div class='inline-block buynum' contenteditable=true>" + l + "</div> <span class='gray'>|</span> ";
-          j += "<span class='clickable' onclick='" + t + '("' + v + '",parseInt($(".buynum").html()))\'>BUY</span> ';
-          j += "</div>"
+          k += "<div style='margin-top: 5px'><!--<input type='number' value='1' class='buynum itemnumi'/> -->";
+          k += "<span class='gray clickable' onclick='$(\".buynum\").cfocus()'>Q:</span> <div class='inline-block buynum' contenteditable=true>" + m + "</div> <span class='gray'>|</span> ";
+          k += "<span class='clickable' onclick='" + u + '("' + w + '",parseInt($(".buynum").html()))\'>BUY</span> ';
+          k += "</div>"
         } else {
-          j += "<div><span class='clickable' onclick='" + t + '("' + v + "\")'>BUY</span></div>"
+          k += "<div><span class='clickable' onclick='" + u + '("' + w + "\")'>BUY</span></div>"
         }
       }
     }
     if (b.token && b.name && b.name != b.token) {
-      var p = "#B6A786";
+      var r = "#B6A786";
       if (b.token == "funtoken") {
-        p = "#AA6AB3"
+        r = "#AA6AB3"
       }
       if (G.tokens[b.token][b.name] < 1) {
-        j += "<div><span class='clickable' style='color: " + p + "' onclick='exchange_buy(\"" + b.token + '","' + b.name + "\")'>EXCHANGE " + (1 / G.tokens[b.token][b.name]) + " FOR A TOKEN</span></div>"
+        k += "<div><span class='clickable' style='color: " + r + "' onclick='exchange_buy(\"" + b.token + '","' + b.name + "\")'>EXCHANGE " + (1 / G.tokens[b.token][b.name]) + " FOR A TOKEN</span></div>"
       } else {
-        j += "<div><span class='clickable' style='color: " + p + "' onclick='exchange_buy(\"" + b.token + '","' + b.name + "\")'>EXCHANGE FOR " + G.tokens[b.token][b.name] + " TOKENS</span></div>"
+        k += "<div><span class='clickable' style='color: " + r + "' onclick='exchange_buy(\"" + b.token + '","' + b.name + "\")'>EXCHANGE FOR " + G.tokens[b.token][b.name] + " TOKENS</span></div>"
       }
     }
-    if (b.sell && n) {
-      var o = calculate_item_value(n);
-      j += "<div style='color: gold'>" + to_pretty_num(o) + " GOLD</div>";
-      if (u.s && n.q) {
-        var l = n.q;
-        j += "<div style='margin-top: 5px'>";
-        j += "<span class='gray clickable' onclick='$(\".sellnum\").cfocus()'>Q:</span> <div class='inline-block sellnum' contenteditable=true>" + l + "</div> <span class='gray'>|</span> ";
-        j += "<span class='clickable' onclick='sell(\"" + b.num + '",parseInt($(".sellnum").html()))\'>SELL</span> ';
-        j += "</div>"
+    if (b.sell && o) {
+      var p = calculate_item_value(o);
+      k += "<div style='color: gold'>" + to_pretty_num(p) + " GOLD</div>";
+      if (v.s && o.q) {
+        var m = o.q;
+        k += "<div style='margin-top: 5px'>";
+        k += "<span class='gray clickable' onclick='$(\".sellnum\").cfocus()'>Q:</span> <div class='inline-block sellnum' contenteditable=true>" + m + "</div> <span class='gray'>|</span> ";
+        k += "<span class='clickable' onclick='sell(\"" + b.num + '",parseInt($(".sellnum").html()))\'>SELL</span> ';
+        k += "</div>"
       } else {
-        j += "<div><span class='clickable' onclick='sell(\"" + b.num + "\")'>SELL</span></div>"
+        k += "<div><span class='clickable' onclick='sell(\"" + b.num + "\")'>SELL</span></div>"
       }
     }
     if (b.cancel) {
-      j += "<div class='clickable' onclick='$(this).parent().remove()'>CLOSE</div>"
+      k += "<div class='clickable' onclick='$(this).parent().remove()'>CLOSE</div>"
     }
-    if (in_arr(v, booster_items)) {
-      if (n && n.expires) {
-        var e = round((-msince(new Date(n.expires))) / (6 * 24)) / 10;
-        j += "<div style='color: #C3C3C3'>" + e + " days</div>"
+    if (in_arr(w, booster_items)) {
+      if (o && o.expires) {
+        var g = round((-msince(new Date(o.expires))) / (6 * 24)) / 10;
+        k += "<div style='color: #C3C3C3'>" + g + " days</div>"
       }
       if (!b.sell) {
-        j += "<div class='clickable' onclick=\"btc(event); show_modal($('#boosterguide').html())\" style=\"color: #D86E89\">HOW TO USE</div>"
+        k += "<div class='clickable' onclick=\"btc(event); show_modal($('#boosterguide').html())\" style=\"color: #D86E89\">HOW TO USE</div>"
       }
     }
-    if (!o && !b.sell && n && !c && !b.trade && !b.npc) {
-      if (u.action) {
-        var m = b && b.slot || b && b.num;
-        j += '<div><span data-id="' + m + '" class="clickable" style="color: ' + p + '" onclick="' + u.onclick + '"">' + u.action + "</span></div>"
+    if (!p && !b.sell && o && !c && !b.trade && !b.npc) {
+      if (v.action) {
+        var n = b && b.slot || b && b.num;
+        k += '<div><span data-id="' + n + '" class="clickable" style="color: ' + r + '" onclick="' + v.onclick + '"">' + v.action + "</span></div>"
       }
-      if (u.type == "computer") {
-        j += "<div class='clickable' onclick='add_log(\"Beep. Boop.\")' style=\"color: #32A3B0\">NETWORK</div>"
+      if (v.type == "computer") {
+        k += "<div class='clickable' onclick='add_log(\"Beep. Boop.\")' style=\"color: #32A3B0\">NETWORK</div>"
       }
-      if (u.type == "stand") {
-        j += "<div class='clickable' onclick='socket.emit(\"trade_history\",{}); $(this).parent().remove()' style=\"color: #44484F\">TRADE HISTORY</div>"
+      if (v.type == "stand") {
+        k += "<div class='clickable' onclick='socket.emit(\"trade_history\",{}); $(this).parent().remove()' style=\"color: #44484F\">TRADE HISTORY</div>"
       }
-      if (0 && u.type == "computer" && (n.charges === undefined || n.charges) && gameplay == "normal") {
-        j += '<div class=\'clickable\' onclick=\'socket.emit("unlock",{name:"code",num:"' + b.num + '"});\' style="color: #BA61A4">UNLOCK</div>'
+      if (0 && v.type == "computer" && (o.charges === undefined || o.charges) && gameplay == "normal") {
+        k += '<div class=\'clickable\' onclick=\'socket.emit("unlock",{name:"code",num:"' + b.num + '"});\' style="color: #BA61A4">UNLOCK</div>'
       }
-      if (u.type == "computer") {
-        j += "<div class='clickable' onclick='render_computer($(this).parent())' style=\"color: #32A3B0\">NETWORK</div>"
+      if (v.type == "computer") {
+        k += "<div class='clickable' onclick='render_computer($(this).parent())' style=\"color: #32A3B0\">NETWORK</div>"
       }
-      if (u.type == "stand" && !character.stand) {
-        j += "<div class='clickable' onclick='open_merchant(\"" + b.num + '"); $(this).parent().remove()\' style="color: #8E5E2C">OPEN</div>'
+      if (v.type == "stand" && !character.stand) {
+        k += "<div class='clickable' onclick='open_merchant(\"" + b.num + '"); $(this).parent().remove()\' style="color: #8E5E2C">OPEN</div>'
       }
-      if (u.type == "stand" && character.stand) {
-        j += "<div class='clickable' onclick='close_merchant(); $(this).parent().remove()' style=\"color: #8E5E2C\">CLOSE</div>"
+      if (v.type == "stand" && character.stand) {
+        k += "<div class='clickable' onclick='close_merchant(); $(this).parent().remove()' style=\"color: #8E5E2C\">CLOSE</div>"
       }
-      if (u.type == "elixir" && !b.from_player) {
-        var k = "DRINK";
-        if (u.eat) {
-          k = "EAT"
+      if (v.type == "elixir" && !b.from_player) {
+        var l = "DRINK";
+        if (v.eat) {
+          l = "EAT"
         }
-        j += "<div class='clickable' onclick='socket.emit(\"equip\",{num:\"" + b.num + '"}); $(this).parent().remove()\' style="color: #D86E89">' + k + "</div>"
+        k += "<div class='clickable' onclick='socket.emit(\"equip\",{num:\"" + b.num + '"}); $(this).parent().remove()\' style="color: #D86E89">' + l + "</div>"
       }
-      if (in_arr(n.name, ["stoneofxp", "stoneofgold", "stoneofluck"])) {
-        j += "<div class='clickable' onclick='socket.emit(\"convert\",{num:\"" + b.num + '"});\' style="color: ' + colors.cash + '">CONVERT TO SHELLS</div>'
+      if (in_arr(o.name, ["stoneofxp", "stoneofgold", "stoneofluck"])) {
+        k += "<div class='clickable' onclick='socket.emit(\"convert\",{num:\"" + b.num + '"});\' style="color: ' + colors.cash + '">CONVERT TO SHELLS</div>'
       }
-      if (in_arr(n.name, booster_items)) {
-        if (n.expires) {
-          j += "<div class='clickable' onclick='shift(\"" + b.num + '","' + booster_items[(booster_items.indexOf(n.name) + 1) % 3] + '"); $(this).parent().remove()\' style="color: #438EE2">SHIFT</div>'
+      if (in_arr(o.name, booster_items)) {
+        if (o.expires) {
+          k += "<div class='clickable' onclick='shift(\"" + b.num + '","' + booster_items[(booster_items.indexOf(o.name) + 1) % 3] + '"); $(this).parent().remove()\' style="color: #438EE2">SHIFT</div>'
         } else {
-          j += "<div class='clickable' onclick='activate(\"" + b.num + '","activate"); $(this).parent().remove()\' style="color: #438EE2">ACTIVATE</div>'
+          k += "<div class='clickable' onclick='activate(\"" + b.num + '","activate"); $(this).parent().remove()\' style="color: #438EE2">ACTIVATE</div>'
         }
       }
     }
     if (b.craft) {
-      var s = 0;
-      j += "<div style='margin-top: 5px'></div>";
-      j += "<div style='color: " + p + "; display: inline-block; border-bottom: 2px dashed gray; margin-bottom: 3px' class='cbold'>Recipe</div>";
-      j += "<div></div>";
-      G.craft[v].items.forEach(function(f) {
-        var w = undefined;
+      var t = 0;
+      k += "<div style='margin-top: 5px'></div>";
+      k += "<div style='color: " + r + "; display: inline-block; border-bottom: 2px dashed gray; margin-bottom: 3px' class='cbold'>Recipe</div>";
+      k += "<div></div>";
+      G.craft[w].items.forEach(function(f) {
+        var x = undefined;
         if (f[0] != 1) {
-          w = f[0]
+          x = f[0]
         }
-        j += item_container({
+        k += item_container({
           skin: G.items[f[1]].skin,
           onclick: "render_item_by_name('" + f[1] + "')"
         }, {
           name: f[1],
-          q: w,
+          q: x,
           level: f[2]
         });
-        s += 1;
-        if (!(s % 4)) {
-          j += "<div></div>"
+        t += 1;
+        if (!(t % 4)) {
+          k += "<div></div>"
         }
       });
-      j += bold_prop_line("Cost", to_pretty_num(G.craft[v].cost), "gold")
+      k += bold_prop_line("Cost", to_pretty_num(G.craft[w].cost), "gold")
     }
     if (b.dismantle) {
-      var s = 0;
-      j += "<div style='margin-top: 5px'></div>";
-      j += "<div style='color: " + p + "; display: inline-block; border-bottom: 2px dashed gray; margin-bottom: 3px' class='cbold'>Dismantles-to</div>";
-      j += "<div></div>";
-      G.dismantle[v].items.forEach(function(f) {
-        var w = undefined;
+      var t = 0;
+      k += "<div style='margin-top: 5px'></div>";
+      k += "<div style='color: " + r + "; display: inline-block; border-bottom: 2px dashed gray; margin-bottom: 3px' class='cbold'>Dismantles-to</div>";
+      k += "<div></div>";
+      G.dismantle[w].items.forEach(function(f) {
+        var x = undefined;
         if (f[0] != 1) {
-          w = f[0]
+          x = f[0]
         }
-        j += item_container({
+        k += item_container({
           skin: G.items[f[1]].skin,
           onclick: "render_item_by_name('" + f[1] + "')"
         }, {
           name: f[1],
-          q: w
+          q: x
         });
-        s += 1;
-        if (!(s % 4)) {
-          j += "<div></div>"
+        t += 1;
+        if (!(t % 4)) {
+          k += "<div></div>"
         }
       });
-      j += bold_prop_line("Cost", to_pretty_num(G.dismantle[v].cost), "gold")
+      k += bold_prop_line("Cost", to_pretty_num(G.dismantle[w].cost), "gold")
     }
     if (b.from) {
-      j += bold_prop_line("From", b.from, "#BED4DE")
+      k += bold_prop_line("From", b.from, "#BED4DE")
     }
-    if (n && n.l) {
-      if (n.l == "s") {
-        j += "<div class='ilsu'>Sealed</div>"
+    if (o && o.l) {
+      if (o.l == "s") {
+        k += "<div class='ilsu'>Sealed</div>"
       } else {
-        if (n.l == "u") {
-          j += "<div class='iluu'>Unsealing</div>"
+        if (o.l == "u") {
+          k += "<div class='iluu'>Unsealing</div>"
         } else {
-          j += "<div style='color: #404141'>Locked</div>"
+          k += "<div style='color: #404141'>Locked</div>"
         }
       }
     }
   }
   if (!b.pure) {
-    j += "</div>"
+    k += "</div>"
   }
-  if (r == "html") {
-    return j
+  if (s == "html") {
+    return k
   } else {
-    $(r).html(j)
+    $(s).html(k)
   }
 }
 function render_item_by_name(a) {
@@ -3195,19 +3218,23 @@ function load_friends(b) {
       return
     }
     var a = "";
-    if (!b.chars.length) {
-      a = "<div style='margin-top: 8px'>No one online.</div>"
+    if (!b.chars.length && !friends.length) {
+      a = "<div style='margin-top: 8px'>You don't have any friends but it's ok. Hang in there! Be kind to other players, get to know them, then friend them from the 'Nearby' tab. Afterwards, you can see when they are online and where they are.</div>"
     } else {
-      a += "<table style='margin: 5px; text-align: center'>";
-      a += "<tr style='color: gray; text-decoration: underline'><th style='width: 100px'>Name</th><th style='width: 60px'>Level</th><th style='width: 100px'>Class</th><th style='width: 100px'>Status</th><th style='width: 120px'>Server</th></tr>";
-      b.chars.forEach(function(c) {
-        var d = "AFK";
-        if (!c.afk) {
-          d = "<span style='color: #34bf15'>Active</span>"
-        }
-        a += "<tr><td>" + c.name + "</td><td>" + c.level + "</td><td>" + c.type.toUpperCase() + "</td><td>" + d + "</td><td>" + c.server + "</td></tr>"
-      });
-      a += "</table>"
+      if (!b.chars.length) {
+        a = "<div style='margin-top: 8px'>No one online.</div>"
+      } else {
+        a += "<table style='margin: 5px; text-align: center'>";
+        a += "<tr style='color: gray; text-decoration: underline'><th style='width: 100px'>Name</th><th style='width: 60px'>Level</th><th style='width: 100px'>Class</th><th style='width: 100px'>Status</th><th style='width: 120px'>Server</th></tr>";
+        b.chars.forEach(function(c) {
+          var d = "AFK";
+          if (!c.afk) {
+            d = "<span style='color: #34bf15'>Active</span>"
+          }
+          a += "<tr><td>" + c.name + "</td><td>" + c.level + "</td><td>" + c.type.toUpperCase() + "</td><td>" + d + "</td><td>" + c.server + "</td></tr>"
+        });
+        a += "</table>"
+      }
     }
     $(".friendslist").html(a)
   } else {
