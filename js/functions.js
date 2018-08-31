@@ -2865,7 +2865,7 @@ function open_chest(b) {
 function generate_textures(b, m) {
   console.log("generate_textures " + b + " " + m);
   if (m == "full") {
-    var l = XYHW[b],
+    var l = XYWH[b],
       c = l[2],
       p = l[3],
       r = 0,
@@ -2889,7 +2889,7 @@ function generate_textures(b, m) {
     }
   }
   if (m == "emblem") {
-    var l = XYHW[b];
+    var l = XYWH[b];
     var n = new PIXI.Rectangle(l[0], l[1], l[2], l[3]);
     textures[b] = new PIXI.Texture(C[FC[b]], n)
   }
@@ -2936,7 +2936,7 @@ function generate_textures(b, m) {
     })
   }
   if (m == "emote") {
-    var l = XYHW[b];
+    var l = XYWH[b];
     textures[b] = [null, null, null];
     for (var k = 0; k < 3; k++) {
       var n = new PIXI.Rectangle(l[0] + k * l[2], l[1], l[2], l[3]);
@@ -2944,7 +2944,7 @@ function generate_textures(b, m) {
     }
   }
   if (m == "v_animation") {
-    var l = XYHW[b];
+    var l = XYWH[b];
     textures[b] = [null, null, null, null];
     for (var k = 0; k < 4; k++) {
       var n = new PIXI.Rectangle(l[0], l[1] + k * l[3], l[2], l[3]);
