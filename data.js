@@ -1529,7 +1529,7 @@ var G = {
       }]
     }
   },
-  "version": 333,
+  "version": 334,
   "conditions": {
     "tarot_5swords": {
       "name": "Tarot Card",
@@ -3183,7 +3183,7 @@ var G = {
     },
     "t2dexamulet": {
       "dex": 6,
-      "g": 800000,
+      "g": 200000,
       "grades": [0, 2],
       "name": "Amulet of the Stubborn Ranger",
       "vit": 5,
@@ -3276,7 +3276,7 @@ var G = {
       "type": "weapon"
     },
     "t2stramulet": {
-      "g": 800000,
+      "g": 200000,
       "grades": [0, 2],
       "name": "Amulet of the Eager Warrior",
       "str": 5,
@@ -5960,7 +5960,7 @@ var G = {
       "armor": 30,
       "grades": [0, 2],
       "name": "Amulet of the Fierce Mage",
-      "g": 800000,
+      "g": 200000,
       "skin": "t2intamulet",
       "int": 5,
       "compound": {
@@ -6445,7 +6445,7 @@ var G = {
     },
     "pots": {
       "says": "Oh, Hello",
-      "items": ["hpot0", "mpot0", "hpot1", "mpot1", null, null, null, null, null, null, null, null, null, null, null, null, null, null, "computer", "stand0"],
+      "items": ["hpot0", "mpot0", "hpot1", "mpot1", null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null],
       "atype": "once",
       "role": "merchant",
       "skin": "yellowlady",
