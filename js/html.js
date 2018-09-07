@@ -404,8 +404,7 @@ function render_transports_npc() {
   a += "<div class='clickable' onclick='transport_to(\"main\",9)'>&gt; New Town</div>";
   a += "<div class='clickable' onclick='transport_to(\"winterland\",1)'>&gt; Winterland</div>";
   a += "<div class='clickable' onclick='transport_to(\"halloween\",1)'>&gt; Spooky Forest</div>";
-  a += "<div class='clickable' onclick='transport_to(\"underworld\")'>&gt; Underworld</div>";
-  a += "<div class='clickable' onclick='transport_to(\"desert\")'>&gt; Desertland <span style='color: #D2CB7E'>[Soon!]</span></div>";
+  a += "<div class='clickable' onclick='transport_to(\"desertland\",1)'>&gt; Desertland</div>";
   a += "</div>";
   $("#topleftcornerui").html(a)
 }
