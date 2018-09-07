@@ -1703,10 +1703,14 @@ function code_persistence_logic() {
     try {
       var c = window.localStorage.getItem("code_cache"),
         b = "",
-        a = false;
+        a = false,
+        f = "";
+      if (gameplay != "normal") {
+        f = "gameplay"
+      }
       c = c && JSON.parse(c) || {};
-      c["run_" + real_id] = actual_code && code_run && "1" || "";
-      c["code_" + real_id] = codemirror_render.getValue();
+      c["run_" + real_id + f] = actual_code && code_run && "1" || "";
+      c["code_" + real_id + f] = codemirror_render.getValue();
       window.localStorage.setItem("code_cache", JSON.stringify(c));
       console.log("Code saved!")
     } catch (d) {
