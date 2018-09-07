@@ -1529,7 +1529,7 @@ var G = {
       }]
     }
   },
-  "version": 334,
+  "version": 335,
   "conditions": {
     "tarot_5swords": {
       "name": "Tarot Card",
@@ -6364,7 +6364,7 @@ var G = {
       "skin": "baron",
       "speed": 28,
       "id": "citizen11",
-      "interaction": ["Guard.    Village.    Protect.    Innocents.", "Brothers.     Rest.     Here.    Protect.    Over.    Their.    Graves.", "Remember.    The.    Fallen.    Never.    Forget.  Their.    Sacrifices."],
+      "interaction": ["Guard.    Village.    Protect.    Innocents.", "Brothers.     Rest.     Here.    Protect.    Over.    Their.    Graves.", "Remember.    The.    Fallen.    Never.    Forget.  Their.    Sacrifices.", "Heal.    The.    Fallen."],
       "name": "Baron",
       "level": 120,
       "delay": 12000,
@@ -6399,7 +6399,7 @@ var G = {
       "skin": "greencap",
       "speed": 30,
       "id": "citizen0",
-      "interaction": ["Hey There! This town is the safest place around. Outside can be dangerous.", "Heyo, I don't understand how those shop owners can just stand around all day. I got to be moving. Kind of restless.", "Just finished school and I've got to go get a real job now. I might become an adventurer since they seem to make a lot of money."],
+      "interaction": ["Hey There! This town is the safest place around. Outside can be dangerous.", "Heyo, I don't understand how those shop owners can just stand around all day. I got to be moving. Kind of restless.", "Just finished school and I've got to go get a real job now. I might become an adventurer since they seem to make a lot of money.", "A friend of mine said the frog thingies in the beach drop some old money or sth like that."],
       "name": "Kane",
       "level": 12,
       "delay": 1200,
@@ -6421,7 +6421,7 @@ var G = {
       "type": "fullstatic"
     },
     "citizen2": {
-      "says": ["Freaking youngens", "Go away", "Stop bothering me", "Someone needs to fix this place up", "I don't have time for this", "I need to go take a nap", "Uhhh", "Mmmehh", "Ugg", "Noob", "Young yipper snappers"],
+      "says": ["Freaking youngens", "Go away - Kill some monsters", "Stop", "Someone needs to fix this place up", "I don't have time for this", "I need to go take a nap", "Uhhh", "Mmmehh", "Ugg", "Noob", "Young yipper snappers"],
       "hp": 2400,
       "skin": "oldcitizen",
       "speed": 10,
@@ -6815,8 +6815,8 @@ var G = {
       "skin": "renaldo",
       "speed": 55,
       "id": "citizen3",
-      "interaction": ["I Grind 24 hours a day! 7 days a week! Never Stop! Never Give up! Always Training!!", "Yah I work out. Wanna see my MANLY Muscles!!", "Do you even lift Bro.", "Hi, I do laps around this town all the time. Got to stay in shape."],
-      "name": "Renaldo",
+      "interaction": ["I Grind 24 hours a day! 7 days a week! Never Stop! Never Give up! Always Training!!", "My body fat ratio is just 18%. Can you believe it? Yes!", "Do you even lift Bro.", "Hi, I do laps around this town all the time. Gotta stay in shape."],
+      "name": "Reny",
       "level": 32,
       "delay": 3600,
       "role": "citizen",
