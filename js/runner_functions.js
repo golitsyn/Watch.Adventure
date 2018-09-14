@@ -1037,13 +1037,8 @@ function bfs() {
         continue;
       }
       map.doors.forEach(function(door) {
-        if (simple_distance({
-          x: map.spawns[door[6]][0],
-          y: map.spawns[door[6]][1]
-        }, {
-          x: current.x,
-          y: current.y
-        }) < 30) qpush({
+        // if(simple_distance({x:map.spawns[door[6]][0],y:map.spawns[door[6]][1]},{x:current.x,y:current.y})<30)
+        if (is_door_close(current.map, door, current.x, current.y) && can_use_door(current.map, door, current.x, current.y)) qpush({
           map: door[4],
           x: G.maps[door[4]].spawns[door[5] || 0][0],
           y: G.maps[door[4]].spawns[door[5] || 0][1],
