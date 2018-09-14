@@ -4401,10 +4401,7 @@ function add_door(b) {
   c.type = "door";
 
   function a() {
-    if (distance(character, {
-      x: b[0] + b[2] / 2,
-      y: b[1] + b[3] / 2
-    }) > 100) {
+    if (!is_door_close(character.map, b, character.real_x, character.real_y) || !can_use_door(character.map, b, character.real_x, character.real_y)) {
       add_log("Get closer", "gray");
       return
     }
