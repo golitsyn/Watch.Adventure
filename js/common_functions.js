@@ -659,7 +659,7 @@ function calculate_movex(A, k, j, f, e) {
       if (s) {
         h = min(m[1], m[2]) - u, e = min(e, h), y = e
       } else {
-        q = h = max(m[1], m[2]) + u, e = min(e, h), q = e
+        h = max(m[1], m[2]) + u, e = min(e, h), q = e
       }
       continue
     }
@@ -700,7 +700,7 @@ function calculate_movex(A, k, j, f, e) {
       if (B) {
         c = min(m[1], m[2]) - u, f = min(f, c), z = f
       } else {
-        r = c = max(m[1], m[2]) + u, f = min(f, c), r = f
+        c = max(m[1], m[2]) + u, f = min(f, c), r = f
       }
       continue
     }
@@ -1072,6 +1072,69 @@ function stop_logic(b) {
     b.moving = false;
     b.vx = b.vy = 0
   }
+}
+function is_door_close(e, b, a, f) {
+  var d = G.maps[e],
+    c = d.spawns[b[6]];
+  if (point_distance(a, f, c[0], c[1]) < 40) {
+    return true
+  }
+  if (distance({
+    x: a,
+    y: f,
+    width: 26,
+    height: 35
+  }, {
+    x: b[0],
+    y: b[1],
+    width: b[2],
+    height: b[3]
+  }) < 40) {
+    return true
+  }
+  return false
+}
+function can_use_door(f, b, a, g) {
+  var e = G.maps[f],
+    c = e.spawns[b[6]];
+  if (point_distance(a, g, c[0], c[1]) < 40 && can_move({
+    map: f,
+    x: a,
+    y: g,
+    going_x: c[0],
+    going_y: c[1]
+  })) {
+    return true
+  }
+  if (distance({
+    x: a,
+    y: g,
+    width: 26,
+    height: 35
+  }, {
+    x: b[0],
+    y: b[1],
+    width: b[2],
+    height: b[3]
+  }) < 40) {
+    var d = false;[[0, 0], [-b[2] / 2, 0], [b[2] / 2, 0], [-b[2] / 2, -b[3]], [b[2] / 2, -b[3]], [0, -b[3]], ].forEach(function(h) {
+      var k = h[0],
+        j = h[1];
+      if (can_move({
+        map: f,
+        x: a,
+        y: g,
+        going_x: b[0] + k,
+        going_y: b[1] + j
+      })) {
+        d = true
+      }
+    });
+    if (d) {
+      return true
+    }
+  }
+  return false
 }
 function trigger(a) {
   setTimeout(a, 0)
