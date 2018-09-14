@@ -2801,7 +2801,7 @@ function render_travel(b) {
   }
   object_sort(G.maps).forEach(function(e) {
     var d = e[0];
-    if (!G.maps[d].ignore && !G.maps[d].unlist && !G.maps[d].instance && (!G.maps[d].irregular || b)) {
+    if (!G.maps[d].ignore && (!G.maps[d].unlist || b) && !G.maps[d].instance && (!G.maps[d].irregular || b)) {
       a += "<div class='gamebutton' style='margin-left: 5px; margin-bottom: 5px' onclick='hide_modal(); " + c + '("' + d + "\");'>" + G.maps[d].name + "</div>"
     }
   });
